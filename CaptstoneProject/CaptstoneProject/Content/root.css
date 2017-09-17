@@ -1,0 +1,89 @@
+/*================================================================================
+  Item Name: Foxlabel - Responsive Admin Dashboard Template
+  Description: Bootstrap Admin Template
+  Version: 1.0
+================================================================================*/
+
+/* ================================================
+Google Web Fonts
+================================================ */
+/* Raleway */
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+/* Open Sans */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,800,300);
+
+/* === Icons === */
+/* Font Awesome */
+@import url('font-awesome.min.css');
+
+/* Weather Icons */
+@import url('weather-icons.min.css');
+
+/* ================================================
+Main Css
+================================================ */
+/* Bootstrap Main Css File (unedited) */
+@import url('plugin/bootstrap/dist/css/bootstrap.min.css');
+
+/* Theme Style */
+@import url('style.css');
+
+/* Responsive Style */
+@import url('responsive.css');
+
+/* Shortcuts Css Codes */
+@import url('shortcuts.css');
+
+/* Animate Css Codes */
+@import url('animate.css');
+
+/* Jquery Ui */
+@import url('jquery-ui-1.10.4.custom.min.css');
+
+/* ================================================
+Plugin Css
+================================================ */
+/* Awesome Bootstrap Checkbox */
+@import url('plugin/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
+
+/* Bootstrap Select */
+@import url('plugin/bootstrap-select/bootstrap-select.css');
+
+/* Bootstrap Select */
+@import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
+
+/* Bootstrap wysihtml5 */
+@import url('plugin/bootstrap-wysihtml5/bootstrap-wysihtml5.css');
+
+/* Sweet Alert */
+@import url('plugin/sweet-alert/sweet-alert.css');
+
+/* Data Tables */
+@import url('plugin/datatables/datatables.css');
+
+/* Chartist */
+@import url('plugin/chartist/chartist.min.css');
+
+/* C3 */
+@import url('plugin/c3/c3.min.css');
+
+/* Rickshaw */
+@import url('plugin/rickshaw/rickshaw.css');
+@import url('plugin/rickshaw/detail.css');
+@import url('plugin/rickshaw/graph.css');
+@import url('plugin/rickshaw/legend.css');
+
+/* Date Range Picker */
+@import url('plugin/date-range-picker/daterangepicker-bs3.css');
+
+/* Full Calendar */
+@import url('plugin/fullcalendar/fullcalendar.css');
+
+/* JqGrid */
+@import url('plugin/jqgrid/ui.jqgrid.css');
+
+/* Toastr */
+@import url('plugin/toastr/toastr.min.css');
+
+/* Tour */
+@import url('plugin/bootstrap-tour/bootstrap-tour.min.css');
