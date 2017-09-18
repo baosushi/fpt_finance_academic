@@ -211,6 +211,9 @@
   <ItemGroup>
     <Content Include="Content\animate.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\img\blue-loading-icon.gif" />
+    <Content Include="Content\img\comp-2.gif" />
+    <Content Include="Content\img\default_user_icon.png" />
     <Content Include="Content\jquery-ui-1.10.4.custom.min.css" />
     <Content Include="Content\js\alert\main.js" />
     <Content Include="Content\js\bootstrap-select\bootstrap-select.js" />
@@ -373,6 +376,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

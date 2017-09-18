@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    <!-- jQuery Library -->
+    <script type="text/javascript" src="~/Content/js/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript File -->
+    <script src="~/Content/js/datatables/datatables.min.js"></script>
+    <script src="~/Content/js/bootstrap/tether.min.js"></script>
+    <script src="~/Content/js/bootstrap/bootstrap.min.js"></script>
+    <!-- MetisMenu -->
+    <script type="text/javascript" src="~/Content/js/metismenu/metisMenu.min.js"></script>
+    <!-- Plugin.js - Some Specific JS codes for Plugin Settings -->
+    <script type="text/javascript" src="~/Content/js/plugins.js"></script>
+    <!-- Counterup -->
+    <script type="text/javascript" src="~/Content/js/counterup/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
     @*@Scripts.Render("~/bundles/modernizr")*@
-
+   
+    <link href="~/Content/root.css" rel="stylesheet">
 </head>
 <body>
-   <div class="loading"><img src="img/loading.gif" alt="loading-img"></div>
+   <div class="loading"><img src="~/Content/img/blue-loading-icon.gif" alt="loading-img"></div>
     <!-- End Page Loading -->
     <!-- Start Top -->
     <div id="top" class="clearfix">
@@ -21,7 +35,7 @@
         <!-- End Sidebar Show Hide Button -->
         <!-- Start Searchbox -->
         <form class="searchform">
-            <input type="text" class="searchbox" id="searchbox" placeholder="Search for something...">
+            <input type="text" class="searchbox" id="searchbox" placeholder="Search for course...">
             <span class="searchbutton"><i class="fa fa-search"></i></span>
         </form>
         <!-- End Searchbox -->
@@ -91,7 +105,7 @@
                 </ul>
             </li>
             <li class="dropdown link">
-                <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="img/profileimg.png" alt="img"><b>John Doe</b><span class="caret"></span></a>
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="~/Content/img/default_user_icon.png" alt="img"><b>John Doe</b><span class="caret"></span></a>
                 <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
                     <li role="presentation" class="dropdown-header">Profile</li>
                     <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">2</span></a></li>
@@ -348,19 +362,7 @@
         </div>
     </div>
     <!-- End Sidepanel -->
-    <!-- jQuery Library -->
-    <script type="text/javascript" src="~/Content/js/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript File -->
-    <script src="~/Content/js/bootstrap/tether.min.js"></script>
-    <script src="~/Content/js/bootstrap/bootstrap.min.js"></script>
-    <!-- MetisMenu -->
-    <script type="text/javascript" src="~/Content/js/metismenu/metisMenu.min.js"></script>
-    <!-- Plugin.js - Some Specific JS codes for Plugin Settings -->
-    <script type="text/javascript" src="~/Content/js/plugins.js"></script>
-    <!-- Counterup -->
-    <script type="text/javascript" src="~/Content/js/counterup/jquery.waypoints.min.js"></script>
-    <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
-
+    
     @*@Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")*@
     @*@RenderSection("scripts", required: false)*@

@@ -1,80 +1,3 @@
-/*---------------------------
-  Item Name:    Foxlabel - Responsive Admin Dashboard Template
-  Description:  Bootstrap Admin Template
-  Version:      1.0
-
-
-[Table of contents]
-
-    * Color Class
-    * Up - Down
-    * Grid Normal
-    * Grid Widget
-    * Top
-    * Password Page
-    * App Logo
-    * Sidebar Open Button - Show or Hide Sidebar
-    * Searchbox - Top Search Input
-    * Top Menu 
-    * Sidepanel Open Button - Show or Hide Sidepanel
-    * Top Right
-    * Sidebar 
-    * Sidepanel 
-    * Today
-    * List with Title
-    * General Sidepanel Title
-    * Todo List
-    * Chat List
-    * Content
-    * Footer
-    * Contact
-    * Page Header 
-    * Page loading
-    * Icons Preview
-    * Foxlabel Alert
-    * Mailbox
-    * Social Profile 
-    * Invoice
-    * Login Pages
-    * 404 - 500 Pages
-    * Top Stats
-    * Charts
-    * Calendar
-    * Awesome Bootstrap Checkbox Rewrite
-    * Bootstrap Rewrite
-    * Typography
-    * Button
-    * Label Class
-    * Input options
-    * Form Control
-    * Input Group Addon
-    * Input Control Sizing 
-    * breadcrumb
-    * Dropdown Menu
-    * Tabs
-    * Panels
-    * Widget Tools
-    * Modals
-    * Table
-    * Widgets
-    * Chart with Stats
-    * Social Box
-    * Profile Widget
-    * Basic List
-    * Image List
-    * Blog Post
-    * Mini Stat
-    * Widget Map
-    * widget table-dic
-    * jvectormap
-    * Slick Carousel
-    * Products
-    * Carousel
-    * Timeline
-    * Chat
-    * Recent Widget
-    ----------------------------------*/
-
 /* 
 * Color Class 
 */
@@ -431,7 +354,8 @@ img.circle-border {
     z-index: 1;
 }
 .sidebar-open-button:hover, .sidebar-open-button:active {
-    background: #fff;
+    background: #bb4600;
+    color:gray;
 }
 .sidebar-open-button-mobile {
     height: 60px;
@@ -445,7 +369,8 @@ img.circle-border {
     border-right: 1px solid rgba(0, 0, 0, 0.14);
 }
 .sidebar-open-button-mobile:hover, .sidebar-open-button-mobile:active {
-    background: rgba(255, 255, 255, 0.07);
+    background: #bb4600;
+    color:gray;
 }
 /*
 * Searchbox - Top Search Input
