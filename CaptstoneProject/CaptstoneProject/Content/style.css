@@ -529,7 +529,7 @@ img.circle-border {
     top: 60px;
     left: 0;
     font-family: 'Raleway', sans-serif;
-    background: #ffffff;
+    background: #292929;
     z-index: 0;
     font-size: 13px;
     font-weight: normal;
@@ -558,7 +558,7 @@ img.circle-border {
 }
 .sidebar-panel li a {
     display: block;
-    color: #333;
+    color: lightgray;
     padding: 9px 20px 9px 54px;
     margin-left: -20px;
     margin-right: -20px;
@@ -568,14 +568,14 @@ img.circle-border {
     position: absolute;
     right: 20px;
     top: 10px;
-    color: #333;
+    color: lightgray;
 }
 .sidebar-panel li .icon {
     position: absolute;
     left: 20px;
     top: 8px;
     display: block;
-    color: #333;
+    color: lightgray;
     font-size: 16px;
     border-radius: 3px;
     text-align: center;
@@ -584,11 +584,11 @@ img.circle-border {
     padding-top: 1px;
 }
 .sidebar-panel li a:hover, .sidebar-panel li a.active {
-    color: #333;
+    color: white;
     background: rgba(0, 0, 0, 0.1);
 }
 .sidebar-panel li a:hover .icon, .sidebar-panel li a.active .icon {
-    color: #333;
+    color: white;
 }
 .sidebar-panel li ul {
     display: none;
@@ -605,14 +605,14 @@ img.circle-border {
 }
 .sidebar-panel li ul li a {
     margin: 0px;
-    color: #333;
+    color: lightgray;
     padding: 9px 20px 9px 54px;
 }
 .sidebar-panel li ul li a:hover {
     background: rgba(0, 0, 0, 0.08);
 }
 .sidetitle {
-    color: #333;
+    color: lightgray;
     font-size: 10px;
     padding: 0;
     margin: 0 0 5px 3px;
@@ -2912,7 +2912,7 @@ div[data-role="editor-toolbar"] {
 .panel-title {
     font-family: 'Raleway', sans-serif;
     color: #58666e;
-    font-size: 13px;
+    font-size: 19px;
     font-weight: bold;
     text-transform: uppercase;
     padding: 16px 20px;
@@ -3442,7 +3442,9 @@ thead {
     font-family: 'Raleway', sans-serif;
     text-transform: uppercase;
     font-size: 12px;
-    color: #37363e;
+    /*color: #37363e;*/
+    background: #3e83e1;
+    color: white;
 }
 thead .fa {
     font-size: 16px;

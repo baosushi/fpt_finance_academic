@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    <title>Fpt University</title>
+    @*@Styles.Render("~/Content/css")*@
     <!-- jQuery Library -->
     <script type="text/javascript" src="~/Content/js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript File -->
@@ -226,15 +226,13 @@
     </div>
     <!-- End Sidabar -->
     @*</div>*@
-    <div class="body-content">
+    <div class="body-content" style="background: #292929;">
         @RenderBody()
         <!-- Start Footer -->
-        <footer>
-            <div class="row footer">
+            <div class="row footer" style="border-top: 1px solid #505050; color:lightgray">
                 <div class="col-md-6 text-left"> Copyright &copy; 2017 Foxlabel All rights reserved. </div>
                 <div class="col-md-6 text-right"> Design and Developed by Foxlabel </div>
             </div>
-        </footer>
         <!-- End Footer -->
     </div>
     <!-- Start Sidepanel -->

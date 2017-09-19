@@ -317,12 +317,14 @@
                     </tbody>
                 </table>
             </div>
-            <div id="chartist-line-scatter" class="ct-chart ct-perfect-fourth" style="width: 100%;height: 235px;"></div>
+            @*<div id="chartist-line-scatter" class="ct-chart ct-perfect-fourth" style="width: 100%;height: 235px;"></div>*@
         </div>
         </div>
 </div>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable();
+        $('#testTable').DataTable({
+            "searching": true
+        });
     });
 </script>
