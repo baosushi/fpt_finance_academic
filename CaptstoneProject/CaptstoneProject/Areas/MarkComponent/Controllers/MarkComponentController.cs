@@ -109,7 +109,7 @@ namespace CaptstoneProject.Areas.MarkComponent.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new { success = false, message = "Upload failed" });
+                return Json(new { success = false, message = e.Message });
             }
 
             return Json(new { success = true, message = "File uploaded successfully" });
