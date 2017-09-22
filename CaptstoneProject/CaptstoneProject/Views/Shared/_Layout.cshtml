@@ -18,6 +18,8 @@
     <!-- Counterup -->
     <script type="text/javascript" src="~/Content/js/counterup/jquery.waypoints.min.js"></script>
     <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
+    @Styles.Render("~/Content/plugins")
+    @Scripts.Render("~/bundles/plugins")
     @*@Scripts.Render("~/bundles/modernizr")*@
    
     <link href="~/Content/root.css" rel="stylesheet">
@@ -138,12 +140,12 @@
             <li>
                 <a href="#"><span class="icon color7"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span>Marks Excel<i class="fa fa-sort-desc caret"></i></a>
                 <ul>
-                    <li><a href="#"><i class="fa fa-upload" aria-hidden="true"></i> Import Component Marks</a></li>
+                    <li><a href="@Url.Action("Index", "MarkComponent", new { area = "MarkComponent" })"><i class="fa fa-upload" aria-hidden="true"></i> Import Component Marks</a></li>
                     <li><a href="#"><i class="fa fa-download" aria-hidden="true"></i> Export Average Marks</a></li>
                 </ul>
             </li>
             <li>
-                <a href="@Url.Action("Test", "Home")"><span class="icon color7"><i class="fa fa-address-book-o" aria-hidden="true"></i></span>Student's marks</a>
+                <a href="@Url.Action("Test", "Home", new { area = "" })"><span class="icon color7"><i class="fa fa-address-book-o" aria-hidden="true"></i></span>Student's marks</a>
             </li>
         </ul>
     </div>

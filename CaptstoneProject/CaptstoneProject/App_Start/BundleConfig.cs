@@ -26,6 +26,13 @@ namespace CaptstoneProject
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/plugins").Include(
+                      "~/Content/plugin/toastr/toastr.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
+                      "~/Content/js/toastr/toastr.min.js",
+                      "~/Content/js/toastr/toastr-plugin.js"));
         }
     }
 }

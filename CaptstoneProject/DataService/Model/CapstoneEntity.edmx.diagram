@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e6fd86e13465472cacbf0b458f3a177d" Name="Diagram1">
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="7.5" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_CourseMark_Course" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

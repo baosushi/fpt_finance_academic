@@ -1,0 +1,475 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DB_Finance_AcademicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CourseMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComponentName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentCode" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentCourseMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Mark" Type="float" />
+          <Property Name="CourseMarkId" Type="int" Nullable="false" />
+          <Property Name="StudentInCourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentInCourse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Average" Type="float" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="StudentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectCode" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubjectMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComponentName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="SubjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Course_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseMark_Course">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseMark" Type="Self.CourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseMark">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentCourseMark_CourseMark">
+          <End Role="CourseMark" Type="Self.CourseMark" Multiplicity="1" />
+          <End Role="StudentCourseMark" Type="Self.StudentCourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseMark">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentCourseMark">
+              <PropertyRef Name="CourseMarkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentCourseMark_StudentInCourse">
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="1" />
+          <End Role="StudentCourseMark" Type="Self.StudentCourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentInCourse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentCourseMark">
+              <PropertyRef Name="StudentInCourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInCourse_Course">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInCourse">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInCourse_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInCourse">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubjectMark_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="SubjectMark" Type="Self.SubjectMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubjectMark">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_Finance_AcademicModelStoreContainer">
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseMark" EntityType="Self.CourseMark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentCourseMark" EntityType="Self.StudentCourseMark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentInCourse" EntityType="Self.StudentInCourse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectMark" EntityType="Self.SubjectMark" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Course_Subject" Association="Self.FK_Course_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseMark_Course" Association="Self.FK_CourseMark_Course">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CourseMark" EntitySet="CourseMark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentCourseMark_CourseMark" Association="Self.FK_StudentCourseMark_CourseMark">
+            <End Role="CourseMark" EntitySet="CourseMark" />
+            <End Role="StudentCourseMark" EntitySet="StudentCourseMark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentCourseMark_StudentInCourse" Association="Self.FK_StudentCourseMark_StudentInCourse">
+            <End Role="StudentInCourse" EntitySet="StudentInCourse" />
+            <End Role="StudentCourseMark" EntitySet="StudentCourseMark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInCourse_Course" Association="Self.FK_StudentInCourse_Course">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="StudentInCourse" EntitySet="StudentInCourse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInCourse_Student" Association="Self.FK_StudentInCourse_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="StudentInCourse" EntitySet="StudentInCourse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubjectMark_Subject" Association="Self.FK_SubjectMark_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="SubjectMark" EntitySet="SubjectMark" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB_Finance_AcademicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Course_Subject" FromRole="Course" ToRole="Subject" />
+          <NavigationProperty Name="CourseMarks" Relationship="Self.FK_CourseMark_Course" FromRole="Course" ToRole="CourseMark" />
+          <NavigationProperty Name="StudentInCourses" Relationship="Self.FK_StudentInCourse_Course" FromRole="Course" ToRole="StudentInCourse" />
+        </EntityType>
+        <EntityType Name="CourseMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.FK_CourseMark_Course" FromRole="CourseMark" ToRole="Course" />
+          <NavigationProperty Name="StudentCourseMarks" Relationship="Self.FK_StudentCourseMark_CourseMark" FromRole="CourseMark" ToRole="StudentCourseMark" />
+          <Property Name="ComponentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="StudentInCourses" Relationship="Self.FK_StudentInCourse_Student" FromRole="Student" ToRole="StudentInCourse" />
+        </EntityType>
+        <EntityType Name="StudentCourseMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mark" Type="Double" />
+          <Property Name="CourseMarkId" Type="Int32" Nullable="false" />
+          <Property Name="StudentInCourseId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CourseMark" Relationship="Self.FK_StudentCourseMark_CourseMark" FromRole="StudentCourseMark" ToRole="CourseMark" />
+          <NavigationProperty Name="StudentInCourse" Relationship="Self.FK_StudentCourseMark_StudentInCourse" FromRole="StudentCourseMark" ToRole="StudentInCourse" />
+        </EntityType>
+        <EntityType Name="StudentInCourse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.FK_StudentInCourse_Course" FromRole="StudentInCourse" ToRole="Course" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_StudentInCourse_Student" FromRole="StudentInCourse" ToRole="Student" />
+          <NavigationProperty Name="StudentCourseMarks" Relationship="Self.FK_StudentCourseMark_StudentInCourse" FromRole="StudentInCourse" ToRole="StudentCourseMark" />
+          <Property Name="Average" Type="Double" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Course_Subject" FromRole="Subject" ToRole="Course" />
+          <NavigationProperty Name="SubjectMarks" Relationship="Self.FK_SubjectMark_Subject" FromRole="Subject" ToRole="SubjectMark" />
+        </EntityType>
+        <EntityType Name="SubjectMark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_SubjectMark_Subject" FromRole="SubjectMark" ToRole="Subject" />
+          <Property Name="ComponentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Course_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseMark_Course">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseMark" Type="Self.CourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseMark">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInCourse_Course">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInCourse">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentCourseMark_CourseMark">
+          <End Role="CourseMark" Type="Self.CourseMark" Multiplicity="1" />
+          <End Role="StudentCourseMark" Type="Self.StudentCourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseMark">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentCourseMark">
+              <PropertyRef Name="CourseMarkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInCourse_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInCourse">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentCourseMark_StudentInCourse">
+          <End Role="StudentInCourse" Type="Self.StudentInCourse" Multiplicity="1" />
+          <End Role="StudentCourseMark" Type="Self.StudentCourseMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentInCourse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentCourseMark">
+              <PropertyRef Name="StudentInCourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubjectMark_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="SubjectMark" Type="Self.SubjectMark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubjectMark">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_Finance_AcademicEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="CourseMarks" EntityType="Self.CourseMark" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="StudentCourseMarks" EntityType="Self.StudentCourseMark" />
+          <EntitySet Name="StudentInCourses" EntityType="Self.StudentInCourse" />
+          <EntitySet Name="Subjects" EntityType="Self.Subject" />
+          <EntitySet Name="SubjectMarks" EntityType="Self.SubjectMark" />
+          <AssociationSet Name="FK_Course_Subject" Association="Self.FK_Course_Subject">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseMark_Course" Association="Self.FK_CourseMark_Course">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="CourseMark" EntitySet="CourseMarks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInCourse_Course" Association="Self.FK_StudentInCourse_Course">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="StudentInCourse" EntitySet="StudentInCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentCourseMark_CourseMark" Association="Self.FK_StudentCourseMark_CourseMark">
+            <End Role="CourseMark" EntitySet="CourseMarks" />
+            <End Role="StudentCourseMark" EntitySet="StudentCourseMarks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInCourse_Student" Association="Self.FK_StudentInCourse_Student">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="StudentInCourse" EntitySet="StudentInCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentCourseMark_StudentInCourse" Association="Self.FK_StudentCourseMark_StudentInCourse">
+            <End Role="StudentInCourse" EntitySet="StudentInCourses" />
+            <End Role="StudentCourseMark" EntitySet="StudentCourseMarks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubjectMark_Subject" Association="Self.FK_SubjectMark_Subject">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="SubjectMark" EntitySet="SubjectMarks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB_Finance_AcademicModelStoreContainer" CdmEntityContainer="DB_Finance_AcademicEntities">
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseMarks">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.CourseMark">
+              <MappingFragment StoreEntitySet="CourseMark">
+                <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StudentCode" ColumnName="StudentCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentCourseMarks">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentCourseMark">
+              <MappingFragment StoreEntitySet="StudentCourseMark">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
+                <ScalarProperty Name="CourseMarkId" ColumnName="CourseMarkId" />
+                <ScalarProperty Name="StudentInCourseId" ColumnName="StudentInCourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentInCourses">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentInCourse">
+              <MappingFragment StoreEntitySet="StudentInCourse">
+                <ScalarProperty Name="Average" ColumnName="Average" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Subject">
+              <MappingFragment StoreEntitySet="Subject">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SubjectCode" ColumnName="SubjectCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectMarks">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.SubjectMark">
+              <MappingFragment StoreEntitySet="SubjectMark">
+                <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

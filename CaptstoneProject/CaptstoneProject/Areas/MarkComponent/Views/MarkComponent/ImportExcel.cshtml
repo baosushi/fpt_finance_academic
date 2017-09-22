@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "ImportExcel";
+}
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Student's List </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button id="upload-button" class="btn btn-primary">Choose Excel file...</button>
+                        <p id="filename">Nothing has been selected...</p>
+                        <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button id="submit-button" class="btn btn-success" disabled="disabled">Submit file</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#upload-button').click(function () {
+            $('#upload-file').trigger("click");
+        });
+    });
+
+    $('#upload-file').on("change", function () {
+        var fileName = this.files[0].name;
+        $("#filename").html(fileName);
+
+        if (fileName != null) {
+            $('#submit-button').removeAttr("disabled");
+        } else {
+            $('#submit-button').attr("disabled", "disabled");
+        }
+    });
+
+    $('#submit-button').on("click", function () {
+        var data = new FormData();
+        for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+            data.append("file" + i, $("#upload-file")[0].files[i]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UploadExcel")',
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
+</script>
