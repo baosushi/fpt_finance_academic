@@ -1,0 +1,202 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="google-signin-scope" content="profile email">
+    @*Use OAuth credentials*@
+    @*<meta name="google-signin-client_id" content="">*@
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <style>
+        .li-body {
+            overflow: hidden;
+            margin: 0px;
+            background-color: #292929;
+        }
+
+        .li-form {
+            margin: auto;
+            width: 29%;
+            height: 100%;
+            padding: 45px;
+            background: white;
+            margin-bottom: 52px;
+        }
+
+        .inp-form {
+            padding: 14px;
+            border: none;
+            background: #f2f2f2;
+            margin: 0 0 14px;
+            width: 100%;
+            font-family: "Roboto", sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        #customBtnSignin {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            width: 100%;
+            text-align: center;
+            border: thin solid #888;
+            box-shadow: 1px 1px 1px grey;
+            overflow:hidden;
+            white-space: nowrap;
+        }
+
+            #customBtnSignin:hover {
+                cursor: pointer;
+            }
+
+        span.icon {
+            background: url('https://google-developers.appspot.com/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+            display: inline-block;
+            vertical-align: middle;
+            width: 42px;
+            height: 42px;
+        }
+
+        span.buttonText {
+            display: inline-block;
+            vertical-align: middle;
+            padding-left: 42px;
+            padding-right: 42px;
+            font-size: 14px;
+            font-weight: bold;
+            /* Use the Roboto font that is loaded in the <head> */
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="li-body">
+
+
+    <!--Temporary image for view only, just switch to something better-->
+    <div style="text-align:center;overflow:hidden;">
+        <img src="~/Images/Icon/images.png" alt="logo-fpt" />
+    </div>
+    <div class="" style="background: #292929;padding:8% 0 0;">
+
+        <form class="li-form" action="">
+            <div class="">
+                <input class="inp-form" type="text" placeholder="username" />
+            </div>
+            <div class="">
+                <input class="inp-form" type="password" placeholder="Password" />
+            </div>
+            <input type="button" class="inp-form" onclick="test()" value="Sign In" style="background:#42bae0;color:white" />
+            <div id="gSignInWrapper">
+                <div id="customBtnSignin" class="customGPlusSignIn">
+                    <span class="icon"></span>
+                    <span class="buttonText">Sign in with Google</span>
+                </div>
+            </div>
+        </form>
+
+        <!-- Google Login-->
+        <!-- Start Footer -->
+        <div class="row footer" style="border-top: 1px solid #505050; color:lightgray">
+            <div class="col-md-6 text-left"> Copyright &copy; 2017 Fpt University All rights reserved. </div>
+            <div class="col-md-6 text-right"> Design and Developed by Developer </div>
+        </div>
+        <!-- End Footer -->
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            startApp();
+
+        });
+        $(document).ready(function () {
+            console.log("ready!");
+        });
+        var googleUser = {};
+        var startApp = function () {
+            gapi.load('auth2', function () {
+                // Retrieve the singleton for the GoogleAuth library and set up the client.
+                auth2 = gapi.auth2.init({
+                    client_id: '1012737197971-d4okaoko8vegrcivv2m0pnq20ct1qfog.apps.googleusercontent.com',
+                    cookiepolicy: 'single_host_origin',
+                    // Request scopes in addition to 'profile' and 'email'
+                    //scope: 'additional_scope'
+                });
+                attachSignin(document.getElementById('customBtnSignin'));
+            });
+        };
+
+        function attachSignin(element) {
+            console.log(element.id);
+            auth2.attachClickHandler(element, {},
+                function (googleUser) {
+                    var profile = googleUser.getBasicProfile().getName();
+
+                    var id_token = googleUser.getAuthResponse().id_token;
+                    console.log("ID Token: " + id_token);
+
+                    var id = profile.getId();
+                    var fullName = profile.getName();
+                    var givenName = profile.getName();
+                    var imgUrl = profile.getImageUrl();
+                    var email = profile.getEmail();
+                    SignIn(id, fullName, givenName, imgUrl, email);
+
+                }, function (error) {
+                    alert(JSON.stringify(error, undefined, 2));
+                });
+        }
+
+        //old code for button SignIn
+        //function onSignIn(googleUser) {
+
+        //    var profile = googleUser.getBasicProfile();
+        //    //console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        //    //console.log('Full Name: ' + profile.getName());
+        //    //console.log('Given Name: ' + profile.getGivenName());
+        //    //console.log('Family Name: ' + profile.getFamilyName());
+        //    //console.log("Image URL: " + profile.getImageUrl());
+        //    //console.log("Email: " + profile.getEmail());
+
+
+        //    // The ID token you need to pass to your backend:
+        //    var id_token = googleUser.getAuthResponse().id_token;
+        //    console.log("ID Token: " + id_token);
+
+        //    var id = profile.getId();
+        //    var fullName = profile.getName();
+        //    var givenName = profile.getName();
+        //    var imgUrl = profile.getImageUrl();
+        //    var email = profile.getEmail();
+        //    SignIn(id, fullName, givenName, imgUrl, email);
+        //};
+
+
+
+
+
+
+        function SignIn(id, fullName, givenName, imgUrl, email) {
+            var xhr = new XMLHttpRequest();
+            var myObject = "id=" + id + "&fullName=" + fullName + "&givenName=" + givenName + "&imgUrl=" + imgUrl + "&email=" + email;
+
+            xhr.open("Post", "@Url.Action("SignIn","Home")", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(myObject);
+        }
+
+
+
+    </script>
+</body>
+</html>
