@@ -12,8 +12,13 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Schedule1
+    public partial class User
     {
         public int Id { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string ImgUrl { get; set; }
+        public string OAuthId { get; set; }
     }
 }

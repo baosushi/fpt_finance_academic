@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e6fd86e13465472cacbf0b458f3a177d" Name="Diagram1">
+      <Diagram DiagramId="e6fd86e13465472cacbf0b458f3a177d" Name="Diagram1" ZoomLevel="85">
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Block" Width="1.5" PointX="8.75" PointY="1.375" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule" Width="1.5" PointX="3" PointY="2.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Semester" Width="1.5" PointX="8.75" PointY="12.125" />
@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.TeacherSubject" Width="1.5" PointX="3" PointY="5.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="6" PointY="5.125" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="8.25" PointY="8.75" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule1" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="6" PointY="2" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="7.125" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="5.5" />
@@ -33,6 +32,7 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.User" Width="1.5" PointX="0.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

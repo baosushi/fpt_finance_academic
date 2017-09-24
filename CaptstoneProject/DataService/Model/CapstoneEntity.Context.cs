@@ -33,11 +33,11 @@ namespace DataService.Model
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseMark> CourseMarks { get; set; }
-        public virtual DbSet<Schedule1> Schedule1 { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<StudentCourseMark> StudentCourseMarks { get; set; }
         public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

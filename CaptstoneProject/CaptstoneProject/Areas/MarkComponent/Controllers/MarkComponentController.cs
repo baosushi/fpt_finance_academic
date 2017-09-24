@@ -67,13 +67,30 @@ namespace CaptstoneProject.Areas.MarkComponent.Controllers
                                             double average = 0;
                                             for (var j = 5; j <= totalCol; j++)
                                             {
+
                                                 double value = 0;
                                                 if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value))
                                                 {
-                                                    var studentCourseMark = context.StudentCourseMarks.Create();
+
+                                                    StudentCourseMark studentCourseMark = null;
+
+                                                    var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+
+                                                    var stuCourseMarkExist = context.StudentCourseMarks.
+                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+                                                    //check if exist
+                                                    if (stuCourseMarkExist != null)
+                                                    {
+                                                        studentCourseMark = stuCourseMarkExist;
+                                                    }
+                                                    else //create new if none exist
+                                                    {
+                                                        studentCourseMark = context.StudentCourseMarks.Create();
+                                                    }
+
+
                                                     studentCourseMark.Mark = value;
                                                     studentCourseMark.StudentInCourseId = studentInCourse.Id;
-                                                    var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
                                                     if (component != null)
                                                     {
                                                         average += studentCourseMark.Mark.Value * component.Percentage / 100;

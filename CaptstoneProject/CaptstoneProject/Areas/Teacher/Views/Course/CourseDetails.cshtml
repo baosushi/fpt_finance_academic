@@ -1,0 +1,129 @@
+﻿@model CaptstoneProject.Areas.Teacher.Controllers.CourseDetailsViewModel
+@{
+    ViewBag.Title = ViewBag.ClassName;
+}
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
+            <div class="panel-body table-responsive">
+                <table id="mark-table" class="table display dataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                Login Name
+                            </th>
+                            <th>
+                                Student Code
+                            </th>
+                            @foreach (var name in Model.ComponentNames)
+                            {
+                                <th>
+                                    @name
+                                </th>
+                            }
+                            <th>
+                                Average
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 1; i <= Model.StudentInCourse.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Model.StudentInCourse[i - 1].UserName
+                                </td>
+                                <td>
+                                    @Model.StudentInCourse[i - 1].StudentCode
+                                </td>
+                                @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
+                                {
+                                    <td>
+                                        @mark.Mark
+                                    </td>
+                                }
+                                <td>
+                                    @Model.StudentInCourse[i - 1].Average
+                                </td>
+                                <td>
+                                    @Model.StudentInCourse[i - 1].Status
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    @*$.ajax({
+        url: "@Url.Action("GetCourseDetails", "Course")",
+        type: "POST",
+        data: {courseId: @ViewBag.CourseId},
+        success: function (result) {
+            if (result.success) {
+                result.columns
+
+                $('#mark-table').DataTable({
+                    "bServerSide": false,
+                    "bRetrieve": false,
+                    "bDestroy": true,
+                    "bProcessing": true,
+                    "data": result.data,
+                    "searching": true,
+                    "columns": result.columns,
+                    "aoColumnDefs": [
+                        {
+                            "aTargets": [2, 3],
+                            "sClass": "text-center"
+                        },
+                        {
+                            "aTargets": [5],
+                            "mRender": function (data, type, row) {
+                                //var money = o.aData[5];
+                                var data = row[5];
+                                return toMoney(data, ',', '');
+                            }
+                        },
+                        {
+                            "aTargets": [6],
+                            "mRender": function (data, type, row) {
+                                //var money = o.aData[5];
+                                var data = row[6];
+                                return toMoney(data, ',', '');
+                            }
+                        },
+                        {
+                            "aTargets": [7],
+                            "sClass": "hidden",
+                        }
+                    ],
+                    "bAutoWidth": false
+                });
+            }
+        },
+        error: function (result) {
+
+        }
+    });*@
+
+    $(document).ready(function () {
+        $('#mark-table').DataTable({
+            "searching": true
+        });
+    });
+</script>

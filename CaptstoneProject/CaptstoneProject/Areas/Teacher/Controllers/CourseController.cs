@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -47,6 +48,67 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
             return View(courses);
         }
+
+        //public ActionResult CourseDetails(int courseId)
+        //{
+        //    ViewBag.CourseId = courseId;
+        //    return View();
+        //}
+        
+        public ActionResult CourseDetails(int courseId)
+        {
+            ViewBag.CourseId = courseId;
+            try
+            {
+                var loginName = (string)Session["loginName"];
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var course = context.Courses.Find(courseId);
+
+                    if (course != null && course.Teacher.LoginName == loginName)
+                    {
+                        ViewBag.ClassName = course.ClassName;
+
+                        var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
+                        {
+                            UserName = q.Student.LoginName,
+                            StudentCode = q.Student.StudentCode,
+                            Average = q.Average.Value,
+                            MarksComponent = q.StudentCourseMarks.ToList(),
+                            Status = q.Status
+                        }).ToList();
+
+                        //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
+                        //    q.Student.StudentCode,
+                        //    q.Student.LoginName,
+                        //    //q.StudentCourseMarks.Select(s => s.Mark),
+                        //    q.Average,
+                        //    q.Status
+                        //});
+
+                        var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
+
+                        var model = new CourseDetailsViewModel {
+                            ComponentNames = columns,
+                            StudentInCourse = data
+                        };
+
+                        //return Json(new { success = true, columns = columns, data = data });
+                        return View("CourseDetails", model);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Access denied." });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+    }
         public JsonResult GetSemesters()
         {
             var context = new DB_Finance_AcademicEntities();
@@ -75,6 +137,20 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public string Class { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+    }
 
+    public class StudentInCourseViewModel
+    {
+        public string UserName { get; set; }
+        public string StudentCode { get; set; }
+        public double Average { get; set; }
+        public List<StudentCourseMark> MarksComponent { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class CourseDetailsViewModel
+    {
+        public List<StudentInCourseViewModel> StudentInCourse { get; set; }
+        public List<string> ComponentNames { get; set; }
     }
 }
