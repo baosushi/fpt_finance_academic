@@ -5,7 +5,7 @@ using System.Web;
 using System.Data.Entity;
 using DataService.Model;
 
-namespace CaptstoneProject.Models
+namespace CaptstoneProject.Areas.Students.Models
 {
     public class StudentInCourse
     {
