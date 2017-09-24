@@ -12,13 +12,15 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SubjectMark
+    public partial class SemesterBlock
     {
         public int Id { get; set; }
-        public string ComponentName { get; set; }
-        public double Percentage { get; set; }
-        public int SubjectId { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public int SemesterId { get; set; }
+        public int BlockId { get; set; }
     
-        public virtual Subject Subject { get; set; }
+        public virtual Block Block { get; set; }
+        public virtual Semester Semester { get; set; }
     }
 }

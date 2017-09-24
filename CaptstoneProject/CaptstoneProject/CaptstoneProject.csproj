@@ -202,6 +202,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\MarkComponent\Controllers\MarkComponentController.cs" />
     <Compile Include="Areas\MarkComponent\MarkComponentAreaRegistration.cs" />
+    <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
+    <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -339,8 +341,10 @@
     <Content Include="fonts\fontawesome-webfontd41d.eot" />
     <Content Include="Areas\MarkComponent\Views\web.config" />
     <Content Include="Areas\MarkComponent\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\MarkComponent\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\MarkComponent\Views\MarkComponent\ImportExcel.cshtml" />
+    <Content Include="Areas\Teacher\Views\web.config" />
+    <Content Include="Areas\Teacher\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -392,6 +396,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\MarkComponent\Models\" />
+    <Folder Include="Areas\MarkComponent\Views\Shared\" />
+    <Folder Include="Areas\Teacher\Models\" />
+    <Folder Include="Areas\Teacher\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

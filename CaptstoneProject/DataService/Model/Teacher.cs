@@ -12,25 +12,26 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Subject
+    public partial class Teacher
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subject()
+        public Teacher()
         {
-            this.TeacherSubjects = new HashSet<TeacherSubject>();
+            this.Schedules = new HashSet<Schedule>();
             this.Courses = new HashSet<Course>();
-            this.SubjectMarks = new HashSet<SubjectMark>();
+            this.TeacherSubjects = new HashSet<TeacherSubject>();
         }
     
         public int Id { get; set; }
-        public string SubjectName { get; set; }
-        public string SubjectCode { get; set; }
+        public string TeacherCode { get; set; }
+        public string LoginName { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public virtual ICollection<Schedule> Schedules { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubjectMark> SubjectMarks { get; set; }
+        public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
     }
 }

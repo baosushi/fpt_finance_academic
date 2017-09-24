@@ -17,13 +17,22 @@ namespace DataService.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Course()
         {
+            this.Schedules = new HashSet<Schedule>();
             this.CourseMarks = new HashSet<CourseMark>();
             this.StudentInCourses = new HashSet<StudentInCourse>();
         }
     
         public int Id { get; set; }
+        public string CourseName { get; set; }
+        public string ClassName { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public int SubjectId { get; set; }
+        public Nullable<int> TeacherId { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual Teacher Teacher { get; set; }
         public virtual Subject Subject { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseMark> CourseMarks { get; set; }
