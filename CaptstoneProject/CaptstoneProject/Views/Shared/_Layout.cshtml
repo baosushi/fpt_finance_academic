@@ -30,7 +30,7 @@
     <!-- Start Top -->
     <div id="top" class="clearfix">
         <!-- Start App Logo -->
-        <div class="applogo"> <a href="index-2.html" class="logo">FPT Univeristy</a> </div>
+        <div class="applogo" style="padding:0px;"> <a href="index-2.html" class="logo"><img style="height:100%;" src="~/Images/Icon/logo-fpt.png" alt="logo" /></a> </div>
         <!-- End App Logo -->
         <!-- Start Sidebar Show Hide Button -->
         <a href="#" class="sidebar-open-button"><i class="fa fa-bars"></i></a> <a href="#" class="sidebar-open-button-mobile"><i class="fa fa-bars"></i></a>
@@ -132,6 +132,9 @@
                     <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 2</a></li>
                     <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
                 </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Course", new { area = "Teacher" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">My courses</span></a>
             </li>
             <li class="sidetitle">FEATURES</li>
             <li>

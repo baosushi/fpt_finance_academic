@@ -12,13 +12,13 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SubjectMark
+    public partial class TeacherSubject
     {
         public int Id { get; set; }
-        public string ComponentName { get; set; }
-        public double Percentage { get; set; }
+        public int TeacherId { get; set; }
         public int SubjectId { get; set; }
     
+        public virtual Teacher Teacher { get; set; }
         public virtual Subject Subject { get; set; }
     }
 }

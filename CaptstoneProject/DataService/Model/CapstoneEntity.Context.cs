@@ -25,8 +25,15 @@ namespace DataService.Model
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Block> Blocks { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Semester> Semesters { get; set; }
+        public virtual DbSet<SemesterBlock> SemesterBlocks { get; set; }
+        public virtual DbSet<Teacher> Teachers { get; set; }
+        public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseMark> CourseMarks { get; set; }
+        public virtual DbSet<Schedule1> Schedule1 { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<StudentCourseMark> StudentCourseMarks { get; set; }
         public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }

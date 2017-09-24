@@ -1,0 +1,46 @@
+﻿@model List<CaptstoneProject.Areas.Teacher.Controllers.CourseRecordViewModel>
+@{
+    ViewBag.Title = "My Course";
+    this.Session["loginName"] = "phuonglhk";
+}
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Student's List </div>
+            <div class="panel-body table-responsive">
+                <table id="testTable" class="table display dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Student ID</th>
+                            <th>Student login</th>
+                            <th>Name</th>
+                            <th>Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 1; i <= this.Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@Model[i-1].Name</td>
+                                <td>@Model[i-1].Code</td>
+                                <td>@Model[i-1].Class</td>
+                                <td>From @Model[i-1].StartDate.ToString("dd/MM/yyyy") to @Model[i-1].EndDate.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#testTable').DataTable({
+            "searching": true
+        });
+    });
+</script>

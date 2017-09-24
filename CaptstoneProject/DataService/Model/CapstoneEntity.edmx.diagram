@@ -5,20 +5,34 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e6fd86e13465472cacbf0b458f3a177d" Name="Diagram1">
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="7.5" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Subject" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_CourseMark_Course" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Block" Width="1.5" PointX="8.75" PointY="1.375" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule" Width="1.5" PointX="3" PointY="2.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Semester" Width="1.5" PointX="8.75" PointY="12.125" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SemesterBlock" Width="1.5" PointX="11" PointY="1" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Teacher" Width="1.5" PointX="0.75" PointY="5.5" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.TeacherSubject" Width="1.5" PointX="3" PointY="5.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="6" PointY="5.125" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="8.25" PointY="8.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule1" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="6" PointY="2" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="7.125" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="5.5" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="3.75" PointY="8.625" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="6" PointY="9.75" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SemesterBlock_Block" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Course" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Teacher" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SemesterBlock_Semester" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Teacher" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_TeacherSubject_Teacher" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Subject" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_CourseMark_Course" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

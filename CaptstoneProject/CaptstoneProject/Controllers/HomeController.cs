@@ -30,5 +30,24 @@ namespace CaptstoneProject.Controllers
 
             return View();
         }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        public ActionResult SignIn()
+        {
+            var id = Request.Form["id"]; 
+            var fullName = Request.Form["fullName"];
+            var givenName = Request.Form["givenName"];
+            var imgUrl = Request.Form["imgUrl"];
+            var email = Request.Form["givenName"];
+
+            //use Id to save to identify user, haven't implement
+
+
+            return View();
+        }
     }
 }
