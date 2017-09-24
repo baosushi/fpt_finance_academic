@@ -40,22 +40,22 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             return View(courses);
         }
 
+        //public ActionResult CourseDetails(int courseId)
+        //{
+        //    ViewBag.CourseId = courseId;
+        //    return View();
+        //}
+        
         public ActionResult CourseDetails(int courseId)
         {
             ViewBag.CourseId = courseId;
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> GetCourseDetails(int courseId)
-        {
             try
             {
                 var loginName = (string)Session["loginName"];
 
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var course = await context.Courses.FindAsync(courseId);
+                    var course = context.Courses.Find(courseId);
 
                     if (course != null && course.Teacher.LoginName == loginName)
                     {
@@ -68,23 +68,25 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Average = q.Average.Value,
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = q.Status
-                        });
+                        }).ToList();
 
-                        var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
-                            q.Student.StudentCode,
-                            q.Student.LoginName,
-                            //q.StudentCourseMarks.Select(s => s.Mark),
-                            q.Average,
-                            q.Status
-                        });
+                        //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
+                        //    q.Student.StudentCode,
+                        //    q.Student.LoginName,
+                        //    //q.StudentCourseMarks.Select(s => s.Mark),
+                        //    q.Average,
+                        //    q.Status
+                        //});
 
-                        var columns = new List<string[]>();
-                        foreach(var component in data.ElementAt(0).MarksComponent)
-                        {
-                            columns.Add(new string[] { "title", component.CourseMark.ComponentName });
-                        }
+                        var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
 
-                        return Json(new { success = true, columns = columns, data = datatest });
+                        var model = new CourseDetailsViewModel {
+                            ComponentNames = columns,
+                            StudentInCourse = data
+                        };
+
+                        //return Json(new { success = true, columns = columns, data = data });
+                        return View("CourseDetails", model);
                     }
                     else
                     {
@@ -116,5 +118,11 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public double Average { get; set; }
         public List<StudentCourseMark> MarksComponent { get; set; }
         public string Status { get; set; }
+    }
+
+    public class CourseDetailsViewModel
+    {
+        public List<StudentInCourseViewModel> StudentInCourse { get; set; }
+        public List<string> ComponentNames { get; set; }
     }
 }
