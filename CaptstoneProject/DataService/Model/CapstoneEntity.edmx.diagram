@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.TeacherSubject" Width="1.5" PointX="3" PointY="5.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="6" PointY="5.125" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="8.25" PointY="8.75" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule1" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="6" PointY="2" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="7.125" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="5.5" />
