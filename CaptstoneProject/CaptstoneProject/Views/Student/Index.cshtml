@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DataService.Model.StudentInCourse>
+﻿@*@model IEnumerable<DataService.Model.StudentInCourse>*@
 
 <div class="content">
     <!-- Start Container -->
@@ -22,22 +22,22 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Student.StudentCode)
+                                    @*@Html.DisplayFor(modelItem => item.Student.StudentCode)*@
                                 </td>
                                 <td>
                                     Nameless
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Course.SubjectId)
+                                    @*@Html.DisplayFor(modelItem => item.Course.SubjectId)*@
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Course.Id)
+                                    @*@Html.DisplayFor(modelItem => item.Course.Id)*@
                                 </td>
                                 <td>
                                     @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id=item.Id }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
-                                    @Html.DisplayFor(modelItem => item.Average)
+                                    @*@Html.DisplayFor(modelItem => item.Average)*@
                                 </td>
                             </tr>
                         }
