@@ -1,0 +1,103 @@
+﻿@model IEnumerable<DataService.Model.StudentInCourse>
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Student's List </div>
+            <div class="panel-body table-responsive" style="overflow-x:hidden">
+                <table id="testTable" class="table display dataTable">
+                    <thead>
+                        <tr>
+                            <th>Student Code</th>
+                            <th>Name</th>
+                            <th>Subject</th>
+                            <th>Course</th>
+                            <th>Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Student.StudentCode)
+                                </td>
+                                <td>
+                                    Nameless
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Course.SubjectId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Course.Id)
+                                </td>
+                                <td>
+                                    @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                                    @Html.DisplayFor(modelItem => item.Average)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#testTable').DataTable({
+            "bFilter": true,
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": false,
+            //"fnServerParams": function (aoData) {
+            //},
+  
+            "sAjaxSource": "@(Url.Action("GetStudentsList", "Student"))",
+            "bProcessing": true,
+            "bFilter": true,
+            "aLengthMenu": [10, 20, 100],
+            "iDisplayLength" : "10",
+            "oLanguage": {
+                "sSearchPlaceholder": "Student Code",
+                "sSearch": "Search: ",
+                "sZeroRecords": "No matching data",
+                "sInfo": "From _START_ to _END_ out of _TOTAL_ records",
+                "sEmptyTable": "No data",
+                "sInfoFiltered": " - filtered _MAX_ records",
+                "sLengthMenu": "Displaying _MENU_ records",
+                "sProcessing": "Process...",
+                "sInfoEmpty": "No data",
+                "oPaginate": {
+                    "sNext": "<i class='fa fa-chevron-right'></i>",
+                    "sPrevious": "<i class='fa fa-chevron-left'></i>"
+                }
+            },
+            "aoColumnDefs": [
+              {
+                  "aTargets": [0, 2, 3, 4],
+                  "sClass": "text-center",
+                  "bSearchable": false,
+              },
+              {
+                  "aTargets": [1],
+                  "bSearchable": true,
+              },
+              //{
+              //    "aTargets": [3],
+              //    "bSearchable": false,
+              //    "mRender": function (data, type, row) {
+              //        //var money = o.aData[5];
+              //        var data = row[3];
+              //        return toMoney(data, ',', '');
+              //    }
+              //},
+            ]
+        });
+    });
+</script>
