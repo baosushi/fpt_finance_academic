@@ -55,7 +55,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         //    return View();
         //}
         
-        public ActionResult CourseDetails(int courseId)
+        public ActionResult CourseDetails(int courseId, int semesterId)
         {
             ViewBag.CourseId = courseId;
             try
@@ -88,10 +88,13 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //});
 
                         var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
-
+                        var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel {
                             ComponentNames = columns,
-                            StudentInCourse = data
+                            StudentInCourse = data,
+                            Semester = semester.Title + " "+semester.Year,
+                            SubCode = course.Subject.SubjectCode,
+                            SubName= course.Subject.SubjectName,
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -108,7 +111,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 return Json(new { success = false, message = e.Message });
             }
         }
-    }
+
         public JsonResult GetSemesters()
         {
             var context = new DB_Finance_AcademicEntities();
@@ -127,7 +130,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             });
         }
     }
-
 
     public class CourseRecordViewModel
     {
@@ -152,5 +154,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
     {
         public List<StudentInCourseViewModel> StudentInCourse { get; set; }
         public List<string> ComponentNames { get; set; }
+        public string SubName { get; set; }
+        public string SubCode { get; set; }
+        public string Semester { get; set; }
     }
 }

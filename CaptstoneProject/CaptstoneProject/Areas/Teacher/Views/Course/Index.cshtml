@@ -41,7 +41,7 @@
                                 <td>@Model[i - 1].Code</td>
                                 <td>@Model[i - 1].Class</td>
                                 <td>From @Model[i - 1].StartDate.ToString("dd/MM/yyyy") to @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
-                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
+                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">View course</a></td>
                             </tr>
                         }
                     </tbody>

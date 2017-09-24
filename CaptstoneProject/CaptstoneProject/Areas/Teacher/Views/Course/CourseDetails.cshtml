@@ -2,13 +2,26 @@
 @{
     ViewBag.Title = ViewBag.ClassName;
 }
+<style>
+    .course-detail-info {
+        font-size: 14px;
+        padding-left: 20px;
+        padding-bottom: 15px;
+    }
+</style>
 
 <div class="content">
     <!-- Start Container -->
-    <div class="container-default animated fadeInRight" style="padding-bottom:10px">
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
             <div class="panel-body table-responsive">
+                <div class="course-detail-info">
+                    <label><b>Term:</b> @Model.Semester</label>
+                    <label style="padding-left: 60px;"><b>Subject:</b> @Model.SubName - @Model.SubCode</label>
+                    <br />
+                    <label><b>Class:</b> @ViewBag.ClassName</label>
+                </div>
                 <table id="mark-table" class="table display dataTable">
                     <thead>
                         <tr>
