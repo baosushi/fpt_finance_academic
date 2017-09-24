@@ -107,7 +107,7 @@
                 </ul>
             </li>*@
             <li class="dropdown link">
-                <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="~/Content/img/default_user_icon.png" alt="img"><b>John Doe</b><span class="caret"></span></a>
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="@Session["uImgUrl"]" alt="img"><b>@Session["uName"]</b><span class="caret"></span></a>
                 <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
                     <li role="presentation" class="dropdown-header">Profile</li>
                     <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">2</span></a></li>

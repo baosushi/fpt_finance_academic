@@ -39,5 +39,6 @@ namespace DataService.Model
         public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }
