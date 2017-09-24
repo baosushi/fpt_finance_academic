@@ -25,19 +25,47 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                 courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
                     .Courses.Where(q => q.StartDate >= startDate && q.EndDate <= endDate)
-                    .Select(q => new CourseRecordViewModel {
+                    .Select(q => new CourseRecordViewModel
+                    {
                         CourseId = q.Id,
                         Name = q.Subject.SubjectName,
                         Code = q.Subject.SubjectCode,
                         Class = q.ClassName,
                         StartDate = q.StartDate.Value,
                         EndDate = q.EndDate.Value
+                    }).ToList();
+                var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
+                var semesterList = semesters.Select(q => new SelectListItem
+                {
+                    Text = q.Title + " " + q.Year,
+                    Value = q.Id.ToString(),
                 }).ToList();
+                ViewBag.semList = semesterList;
+                ViewBag.selectedSem = semesterId;
             }
+
 
             return View(courses);
         }
+        public JsonResult GetSemesters()
+        {
+            var context = new DB_Finance_AcademicEntities();
+
+            var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
+            var semesterList = semesters.Select(q => new
+            {
+                q.Id,
+                q.Title,
+                q.Year,
+            }).ToList();
+
+            return Json(new
+            {
+                semList = semesterList,
+            });
+        }
     }
+
 
     public class CourseRecordViewModel
     {
