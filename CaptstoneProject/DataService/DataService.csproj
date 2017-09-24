@@ -108,6 +108,9 @@
     <Compile Include="Model\TeacherSubject.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\User.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

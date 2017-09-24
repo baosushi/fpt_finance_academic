@@ -56,6 +56,17 @@
           <Property Name="TeacherId" Type="int" Nullable="false" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="80" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ImgUrl" Type="nvarchar" MaxLength="2000" />
+          <Property Name="OAuthId" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="Course">
           <Key>
             <PropertyRef Name="Id" />
@@ -296,6 +307,7 @@
           <EntitySet Name="SemesterBlock" EntityType="Self.SemesterBlock" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="TeacherSubject" EntityType="Self.TeacherSubject" Schema="db_owner" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseMark" EntityType="Self.CourseMark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
@@ -434,6 +446,7 @@
             <End Role="Subject" EntitySet="Subjects" />
             <End Role="SubjectMark" EntitySet="SubjectMarks" />
           </AssociationSet>
+          <EntitySet Name="Users" EntityType="DB_Finance_AcademicModel.User" />
         </EntityContainer>
         <EntityType Name="Block">
           <Key>
@@ -747,6 +760,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ImgUrl" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="OAuthId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -878,6 +902,18 @@
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
                 <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="OAuthId" ColumnName="OAuthId" />
+                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

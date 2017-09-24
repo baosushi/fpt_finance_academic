@@ -104,6 +104,14 @@
                 </div>
             </div>
         </form>
+        <form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">  
+            <input type="hidden" value="" id="idtxt" name="id"/>
+            <input type="hidden" value="" id="fullNametxt" name="fullName"/>
+            <input type="hidden" value="" id="givenNametxt" name="givenName"/>
+            <input type="hidden" value="" id="imgUrltxt" name="imgUrl"/>
+            <input type="hidden" value="" id="emailtxt" name="email"/>
+            <input type="submit" id="gSignInbtn" hidden />
+        </form>
 
         <!-- Google Login-->
         <!-- Start Footer -->
@@ -140,10 +148,10 @@
             console.log(element.id);
             auth2.attachClickHandler(element, {},
                 function (googleUser) {
-                    var profile = googleUser.getBasicProfile().getName();
+                    var profile = googleUser.getBasicProfile();
 
                     var id_token = googleUser.getAuthResponse().id_token;
-                    console.log("ID Token: " + id_token);
+                   // console.log("ID Token: " + id_token);
 
                     var id = profile.getId();
                     var fullName = profile.getName();
@@ -187,12 +195,15 @@
 
 
         function SignIn(id, fullName, givenName, imgUrl, email) {
-            var xhr = new XMLHttpRequest();
-            var myObject = "id=" + id + "&fullName=" + fullName + "&givenName=" + givenName + "&imgUrl=" + imgUrl + "&email=" + email;
+            //var myObject = "id=" + id + "&fullName=" + fullName + "&givenName=" + givenName + "&imgUrl=" + imgUrl + "&email=" + email;
+            $("#idtxt").val(id);
+            $("#fullNametxt").val(fullName);
+            $("#givenNametxt").val(givenName);
+            $("#imgUrltxt").val(imgUrl);
+            $("#emailtxt").val(email);
 
-            xhr.open("Post", "@Url.Action("SignIn","Home")", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.send(myObject);
+            $("#gSignInbtn").click();
+                
         }
 
 
