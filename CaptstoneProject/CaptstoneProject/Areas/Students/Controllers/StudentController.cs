@@ -7,8 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DataService.Model;
+using CaptstoneProject.Controllers;
 
-namespace CaptstoneProject.Controllers
+namespace CaptstoneProject.Areas.Students.Controllers
 {
     public class StudentController : Controller
     {
