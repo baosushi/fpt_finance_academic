@@ -12,18 +12,13 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Block
+    public partial class UserRole
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Block()
-        {
-            this.SemesterBlocks = new HashSet<SemesterBlock>();
-        }
-    
         public int Id { get; set; }
-        public string Title { get; set; }
+        public int UserId { get; set; }
+        public int RoleId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SemesterBlock> SemesterBlocks { get; set; }
+        public virtual Role Role { get; set; }
+        public virtual User User { get; set; }
     }
 }

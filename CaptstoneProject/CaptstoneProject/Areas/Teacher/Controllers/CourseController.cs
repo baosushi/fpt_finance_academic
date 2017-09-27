@@ -21,8 +21,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 DateTime startDate, endDate;
                 var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                startDate = semester.SemesterBlocks.Select(q => q.StartDate).Min().Value;
-                endDate = semester.SemesterBlocks.Select(q => q.EndDate).Max().Value;
+                startDate = semester.StartDate.Value;
+                endDate = semester.EndDate.Value;
 
                 courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
                     .Courses.Where(q => q.StartDate >= startDate && q.EndDate <= endDate)

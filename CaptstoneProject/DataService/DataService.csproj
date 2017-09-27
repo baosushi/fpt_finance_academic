@@ -54,9 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Model\Block.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\CapstoneEntity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -78,13 +75,13 @@
     <Compile Include="Model\CourseMark.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Role.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Schedule.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Semester.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\SemesterBlock.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Student.cs">
@@ -109,6 +106,9 @@
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\User.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\UserRole.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
