@@ -207,6 +207,7 @@
     <Compile Include="Areas\Semester\SemesterAreaRegistration.cs" />
     <Compile Include="Areas\Students\StudentAreaRegistration.cs" />
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
+    <Compile Include="Areas\Teacher\Controllers\MarkEditController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -361,6 +362,7 @@
     <Content Include="Areas\Semester\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Semester\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Semester\Views\Semester\SemesterMarkExport.cshtml" />
+    <Content Include="Areas\Teacher\Views\MarkEdit\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
