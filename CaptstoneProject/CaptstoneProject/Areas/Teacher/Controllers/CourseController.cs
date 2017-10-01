@@ -108,7 +108,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 return Json(new { success = false, message = e.Message });
             }
         }
-    }
+
+    
         public JsonResult GetSemesters()
         {
             var context = new DB_Finance_AcademicEntities();

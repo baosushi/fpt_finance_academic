@@ -6,6 +6,9 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using CaptstoneProject.Models;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace CaptstoneProject
 {
@@ -58,11 +61,30 @@ namespace CaptstoneProject
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "1012737197971-d4okaoko8vegrcivv2m0pnq20ct1qfog.apps.googleusercontent.com",
+                ClientSecret = "rYcU2JqTJumJU6FgC-XyQDs9",
+            };
+
+            //add scope to access basic profile of user
+            authenticationOptions.Scope.Add("profile");
+            authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
+            {
+                OnAuthenticated = context =>
+                {
+                    var profile = context.User["image"]["url"].ToString();
+                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profile));
+                    //Thread.CurrentPrincipal = new ClaimsPrincipal(context.Identity);
+                    //return Task complete synchronously
+                    return Task.FromResult(0);
+                }
+
+            };
+
+            app.UseGoogleAuthentication(authenticationOptions);
+
+
         }
     }
 }

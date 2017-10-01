@@ -203,6 +203,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\MarkComponent\Controllers\MarkComponentController.cs" />
     <Compile Include="Areas\MarkComponent\MarkComponentAreaRegistration.cs" />
+    <Compile Include="Areas\Semester\Controllers\SemesterController.cs" />
+    <Compile Include="Areas\Semester\SemesterAreaRegistration.cs" />
     <Compile Include="Areas\Students\StudentAreaRegistration.cs" />
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
@@ -355,6 +357,10 @@
     <Content Include="Areas\Teacher\Views\Course\CourseDetails.cshtml" />
     <Content Include="Areas\Students\Views\web.config" />
     <Content Include="Areas\Students\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Semester\Views\web.config" />
+    <Content Include="Areas\Semester\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Semester\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Semester\Views\Semester\SemesterMarkExport.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -413,6 +419,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\MarkComponent\Models\" />
     <Folder Include="Areas\MarkComponent\Views\Shared\" />
+    <Folder Include="Areas\Semester\Models\" />
     <Folder Include="Areas\Students\Views\Shared\" />
     <Folder Include="Areas\Teacher\Models\" />
     <Folder Include="Areas\Teacher\Views\Shared\" />

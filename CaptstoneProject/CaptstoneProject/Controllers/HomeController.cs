@@ -1,9 +1,12 @@
-﻿using DataService.Model;
+﻿using CaptstoneProject.Models;
+using DataService.Model;
+using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static CaptstoneProject.Controllers.AccountController;
 
 namespace CaptstoneProject.Controllers
 {
@@ -82,5 +85,7 @@ namespace CaptstoneProject.Controllers
 
             return View("Index");
         }
+
+
     }
 }
