@@ -1,6 +1,8 @@
 ﻿using DataService.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -54,7 +56,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         //    ViewBag.CourseId = courseId;
         //    return View();
         //}
-        
+
         public ActionResult CourseDetails(int courseId, int semesterId)
         {
             ViewBag.CourseId = courseId;
@@ -89,12 +91,14 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                         var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
-                        var model = new CourseDetailsViewModel {
+                        var model = new CourseDetailsViewModel
+                        {
                             ComponentNames = columns,
                             StudentInCourse = data,
-                            Semester = semester.Title + " "+semester.Year,
+                            Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
-                            SubName= course.Subject.SubjectName,
+                            SubName = course.Subject.SubjectName,
+                            CourseId = course.Id,
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -114,21 +118,107 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
         public JsonResult GetSemesters()
         {
-            var context = new DB_Finance_AcademicEntities();
-
-            var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
-            var semesterList = semesters.Select(q => new
+            using (var context = new DB_Finance_AcademicEntities())
             {
-                q.Id,
-                q.Title,
-                q.Year,
-            }).ToList();
 
-            return Json(new
-            {
-                semList = semesterList,
-            });
+                var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
+                var semesterList = semesters.Select(q => new
+                {
+                    q.Id,
+                    q.Title,
+                    q.Year,
+                }).ToList();
+
+
+                return Json(new
+                {
+                    semList = semesterList,
+                });
+            }
         }
+        public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new PerComp
+                {
+                    CompName = q.ComponentName,
+                    Id = q.Id,
+                    Per = q.Percentage,
+                }).ToList();
+
+                var studentMarks = context.StudentCourseMarks.Where(q => q.StudentInCourseId==studentId).ToList();
+
+                var lengh = markList.Count();
+                double average=0;
+                for (int i = 0; i < lengh; i++)
+                {
+                    var compId = int.Parse(markList[i].name);
+                    var mark = double.Parse(markList[i].value);
+                    var compPer = coursePer.Where(q => q.Id == compId).Select(q => q.Per).FirstOrDefault();
+                    average += mark * compPer;
+                    foreach(var item in studentMarks)
+                    {
+                        if(item.CourseMarkId == compId)
+                        {
+                            item.Mark = mark;
+                            
+                        }
+                    }
+                }
+                average = average / 100;
+                var studentInCourse = context.StudentInCourses.Where(q => q.Id == studentId).FirstOrDefault();
+                studentInCourse.Average = average;
+                context.SaveChanges();
+                return null;
+            }
+        }
+
+        public ActionResult EditMarks(string studentCode, int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                var student = course.StudentInCourses.Where(q => q.Student.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
+                {
+                    Id=q.Id,
+                    Class = course.ClassName,
+                    CourseId = courseId,
+                    Name = q.Student.LoginName,
+                    Code = q.Student.StudentCode,
+                    MarksComponent = q.StudentCourseMarks.ToList(),
+                    
+                }).FirstOrDefault();
+                student.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
+                return View("EditMark", student);
+
+            }
+
+        }
+    }
+
+    public class MarkComp
+    {
+        public string name { get; set; }
+        public string value { get; set; }
+        public int id { get; set; }
+    }
+    public class PerComp
+    {
+        public int Id { get; set; }
+        public string CompName { get; set; }
+        public double Per { get; set; }
+    }
+
+    public class StudentEditViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public int CourseId { get; set; }
+        public string Class { get; set; }
+        public List<string> ComponentNames { get; set; }
+        public List<StudentCourseMark> MarksComponent { get; set; }
     }
 
     public class CourseRecordViewModel
@@ -157,5 +247,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public string SubName { get; set; }
         public string SubCode { get; set; }
         public string Semester { get; set; }
+        public int CourseId { get; set; }
     }
 }

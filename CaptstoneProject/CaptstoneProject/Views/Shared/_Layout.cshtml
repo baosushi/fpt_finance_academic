@@ -18,14 +18,15 @@
     <!-- Counterup -->
     <script type="text/javascript" src="~/Content/js/counterup/jquery.waypoints.min.js"></script>
     <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/sweet-alert/sweet-alert.min.js"></script>
     @Styles.Render("~/Content/plugins")
     @Scripts.Render("~/bundles/plugins")
     @*@Scripts.Render("~/bundles/modernizr")*@
-   
+
     <link href="~/Content/root.css" rel="stylesheet">
 </head>
 <body>
-   <div class="loading"><img src="~/Content/img/blue-loading-icon.gif" alt="loading-img"></div>
+    <div class="loading"><img src="~/Content/img/blue-loading-icon.gif" alt="loading-img"></div>
     <!-- End Page Loading -->
     <!-- Start Top -->
     <div id="top" class="clearfix">
@@ -47,65 +48,65 @@
         <!-- Start Top Right -->
         <ul class="top-right">
             @*<li class="dropdown dropdown-notification nav-item link">
-                <a href="#" data-toggle="dropdown" class="nav-link nav-link-label count-info"><span class="label label-warning">6</span><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right top-width">
-                    <li class="dropdown-menu-header">
-                        <h6 class="dropdown-header"><span>Notifications</span><span class="pull-right label label-danger">6 New</span></h6>
-                    </li>
-                    <li class="list-group">
-                        <a href="#" class="list-group-item">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="media-heading color10"><i class="fa fa-shopping-cart"></i> You have new order!</h6>
-                                    <p class="notification-text font-small-3 text-muted">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                                    <small>
-                                        <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
-                                    </small>
+                    <a href="#" data-toggle="dropdown" class="nav-link nav-link-label count-info"><span class="label label-warning">6</span><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right top-width">
+                        <li class="dropdown-menu-header">
+                            <h6 class="dropdown-header"><span>Notifications</span><span class="pull-right label label-danger">6 New</span></h6>
+                        </li>
+                        <li class="list-group">
+                            <a href="#" class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="media-heading color10"><i class="fa fa-shopping-cart"></i> You have new order!</h6>
+                                        <p class="notification-text font-small-3 text-muted">Lorem ipsum dolor sit amet, consectetuer elit.</p>
+                                        <small>
+                                            <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a><a href="#" class="list-group-item">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="media-heading darken-1 color7"><i class="fa fa-desktop"></i> 99% Server load</h6>
-                                    <p class="notification-text font-small-3 text-muted">Aliquam tincidunt mauris eu risus.</p>
-                                    <small>
-                                        <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
-                                    </small>
+                            </a><a href="#" class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="media-heading darken-1 color7"><i class="fa fa-desktop"></i> 99% Server load</h6>
+                                        <p class="notification-text font-small-3 text-muted">Aliquam tincidunt mauris eu risus.</p>
+                                        <small>
+                                            <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a><a href="#" class="list-group-item">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="media-heading color9"><i class="fa fa-server"></i> Warning notifixation</h6>
-                                    <p class="notification-text font-small-3 text-muted">Vestibulum auctor dapibus neque.</p>
-                                    <small>
-                                        <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
-                                    </small>
+                            </a><a href="#" class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="media-heading color9"><i class="fa fa-server"></i> Warning notifixation</h6>
+                                        <p class="notification-text font-small-3 text-muted">Vestibulum auctor dapibus neque.</p>
+                                        <small>
+                                            <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a><a href="#" class="list-group-item">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="media-heading color11"><i class="fa fa-check"></i> Complete the task</h6>
-                                    <small>
-                                        <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
-                                    </small>
+                            </a><a href="#" class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="media-heading color11"><i class="fa fa-check"></i> Complete the task</h6>
+                                        <small>
+                                            <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a><a href="#" class="list-group-item">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="media-heading"><i class="fa fa-bar-chart"></i> Generate monthly report</h6>
-                                    <small>
-                                        <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
-                                    </small>
+                            </a><a href="#" class="list-group-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="media-heading"><i class="fa fa-bar-chart"></i> Generate monthly report</h6>
+                                        <small>
+                                            <time datetime="2017-02-14 20:00" class="media-meta text-muted">30 minutes ago</time>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="dropdown-menu-footer"><a href="#" class="dropdown-item text-muted text-center">Read all notifications</a></li>
-                </ul>
-            </li>*@
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-footer"><a href="#" class="dropdown-item text-muted text-center">Read all notifications</a></li>
+                    </ul>
+                </li>*@
             <li class="dropdown link">
                 <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="@Session["uImgUrl"]" alt="img"><b>@Session["uName"]</b><span class="caret"></span></a>
                 <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
@@ -157,141 +158,140 @@
     <div class="body-content" style="background: #292929;">
         @RenderBody()
         <!-- Start Footer -->
-            <div class="row footer" style="border-top: 1px solid #505050; color:lightgray; margin-right:0px">
-                <div class="col-md-6 text-left"> Copyright &copy; 2017 Foxlabel All rights reserved. </div>
-                <div class="col-md-6 text-right"> Design and Developed by Foxlabel </div>
-            </div>
+        <div class="row footer" style="border-top: 1px solid #505050; color:lightgray; margin-right:0px">
+            <div class="col-md-6 text-left"> Copyright &copy; 2017 Foxlabel All rights reserved. </div>
+            <div class="col-md-6 text-right"> Design and Developed by Foxlabel </div>
+        </div>
         <!-- End Footer -->
     </div>
     <!-- Start Sidepanel -->
     @*<div role="tabpanel" class="sidepanel">
-        <!-- Nav tabs -->
-      
-        .3  <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a class="nav-link active" href="#today" aria-controls="today" role="tab" data-toggle="tab">TODAY</a></li>
-            <li class="nav-item"><a class="nav-link" href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">TASKS</a></li>
-            <li class="nav-item"><a class="nav-link" href="#chat" aria-controls="chat" role="tab" data-toggle="tab">CHAT</a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Start Today -->
-            <div role="tabpanel" class="tab-pane active" id="today">
-                <div class="sidepanel-m-title"> Today <span class="left-icon"><a href="#"><i class="fa fa-refresh"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-file-o"></i></a></span> </div>
-                <div class="gn-title">NEW</div>
-                <ul class="list-w-title">
-                    <li>
-                        <a href="#">
-                            <span class="label label-danger">ORDER</span> <span class="date">9 hours ago</span>
-                            <h4>New Jacket 2.0</h4>
-                            Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="label label-success">COMMENT</span> <span class="date">14 hours ago</span>
-                            <h4>Bill Jackson</h4>
-                            Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="label label-info">MEETING</span> <span class="date">at 2:30 PM</span>
-                            <h4>Developer Team</h4>
-                            Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="label label-warning">EVENT</span> <span class="date">3 days left</span>
-                            <h4>Birthday Party</h4>
-                            Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
-                        </a>
-                    </li>
-                </ul>
+            <!-- Nav tabs -->
+
+            .3  <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item"><a class="nav-link active" href="#today" aria-controls="today" role="tab" data-toggle="tab">TODAY</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab">TASKS</a></li>
+                <li class="nav-item"><a class="nav-link" href="#chat" aria-controls="chat" role="tab" data-toggle="tab">CHAT</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Start Today -->
+                <div role="tabpanel" class="tab-pane active" id="today">
+                    <div class="sidepanel-m-title"> Today <span class="left-icon"><a href="#"><i class="fa fa-refresh"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-file-o"></i></a></span> </div>
+                    <div class="gn-title">NEW</div>
+                    <ul class="list-w-title">
+                        <li>
+                            <a href="#">
+                                <span class="label label-danger">ORDER</span> <span class="date">9 hours ago</span>
+                                <h4>New Jacket 2.0</h4>
+                                Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="label label-success">COMMENT</span> <span class="date">14 hours ago</span>
+                                <h4>Bill Jackson</h4>
+                                Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="label label-info">MEETING</span> <span class="date">at 2:30 PM</span>
+                                <h4>Developer Team</h4>
+                                Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="label label-warning">EVENT</span> <span class="date">3 days left</span>
+                                <h4>Birthday Party</h4>
+                                Etiam auctor porta augue sit amet facilisis. Sed libero nisi, scelerisque.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End Today -->
+                <!-- Start Tasks -->
+                <div role="tabpanel" class="tab-pane" id="tasks">
+                    <div class="sidepanel-m-title"> To-do List <span class="left-icon"><a href="#"><i class="fa fa-pencil"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-trash"></i></a></span> </div>
+                    <div class="gn-title">TODAY</div>
+                    <div class="form-group has-success">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Add new products</span>
+                        </label>
+                    </div>
+                    <div class="form-group has-warning">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">May 14, 8:20 pm Meeting with Team</span>
+                        </label>
+                    </div>
+                    <div class="form-group has-danger mb-0">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Design Facebook page</span>
+                        </label>
+                    </div>
+                    <div class="form-group has-info mb-0">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Send Invoice to customers</span>
+                        </label>
+                    </div>
+                    <div class="form-group has-success mb-0">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Meeting with developer team</span>
+                        </label>
+                    </div>
+                    <div class="gn-title">TOMORROW</div>
+                    <ul class="todo-list">
+                        <li class="checkbox checkbox-warning">
+                            <input id="checkboxside6" type="checkbox">
+                            <label for="checkboxside6">Redesign our company blog</label>
+                        </li>
+                        <li class="checkbox checkbox-success">
+                            <input id="checkboxside7" type="checkbox">
+                            <label for="checkboxside7">Finish client work</label>
+                        </li>
+                        <li class="checkbox checkbox-info">
+                            <input id="checkboxside8" type="checkbox">
+                            <label for="checkboxside8">Call Johnny from Developer Team</label>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End Tasks -->
+                <!-- Start Chat -->
+                <div role="tabpanel" class="tab-pane" id="chat">
+                    <div class="sidepanel-m-title"> Friend List <span class="left-icon"><a href="#"><i class="fa fa-pencil"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-trash"></i></a></span> </div>
+                    <div class="gn-title">ONLINE MEMBERS (3)</div>
+                    <ul class="group">
+                        <li class="member"><a href="#"><img src="img/profileimg.png" alt="img"><b>Allice Mingham</b>Los Angeles</a><span class="status online"></span></li>
+                        <li class="member"><a href="#"><img src="img/profileimg3.png" alt="img"><b>James Throwing</b>Las Vegas</a><span class="status busy"></span></li>
+                        <li class="member"><a href="#"><img src="img/profileimg2.png" alt="img"><b>Fred Stonefield</b>New York</a><span class="status away"></span></li>
+                        <li class="member"><a href="#"><img src="img/profileimg4.png" alt="img"><b>Chris M. Johnson</b>California</a><span class="status online"></span></li>
+                    </ul>
+                    <div class="gn-title">OFFLINE MEMBERS (8)</div>
+                    <ul class="group">
+                        <li class="member"><a href="#"><img src="img/profileimg.png" alt="img"><b>Allice Mingham</b>Los Angeles</a><span class="status offline"></span></li>
+                        <li class="member"><a href="#"><img src="img/profileimg3.png" alt="img"><b>James Throwing</b>Las Vegas</a><span class="status offline"></span></li>
+                    </ul>
+                    <form class="search">
+                        <input type="text" class="form-control" placeholder="Search a Friend...">
+                    </form>
+                </div>
+                <!-- End Chat -->
             </div>
-            <!-- End Today -->
-            <!-- Start Tasks -->
-            <div role="tabpanel" class="tab-pane" id="tasks">
-                <div class="sidepanel-m-title"> To-do List <span class="left-icon"><a href="#"><i class="fa fa-pencil"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-trash"></i></a></span> </div>
-                <div class="gn-title">TODAY</div>
-                <div class="form-group has-success">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Add new products</span>
-                    </label>
-                </div>
-                <div class="form-group has-warning">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">May 14, 8:20 pm Meeting with Team</span>
-                    </label>
-                </div>
-                <div class="form-group has-danger mb-0">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Design Facebook page</span>
-                    </label>
-                </div>
-                <div class="form-group has-info mb-0">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Send Invoice to customers</span>
-                    </label>
-                </div>
-                <div class="form-group has-success mb-0">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Meeting with developer team</span>
-                    </label>
-                </div>
-                <div class="gn-title">TOMORROW</div>
-                <ul class="todo-list">
-                    <li class="checkbox checkbox-warning">
-                        <input id="checkboxside6" type="checkbox">
-                        <label for="checkboxside6">Redesign our company blog</label>
-                    </li>
-                    <li class="checkbox checkbox-success">
-                        <input id="checkboxside7" type="checkbox">
-                        <label for="checkboxside7">Finish client work</label>
-                    </li>
-                    <li class="checkbox checkbox-info">
-                        <input id="checkboxside8" type="checkbox">
-                        <label for="checkboxside8">Call Johnny from Developer Team</label>
-                    </li>
-                </ul>
-            </div>
-            <!-- End Tasks -->
-            <!-- Start Chat -->
-            <div role="tabpanel" class="tab-pane" id="chat">
-                <div class="sidepanel-m-title"> Friend List <span class="left-icon"><a href="#"><i class="fa fa-pencil"></i></a></span> <span class="right-icon"><a href="#"><i class="fa fa-trash"></i></a></span> </div>
-                <div class="gn-title">ONLINE MEMBERS (3)</div>
-                <ul class="group">
-                    <li class="member"><a href="#"><img src="img/profileimg.png" alt="img"><b>Allice Mingham</b>Los Angeles</a><span class="status online"></span></li>
-                    <li class="member"><a href="#"><img src="img/profileimg3.png" alt="img"><b>James Throwing</b>Las Vegas</a><span class="status busy"></span></li>
-                    <li class="member"><a href="#"><img src="img/profileimg2.png" alt="img"><b>Fred Stonefield</b>New York</a><span class="status away"></span></li>
-                    <li class="member"><a href="#"><img src="img/profileimg4.png" alt="img"><b>Chris M. Johnson</b>California</a><span class="status online"></span></li>
-                </ul>
-                <div class="gn-title">OFFLINE MEMBERS (8)</div>
-                <ul class="group">
-                    <li class="member"><a href="#"><img src="img/profileimg.png" alt="img"><b>Allice Mingham</b>Los Angeles</a><span class="status offline"></span></li>
-                    <li class="member"><a href="#"><img src="img/profileimg3.png" alt="img"><b>James Throwing</b>Las Vegas</a><span class="status offline"></span></li>
-                </ul>
-                <form class="search">
-                    <input type="text" class="form-control" placeholder="Search a Friend...">
-                </form>
-            </div>
-            <!-- End Chat -->
-        </div>
-    </div>*@
+        </div>*@
     <!-- End Sidepanel -->
-    
     @*@Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")*@
+        @Scripts.Render("~/bundles/bootstrap")*@
     @*@RenderSection("scripts", required: false)*@
 </body>
 </html>

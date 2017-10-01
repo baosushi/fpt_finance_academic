@@ -56,7 +56,7 @@
                                     @i
                                 </td>
                                 <td>
-                                    @Model.StudentInCourse[i - 1].UserName
+                                    <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
                                 </td>
                                 <td>
                                     @Model.StudentInCourse[i - 1].StudentCode
