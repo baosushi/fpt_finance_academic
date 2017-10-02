@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "SemesterMarkExport";
+}
+
+<div class="content">
+
+    <form id="fSubmit" method="post" action="@Url.Action("ExportExcelbySemester","Semester")">
+    <span>
+        <select id="semPicker" name="semesterId" data-live-search="true"></select>
+    </span>
+        <input type="hidden" id="semesterName" name="semesterName" value="" />
+        <span class="btn btn-success btn-md" style="cursor:pointer" id="btn-submit">
+            <span class="fa fa-download"></span> Export
+        </span>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetSemester","Semester")",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                if (result.success) {
+                    var list = result.semesterList;
+                    for (var i = 0; i < list.length; i++) {
+                        $('#semPicker').append("<option value='" + list[i]['Id'] + "'>"
+                            + list[i]['Title'] + list[i]['Year'] + "</option>");
+                    }
+                    $('#semPicker').selectpicker();
+                    $('#semPicker').selectpicker('render');
+                    var name = $('#semPicker').find("option:selected").text();
+                    $("#semesterName").val(name);
+
+                }
+            }
+        });
+
+        $('#semPicker').on("change", function () {
+            var name = $(this).find("option:selected").text();
+            $("#semesterName").val(name);
+        })
+
+        $('#btn-submit').on("click", function () {
+            $('#fSubmit').submit();
+        })
+    });
+</script>
+
