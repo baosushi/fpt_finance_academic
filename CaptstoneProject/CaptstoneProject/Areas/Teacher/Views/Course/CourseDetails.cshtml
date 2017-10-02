@@ -14,6 +14,11 @@
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
+            <div>
+                <a href="" class="btn btn-success btn-lg">
+                    <span class="glyphicon glyphicon-export"></span>Export
+                </a>
+            </div>
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
             <div class="panel-body table-responsive">
                 <div class="course-detail-info">
@@ -73,7 +78,7 @@
                                     @i
                                 </td>
                                 <td>
-                                    @Model.StudentInCourse[i - 1].UserName
+                                    <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
                                 </td>
                                 <td>
                                     @Model.StudentInCourse[i - 1].StudentCode
@@ -154,5 +159,6 @@
         $('#mark-table').DataTable({
             "searching": true
         });
+
     });
 </script>

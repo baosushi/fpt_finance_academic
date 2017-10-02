@@ -8,6 +8,11 @@ namespace CaptstoneProject.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string ImageUrl { get; set; }
+        public string IdGoogle { get; set; }
     }
 
     public class ExternalLoginListViewModel

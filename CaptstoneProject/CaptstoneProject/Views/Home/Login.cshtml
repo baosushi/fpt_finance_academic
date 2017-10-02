@@ -89,14 +89,15 @@
     </div>
     <div class="" style="background: #292929;padding:8% 0 0;">
 
-        <form class="li-form" action="">
+        <form class="li-form" method="post" action="@Url.Action("ExternalLogin", "Account")">
+            @Html.AntiForgeryToken()
             <div class="">
                 <input class="inp-form" type="text" placeholder="username" />
             </div>
             <div class="">
                 <input class="inp-form" type="password" placeholder="Password" />
             </div>
-            <input type="button" class="inp-form" onclick="test()" value="Sign In" style="background:#42bae0;color:white" />
+            <input type="submit" class="inp-form" value="Sign In" style="background:#42bae0;color:white" />
             <div id="gSignInWrapper">
                 <div id="customBtnSignin" class="customGPlusSignIn">
                     <span class="icon"></span>
