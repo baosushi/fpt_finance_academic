@@ -22,6 +22,23 @@
                     <br />
                     <label><b>Class:</b> @ViewBag.ClassName</label>
                 </div>
+                <div class="row">
+                    <div class="offset-8 col-md-4">
+                        <div class="pull-right">
+                            <button class="btn-success btn" id="download-template-btn">Download Template</button>
+                            <button class="btn-primary btn" id="import-mark-btn">Import excel</button>
+                            <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="offset-10 col-md-2">
+                        <button id="submit-button" class="btn btn-default pull-right" disabled="disabled">Submit file</button>
+                    </div>
+                </div>
+                <br />
+
                 <table id="mark-table" class="table display dataTable">
                     <thead>
                         <tr>
@@ -81,58 +98,57 @@
         </div>
     </div>
 </div>
+<form class="hidden" method="post" id="template-request-form" action="@Url.Action("DownloadTemplate")">
+    <input type="text" name="courseId" value="@Model.CourseId" />
+</form>
 
 <script>
-    @*$.ajax({
-        url: "@Url.Action("GetCourseDetails", "Course")",
-        type: "POST",
-        data: {courseId: @ViewBag.CourseId},
-        success: function (result) {
-            if (result.success) {
-                result.columns
+    $('#download-template-btn').click(function () {
+        $('#template-request-form').submit();
+    });
 
-                $('#mark-table').DataTable({
-                    "bServerSide": false,
-                    "bRetrieve": false,
-                    "bDestroy": true,
-                    "bProcessing": true,
-                    "data": result.data,
-                    "searching": true,
-                    "columns": result.columns,
-                    "aoColumnDefs": [
-                        {
-                            "aTargets": [2, 3],
-                            "sClass": "text-center"
-                        },
-                        {
-                            "aTargets": [5],
-                            "mRender": function (data, type, row) {
-                                //var money = o.aData[5];
-                                var data = row[5];
-                                return toMoney(data, ',', '');
-                            }
-                        },
-                        {
-                            "aTargets": [6],
-                            "mRender": function (data, type, row) {
-                                //var money = o.aData[5];
-                                var data = row[6];
-                                return toMoney(data, ',', '');
-                            }
-                        },
-                        {
-                            "aTargets": [7],
-                            "sClass": "hidden",
-                        }
-                    ],
-                    "bAutoWidth": false
-                });
-            }
-        },
-        error: function (result) {
+    $('#import-mark-btn').click(function () {
+        $('#upload-file').trigger("click");
+    });
 
+    $('#upload-file').on("change", function () {
+        var fileName = this.files[0].name;
+        $("#filename").html(fileName);
+
+        if (fileName != null) {
+            $('#submit-button').removeAttr("disabled");
+        } else {
+            $('#submit-button').attr("disabled", "disabled");
         }
-    });*@
+    });
+
+    $('#submit-button').on("click", function () {
+        var data = new FormData();
+        data.append("courseId", @Model.CourseId);
+        for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+            data.append("file" + i, $("#upload-file")[0].files[i]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UploadExcel")',
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
 
     $(document).ready(function () {
         $('#mark-table').DataTable({
