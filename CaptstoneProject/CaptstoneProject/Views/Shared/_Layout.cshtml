@@ -28,7 +28,11 @@
     @*@Scripts.Render("~/bundles/modernizr")*@
 
     <link href="~/Content/root.css" rel="stylesheet">
-
+    <style>
+        .dropdown-menu li:hover {
+            background-color: #d8d4d4;
+        }
+    </style>
 </head>
 <body>
     <div class="loading"><img src="~/Content/img/blue-loading-icon.gif" alt="loading-img"></div>
@@ -121,7 +125,14 @@
                     <li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
-                    <li><a href="#"><i class="fa falist fa-power-off"></i> Logout</a></li>
+                    <li id="btn_Signout">
+                        <a href="#">
+                            <form id="fSignout" action="@Url.Action("LogOff","Account")" method="post">
+                                @Html.AntiForgeryToken()
+                                <i class="fa falist fa-power-off"></i> Logout
+                            </form>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -298,5 +309,12 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
     @*@RenderSection("scripts", required: false)*@
+    <script>
+        $(document).ready(function () {
+            $("#btn_Signout").click(function () {
+                $("#fSignout").submit();
+            });
+        })
+    </script>
 </body>
 </html>

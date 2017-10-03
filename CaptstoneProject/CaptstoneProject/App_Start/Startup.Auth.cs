@@ -28,7 +28,7 @@ namespace CaptstoneProject
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login"),
+                LoginPath = new PathString("/Home/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
@@ -68,14 +68,14 @@ namespace CaptstoneProject
             };
 
             //add scope to access basic profile of user
-            authenticationOptions.Scope.Add("profile");
+            //authenticationOptions.Scope.Add("profile");
             authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
             {
                 OnAuthenticated = context =>
                 {
-                    var profile = context.User["image"]["url"].ToString();
-                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profile));
-                    //Thread.CurrentPrincipal = new ClaimsPrincipal(context.Identity);
+                    var img = context.User["image"]["url"].ToString();
+                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, img));
+
                     //return Task complete synchronously
                     return Task.FromResult(0);
                 }

@@ -1,4 +1,5 @@
-﻿using DataService.Model;
+﻿using CaptstoneProject.Controllers;
+using DataService.Model;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Web.Mvc;
 
 namespace CaptstoneProject.Areas.MarkComponent.Controllers
 {
-    public class MarkComponentController : Controller
+    public class MarkComponentController : MyBaseController
     {
         // GET: MarkComponent/MarkComponent
         public ActionResult Index()

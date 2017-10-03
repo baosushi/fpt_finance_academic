@@ -11,7 +11,7 @@ using CaptstoneProject.Controllers;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
-    public class StudentController : Controller
+    public class StudentController : MyBaseController
     {
         private DB_Finance_AcademicEntities db = new DB_Finance_AcademicEntities();
 

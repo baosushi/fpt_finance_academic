@@ -12,7 +12,6 @@ namespace CaptstoneProject.Models
         public string Name { get; set; }
         public string FullName { get; set; }
         //public string Email { get; set; }
-        public string ImageUrl { get; set; }
         public string IdGoogle { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

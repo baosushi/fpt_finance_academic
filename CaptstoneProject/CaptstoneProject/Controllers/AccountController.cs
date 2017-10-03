@@ -9,11 +9,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CaptstoneProject.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CaptstoneProject.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+
+    public class AccountController : MyBaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -183,9 +184,9 @@ namespace CaptstoneProject.Controllers
                 var user = new ApplicationUser
                 {
                     Name = name,
+                    FullName = fullName,
                     Email = email,
                     IdGoogle = id,
-                    ImageUrl = imageUrl
                 };
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 var result = await UserManager.CreateAsync(user);
@@ -308,8 +309,8 @@ namespace CaptstoneProject.Controllers
 
         //
         // POST: /Account/ExternalLogin
-        [HttpPost]
         [AllowAnonymous]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
@@ -352,6 +353,66 @@ namespace CaptstoneProject.Controllers
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
+        //regis
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> MyRegister()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                try
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    await roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+                    await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+
+
+                //bao
+                ExternalLoginInfo info = new ExternalLoginInfo { DefaultUserName = "baotdse62099@fpt.edu.vn", Email = "baotdse62099@fpt.edu.vn" };
+                UserLoginInfo uinfo = new UserLoginInfo("Google", "109983346659077543724");
+                info.Login = uinfo;
+
+
+                //info.Email = "baotdse62099@fpt.edu.vn";
+                //info.DefaultUserName = "baotdse62099@fpt.edu.vn";
+
+                //Danh
+                ExternalLoginInfo info2 = new ExternalLoginInfo { DefaultUserName = "danhdcse61904@fpt.edu.vn", Email = "danhdcse61904@fpt.edu.vn" };
+                UserLoginInfo uinfo2 = new UserLoginInfo("Google", "107166571606205395096");
+                info2.Login = uinfo2;
+
+
+
+
+                var bao = new ApplicationUser { UserName = info.Email, Email = info.Email, Name = "Trần Đức Bảo", FullName = "Bao Tran Duc" };
+                var danh = new ApplicationUser { UserName = info2.Email, Email = info2.Email, Name = "Đổng Công Danh", FullName = "(K10_HCM) Đổng Công Danh" };
+                //var phuong = new ApplicationUser { UserName = info3.Email, Email = info3.Email, Name = "Phạm Hồng Sơn", FullName = "(K10_HCM) Phạm Hồng Sơn" };
+
+
+                var result = await UserManager.CreateAsync(bao);
+                var result2 = await UserManager.CreateAsync(danh);
+
+
+                await UserManager.AddLoginAsync(bao.Id, info.Login);
+                await UserManager.AddLoginAsync(danh.Id, info2.Login);
+
+                var son= UserManager.FindByEmail("sonphse61822@fpt.edu.vn");
+
+                UserManager.AddToRole(bao.Id, "Admin");
+                UserManager.AddToRole(danh.Id, "Admin");
+                UserManager.AddToRole(son.Id, "Admin");
+            }
+
+            return RedirectToAction("Login", "Home");
+        }
+
         //edited
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
@@ -361,21 +422,18 @@ namespace CaptstoneProject.Controllers
             var claims = loginInfo.ExternalIdentity.Claims;
 
             var name = claims.Where(q => q.Type == ClaimTypes.Name).Select(q => q.Value).SingleOrDefault();
-            var fullName = claims.Where(q => q.Type == ClaimTypes.Surname).Select(q => q.Value).SingleOrDefault();
-            var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
+            //var fullName = claims.Where(q => q.Type == ClaimTypes.Surname).Select(q => q.Value).SingleOrDefault();
+            //var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
             var imageUrl = claims.Where(q => q.Type == ClaimTypes.Uri).Select(q => q.Value).SingleOrDefault();
 
-
+            Session["uImgUrl"] = imageUrl;
+            Session["uName"] = name;
             if (loginInfo == null)
             {
                 return RedirectToAction("Login", "Home");
             }
-            var userExist = UserManager.FindByEmail(email);
-            if (userExist == null)
-            {
-                //create and login
-                return RedirectToAction("RegisterGG");
-            }
+            //var userExist = UserManager.FindByEmail(email);
+
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
@@ -441,6 +499,7 @@ namespace CaptstoneProject.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session.Abandon();
             return RedirectToAction("Login", "Home");
         }
 
