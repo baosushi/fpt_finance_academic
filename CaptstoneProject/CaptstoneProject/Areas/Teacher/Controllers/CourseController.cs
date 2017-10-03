@@ -147,22 +147,22 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     Per = q.Percentage,
                 }).ToList();
 
-                var studentMarks = context.StudentCourseMarks.Where(q => q.StudentInCourseId==studentId).ToList();
+                var studentMarks = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentId).ToList();
 
                 var lengh = markList.Count();
-                double average=0;
+                double average = 0;
                 for (int i = 0; i < lengh; i++)
                 {
                     var compId = int.Parse(markList[i].name);
                     var mark = double.Parse(markList[i].value);
                     var compPer = coursePer.Where(q => q.Id == compId).Select(q => q.Per).FirstOrDefault();
                     average += mark * compPer;
-                    foreach(var item in studentMarks)
+                    foreach (var item in studentMarks)
                     {
-                        if(item.CourseMarkId == compId)
+                        if (item.CourseMarkId == compId)
                         {
                             item.Mark = mark;
-                            
+
                         }
                     }
                 }
@@ -181,13 +181,14 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 var course = context.Courses.Find(courseId);
                 var student = course.StudentInCourses.Where(q => q.Student.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
-                    Id=q.Id,
+                    Id = q.Id,
                     Class = course.ClassName,
                     CourseId = courseId,
                     Name = q.Student.LoginName,
                     Code = q.Student.StudentCode,
+                    Average = q.Average != null ? q.Average.ToString() : "N/A",
                     MarksComponent = q.StudentCourseMarks.ToList(),
-                    
+
                 }).FirstOrDefault();
                 student.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
                 return View("EditMark", student);
@@ -219,6 +220,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public string Class { get; set; }
         public List<string> ComponentNames { get; set; }
         public List<StudentCourseMark> MarksComponent { get; set; }
+        public string Average { get; set; }
     }
 
     public class CourseRecordViewModel

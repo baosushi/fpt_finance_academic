@@ -913,6 +913,7 @@ img.circle-border {
     padding-top: 80px;
     margin-left: 250px;
     background: #eee;
+    min-height:800px;
 }
 /*
 * Contact
