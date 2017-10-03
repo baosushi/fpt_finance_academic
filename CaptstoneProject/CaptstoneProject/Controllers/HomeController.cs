@@ -10,7 +10,7 @@ using static CaptstoneProject.Controllers.AccountController;
 
 namespace CaptstoneProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : MyBaseController
     {
         private DB_Finance_AcademicEntities contextDB = new DB_Finance_AcademicEntities();
 
@@ -37,6 +37,7 @@ namespace CaptstoneProject.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();

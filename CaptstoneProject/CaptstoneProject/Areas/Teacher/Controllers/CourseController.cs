@@ -1,4 +1,5 @@
-﻿using DataService.Model;
+﻿using CaptstoneProject.Controllers;
+using DataService.Model;
 using OfficeOpenXml;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ using System.Web.Mvc;
 
 namespace CaptstoneProject.Areas.Teacher.Controllers
 {
-    public class CourseController : Controller
+    public class CourseController : MyBaseController
     {
         // GET: Teacher/Course
         public ActionResult Index(int semesterId = -1)

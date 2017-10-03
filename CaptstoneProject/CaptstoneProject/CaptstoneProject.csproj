@@ -213,6 +213,7 @@
     <Compile Include="Controllers\jQueryDataTableParamModel.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Areas\Students\Controllers\StudentController.cs" />
+    <Compile Include="Controllers\MyBaseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -324,6 +325,7 @@
     <Content Include="fonts\fontawesome-webfont3e6e.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\g-logo.png" />
     <Content Include="Images\Icon\images.png" />
     <Content Include="Images\Icon\logo-fpt.png" />
     <Content Include="Scripts\bootstrap.js" />
@@ -427,6 +429,7 @@
     <Folder Include="Areas\Students\Views\Shared\" />
     <Folder Include="Areas\Teacher\Models\" />
     <Folder Include="Areas\Teacher\Views\Shared\" />
+    <Folder Include="Views\MyBase\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

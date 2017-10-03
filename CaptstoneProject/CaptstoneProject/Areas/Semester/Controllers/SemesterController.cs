@@ -1,4 +1,5 @@
-﻿using DataService.Model;
+﻿using CaptstoneProject.Controllers;
+using DataService.Model;
 using OfficeOpenXml;
 using System;
 
@@ -10,7 +11,7 @@ using System.Web.Mvc;
 
 namespace CaptstoneProject.Areas.Semester.Controllers
 {
-    public class SemesterController : Controller
+    public class SemesterController : MyBaseController
     {
         // GET: Semester/Semester
         public ActionResult Index()
@@ -51,7 +52,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
                               SubjectCode = c.Subject.SubjectCode,
                               ClassName = c.ClassName,
                               AverageMark = sc.Average,
-                              Status = (sc.Status == null)? -1: (sc.Status.Equals("Pass")? 1: 0),
+                              Status = (sc.Status == null)? null: sc.Status
                           }).OrderBy(q => q.RollNumber).ToList();
             }
             string fileName = "Export_Mark_" + semesterName;
@@ -97,7 +98,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
             public string SubjectCode { get; set; }
             public string ClassName { get; set; }
             public double? AverageMark { get; set; }
-            public int? Status { get; set; } // 0:Fail, 1:Success
+            public String Status { get; set; } // 0:Fail, 1:Success
             public string RollNumber { get; set; } // studentRollNumber
 
         }

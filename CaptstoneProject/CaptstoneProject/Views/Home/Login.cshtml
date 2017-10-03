@@ -52,7 +52,7 @@
             text-align: center;
             border: thin solid #888;
             box-shadow: 1px 1px 1px grey;
-            overflow:hidden;
+            overflow: hidden;
             white-space: nowrap;
         }
 
@@ -88,31 +88,38 @@
         <img src="~/Images/Icon/images.png" alt="logo-fpt" />
     </div>
     <div class="" style="background: #292929;padding:8% 0 0;">
-
-        <form class="li-form" method="post" action="@Url.Action("ExternalLogin", "Account")">
-            @Html.AntiForgeryToken()
-            <div class="">
-                <input class="inp-form" type="text" placeholder="username" />
-            </div>
-            <div class="">
-                <input class="inp-form" type="password" placeholder="Password" />
-            </div>
-            <input type="submit" class="inp-form" value="Sign In" style="background:#42bae0;color:white" />
-            <div id="gSignInWrapper">
-                <div id="customBtnSignin" class="customGPlusSignIn">
-                    <span class="icon"></span>
-                    <span class="buttonText">Sign in with Google</span>
+        <div class="li-form">
+            <form class="" method="post" action="">
+                @Html.AntiForgeryToken()
+                <div class="">
+                    <input class="inp-form" type="text" placeholder="username" />
                 </div>
-            </div>
-        </form>
-        <form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">  
-            <input type="hidden" value="" id="idtxt" name="id"/>
-            <input type="hidden" value="" id="fullNametxt" name="fullName"/>
-            <input type="hidden" value="" id="givenNametxt" name="givenName"/>
-            <input type="hidden" value="" id="imgUrltxt" name="imgUrl"/>
-            <input type="hidden" value="" id="emailtxt" name="email"/>
-            <input type="submit" id="gSignInbtn" hidden />
-        </form>
+                <div class="">
+                    <input class="inp-form" type="password" placeholder="Password" />
+                </div>
+                <input type="submit" class="inp-form" value="Sign In" style="background:#42bae0;color:white" />
+            </form>
+            <form id="gForm" action="@Url.Action("ExternalLogin","Account")" method="post">
+                @Html.AntiForgeryToken()
+                <div id="gSignInWrapper">
+                    <div id="customBtnSignin" class="customGPlusSignIn">
+                        <span class="icon"><img src="~/Images/g-logo.png" /></span>
+                        <span class="buttonText">Sign in with Google</span>
+                    </div>
+                </div>
+            </form>
+            @*<form method="post" action="@Url.Action("MyRegister","Account")">
+                <input type="submit" value="register" />
+            </form>*@
+        </div>
+        @*<form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">
+                <input type="hidden" value="" id="idtxt" name="id"/>
+                <input type="hidden" value="" id="fullNametxt" name="fullName"/>
+                <input type="hidden" value="" id="givenNametxt" name="givenName"/>
+                <input type="hidden" value="" id="imgUrltxt" name="imgUrl"/>
+                <input type="hidden" value="" id="emailtxt" name="email"/>
+                <input type="submit" id="gSignInbtn" hidden />
+            </form>*@
 
         <!-- Google Login-->
         <!-- Start Footer -->
@@ -125,46 +132,47 @@
     <script>
 
         $(document).ready(function () {
-            startApp();
-
-        });
-        $(document).ready(function () {
-            console.log("ready!");
-        });
-        var googleUser = {};
-        var startApp = function () {
-            gapi.load('auth2', function () {
-                // Retrieve the singleton for the GoogleAuth library and set up the client.
-                auth2 = gapi.auth2.init({
-                    client_id: '1012737197971-d4okaoko8vegrcivv2m0pnq20ct1qfog.apps.googleusercontent.com',
-                    cookiepolicy: 'single_host_origin',
-                    // Request scopes in addition to 'profile' and 'email'
-                    //scope: 'additional_scope'
-                });
-                attachSignin(document.getElementById('customBtnSignin'));
+            //startApp();
+            $("#customBtnSignin").on("click", function () {
+                $("#gForm").submit();
             });
-        };
 
-        function attachSignin(element) {
-            console.log(element.id);
-            auth2.attachClickHandler(element, {},
-                function (googleUser) {
-                    var profile = googleUser.getBasicProfile();
+        });
 
-                    var id_token = googleUser.getAuthResponse().id_token;
-                   // console.log("ID Token: " + id_token);
+        //var googleUser = {};
+        //var startApp = function () {
+        //    gapi.load('auth2', function () {
+        //        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        //        auth2 = gapi.auth2.init({
+        //            client_id: '1012737197971-d4okaoko8vegrcivv2m0pnq20ct1qfog.apps.googleusercontent.com',
+        //            cookiepolicy: 'single_host_origin',
+        //            // Request scopes in addition to 'profile' and 'email'
+        //            //scope: 'additional_scope'
+        //        });
+        //        attachSignin(document.getElementById('customBtnSignin'));
+        //    });
+        //};
 
-                    var id = profile.getId();
-                    var fullName = profile.getName();
-                    var givenName = profile.getName();
-                    var imgUrl = profile.getImageUrl();
-                    var email = profile.getEmail();
-                    SignIn(id, fullName, givenName, imgUrl, email);
+        //function attachSignin(element) {
+        //    console.log(element.id);
+        //    auth2.attachClickHandler(element, {},
+        //        function (googleUser) {
+        //            var profile = googleUser.getBasicProfile();
 
-                }, function (error) {
-                    alert(JSON.stringify(error, undefined, 2));
-                });
-        }
+        //            var id_token = googleUser.getAuthResponse().id_token;
+        //           // console.log("ID Token: " + id_token);
+
+        //            var id = profile.getId();
+        //            var fullName = profile.getName();
+        //            var givenName = profile.getName();
+        //            var imgUrl = profile.getImageUrl();
+        //            var email = profile.getEmail();
+        //            SignIn(id, fullName, givenName, imgUrl, email);
+
+        //        }, function (error) {
+        //            alert(JSON.stringify(error, undefined, 2));
+        //        });
+        //}
 
         //old code for button SignIn
         //function onSignIn(googleUser) {
@@ -195,17 +203,17 @@
 
 
 
-        function SignIn(id, fullName, givenName, imgUrl, email) {
-            //var myObject = "id=" + id + "&fullName=" + fullName + "&givenName=" + givenName + "&imgUrl=" + imgUrl + "&email=" + email;
-            $("#idtxt").val(id);
-            $("#fullNametxt").val(fullName);
-            $("#givenNametxt").val(givenName);
-            $("#imgUrltxt").val(imgUrl);
-            $("#emailtxt").val(email);
+        //function SignIn(id, fullName, givenName, imgUrl, email) {
+        //    //var myObject = "id=" + id + "&fullName=" + fullName + "&givenName=" + givenName + "&imgUrl=" + imgUrl + "&email=" + email;
+        //    $("#idtxt").val(id);
+        //    $("#fullNametxt").val(fullName);
+        //    $("#givenNametxt").val(givenName);
+        //    $("#imgUrltxt").val(imgUrl);
+        //    $("#emailtxt").val(email);
 
-            $("#gSignInbtn").click();
-                
-        }
+        //    $("#gSignInbtn").click();
+
+        //}
 
 
 

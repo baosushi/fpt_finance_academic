@@ -10,8 +10,8 @@ using CaptstoneProject.Models;
 
 namespace CaptstoneProject.Controllers
 {
-    [Authorize]
-    public class ManageController : Controller
+    
+    public class ManageController : MyBaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
