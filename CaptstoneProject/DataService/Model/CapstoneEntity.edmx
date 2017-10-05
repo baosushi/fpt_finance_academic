@@ -30,6 +30,7 @@
           <Property Name="EndDate" Type="datetime" />
           <Property Name="Year" Type="int" Nullable="false" />
           <Property Name="SemesterInYear" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -105,6 +106,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Mark" Type="float" />
           <Property Name="CourseMarkId" Type="int" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
           <Property Name="StudentInCourseId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="StudentInCourse">
@@ -499,6 +501,7 @@
           <Property Name="Year" Type="Int32" Nullable="false" />
           <Property Name="SemesterInYear" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Semester" FromRole="Semester" ToRole="Course" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -594,6 +597,7 @@
           <Property Name="StudentInCourseId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CourseMark" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" FromRole="StudentCourseMark" ToRole="CourseMark" />
           <NavigationProperty Name="StudentInCourse" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" FromRole="StudentCourseMark" ToRole="StudentInCourse" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="StudentInCourse">
           <Key>
@@ -835,6 +839,7 @@
           <EntitySetMapping Name="Semesters">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Semester">
               <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="SemesterInYear" ColumnName="SemesterInYear" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
@@ -921,6 +926,7 @@
           <EntitySetMapping Name="StudentCourseMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentCourseMark">
               <MappingFragment StoreEntitySet="StudentCourseMark">
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="StudentInCourseId" ColumnName="StudentInCourseId" />
                 <ScalarProperty Name="CourseMarkId" ColumnName="CourseMarkId" />
                 <ScalarProperty Name="Mark" ColumnName="Mark" />

@@ -18,6 +18,7 @@ namespace DataService.Model
         public Nullable<double> Mark { get; set; }
         public int CourseMarkId { get; set; }
         public int StudentInCourseId { get; set; }
+        public string Note { get; set; }
     
         public virtual CourseMark CourseMark { get; set; }
         public virtual StudentInCourse StudentInCourse { get; set; }
