@@ -73,6 +73,7 @@ namespace CaptstoneProject.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -445,6 +446,7 @@ namespace CaptstoneProject.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             var claims = loginInfo.ExternalIdentity.Claims;
 
