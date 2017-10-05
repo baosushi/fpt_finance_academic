@@ -1,5 +1,6 @@
 ﻿using CaptstoneProject.Models;
 using DataService.Model;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,11 @@ namespace CaptstoneProject.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View();
+            //else
+            //{
+            //    HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //}
+            return View("Login");
         }
 
         public ActionResult GoogleSignIn()
