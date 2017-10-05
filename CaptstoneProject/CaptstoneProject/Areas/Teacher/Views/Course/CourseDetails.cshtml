@@ -39,7 +39,7 @@
                 <br />
                 <div class="row">
                     <div class="offset-10 col-md-2">
-                        <button id="submit-button" class="btn btn-default pull-right" disabled="disabled">Submit file</button>
+                        <button id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waitting for file</button>
                     </div>
                 </div>
                 <br />
@@ -122,8 +122,16 @@
 
         if (fileName != null) {
             $('#submit-button').removeAttr("disabled");
+            $('#submit-button').addClass("active");
+            $('#submit-button').removeClass("disabled");
+            $('#submit-button').html('Ready to submit!')
         } else {
             $('#submit-button').attr("disabled", "disabled");
+            $('#submit-button').addClass("disabled");
+            $('#submit-button').removeClass("active");
+            $('#icon-upload').removeClass('fa-check-circle');
+            $('#icon-upload').addClass('fa-times-circle');
+            $('#submit-button').html('Waitting for file')
         }
     });
 
