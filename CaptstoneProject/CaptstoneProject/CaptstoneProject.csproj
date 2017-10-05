@@ -208,6 +208,7 @@
     <Compile Include="Areas\Students\StudentAreaRegistration.cs" />
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
+    <Compile Include="Areas\TrainingManagement\Controllers\ManagementController.cs" />
     <Compile Include="Areas\TrainingManagement\TrainingManagementAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -357,19 +358,23 @@
     <Content Include="Areas\MarkComponent\Views\MarkComponent\ImportExcel.cshtml" />
     <Content Include="Areas\Teacher\Views\web.config" />
     <Content Include="Areas\Teacher\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Teacher\Views\Course\Index.cshtml" />
-    <Content Include="Areas\Teacher\Views\Course\CourseDetails.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\Index.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\CourseDetails.cshtml" />
     <Content Include="Areas\Students\Views\web.config" />
     <Content Include="Areas\Students\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Teacher\Views\MarkEdit\Edit.cshtml" />
     <Content Include="ExcelTemplate\ImportMarkTemplate.xlsx" />
-    <Content Include="Areas\Teacher\Views\Course\EditMark.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\EditMark.cshtml" />
     <Content Include="Areas\Semester\Views\web.config" />
     <Content Include="Areas\Semester\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Semester\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Semester\Views\Semester\SemesterMarkExport.cshtml" />
     <Content Include="Areas\Teacher\Views\MarkEdit\Edit.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\web.config" />
+    <Content Include="Areas\Teacher\Views\Course\CourseDetails.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\EditMark.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\Index.cshtml" />
+    <Content Include="Areas\TrainingManagement\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -425,6 +430,7 @@
     <Content Include="Areas\Students\Views\Student\Details.cshtml" />
     <Content Include="Areas\Students\Views\Student\Edit.cshtml" />
     <Content Include="Areas\Students\Views\Student\Index.cshtml" />
+    <Content Include="Views\Shared\_ManagementLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -434,7 +440,6 @@
     <Folder Include="Areas\Students\Views\Shared\" />
     <Folder Include="Areas\Teacher\Models\" />
     <Folder Include="Areas\Teacher\Views\Shared\" />
-    <Folder Include="Areas\TrainingManagement\Controllers\" />
     <Folder Include="Areas\TrainingManagement\Models\" />
     <Folder Include="Areas\TrainingManagement\Views\Shared\" />
     <Folder Include="Views\MyBase\" />

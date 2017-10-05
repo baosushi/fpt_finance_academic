@@ -727,7 +727,7 @@ img.circle-border {
     padding: 0;
 }
 .sidepanel .nav-tabs > li {
-    float: left;
+    /*float: left;*/
     margin-bottom: -1px;
     display: inline-block;
     border-right: none;
@@ -3827,7 +3827,7 @@ table td {
   display: inline-block;
   line-height: 60px;
   text-align: center;
-  float: left;
+  /*float: left;*/
   margin-right: 10px;
 }
 
@@ -3840,7 +3840,7 @@ table td {
   font-size: 30px;
   background: none repeat scroll 0% 0% #EEE;
   border-radius: 100%;
-  float: left;
+  /*float: left;*/
   margin-right: 10px;
   color: #FFF;
 }
