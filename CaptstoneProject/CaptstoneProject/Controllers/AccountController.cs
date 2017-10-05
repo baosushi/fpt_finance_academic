@@ -62,33 +62,37 @@ namespace CaptstoneProject.Controllers
             return View();
         }
 
-        //
+        //edited
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(MyLoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("Login", "Home");
             }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, false, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    Session["uName"] = model.Username;
+                    Session["uImgUrl"] = "/Images/prideKappa.jpg";
+
+                    return RedirectToAction("Index", "Home");
+                //case SignInStatus.LockedOut:
+                //    return View("Lockout");
+                //case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return RedirectToAction("Login", "Home");
             }
         }
 
@@ -360,54 +364,78 @@ namespace CaptstoneProject.Controllers
         {
             using (var context = new ApplicationDbContext())
             {
-                try
-                {
-                    var roleStore = new RoleStore<IdentityRole>(context);
-                    var roleManager = new RoleManager<IdentityRole>(roleStore);
-                    await roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
-                    await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
-                }
-                catch (Exception e)
-                {
+                //try
+                //{
+                //    var roleStore = new RoleStore<IdentityRole>(context);
+                //    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                //    //await roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+                //    //await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
+                //    await roleManager.CreateAsync(new IdentityRole { Name = "Student" });
+                //    await roleManager.CreateAsync(new IdentityRole { Name = "Head of Department" });
+                //    await roleManager.CreateAsync(new IdentityRole { Name = "Training Management" });
 
-                    throw e;
-                }
+
+                //}
+                //catch (Exception e)
+                //{
+
+                //    throw e;
+                //}
+
+
+                //var user = new ApplicationUser { UserName = "sensei", Email = "sensei@mail.com" };
+                //var result = await UserManager.CreateAsync(user, "@Qawsed321");
+
+                var user2 = new ApplicationUser { UserName = "gakusei", Email = "gakusei@mail.com" };
+                var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
+
+                //var user3 = new ApplicationUser { UserName = "bosshere", Email = "bosshere@mail.com" };
+                //var result3 = await UserManager.CreateAsync(user3, "@Qawsed123");
+
+                var user =  UserManager.FindByEmail("sensei@mail.com");
+                var user3 =  UserManager.FindByEmail("bosshere@mail.com");
+
+
+                UserManager.AddToRole(user.Id, "Teacher");
+                UserManager.AddToRole(user2.Id, "Student");
+                UserManager.AddToRole(user3.Id, "Training Management");
+
 
 
                 //bao
-                ExternalLoginInfo info = new ExternalLoginInfo { DefaultUserName = "baotdse62099@fpt.edu.vn", Email = "baotdse62099@fpt.edu.vn" };
-                UserLoginInfo uinfo = new UserLoginInfo("Google", "109983346659077543724");
-                info.Login = uinfo;
+                //ExternalLoginInfo info = new ExternalLoginInfo { DefaultUserName = "baotdse62099@fpt.edu.vn", Email = "baotdse62099@fpt.edu.vn" };
+                //UserLoginInfo uinfo = new UserLoginInfo("Google", "109983346659077543724");
+                //info.Login = uinfo;
 
 
                 //info.Email = "baotdse62099@fpt.edu.vn";
                 //info.DefaultUserName = "baotdse62099@fpt.edu.vn";
 
                 //Danh
-                ExternalLoginInfo info2 = new ExternalLoginInfo { DefaultUserName = "danhdcse61904@fpt.edu.vn", Email = "danhdcse61904@fpt.edu.vn" };
-                UserLoginInfo uinfo2 = new UserLoginInfo("Google", "107166571606205395096");
-                info2.Login = uinfo2;
+                //ExternalLoginInfo info2 = new ExternalLoginInfo { DefaultUserName = "danhdcse61904@fpt.edu.vn", Email = "danhdcse61904@fpt.edu.vn" };
+                //UserLoginInfo uinfo2 = new UserLoginInfo("Google", "107166571606205395096");
+                //info2.Login = uinfo2;
 
 
 
 
-                var bao = new ApplicationUser { UserName = info.Email, Email = info.Email, Name = "Trần Đức Bảo", FullName = "Bao Tran Duc" };
-                var danh = new ApplicationUser { UserName = info2.Email, Email = info2.Email, Name = "Đổng Công Danh", FullName = "(K10_HCM) Đổng Công Danh" };
-                //var phuong = new ApplicationUser { UserName = info3.Email, Email = info3.Email, Name = "Phạm Hồng Sơn", FullName = "(K10_HCM) Phạm Hồng Sơn" };
+                //var bao = new ApplicationUser { UserName = info.Email, Email = info.Email, Name = "Trần Đức Bảo", FullName = "Bao Tran Duc" };
+                //var danh = new ApplicationUser { UserName = info2.Email, Email = info2.Email, Name = "Đổng Công Danh", FullName = "(K10_HCM) Đổng Công Danh" };
+                ////var phuong = new ApplicationUser { UserName = info3.Email, Email = info3.Email, Name = "Phạm Hồng Sơn", FullName = "(K10_HCM) Phạm Hồng Sơn" };
 
 
-                var result = await UserManager.CreateAsync(bao);
-                var result2 = await UserManager.CreateAsync(danh);
+                //var result = await UserManager.CreateAsync(bao);
+                //var result2 = await UserManager.CreateAsync(danh);
 
 
-                await UserManager.AddLoginAsync(bao.Id, info.Login);
-                await UserManager.AddLoginAsync(danh.Id, info2.Login);
+                //await UserManager.AddLoginAsync(bao.Id, info.Login);
+                //await UserManager.AddLoginAsync(danh.Id, info2.Login);
 
-                var son= UserManager.FindByEmail("sonphse61822@fpt.edu.vn");
+                //var son= UserManager.FindByEmail("sonphse61822@fpt.edu.vn");
 
-                UserManager.AddToRole(bao.Id, "Admin");
-                UserManager.AddToRole(danh.Id, "Admin");
-                UserManager.AddToRole(son.Id, "Admin");
+                //UserManager.AddToRole(bao.Id, "Admin");
+                //UserManager.AddToRole(danh.Id, "Admin");
+                //UserManager.AddToRole(son.Id, "Admin");
             }
 
             return RedirectToAction("Login", "Home");
@@ -418,6 +446,7 @@ namespace CaptstoneProject.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             var claims = loginInfo.ExternalIdentity.Claims;
 

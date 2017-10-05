@@ -1,4 +1,6 @@
 ﻿
+@using CaptstoneProject.Models
+@model MyLoginViewModel
 @{
     Layout = null;
 }
@@ -89,13 +91,17 @@
     </div>
     <div class="" style="background: #292929;padding:8% 0 0;">
         <div class="li-form">
-            <form class="" method="post" action="">
+            <form class="" method="post" action="@Url.Action("Login","Account")">
                 @Html.AntiForgeryToken()
                 <div class="">
-                    <input class="inp-form" type="text" placeholder="username" />
+                    @*<input class="inp-form" type="text" placeholder="username" />*@
+                    @Html.TextBoxFor(m => m.Username, new { @class = "inp-form", @placeholder="Username" })
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger"})
                 </div>
                 <div class="">
-                    <input class="inp-form" type="password" placeholder="Password" />
+                    @*<input class="inp-form" type="password" placeholder="Password" />*@
+                    @Html.PasswordFor(m => m.Password, new { @class = "inp-form", @placeholder = "Password"})
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
                 <input type="submit" class="inp-form" value="Sign In" style="background:#42bae0;color:white" />
             </form>
@@ -108,9 +114,6 @@
                     </div>
                 </div>
             </form>
-            @*<form method="post" action="@Url.Action("MyRegister","Account")">
-                <input type="submit" value="register" />
-            </form>*@
         </div>
         @*<form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">
                 <input type="hidden" value="" id="idtxt" name="id"/>
