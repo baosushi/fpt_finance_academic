@@ -1,0 +1,78 @@
+﻿@model List<CaptstoneProject.Areas.TrainingManagement.Controllers.CourseRecordViewModel>
+@{
+    ViewBag.Title = "My Course";
+    this.Session["loginName"] = "phuonglhk";
+}
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Your courses </div>
+            <form action="@Url.Action("Index","Course")" id="semesterForm">
+                <label>Term: </label>
+                <select id="semesterSelector" style="width:100px" name="semesterId">
+                    @foreach (var item in ViewBag.semList)
+                    {
+                        <option value="@item.Value">
+                            @item.Text
+                        </option>
+                    }
+                </select>
+            </form>
+            <div class="panel-body table-responsive">
+                <table id="testTable" class="table display dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Course Name</th>
+                            <th>Course Code</th>
+                            <th>Class</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 1; i <= this.Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@Model[i - 1].Name</td>
+                                <td>@Model[i - 1].Code</td>
+                                <td>@Model[i - 1].Class</td>
+                                <td>From @Model[i - 1].StartDate.ToString("dd/MM/yyyy") to @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
+                                <td><a href="@Url.Action("CourseDetails", "Management", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">View course</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        debugger
+        var selectedSem = '@ViewBag.selectedSem';
+        if (selectedSem != -1 && selectedSem != '') {
+            $('#semesterSelector').val(selectedSem);
+        }
+        $('#testTable').DataTable({
+            "searching": true
+        });
+    });
+    $("#semesterSelector").on('change', function () {
+        @*$.ajax({
+            url: '@Url.Action("Index","Course")',
+            data: { semesterId: $('#semesterSelector').val() },
+            type: "POST",
+            success: function (result) {
+                location.reload();
+            },
+            error: function (error) {
+                alert("Error, please try again later.");
+            }
+        });*@
+        $('#semesterForm').submit();
+    });
+</script>

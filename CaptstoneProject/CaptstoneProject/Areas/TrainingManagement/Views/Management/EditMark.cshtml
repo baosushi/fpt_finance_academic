@@ -1,0 +1,60 @@
+﻿@model CaptstoneProject.Areas.TrainingManagement.Controllers.StudentEditViewModel
+<div class="content" style="min-height:800px">
+    <div class="panel">
+        <div class="panel-heading">
+            <h4><i style="color:#4db748" class="fa fa-address-card"></i> Edit marks</h4>
+        </div>
+        <div class="panel-body">
+            <form onsubmit='return onSubmit(this)'>
+                <label><b>Name: </b>@Model.Name - @Model.Code</label>
+                <br />
+                <label><b>Class: </b>@Model.Class</label>
+                <br />
+                <input hidden type="text" value="@Model.CourseId" id="courseId" />
+                <input hidden type="text" value="@Model.Id" id="studentId" />
+                <b>Marks: </b>
+                <br />
+                <div class="row col-md-12">
+                    @for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                    {
+                        <div class="col-md-3">
+                            <label>@Model.ComponentNames[i - 1]</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i-1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i -1].Mark" title="Please enter number format" />
+                        </div>
+                    }
+                    <div class="col-md-10">
+                        <h5 id="aver"><b>Average: </b> @Model.Average</h5>
+                        </div>
+                    <div class="col-md-2" style="margin:auto">
+                    <input class="btn btn-success btn-lg" type="submit" />
+                    </div>
+                </div>
+               
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function onSubmit(form) {
+        $.ajax({
+            url: '@Url.Action("GetEdit","Management")',
+            data: { markList: $(form).serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val() },
+            type: "POST",
+            success: function (result) {
+                swal("Edit successful!", "success");
+                location.reload();
+            },
+            error: function (error) {
+                alert("Error, please try again later.");
+            }
+        });
+        return false;
+    }
+
+    $("input").on('change', function () {
+        $('#aver').html("<b>Average: </b> N/A");
+    });
+</script>
