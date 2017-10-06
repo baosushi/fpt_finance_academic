@@ -98,7 +98,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
             public string SubjectCode { get; set; }
             public string ClassName { get; set; }
             public double? AverageMark { get; set; }
-            public String Status { get; set; } // 0:Fail, 1:Success
+            public int? Status { get; set; } // 0:Fail, 1:Success
             public string RollNumber { get; set; } // studentRollNumber
 
         }

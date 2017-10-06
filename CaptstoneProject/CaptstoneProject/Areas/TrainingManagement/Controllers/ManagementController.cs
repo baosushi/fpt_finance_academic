@@ -537,7 +537,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         public string StudentCode { get; set; }
         public double Average { get; set; }
         public List<StudentCourseMark> MarksComponent { get; set; }
-        public string Status { get; set; }
+        public int? Status { get; set; }
     }
 
     public class CourseDetailsViewModel
