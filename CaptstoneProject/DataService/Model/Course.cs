@@ -31,6 +31,7 @@ namespace DataService.Model
         public int SubjectId { get; set; }
         public int TeacherId { get; set; }
         public Nullable<int> SemesterId { get; set; }
+        public Nullable<int> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Schedule> Schedules { get; set; }

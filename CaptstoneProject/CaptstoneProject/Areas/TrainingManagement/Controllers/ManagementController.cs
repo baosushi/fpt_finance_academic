@@ -375,32 +375,179 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
         }
+        public ActionResult UploadFinalExamExcel(int courseId)
+        {
+            try
+            {
+                if (Request.Files.Count > 0)
+                {
+                    using (var context = new DB_Finance_AcademicEntities())
+                    {
+                        foreach (string file in Request.Files)
+                        {
+                            var fileContent = Request.Files[file];
+
+                            var course = context.Courses.Find(courseId);
+
+                            var subjectCode = course.Subject.SubjectCode;
+                            var className = course.ClassName;
+                            if (fileContent != null && fileContent.ContentLength > 0)
+                            {
+                                var stream = fileContent.InputStream;
+
+                                using (ExcelPackage package = new ExcelPackage(stream))
+                                {
+                                    var ws = package.Workbook.Worksheets.First();
+                                    var totalCol = ws.Dimension.Columns;
+                                    var totalRow = ws.Dimension.Rows;
+                                    var studentCodeCol = 2;
+                                    var titleRow = 1;
+                                    var firstRow = 3;
+
+                                    int tempNo = 0;
+                                    for (int i = firstRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
+                                    {
+                                        var studentCode = ws.Cells[i, studentCodeCol].Text.Trim().ToUpper();
+                                        var studentInCourse = context.StudentInCourses.Where(q => q.Student.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+
+                                        if (studentInCourse != null)
+                                        {
+                                            double average = studentInCourse.Average!=null?studentInCourse.Average.Value:0;
+                                            for (var j = 5; j <= totalCol; j++)
+                                            {
+
+                                                double value = 0;
+                                                if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value) || ws.Cells[i, j].Text.Trim().Equals('/'))
+                                                {
+                                                    if (!ws.Cells[i, j].Text.Trim().Equals('/'))
+                                                    {
+                                                        StudentCourseMark studentCourseMark = null;
+
+                                                        var component = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+
+                                                        studentCourseMark = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+
+                                                        var recordExisted = true;
+                                                        //remake null check
+                                                        if (studentCourseMark == null)
+                                                        {
+                                                            studentCourseMark = context.StudentCourseMarks.Create();
+                                                            recordExisted = false;
+                                                        }
+
+
+                                                        studentCourseMark.Mark = value;
+                                                        studentCourseMark.StudentInCourseId = studentInCourse.Id;
+                                                        if (component != null)
+                                                        {
+                                                            average += studentCourseMark.Mark.Value * component.Percentage / 100;
+                                                            studentCourseMark.CourseMarkId = component.Id;
+
+                                                            if (!recordExisted)
+                                                            {
+                                                                context.StudentCourseMarks.Add(studentCourseMark);
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        StudentCourseMark studentCourseMark = null;
+                                                        var component = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+
+                                                        studentCourseMark = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+                                                        //remake null check
+                                                        if (studentCourseMark == null)
+                                                        {
+                                                            studentCourseMark = context.StudentCourseMarks.Create();
+                                                        }
+
+
+                                                        studentCourseMark.Mark = -1;
+                                                        studentCourseMark.StudentInCourseId = studentInCourse.Id;
+                                                        //studentInCourse.Status = 3;
+                                                    }
+                                                }
+                                            }
+
+                                            studentInCourse.Average = average;
+                                        }
+
+                                        context.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, message = "No file has been uploaded" });
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+
+            return Json(new { success = true, message = "File uploaded successfully" });
+        }
     }
 
-        public class MarkComp
-        {
-            public string name { get; set; }
-            public string value { get; set; }
-            public int id { get; set; }
-        }
-        public class PerComp
-        {
-            public int Id { get; set; }
-            public string CompName { get; set; }
-            public double Per { get; set; }
-        }
+    public class MarkComp
+    {
+        public string name { get; set; }
+        public string value { get; set; }
+        public int id { get; set; }
+    }
+    public class PerComp
+    {
+        public int Id { get; set; }
+        public string CompName { get; set; }
+        public double Per { get; set; }
+    }
 
-        public class StudentEditViewModel
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public int CourseId { get; set; }
-            public string Class { get; set; }
-            public List<string> ComponentNames { get; set; }
-            public List<StudentCourseMark> MarksComponent { get; set; }
-            public string Average { get; set; }
-        }
+    public class StudentEditViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public int CourseId { get; set; }
+        public string Class { get; set; }
+        public List<string> ComponentNames { get; set; }
+        public List<StudentCourseMark> MarksComponent { get; set; }
+        public string Average { get; set; }
+    }
+
+    public class CourseRecordViewModel
+    {
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string Class { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class StudentInCourseViewModel
+    {
+        public string UserName { get; set; }
+        public string StudentCode { get; set; }
+        public double Average { get; set; }
+        public List<StudentCourseMark> MarksComponent { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class CourseDetailsViewModel
+    {
+        public List<StudentInCourseViewModel> StudentInCourse { get; set; }
+        public List<string> ComponentNames { get; set; }
+        public string SubName { get; set; }
+        public string SubCode { get; set; }
+        public string Semester { get; set; }
+        public int CourseId { get; set; }
 
         public class CourseRecordViewModel
         {
@@ -411,33 +558,5 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
         }
-
-        public class StudentInCourseViewModel
-        {
-            public string UserName { get; set; }
-            public string StudentCode { get; set; }
-            public double Average { get; set; }
-            public List<StudentCourseMark> MarksComponent { get; set; }
-            public string Status { get; set; }
-        }
-
-        public class CourseDetailsViewModel
-        {
-            public List<StudentInCourseViewModel> StudentInCourse { get; set; }
-            public List<string> ComponentNames { get; set; }
-            public string SubName { get; set; }
-            public string SubCode { get; set; }
-            public string Semester { get; set; }
-            public int CourseId { get; set; }
-
-            public class CourseRecordViewModel
-            {
-                public int CourseId { get; set; }
-                public string Name { get; set; }
-                public string Code { get; set; }
-                public string Class { get; set; }
-                public DateTime StartDate { get; set; }
-                public DateTime EndDate { get; set; }
-            }
-        }
+    }
 }

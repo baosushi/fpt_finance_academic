@@ -26,6 +26,7 @@ namespace DataService.Model
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Year { get; set; }
         public int SemesterInYear { get; set; }
+        public int Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }

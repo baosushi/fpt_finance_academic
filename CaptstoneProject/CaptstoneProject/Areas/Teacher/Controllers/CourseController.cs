@@ -104,13 +104,13 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Access denied." });
+                        return Json(new { success = false, message = "Access denied." }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = e.Message });
+                return Json(new { success = false, message = e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -333,8 +333,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 double average = 0;
                 for (int i = 0; i < lengh; i++)
                 {
-                    var compId = int.Parse(markList[i].name);
-                    var mark = double.Parse(markList[i].value);
+                    var compId = int.Parse(markList[i].Name);
+                    var mark = double.Parse(markList[i].Value);
                     var compPer = coursePer.Where(q => q.Id == compId).Select(q => q.Per).FirstOrDefault();
                     average += mark * compPer;
                     foreach (var item in studentMarks)
@@ -380,9 +380,9 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 	
 	public class MarkComp
     {
-        public string name { get; set; }
-        public string value { get; set; }
-        public int id { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public int Id { get; set; }
     }
     public class PerComp
     {
