@@ -220,6 +220,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Enum.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Areas\Students\Models\StudentInCourse.cs" />
@@ -370,11 +371,13 @@
     <Content Include="Areas\Semester\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Semester\Views\Semester\SemesterMarkExport.cshtml" />
     <Content Include="Areas\Teacher\Views\MarkEdit\Edit.cshtml" />
-    <Content Include="Areas\TrainingManagement\Views\web.config" />
+    <Content Include="Areas\TrainingManagement\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Teacher\Views\Course\CourseDetails.cshtml" />
     <Content Include="Areas\Teacher\Views\Course\EditMark.cshtml" />
     <Content Include="Areas\Teacher\Views\Course\Index.cshtml" />
-    <Content Include="Areas\TrainingManagement\_ViewStart.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
