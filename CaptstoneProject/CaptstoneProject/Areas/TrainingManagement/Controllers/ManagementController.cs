@@ -1,4 +1,5 @@
 ﻿using CaptstoneProject.Controllers;
+using CaptstoneProject.Models;
 using DataService.Model;
 using OfficeOpenXml;
 using System;
@@ -75,7 +76,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             StudentCode = q.Student.StudentCode,
                             Average = q.Average.Value,
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = q.Status
+                            Status = ((StudentCourseStatus)q.Status).ToString()
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -537,7 +538,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         public string StudentCode { get; set; }
         public double Average { get; set; }
         public List<StudentCourseMark> MarksComponent { get; set; }
-        public int? Status { get; set; }
+        public string Status { get; set; }
     }
 
     public class CourseDetailsViewModel

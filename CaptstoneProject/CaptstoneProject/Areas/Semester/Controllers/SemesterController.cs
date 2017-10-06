@@ -1,4 +1,5 @@
 ﻿using CaptstoneProject.Controllers;
+using CaptstoneProject.Models;
 using DataService.Model;
 using OfficeOpenXml;
 using System;
@@ -52,7 +53,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
                               SubjectCode = c.Subject.SubjectCode,
                               ClassName = c.ClassName,
                               AverageMark = sc.Average,
-                              Status = (sc.Status == null)? null: sc.Status
+                              Status = ((StudentCourseStatus)sc.Status).ToString()
                           }).OrderBy(q => q.RollNumber).ToList();
             }
             string fileName = "Export_Mark_" + semesterName;
@@ -98,7 +99,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
             public string SubjectCode { get; set; }
             public string ClassName { get; set; }
             public double? AverageMark { get; set; }
-            public int? Status { get; set; } // 0:Fail, 1:Success
+            public string Status { get; set; } // 0:Fail, 1:Success
             public string RollNumber { get; set; } // studentRollNumber
 
         }

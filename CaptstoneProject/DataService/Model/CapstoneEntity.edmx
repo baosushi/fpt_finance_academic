@@ -1235,8 +1235,8 @@
           <EntitySetMapping Name="StudentCourseMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentCourseMark">
               <MappingFragment StoreEntitySet="StudentCourseMark">
-                <ScalarProperty Name="StudentInCourseId" ColumnName="StudentInCourseId" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="StudentInCourseId" ColumnName="StudentInCourseId" />
                 <ScalarProperty Name="CourseMarkId" ColumnName="CourseMarkId" />
                 <ScalarProperty Name="Mark" ColumnName="Mark" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
