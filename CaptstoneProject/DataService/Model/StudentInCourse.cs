@@ -22,7 +22,7 @@ namespace DataService.Model
     
         public int Id { get; set; }
         public Nullable<double> Average { get; set; }
-        public string Status { get; set; }
+        public Nullable<int> Status { get; set; }
         public int CourseId { get; set; }
         public int StudentId { get; set; }
     

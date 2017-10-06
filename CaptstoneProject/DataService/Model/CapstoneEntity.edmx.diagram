@@ -15,8 +15,6 @@
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="6" PointY="4.875" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="8.25" PointY="9.125" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="6" PointY="2" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="5.875" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="2.625" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="3.75" PointY="2.25" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="6" PointY="10.25" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_UserRole_Role" />
@@ -29,11 +27,20 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_UserRole_User" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_CourseMark_Course" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetRole" Width="1.5" PointX="8.375" PointY="14.5" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserClaim" Width="1.5" PointX="12.875" PointY="15.625" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserLogin" Width="1.5" PointX="12.875" PointY="13" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUser" Width="1.5" PointX="10.625" PointY="13.125" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="5.75" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="2.25" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
