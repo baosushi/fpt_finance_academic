@@ -127,7 +127,7 @@
                     <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
                     <li id="btn_Signout">
                         <a href="#">
-                            <form id="fSignout" action="@Url.Action("LogOff","Account")" method="post">
+                            <form id="fSignout" action="@Url.Action("LogOff","Account", new { area= ""})" method="post">
                                 @Html.AntiForgeryToken()
                                 <i class="fa falist fa-power-off"></i> Logout
                             </form>

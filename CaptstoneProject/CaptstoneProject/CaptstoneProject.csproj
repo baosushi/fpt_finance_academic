@@ -208,6 +208,7 @@
     <Compile Include="Areas\Students\StudentAreaRegistration.cs" />
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
+    <Compile Include="Areas\TrainingManagement\TrainingManagementAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\jQueryDataTableParamModel.cs" />
@@ -328,6 +329,7 @@
     <Content Include="Images\g-logo.png" />
     <Content Include="Images\Icon\images.png" />
     <Content Include="Images\Icon\logo-fpt.png" />
+    <Content Include="Images\prideKappa.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -367,6 +369,7 @@
     <Content Include="Areas\Semester\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Semester\Views\Semester\SemesterMarkExport.cshtml" />
     <Content Include="Areas\Teacher\Views\MarkEdit\Edit.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -379,7 +382,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -429,6 +434,9 @@
     <Folder Include="Areas\Students\Views\Shared\" />
     <Folder Include="Areas\Teacher\Models\" />
     <Folder Include="Areas\Teacher\Views\Shared\" />
+    <Folder Include="Areas\TrainingManagement\Controllers\" />
+    <Folder Include="Areas\TrainingManagement\Models\" />
+    <Folder Include="Areas\TrainingManagement\Views\Shared\" />
     <Folder Include="Views\MyBase\" />
   </ItemGroup>
   <ItemGroup>

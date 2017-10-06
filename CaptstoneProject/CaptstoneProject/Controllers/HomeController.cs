@@ -40,6 +40,10 @@ namespace CaptstoneProject.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
