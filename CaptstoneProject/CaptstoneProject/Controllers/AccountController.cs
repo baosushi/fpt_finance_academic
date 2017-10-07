@@ -523,8 +523,8 @@ namespace CaptstoneProject.Controllers
 
         //
         // POST: /Account/LogOff to Custom Login at HomeController
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);

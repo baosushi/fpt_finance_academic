@@ -27,4 +27,15 @@ namespace CaptstoneProject.Models
         [Display(Name = "Failed")]
         Failed = 3,
     }
+    public enum CourseStatus
+    {
+        [Display(Name = "Open")]
+        Open = 0,
+        [Display(Name ="LockTeacher")]
+        LockTeacher= 1,
+        [Display(Name = "LockTM")] //Lock Training Mangement
+        LockTM = 2,
+
+    }
+
 }

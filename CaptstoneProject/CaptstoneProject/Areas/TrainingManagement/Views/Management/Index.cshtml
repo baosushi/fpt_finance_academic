@@ -1,4 +1,5 @@
-﻿@model List<CaptstoneProject.Areas.TrainingManagement.Controllers.CourseRecordViewModel>
+﻿@using CaptstoneProject.Models
+@model List<CaptstoneProject.Models.AreaViewModel.CourseRecordViewModel>
 @{
     ViewBag.Title = "My Course";
     this.Session["loginName"] = "phuonglhk";
@@ -20,6 +21,24 @@
                     }
                 </select>
             </form>
+            @if (ViewBag.courseStatus == (int)CourseStatus.Open)
+            {
+                <form method="post" action="@Url.Action("LockAllCourseForTeacher","Management")">
+                    <span>
+                        <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
+                        <input class="btn btn-danger" title="Lock edited all teacher of all course in @ViewBag.selectedSemName semester" type="submit" value="LockTeacher" />
+                    </span>
+                </form>
+            }
+            @if (ViewBag.courseStatus != (int)CourseStatus.LockTM)
+            {
+                <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement","Management")">
+                    <span>
+                        <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
+                        <input class="btn btn-danger" title="Lock edited of all course in @ViewBag.selectedSemName semester" type="submit" value="Lock Semester" />
+                    </span>
+                </form>
+            }
             <div class="panel-body table-responsive">
                 <table id="testTable" class="table display dataTable">
                     <thead>
@@ -58,7 +77,8 @@
             $('#semesterSelector').val(selectedSem);
         }
         $('#testTable').DataTable({
-            "searching": true
+            "searching": true,
+
         });
     });
     $("#semesterSelector").on('change', function () {

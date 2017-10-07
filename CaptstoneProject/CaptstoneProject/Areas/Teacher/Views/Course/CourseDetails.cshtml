@@ -1,4 +1,4 @@
-﻿@model CaptstoneProject.Areas.TrainingManagement.Controllers.CourseDetailsViewModel
+﻿@model CaptstoneProject.Models.AreaViewModel.CourseDetailsViewModel
 @{
     ViewBag.Title = ViewBag.ClassName;
 }
@@ -78,9 +78,16 @@
                                     @i
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
+                                    @if (Model.isEditable)
+                                    {
+                                        <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
+                                    }
+                                    else
+                                    {
+                                        <div>@Model.StudentInCourse[i - 1].UserName</div>
+                                    }
                                 </td>
-                                <td>
+                                <td>#
                                     @Model.StudentInCourse[i - 1].StudentCode
                                 </td>
                                 @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
