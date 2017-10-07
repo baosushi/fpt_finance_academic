@@ -12,26 +12,25 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
+    [Authorize(Roles = "Training Management")]
     public class ManagementController : MyBaseController
     {
         public ActionResult Index(int semesterId = -1)
         {
-            this.Session["loginName"] = "phuonglhk";
-            var loginName = (string)Session["loginName"];
-            List<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
+            IEnumerable<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
             using (var context = new DB_Finance_AcademicEntities())
             {
-                DateTime startDate, endDate;
+                //DateTime startDate, endDate;
                 var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                startDate = semester.StartDate.Value;
-                endDate = semester.EndDate.Value;
+                //startDate = semester.StartDate.Value;
+                //endDate = semester.EndDate.Value;
 
-                courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
-                    .Courses.Where(q => q.StartDate >= startDate && q.EndDate <= endDate)
+                courses = context.Courses.Where(q => q.SemesterId == semester.Id).AsEnumerable()
                     .Select(q => new CourseRecordViewModel
                     {
                         CourseId = q.Id,
@@ -39,8 +38,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         Code = q.Subject.SubjectCode,
                         Class = q.ClassName,
                         StartDate = q.StartDate.Value,
-                        EndDate = q.EndDate.Value
+                        EndDate = q.EndDate.Value,
+                        Status = Enum.GetName(typeof(StudentCourseStatus),q.Status.Value)
                     }).ToList();
+                var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
+                var status = randomCourse.Status;
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
                 var semesterList = semesters.Select(q => new SelectListItem
                 {
@@ -48,7 +50,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     Value = q.Id.ToString(),
                 }).ToList();
                 ViewBag.semList = semesterList;
-                ViewBag.selectedSem = semesterId;
+                ViewBag.selectedSem = semester.Id;
+                ViewBag.selectedSemName = semester.Title + "" + semester.Year;
+                ViewBag.courseStatus = status;
             }
 
 
@@ -60,13 +64,12 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             ViewBag.CourseId = courseId;
             try
             {
-                var loginName = "phuonglhk";
 
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     var course = context.Courses.Find(courseId);
 
-                    if (course != null && course.Teacher.LoginName == loginName)
+                    if (course != null)
                     {
                         ViewBag.ClassName = course.ClassName;
 
@@ -97,6 +100,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
+                            isEditable = course.Status != (int)CourseStatus.LockTM ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -113,6 +117,50 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 return Json(new { success = false, message = e.Message });
             }
         }
+
+        [HttpPost]
+        public ActionResult LockAllCourseForTeacher(int semesterId, string returnUrl)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
+                if (semester.Status != (int)SememsterStatus.Closed)
+                {
+                    var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
+                    foreach (var course in courseList)
+                    {
+                        course.Status = (int)CourseStatus.LockTeacher;
+                    }
+                    context.SaveChanges();
+                }
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        [HttpPost]
+        public ActionResult LockAllCourseForTrainingMangement(int semesterId, string returnUrl)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
+                if (semester.Status != (int)SememsterStatus.Closed)
+                {
+                    var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
+                    foreach (var course in courseList)
+                    {
+                        course.Status = (int)CourseStatus.LockTM;
+                    }
+                    semester.Status = (int)SememsterStatus.Closed;
+                    context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
 
         [HttpPost]
         public ActionResult DownloadTemplate(int courseId)
@@ -236,8 +284,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 double average = 0;
                 for (int i = 0; i < lengh; i++)
                 {
-                    var compId = int.Parse(markList[i].name);
-                    var mark = double.Parse(markList[i].value);
+                    var compId = int.Parse(markList[i].Name);
+                    var mark = double.Parse(markList[i].Value);
                     var compPer = coursePer.Where(q => q.Id == compId).Select(q => q.Per).FirstOrDefault();
                     average += mark * compPer;
                     foreach (var item in studentMarks)
@@ -262,6 +310,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var course = context.Courses.Find(courseId);
+                var status = course.Status;
+                if (status == (int)CourseStatus.LockTM)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
                 var student = course.StudentInCourses.Where(q => q.Student.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
                     Id = q.Id,
@@ -487,67 +540,4 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
     }
 
-    public class MarkComp
-    {
-        public string name { get; set; }
-        public string value { get; set; }
-        public int id { get; set; }
-    }
-    public class PerComp
-    {
-        public int Id { get; set; }
-        public string CompName { get; set; }
-        public double Per { get; set; }
-    }
-
-    public class StudentEditViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public int CourseId { get; set; }
-        public string Class { get; set; }
-        public List<string> ComponentNames { get; set; }
-        public List<StudentCourseMark> MarksComponent { get; set; }
-        public string Average { get; set; }
-    }
-
-    public class CourseRecordViewModel
-    {
-        public int CourseId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Class { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-
-    public class StudentInCourseViewModel
-    {
-        public string UserName { get; set; }
-        public string StudentCode { get; set; }
-        public string Average { get; set; }
-        public List<StudentCourseMark> MarksComponent { get; set; }
-        public string Status { get; set; }
-    }
-
-    public class CourseDetailsViewModel
-    {
-        public List<StudentInCourseViewModel> StudentInCourse { get; set; }
-        public List<string> ComponentNames { get; set; }
-        public string SubName { get; set; }
-        public string SubCode { get; set; }
-        public string Semester { get; set; }
-        public int CourseId { get; set; }
-
-        public class CourseRecordViewModel
-        {
-            public int CourseId { get; set; }
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public string Class { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
-        }
-    }
 }
