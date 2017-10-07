@@ -1,4 +1,4 @@
-﻿@model CaptstoneProject.Areas.TrainingManagement.Controllers.CourseDetailsViewModel
+﻿@model CaptstoneProject.Areas.Teacher.Controllers.CourseDetailsViewModel
 @{
     ViewBag.Title = ViewBag.ClassName;
 }
@@ -85,9 +85,18 @@
                                 </td>
                                 @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
                                 {
-                                    <td>
-                                        @mark.Mark
-                                    </td>
+                                    if (mark.Mark != null)
+                                    {
+                                        <td>
+                                            @mark.Mark
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            N/A
+                                        </td>
+                                    }
                                 }
                                 <td>
                                     @Model.StudentInCourse[i - 1].Average

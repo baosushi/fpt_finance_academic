@@ -85,9 +85,18 @@
                                 </td>
                                 @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
                                 {
+                                    if (mark.Mark != null)
+                                    {
                                     <td>
                                         @mark.Mark
                                     </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            N/A
+                                        </td>
+                                    }
                                 }
                                 <td>
                                     @Model.StudentInCourse[i - 1].Average

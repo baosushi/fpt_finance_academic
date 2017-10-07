@@ -75,10 +75,10 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         {
                             UserName = q.Student.LoginName,
                             StudentCode = q.Student.StudentCode,
-                            Average = q.Average.Value,
+                            Average = q.Average != null ? q.Average.ToString() : "N/A",
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = ((StudentCourseStatus)q.Status).ToString()
-                        }).ToList();
+                            Status = Enum.GetName(typeof(StudentCourseStatus), q.Status==null?0:q.Status.Value)
+                    }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
                         //    q.Student.StudentCode,
@@ -88,7 +88,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //    q.Status
                         //});
 
-                        var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
+                        var columns = context.CourseMarks.Where(q =>q.CourseId==courseId).Select(q => q.ComponentName).ToList();
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {
@@ -270,10 +270,35 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                             context.StudentCourseMarks.Add(studentCourseMark);
                                                         }
                                                     }
+                                                    var FE = course.CourseMarks.Where(q => q.ComponentName.Equals("FE")).FirstOrDefault();
+                                                    var RE = course.CourseMarks.Where(q => q.ComponentName.Equals("RE")).FirstOrDefault();
+                                                    var studentCourseMarkFE = context.StudentCourseMarks.
+                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
+                                                    var studentCourseMarkRE = context.StudentCourseMarks.
+                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
+                                                    //remake null check
+
+                                                    if (studentCourseMarkFE == null)
+                                                    {
+                                                        studentCourseMarkFE = context.StudentCourseMarks.Create();
+                                                        context.StudentCourseMarks.Add(studentCourseMarkFE);
+                                                    }
+                                                    if (studentCourseMarkRE == null)
+                                                    {
+                                                        studentCourseMarkRE = context.StudentCourseMarks.Create();
+                                                        context.StudentCourseMarks.Add(studentCourseMarkRE);
+                                                    }
+                                                    studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
+                                                    studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
+                                                    studentCourseMarkFE.CourseMarkId = FE.Id;
+                                                    studentCourseMarkRE.CourseMarkId = RE.Id;
+                                                    studentCourseMarkRE.Mark = null;
+                                                    studentCourseMarkFE.Mark = null;
                                                 }
                                             }
 
                                             studentInCourse.Average = average;
+                                            studentInCourse.Status = 1;
                                         }
 
                                         context.SaveChanges();
@@ -418,7 +443,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
     {
         public string UserName { get; set; }
         public string StudentCode { get; set; }
-        public double Average { get; set; }
+        public string Average { get; set; }
         public List<StudentCourseMark> MarksComponent { get; set; }
         public string Status { get; set; }
     }
