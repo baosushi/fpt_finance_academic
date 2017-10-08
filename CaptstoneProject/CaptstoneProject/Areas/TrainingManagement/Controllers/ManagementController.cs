@@ -39,7 +39,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         Class = q.ClassName,
                         StartDate = q.StartDate.Value,
                         EndDate = q.EndDate.Value,
-                        Status = Enum.GetName(typeof(StudentCourseStatus),q.Status.Value)
+                        Status = Enum.GetName(typeof(CourseStatus), q.Status.Value)
                     }).ToList();
                 var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
                 var status = randomCourse.Status;
@@ -170,7 +170,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var course = context.Courses.Find(courseId);
-                var fileName = "Final Exam "+course.Subject.SubjectCode+" - "+course.ClassName + " - " + course.CourseName;
+                var fileName = "Final Exam " + course.Subject.SubjectCode + " - " + course.ClassName + " - " + course.CourseName;
 
                 using (ExcelPackage package = new ExcelPackage(ms))
                 {
@@ -459,7 +459,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                         {
                                                             studentInCourse.Status = 3;
                                                         }
-                                                        else if(average<5)
+                                                        else if (average < 5)
                                                         {
                                                             studentInCourse.Status = 3;
                                                         }
@@ -491,7 +491,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                 var studentCourseMarkRE = context.StudentCourseMarks.
                                                     Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
                                                 //remake null check
-                                               
+
                                                 if (studentCourseMarkFE == null)
                                                 {
                                                     studentCourseMarkFE = context.StudentCourseMarks.Create();
@@ -537,6 +537,207 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
             return Json(new { success = true, message = "File uploaded successfully" });
+        }
+
+        [HttpPost]
+        public ActionResult UploadSubject()
+        {
+            List<String> emptyFileName = new List<String>();
+            try
+            {
+                if (Request.Files.Count == 0)
+                {
+                    return Json(new { success = false, message = "No file has been uploaded" });
+                }
+                foreach (string file in Request.Files)
+                {
+                    HttpPostedFileBase fileContent = Request.Files[file];
+                    if (fileContent != null && fileContent.ContentLength > 0)
+                    {
+                        string[] segments = fileContent.FileName.Split('.');
+                        var fileExt = segments[segments.Length - 1];
+                        Stream stream = null;
+                        string path = Server.MapPath("~/UploadFile/");
+                        var savePath = path + fileContent.FileName;
+
+                        if (fileExt.Equals("xls"))
+                        {
+                            fileContent.SaveAs(savePath);
+
+                            var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
+                            var wb = app.Workbooks.Open(savePath);
+                            wb.SaveAs(savePath + "x", FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+                            wb.Close();
+                            app.Quit();
+
+                            stream = new FileStream(savePath, FileMode.Open);
+                        }
+                        else
+                        {
+
+                            stream = fileContent.InputStream;
+                        }
+
+
+                        using (ExcelPackage excelPackage = new ExcelPackage(stream))
+                        {
+                            var wsList = excelPackage.Workbook.Worksheets.ToList();
+                            if (wsList.Count == 0)
+                            {
+                                emptyFileName.Add(fileContent.FileName);
+                            }
+                            using (var context = new DB_Finance_AcademicEntities())
+                            {
+                                foreach (var ws in wsList)
+                                {
+                                    var totalRow = ws.Dimension.Rows;
+
+                                    //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
+                                    if (ws.Cells[4, 2].Text.Trim().ToUpper().Equals("SUBJECT CODE")
+                                        & ws.Cells[4, 4].Text.Trim().ToUpper().Equals("SUBJECT NAME"))
+                                    {
+
+                                        for (int i = 5; i <= totalRow; i++) //data start from row 5 in template
+                                        {
+                                            var subCode = ws.Cells[i, 2].Text.Trim();
+                                            var subName = ws.Cells[i, 4].Text.Trim();
+                                            var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
+                                            if (existList.Count == 0)
+                                                context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
+
+                                        }
+                                    }
+
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        stream.Close();
+                        if (System.IO.File.Exists(@savePath))
+                        {
+                            System.IO.File.Delete(@savePath);
+                            if (System.IO.File.Exists(@savePath + "x"))
+                            {
+                                System.IO.File.Delete(@savePath + "x");
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+            if (emptyFileName.Count > 0)
+            {
+                string empFileName = "";
+                foreach (var item in emptyFileName)
+                {
+                    empFileName += item + " ,";
+                }
+                return Json(new { success = false, message = "Upload Students successed! But " + empFileName + " file are empty" });
+            }
+
+            return Json(new { success = true, message = "Upload Students successed" });
+        }
+
+
+
+        public ActionResult ImportSubject()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UploadStudent()
+        {
+            //try
+            //{
+            //    if (Request.Files.Count == 0)
+            //    {
+            //        return Json(new { success = false, message = "No file has been uploaded" });
+            //    }
+            //    foreach (string file in Request.Files)
+            //    {
+            //        HttpPostedFileBase fileContent = Request.Files[file];
+            //        if (fileContent != null && fileContent.ContentLength > 0)
+            //        {
+            //            string[] segments = fileContent.FileName.Split('.');
+            //            var fileExt = segments[segments.Length - 1];
+            //            Stream stream = null;
+            //            string path = Server.MapPath("~/UploadFile/");
+            //            var savePath = path + fileContent.FileName;
+            //            if (fileExt.Equals("xls"))
+            //            {
+            //                fileContent.SaveAs(savePath);
+
+            //                var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
+            //                var wb = app.Workbooks.Open(savePath);
+            //                wb.SaveAs(savePath + "x", FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+            //                wb.Close();
+            //                app.Quit();
+
+            //                stream = new FileStream(savePath, FileMode.Open);
+            //            }
+            //            else
+            //            {
+
+            //                stream = fileContent.InputStream;
+            //            }
+
+            //            using (ExcelPackage excelPackage = new ExcelPackage(stream))
+            //            {
+            //                var wsList = excelPackage.Workbook.Worksheets.ToList();
+            //                using (var context = new DB_Finance_AcademicEntities())
+            //                {
+            //                    foreach (var ws in wsList)
+            //                    {
+            //                        //Not import Name Sheet 3 
+            //                        if (!ws.Name.Equals("Sheet3"))
+            //                        {
+            //                            var totalRow = ws.Dimension.Rows;
+
+            //                            //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
+
+
+            //                            for (int i = 5; i <= totalRow; i++) //data start from row 5
+            //                            {
+            //                                var subCode = ws.Cells[i, 2].Text.Trim();
+            //                                var subName = ws.Cells[i, 4].Text.Trim();
+            //                                var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
+            //                                if (existList.Count == 0)
+            //                                    context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
+
+            //                            }
+            //                        }
+
+
+            //                    }
+            //                    context.SaveChanges();
+            //                }
+            //            }
+            //            stream.Close();
+            //            if (System.IO.File.Exists(@savePath))
+            //            {
+            //                System.IO.File.Delete(@savePath);
+            //                if (System.IO.File.Exists(@savePath + "x"))
+            //                {
+            //                    System.IO.File.Delete(@savePath + "x");
+            //                }
+
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return Json(new { success = false, message = e.Message });
+            //}
+
+            return Json(new { success = true, message = "Upload Student Success" });
         }
     }
 
