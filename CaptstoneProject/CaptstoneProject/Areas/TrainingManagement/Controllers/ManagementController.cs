@@ -369,7 +369,14 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                                         if (studentInCourse != null)
                                         {
-                                            double? average = null;
+                                            double? average = 0;
+                                            foreach (var item in studentInCourse.StudentCourseMarks)
+                                            {
+                                                if (item.CourseMark.ComponentName != "FE" && item.CourseMark.ComponentName != "Final Exam" && item.CourseMark.ComponentName != "RE" && item.CourseMark.ComponentName != "Retake Exam")
+                                                {
+                                                    average += item.Mark * item.CourseMark.Percentage /100;
+                                                }
+                                            }
 
                                             double value = 0;
                                             if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value) || ws.Cells[i, j].Text.Trim().Equals('/'))
@@ -427,14 +434,14 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                     studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
                                                     if (studentCourseMarkFE.Mark != null && studentCourseMarkRE.Mark == null)
                                                     {
-                                                        average = studentInCourse.Average.Value;
+                                                        //average = studentInCourse.Average.Value;
                                                         average += studentCourseMarkFE.Mark.Value * FE.Percentage / 100;
 
 
                                                     }
                                                     else if (studentCourseMarkRE.Mark != null)
                                                     {
-                                                        average = studentInCourse.Average.Value;
+                                                        //average = studentInCourse.Average.Value;
                                                         average += studentCourseMarkRE.Mark.Value * RE.Percentage / 100;
 
 

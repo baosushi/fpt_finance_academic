@@ -10,15 +10,16 @@
     }
 </style>
 
+
 <div class="content">
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
-            <div>
+            @*<div>
                 <a href="" class="btn btn-success btn-lg">
                     <span class="glyphicon glyphicon-export"></span>Export
                 </a>
-            </div>
+            </div>*@
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
             <div class="panel-body table-responsive">
                 <div class="course-detail-info">
@@ -33,6 +34,12 @@
                             <button class="btn-success btn" id="download-template-btn">Download Template</button>
                             <button class="btn-primary btn" id="import-mark-btn">Import excel</button>
                             <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                            <div class="progress" style="display:none">
+                                <div id="upload-progress-bar" class="progress-bar progress-bar-striped active" role="progressbar"
+                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,31 +162,63 @@
     });
 
     $('#submit-button').on("click", function () {
-        var data = new FormData();
-        data.append("courseId", @Model.CourseId);
-        for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
-            data.append("file" + i, $("#upload-file")[0].files[i]);
+        var file = $("#upload-file")[0].files[0];
+        
+        if (file.size > 20971520) {
+            toastr.error('Max upload size is 20MB!');
         }
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("UploadFinalExamExcel")',
-            contentType: false,
-            processData: false,
-            data: data,
-            success: function (result) {
-                if (result.success) {
-                    toastr.success(result.message);
-                    window.location.reload();
-                } else {
-                    toastr.error(result.message);
-                }
-            },
-            error: function (xhr, status, p3, p4) {
-                var err = "Error " + " " + status + " " + p3 + " " + p4;
-                toastr.error(err);
+        else{
+            var data = new FormData();
+            data.append("courseId", @Model.CourseId);
+            for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+                data.append("file" + i, $("#upload-file")[0].files[i]);
             }
-        });
+            $(".progress").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadFinalExamExcel")',
+                contentType: false,
+                processData: false,
+                data: data,
+                xhr: function() {
+                    var settingXhr = $.ajaxSettings.xhr();
+                    if (settingXhr.upload) {
+                        // For handling the progress of the upload
+                        settingXhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                var percent = Math.ceil(e.loaded/e.total*100);
+                                $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                $('#upload-progress-bar').html(percent+"%");
+                                if(percent==100){
+                                    $('#upload-progress-bar').html("Processing...");
+                                }
+                            }
+                        } , false);
+                    }
+                    return settingXhr;
+                },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                        $('#upload-progress-bar').html("Completed!");
+                        window.location.reload();
+
+                    } else {
+                        toastr.error(result.message);
+                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').addClass('progress-bar-danger');
+                    }
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    toastr.error(err);
+                    $('#upload-progress-bar').html("Fail to upload!");
+                    $('#upload-progress-bar').addClass('progress-bar-danger');
+                }
+            });
+        }
     });
 
     $(document).ready(function () {
