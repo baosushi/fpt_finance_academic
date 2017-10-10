@@ -653,89 +653,121 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         [HttpPost]
         public ActionResult UploadStudent()
         {
-            //try
-            //{
-            //    if (Request.Files.Count == 0)
-            //    {
-            //        return Json(new { success = false, message = "No file has been uploaded" });
-            //    }
-            //    foreach (string file in Request.Files)
-            //    {
-            //        HttpPostedFileBase fileContent = Request.Files[file];
-            //        if (fileContent != null && fileContent.ContentLength > 0)
-            //        {
-            //            string[] segments = fileContent.FileName.Split('.');
-            //            var fileExt = segments[segments.Length - 1];
-            //            Stream stream = null;
-            //            string path = Server.MapPath("~/UploadFile/");
-            //            var savePath = path + fileContent.FileName;
-            //            if (fileExt.Equals("xls"))
-            //            {
-            //                fileContent.SaveAs(savePath);
+            try
+            {
+                if (Request.Files.Count == 0)
+                {
+                    return Json(new { success = false, message = "No file has been uploaded" });
+                }
+                foreach (string file in Request.Files)
+                {
+                    HttpPostedFileBase fileContent = Request.Files[file];
+                    if (fileContent != null && fileContent.ContentLength > 0)
+                    {
+                        string[] segments = fileContent.FileName.Split('.');
+                        var fileExt = segments[segments.Length - 1];
+                        Stream stream = null;
+                        string path = Server.MapPath("~/UploadFile/");
+                        var savePath = path + fileContent.FileName;
+                        if (fileExt.Equals("xls"))
+                        {
+                            fileContent.SaveAs(savePath);
 
-            //                var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
-            //                var wb = app.Workbooks.Open(savePath);
-            //                wb.SaveAs(savePath + "x", FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
-            //                wb.Close();
-            //                app.Quit();
+                            var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
+                            var wb = app.Workbooks.Open(savePath);
+                            wb.SaveAs(savePath + "x", FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+                            wb.Close();
+                            app.Quit();
 
-            //                stream = new FileStream(savePath, FileMode.Open);
-            //            }
-            //            else
-            //            {
+                            stream = new FileStream(savePath, FileMode.Open);
+                        }
+                        else
+                        {
 
-            //                stream = fileContent.InputStream;
-            //            }
+                            stream = fileContent.InputStream;
+                        }
 
-            //            using (ExcelPackage excelPackage = new ExcelPackage(stream))
-            //            {
-            //                var wsList = excelPackage.Workbook.Worksheets.ToList();
-            //                using (var context = new DB_Finance_AcademicEntities())
-            //                {
-            //                    foreach (var ws in wsList)
-            //                    {
-            //                        //Not import Name Sheet 3 
-            //                        if (!ws.Name.Equals("Sheet3"))
-            //                        {
-            //                            var totalRow = ws.Dimension.Rows;
+                        using (ExcelPackage excelPackage = new ExcelPackage(stream))
+                        {
+                            var wsList = excelPackage.Workbook.Worksheets.ToList();
+                            using (var context = new DB_Finance_AcademicEntities())
+                            {
+                                foreach (var ws in wsList)
+                                {
+                                    //Not import Name Sheet 3 
+                                    if (!ws.Name.Equals("Sheet3"))
+                                    {
+                                        var totalRow = ws.Dimension.Rows;
+                                        var totalCol = ws.Dimension.Columns;
 
-            //                            //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
-
-
-            //                            for (int i = 5; i <= totalRow; i++) //data start from row 5
-            //                            {
-            //                                var subCode = ws.Cells[i, 2].Text.Trim();
-            //                                var subName = ws.Cells[i, 4].Text.Trim();
-            //                                var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
-            //                                if (existList.Count == 0)
-            //                                    context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
-
-            //                            }
-            //                        }
+                                        int count = 0; 
+                                        int stuRollNumberRow = 0;
+                                        int stuRollNumberCol = 0;
+                                        int stuNameRow = 0;
+                                        int stuNamerCol = 0;
 
 
-            //                    }
-            //                    context.SaveChanges();
-            //                }
-            //            }
-            //            stream.Close();
-            //            if (System.IO.File.Exists(@savePath))
-            //            {
-            //                System.IO.File.Delete(@savePath);
-            //                if (System.IO.File.Exists(@savePath + "x"))
-            //                {
-            //                    System.IO.File.Delete(@savePath + "x");
-            //                }
 
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return Json(new { success = false, message = e.Message });
-            //}
+                                        for (int i = 1; i < totalRow; i++)
+                                        {
+                                            for (int j = 1; j < totalCol; j++)
+                                            {
+                                                if (ws.Cells[i, j].Text.Trim().ToUpper().Equals("MSSV"))
+                                                {
+                                                    stuRollNumberRow = i;
+                                                    stuRollNumberCol = j;
+                                                }
+                                                if (ws.Cells[i, j].Text.Trim().ToUpper().Equals("Họ và tên"))
+                                                {
+                                                    stuNameRow = i;
+                                                    stuNamerCol = j;
+                                                }
+                                                if (count == 2) //only StudentRowNumber and Name needed
+                                                    break;
+                                            }
+                                        }
+
+                                        //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
+
+                                        if(stuRollNumberRow == 0 || stuNameRow == 0|| stuRollNumberRow != stuNameRow)
+                                        {
+                                            return Json(new { success = false, message = "Upload file format is invalid" });
+                                        }
+                                        for (int i = stuRollNumberCol; i <= totalRow; i++) //data start from row 5
+                                        {
+                                            var stuRollNumber = ws.Cells[i, stuRollNumberCol].Text.Trim();
+                                            var stuName = ws.Cells[i, stuNamerCol].Text.Trim();
+
+                                            //var existList = context.Students.Where(q => q.;
+                                            //if (existList.Count == 0)
+                                            //    context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
+
+                                        }
+                                    }
+
+
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        stream.Close();
+                        if (System.IO.File.Exists(@savePath))
+                        {
+                            System.IO.File.Delete(@savePath);
+                            if (System.IO.File.Exists(@savePath + "x"))
+                            {
+                                System.IO.File.Delete(@savePath + "x");
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
 
             return Json(new { success = true, message = "Upload Student Success" });
         }
