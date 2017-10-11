@@ -71,11 +71,11 @@
                                 <td>
                                     @if (Model[i - 1].Status.Equals("Open"))
                                     {
-                                        <i style="background-color:#6dc16d;" class="col-md-2 p-2 status">@Model[i-1].Status</i>
+                                        <i style="background-color:#6dc16d;" class="col-md-2 p-2 status">@Model[i - 1].Status</i>
                                     }
                                     else
                                     {
-                                        <i  style="background-color:#ef7470;" class="col-md-2 p-2 status">@Model[i-1].Status</i>
+                                        <i style="background-color:#ef7470;" class="col-md-2 p-2 status">@Model[i - 1].Status</i>
                                     }
                                 </td>
                             </tr>
@@ -95,7 +95,9 @@
         }
         $('#testTable').DataTable({
             "searching": true,
-
+            "columnDefs": [
+                {"className": "dt-center","targets": "_all"}
+            ]
         });
     });
     $("#semesterSelector").on('change', function () {
