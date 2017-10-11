@@ -3,6 +3,8 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -67,6 +69,63 @@ namespace CaptstoneProject.Controllers
             }
 
 
+        }
+
+        public void Toast()
+        {
+            string searchPattern = "*";
+            var path = Server.MapPath("~");
+
+            DirectoryInfo di = new DirectoryInfo(path + "Khao thi/");
+            DirectoryInfo[] directories =
+                di.GetDirectories(searchPattern, SearchOption.TopDirectoryOnly);
+
+            FileInfo[] files =
+                di.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
+
+            try
+            {
+                foreach (DirectoryInfo dir in directories)
+                {
+                    var subFiles = dir.GetFiles("*Ketquahoctap*.xls?", SearchOption.AllDirectories);
+                    subFiles.Concat(dir.GetFiles("*Ket qua hoc tap*.xls?", SearchOption.AllDirectories));
+                    subFiles = subFiles.Where(q => !q.Name.StartsWith("_")).ToArray();
+
+                    foreach (var excel in subFiles)
+                    {
+                        HSSFWorkbook hssfwb;
+                        using (FileStream file = excel.OpenRead())
+                        {
+                            hssfwb = new HSSFWorkbook(file);
+                        }
+
+                        ISheet result = hssfwb.GetSheetAt(0);
+                        ISheet component = hssfwb.GetSheetAt(1);
+
+                        var markCompRow = component.GetRow(1);
+                        for (int i = 3; i <= component.LastRowNum; i++)
+                        {
+                            var row = component.GetRow(i);
+                            if (row != null) //null is when the row only contains empty cells 
+                            {
+                                var loginName = row.Cells[0].StringCellValue.Trim().ToLower();
+                                var average = 0.0;
+                                for (int j = 5; j <= row.Cells.Count; j++)
+                                {
+                                    if(row.GetCell(j, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null)
+                                    {
+                                        average += row.GetCell(j, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue * markCompRow.Cells[j].NumericCellValue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
     }
 }
