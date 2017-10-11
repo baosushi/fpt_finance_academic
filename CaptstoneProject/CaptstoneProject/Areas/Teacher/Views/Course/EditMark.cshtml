@@ -17,12 +17,15 @@
                 <div class="row col-md-12">
                     @for (int i = 1; i <= Model.ComponentNames.Count; i++)
                     {
+                        if (Model.ComponentNames[i - 1] != "FE" && Model.ComponentNames[i - 1] != "Final Exam" && Model.ComponentNames[i - 1] != "RE" && Model.ComponentNames[i - 1] != "Retake Exam")
+                        {
                         <div class="col-md-3">
                             <label>@Model.ComponentNames[i - 1]</label>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i-1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i -1].Mark" title="Please enter number format" />
+                            <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
                         </div>
+                        }
                     }
                     <div class="col-md-10">
                         <h5 id="aver"><b>Average: </b> @Model.Average</h5>

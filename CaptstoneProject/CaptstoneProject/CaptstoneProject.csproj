@@ -258,6 +258,9 @@
     <Content Include="Content\img\blue-loading-icon.gif" />
     <Content Include="Content\img\comp-2.gif" />
     <Content Include="Content\img\default_user_icon.png" />
+    <Content Include="Content\img\fpt-icon.png" />
+    <Content Include="Content\img\HCMC.png" />
+    <Content Include="Content\img\img-logo-fe.jpg" />
     <Content Include="Content\jquery-ui-1.10.4.custom.min.css" />
     <Content Include="Content\js\alert\main.js" />
     <Content Include="Content\js\bootstrap-select\bootstrap-select.js" />
