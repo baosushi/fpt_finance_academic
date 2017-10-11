@@ -335,6 +335,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
         }
+
         public ActionResult UploadFinalExamExcel(int courseId)
         {
             try
@@ -348,7 +349,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-
+                            if(course.Status == (int)CourseStatus.LockTM)
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
                             var subjectCode = course.Subject.SubjectCode;
                             var className = course.ClassName;
                             if (fileContent != null && fileContent.ContentLength > 0)

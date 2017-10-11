@@ -213,7 +213,10 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-
+                            if(course.Status != (int)CourseStatus.Open)
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
                             var subjectCode = course.Subject.SubjectCode;
                             var className = course.ClassName;
                             if (fileContent != null && fileContent.ContentLength > 0)

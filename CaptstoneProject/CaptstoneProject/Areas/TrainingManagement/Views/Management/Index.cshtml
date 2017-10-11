@@ -94,7 +94,9 @@
         }
         $('#testTable').DataTable({
             "searching": true,
-
+            "columnDefs": [
+                {"className": "dt-center","targets": "_all"}
+            ]
         });
 
         $("#semesterSelector").on('change', function () {
