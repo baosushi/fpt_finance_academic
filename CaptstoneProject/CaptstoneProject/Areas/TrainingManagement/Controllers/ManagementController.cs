@@ -24,6 +24,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             IEnumerable<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
             using (var context = new DB_Finance_AcademicEntities())
             {
+                int? status = null;
                 //DateTime startDate, endDate;
                 var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
@@ -42,7 +43,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         Status = Enum.GetName(typeof(CourseStatus), q.Status.Value)
                     }).ToList();
                 var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
-                var status = randomCourse.Status;
+                if (randomCourse != null)
+                {
+                    status = randomCourse.Status;
+                }
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
                 var semesterList = semesters.Select(q => new SelectListItem
                 {
@@ -50,12 +54,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     Value = q.Id.ToString(),
                 }).ToList();
                 ViewBag.semList = semesterList;
-                ViewBag.selectedSem = semester.Id;
+                ViewBag.selectedSem = semesterId;
                 ViewBag.selectedSemName = semester.Title + "" + semester.Year;
                 ViewBag.courseStatus = status;
             }
-
-
+            
             return View(courses);
         }
 
