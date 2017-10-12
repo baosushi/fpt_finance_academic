@@ -17,14 +17,13 @@ namespace DataService.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
-            this.StudentInCourses = new HashSet<StudentInCourse>();
+            this.StudentMajors = new HashSet<StudentMajor>();
         }
     
         public int Id { get; set; }
-        public string StudentCode { get; set; }
-        public string LoginName { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudentInCourse> StudentInCourses { get; set; }
+        public virtual ICollection<StudentMajor> StudentMajors { get; set; }
     }
 }

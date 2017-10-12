@@ -27,8 +27,8 @@ namespace DataService.Model
         public int StudentId { get; set; }
     
         public virtual Course Course { get; set; }
-        public virtual Student Student { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentCourseMark> StudentCourseMarks { get; set; }
+        public virtual StudentMajor StudentMajor { get; set; }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using CaptstoneProject.Controllers;
 using CaptstoneProject.Models;
 using DataService.Model;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 using System;
 using System.Collections;
@@ -13,6 +16,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
+using Microsoft.Office.Interop.Excel;
+using Microsoft.Ajax.Utilities;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -58,7 +63,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 ViewBag.selectedSemName = semester.Title + "" + semester.Year;
                 ViewBag.courseStatus = status;
             }
-            
+
             return View(courses);
         }
 
@@ -78,8 +83,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                         var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
                         {
-                            UserName = q.Student.LoginName,
-                            StudentCode = q.Student.StudentCode,
+                            UserName = q.StudentMajor.LoginName,
+                            StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "N/A",
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = Enum.GetName(typeof(StudentCourseStatus), q.Status == null ? 0 : q.Status.Value)
@@ -222,9 +227,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     foreach (var student in course.StudentInCourses)
                     {
                         ws.Cells["" + (StartHeaderChar++) + (++StartHeaderNumber)].Value = count++;
-                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.Student.StudentCode;
-                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.Student.LoginName;
-                        ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = student.Student.LoginName;
+                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.StudentMajor.StudentCode;
+                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.StudentMajor.LoginName;
+                        ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = student.StudentMajor.LoginName;
                         //foreach(var mark in student.StudentCourseMarks)
                         //{
                         //    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue ? mark.Mark.Value : -1;
@@ -318,13 +323,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
-                var student = course.StudentInCourses.Where(q => q.Student.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
+                var student = course.StudentInCourses.Where(q => q.StudentMajor.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
                     Id = q.Id,
                     Class = course.ClassName,
                     CourseId = courseId,
-                    Name = q.Student.LoginName,
-                    Code = q.Student.StudentCode,
+                    Name = q.StudentMajor.LoginName,
+                    Code = q.StudentMajor.StudentCode,
                     Average = q.Average != null ? q.Average.ToString() : "N/A",
                     MarksComponent = q.StudentCourseMarks.ToList(),
 
@@ -349,7 +354,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-                            if(course.Status == (int)CourseStatus.LockTM)
+                            if (course.Status == (int)CourseStatus.LockTM)
                             {
                                 return RedirectToAction("Index", "Home");
                             }
@@ -372,7 +377,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     for (int i = firstRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
                                     {
                                         var studentCode = ws.Cells[i, studentCodeCol].Text.Trim().ToUpper();
-                                        var studentInCourse = context.StudentInCourses.Where(q => q.Student.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+                                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
 
                                         if (studentInCourse != null)
                                         {
@@ -381,7 +386,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                             {
                                                 if (item.CourseMark.ComponentName != "FE" && item.CourseMark.ComponentName != "Final Exam" && item.CourseMark.ComponentName != "RE" && item.CourseMark.ComponentName != "Retake Exam")
                                                 {
-                                                    average += item.Mark * item.CourseMark.Percentage /100;
+                                                    average += item.Mark * item.CourseMark.Percentage / 100;
                                                 }
                                             }
 
@@ -675,105 +680,101 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 }
                 foreach (string file in Request.Files)
                 {
-                    HttpPostedFileBase fileContent = Request.Files[file];
+                    var fileContent = Request.Files[file];
                     if (fileContent != null && fileContent.ContentLength > 0)
                     {
-                        string[] segments = fileContent.FileName.Split('.');
-                        var fileExt = segments[segments.Length - 1];
-                        Stream stream = null;
-                        string path = Server.MapPath("~/UploadFile/");
-                        var savePath = path + fileContent.FileName;
-                        if (fileExt.Equals("xls"))
+                        string path = Server.MapPath(fileContent.FileName);
+                        string fileName = Path.GetFileName(path);
+                        string fileExt = Path.GetExtension(fileName);
+
+                        //problem: html tag contain in excel file
+                        //string myPath = Server.MapPath("~/UploadFile/");
+                        //fileContent.SaveAs(myPath + fileName);
+
+                        //var srcApp = new Application();
+                        //var destApp = new Application();
+
+                        //var srcWb = srcApp.Workbooks.Open(myPath + fileName);
+                        //var destWb = srcApp.Workbooks.Add(Type.Missing);
+
+                        //Worksheet srcSheet = srcWb.Worksheets[1];
+                        //Worksheet destSheet = destWb.Worksheets[1];
+                        //var srcRange = srcSheet.UsedRange;
+                        //srcRange.Copy(Type.Missing);
+                        //destSheet.Cells[1, 1].Select();
+                        //destSheet.Paste(Type.Missing, Type.Missing);
+                        //destWb.SaveAs(Server.MapPath("~/UploadFile/")+path + "2");
+                        //destWb.Close();
+                        //destApp.Quit();
+                        //srcWb.Close();
+                        //srcApp.Quit();
+
+
+                        ISheet sheet;
+                        if (fileExt.Equals(".xls"))
                         {
-                            fileContent.SaveAs(savePath);
-
-                            var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
-                            var wb = app.Workbooks.Open(savePath);
-                            wb.SaveAs(savePath + "x", FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
-                            wb.Close();
-                            app.Quit();
-
-                            stream = new FileStream(savePath, FileMode.Open);
+                            HSSFWorkbook hssfwb = new HSSFWorkbook(fileContent.InputStream);
+                            sheet = hssfwb.GetSheetAt(0);//only 1 sheet
                         }
                         else
                         {
-
-                            stream = fileContent.InputStream;
+                            XSSFWorkbook xssfwb = new XSSFWorkbook(fileContent.InputStream);
+                            sheet = xssfwb.GetSheetAt(0);//only 1 sheet
                         }
 
-                        using (ExcelPackage excelPackage = new ExcelPackage(stream))
+
+                        IEnumerator rows = sheet.GetRowEnumerator();
+                        var t = sheet.GetEnumerator();
+                        int? dataRow = null;
+                        int dataCol = 0; //default sheet
+                        using (var context = new DB_Finance_AcademicEntities())
                         {
-                            var wsList = excelPackage.Workbook.Worksheets.ToList();
-                            using (var context = new DB_Finance_AcademicEntities())
+                            while (rows.MoveNext())
                             {
-                                foreach (var ws in wsList)
+                                IRow row;
+                                if (fileExt.Equals(".xls"))
                                 {
-                                    //Not import Name Sheet 3 
-                                    if (!ws.Name.Equals("Sheet3"))
-                                    {
-                                        var totalRow = ws.Dimension.Rows;
-                                        var totalCol = ws.Dimension.Columns;
-
-                                        int count = 0; 
-                                        int stuRollNumberRow = 0;
-                                        int stuRollNumberCol = 0;
-                                        int stuNameRow = 0;
-                                        int stuNamerCol = 0;
-
-
-
-                                        for (int i = 1; i < totalRow; i++)
-                                        {
-                                            for (int j = 1; j < totalCol; j++)
-                                            {
-                                                if (ws.Cells[i, j].Text.Trim().ToUpper().Equals("MSSV"))
-                                                {
-                                                    stuRollNumberRow = i;
-                                                    stuRollNumberCol = j;
-                                                }
-                                                if (ws.Cells[i, j].Text.Trim().ToUpper().Equals("Họ và tên"))
-                                                {
-                                                    stuNameRow = i;
-                                                    stuNamerCol = j;
-                                                }
-                                                if (count == 2) //only StudentRowNumber and Name needed
-                                                    break;
-                                            }
-                                        }
-
-                                        //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
-
-                                        if(stuRollNumberRow == 0 || stuNameRow == 0|| stuRollNumberRow != stuNameRow)
-                                        {
-                                            return Json(new { success = false, message = "Upload file format is invalid" });
-                                        }
-                                        for (int i = stuRollNumberCol; i <= totalRow; i++) //data start from row 5
-                                        {
-                                            var stuRollNumber = ws.Cells[i, stuRollNumberCol].Text.Trim();
-                                            var stuName = ws.Cells[i, stuNamerCol].Text.Trim();
-
-                                            //var existList = context.Students.Where(q => q.;
-                                            //if (existList.Count == 0)
-                                            //    context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
-
-                                        }
-                                    }
-
+                                    row = (HSSFRow)rows.Current;
+                                }
+                                else
+                                {
+                                    row = (XSSFRow)rows.Current;
 
                                 }
-                                context.SaveChanges();
-                            }
-                        }
-                        stream.Close();
-                        if (System.IO.File.Exists(@savePath))
-                        {
-                            System.IO.File.Delete(@savePath);
-                            if (System.IO.File.Exists(@savePath + "x"))
-                            {
-                                System.IO.File.Delete(@savePath + "x");
-                            }
+                                var tempCell = row.GetCell(0);
+                                if (tempCell != null && tempCell.ToString().Trim().ToUpper().Equals("LOGIN")
+                                    && dataRow == null)
+                                {
+                                    dataRow = tempCell.RowIndex + 2; // plus percentage Mark row
+                                    dataCol = tempCell.ColumnIndex;
+                                }
+                                if (dataRow != null && tempCell.RowIndex >= dataRow)
+                                {
+                                    var loginName = row.GetCell(dataCol + 0).ToString().Trim();
+                                    var studentCode = row.GetCell(dataCol + 1).ToString().Trim();
+                                    var name = row.GetCell(dataCol + 2).ToString().Trim();
 
+                                    Student student;
+
+                                    var stuMajorExist = context.StudentMajors.Where(q => q.StudentCode == studentCode).FirstOrDefault();
+                                    if (stuMajorExist == null)
+                                    {
+                                        student = context.Students.Add(new Student { Name = name });
+                                        var studentMajor = context.StudentMajors.Add(new StudentMajor { LoginName = loginName, StudentCode = studentCode });
+                                        studentMajor.StudentId = student.Id;
+                                    }
+                                    context.SaveChanges();
+                                }
+                            }
                         }
+
+
+                        if (dataRow == null)
+                        {
+                            return Json(new { success = false, message = "File uploaded was empty" });
+                        }
+
+
                     }
                 }
             }
@@ -784,6 +785,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
             return Json(new { success = true, message = "Upload Student Success" });
+        }
+
+        public ActionResult ManageStudent()
+        {
+            return View();
         }
     }
 

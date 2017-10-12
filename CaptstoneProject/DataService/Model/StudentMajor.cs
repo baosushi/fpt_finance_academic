@@ -12,18 +12,22 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Role
+    public partial class StudentMajor
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Role()
+        public StudentMajor()
         {
-            this.UserRoles = new HashSet<UserRole>();
+            this.StudentInCourses = new HashSet<StudentInCourse>();
         }
     
         public int Id { get; set; }
-        public string RoleName { get; set; }
+        public string StudentCode { get; set; }
+        public string LoginName { get; set; }
+        public Nullable<int> StudentId { get; set; }
+        public Nullable<int> OldStudentId { get; set; }
     
+        public virtual Student Student { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<StudentInCourse> StudentInCourses { get; set; }
     }
 }

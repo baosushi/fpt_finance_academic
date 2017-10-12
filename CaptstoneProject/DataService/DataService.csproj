@@ -87,9 +87,6 @@
     <Compile Include="Model\CourseMark.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Role.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Schedule.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
@@ -105,6 +102,9 @@
     <Compile Include="Model\StudentInCourse.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\StudentMajor.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Subject.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
@@ -115,12 +115,6 @@
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\TeacherSubject.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\User.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UserRole.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

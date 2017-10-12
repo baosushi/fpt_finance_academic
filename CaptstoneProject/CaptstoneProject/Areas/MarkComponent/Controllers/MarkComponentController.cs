@@ -60,7 +60,7 @@ namespace CaptstoneProject.Areas.MarkComponent.Controllers
                                     //data.Add(new KeyValuePair<string, List<double>>(studentCode, new List<double>()));
                                     using (var context = new DB_Finance_AcademicEntities())
                                     {
-                                        var studentInCourse = context.StudentInCourses.Where(q => q.Student.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+                                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
                                         var course = context.Courses.Where(q => q.Subject.SubjectCode == subjectCode).FirstOrDefault();
 
                                         if (studentInCourse != null && course != null)
@@ -144,7 +144,7 @@ namespace CaptstoneProject.Areas.MarkComponent.Controllers
                     int count = 1;
                     var result = course.StudentInCourses.Select(q => new IConvertible[] {
                         count++,
-                        q.Student.StudentCode,
+                        q.StudentMajor.StudentCode,
                         "Voodoo Login",
                         "Voodoo Name",
                         q.Average.Value.ToString("0.##")
