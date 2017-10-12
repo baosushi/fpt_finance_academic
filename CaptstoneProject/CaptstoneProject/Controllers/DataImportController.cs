@@ -1,10 +1,12 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using DataService.Model;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,21 +79,16 @@ namespace CaptstoneProject.Controllers
             var path = Server.MapPath("~");
 
             DirectoryInfo di = new DirectoryInfo(path + "Khao thi/");
-            DirectoryInfo[] directories =
-                di.GetDirectories(searchPattern, SearchOption.TopDirectoryOnly);
 
             FileInfo[] files =
                 di.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
 
             try
             {
-                foreach (DirectoryInfo dir in directories)
+                //Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var subFiles = dir.GetFiles("*Ketquahoctap*.xls?", SearchOption.AllDirectories);
-                    subFiles.Concat(dir.GetFiles("*Ket qua hoc tap*.xls?", SearchOption.AllDirectories));
-                    subFiles = subFiles.Where(q => !q.Name.StartsWith("_")).ToArray();
-
-                    foreach (var excel in subFiles)
+                    foreach (var excel in files)
                     {
                         HSSFWorkbook hssfwb;
                         using (FileStream file = excel.OpenRead())
@@ -99,20 +96,27 @@ namespace CaptstoneProject.Controllers
                             hssfwb = new HSSFWorkbook(file);
                         }
 
-                        ISheet result = hssfwb.GetSheetAt(0);
-                        ISheet component = hssfwb.GetSheetAt(1);
+                        ISheet component = hssfwb.GetSheetAt(0);
 
-                        var markCompRow = component.GetRow(1);
-                        for (int i = 3; i <= component.LastRowNum; i++)
+                        var markCompRow = component.GetRow(8);
+                        var titleRow = 7;
+
+                        //Microsoft.Office.Interop.Excel.Workbook xls;
+                        //xls = app.Workbooks.Open(excel.FullName);
+                        //xls.SaveAs(path + "Khao thi/New files/" + excel.Name, Microsoft.Office.Interop.Excel.XlFileFormat.xlExcel8);
+
+                        for (int i = 9; i <= component.LastRowNum; i++)
                         {
                             var row = component.GetRow(i);
-                            if (row != null) //null is when the row only contains empty cells 
+                            if (row != null) //null is when the row only contains empty cells
                             {
-                                var loginName = row.Cells[0].StringCellValue.Trim().ToLower();
+                                var studentCode = row.Cells[1].StringCellValue.Trim().ToLower();
+                                var studentInCourse = context.StudentInCourses.Where(q => q.Student.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+
                                 var average = 0.0;
-                                for (int j = 5; j <= row.Cells.Count; j++)
+                                for (int j = 4; j <= row.Cells.Count; j++)
                                 {
-                                    if(row.GetCell(j, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null)
+                                    if (row.GetCell(j, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null)
                                     {
                                         average += row.GetCell(j, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue * markCompRow.Cells[j].NumericCellValue;
                                     }
@@ -120,6 +124,8 @@ namespace CaptstoneProject.Controllers
                             }
                         }
                     }
+                    //app.Workbooks.Close();
+                    //app.Quit();
                 }
             }
             catch (Exception e)
