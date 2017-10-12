@@ -102,9 +102,16 @@
                                 {
                                     if (mark.Mark != null)
                                     {
-                                        <td>
-                                            @mark.Mark
-                                        </td>
+                                        if (mark.Mark.Value == -1)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @mark.Mark
+                                            </td>
+                                        }
                                     }
                                     else
                                     {

@@ -5,25 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e6fd86e13465472cacbf0b458f3a177d" Name="Diagram1" ZoomLevel="88">
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Schedule" Width="1.5" PointX="8.25" PointY="7.5" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Semester" Width="1.5" PointX="3.75" PointY="11.125" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Teacher" Width="1.5" PointX="0.75" PointY="3.25" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.TeacherSubject" Width="1.5" PointX="3" PointY="4.5" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetRole" Width="1.5" PointX="10.75" PointY="2.5" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserClaim" Width="1.5" PointX="15.25" PointY="1" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserLogin" Width="1.5" PointX="15.25" PointY="3.75" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUser" Width="1.5" PointX="13" PointY="1.125" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="6" PointY="6.375" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="8.25" PointY="13.375" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="3.75" PointY="1.625" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="10.5" PointY="8.75" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="8.25" PointY="4.125" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentMajor" Width="1.5" PointX="6" PointY="1.25" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="0.75" PointY="7.375" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="3" PointY="7.5" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Course" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Teacher" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Semester" Width="1.5" PointX="0.75" PointY="3.5" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Student" Width="1.5" PointX="0.75" PointY="12" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Teacher" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.TeacherSubject" Width="1.5" PointX="6" PointY="7.875" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetRole" Width="1.5" PointX="7.75" PointY="13.25" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserClaim" Width="1.5" PointX="12.25" PointY="11.875" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUserLogin" Width="1.5" PointX="12.25" PointY="14.625" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AspNetUser" Width="1.5" PointX="10" PointY="11.875" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="3" PointY="6.875" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="5.25" PointY="11" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="5.25" PointY="4.5" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentMajor" Width="1.5" PointX="3" PointY="11.625" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="3" PointY="15.25" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Semester" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentMajor_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Teacher" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_TeacherSubject_Teacher" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" />
@@ -32,12 +29,12 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_CourseMark_Course" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Course" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentMajor_Student" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="8.5" PointY="7.625" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -79,7 +79,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "N/A",
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = Enum.GetName(typeof(StudentCourseStatus),q.Status.Value)
+                            Status = q.Status == null ? null : Enum.GetName(typeof(StudentCourseStatus), q.Status.Value)
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -100,7 +100,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status == (int)CourseStatus.Open? true: false
+                            isEditable = course.Status == (int)CourseStatus.Open ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -213,7 +213,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-                            if(course.Status != (int)CourseStatus.Open)
+                            if (course.Status != (int)CourseStatus.Open)
                             {
                                 return RedirectToAction("Index", "Home");
                             }
@@ -271,7 +271,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                         average += studentCourseMark.Mark.Value * component.Percentage / 100;
                                                         studentCourseMark.CourseMarkId = component.Id;
 
-                                                        if(!recordExisted)
+                                                        if (!recordExisted)
                                                         {
                                                             context.StudentCourseMarks.Add(studentCourseMark);
                                                         }
@@ -347,8 +347,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 });
             }
         }
-		
-		public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId)
+
+        public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId)
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
@@ -388,7 +388,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
         public ActionResult EditMarks(string studentCode, int courseId)
         {
-            if(String.IsNullOrEmpty(studentCode))
+            if (String.IsNullOrEmpty(studentCode))
             {
                 return RedirectToAction("Index");
             }
@@ -418,6 +418,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
         }
     }
-	
-	
+
+
 }
