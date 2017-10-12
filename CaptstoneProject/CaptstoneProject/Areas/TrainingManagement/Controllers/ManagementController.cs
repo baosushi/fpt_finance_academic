@@ -589,7 +589,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             wb.Close();
                             app.Quit();
 
-                            stream = new FileStream(savePath, FileMode.Open);
+                            stream = new FileStream(savePath + "x", FileMode.Open);
                         }
                         else
                         {
@@ -678,15 +678,44 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     return Json(new { success = false, message = "No file has been uploaded" });
                 }
+                String savePath = "";
+                String savePath2 = "";
+
                 foreach (string file in Request.Files)
                 {
                     var fileContent = Request.Files[file];
                     if (fileContent != null && fileContent.ContentLength > 0)
                     {
-                        string path = Server.MapPath(fileContent.FileName);
-                        string fileName = Path.GetFileName(path);
-                        string fileExt = Path.GetExtension(fileName);
+                        //old code get file Extension
+                        //string path = Server.MapPath(fileContent.FileName);
+                        //string fileName = Path.GetFileName(path);
+                        //string fileExt = Path.GetExtension(fileName);
 
+                        string[] segments = fileContent.FileName.Split('.');
+                        var fileExt = segments[segments.Length - 1];
+                        var fileNameWithoutExt = segments[0];
+
+                        string myPath = Server.MapPath("~/UploadFile/");
+
+                        if (fileExt.Equals("xls"))
+                        {
+                            fileExt += "x";
+                        }
+                        savePath = myPath + fileContent.FileName;
+                        savePath2 = myPath + fileNameWithoutExt + "_2" + "." + fileExt;
+
+
+                        fileContent.SaveAs(savePath);
+
+                        var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream
+                        var wb = app.Workbooks.Open(savePath, null);
+                        wb.SaveAs(savePath2, FileFormat: Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+                        wb.Close();
+                        app.Quit();
+
+                        var stream = new FileStream(savePath2, FileMode.Open);
+
+                        #region
                         //problem: html tag contain in excel file
                         //string myPath = Server.MapPath("~/UploadFile/");
                         //fileContent.SaveAs(myPath + fileName);
@@ -708,17 +737,17 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         //destApp.Quit();
                         //srcWb.Close();
                         //srcApp.Quit();
-
+                        #endregion
 
                         ISheet sheet;
-                        if (fileExt.Equals(".xls"))
+                        if (fileExt.Equals("xls"))
                         {
-                            HSSFWorkbook hssfwb = new HSSFWorkbook(fileContent.InputStream);
+                            HSSFWorkbook hssfwb = new HSSFWorkbook(stream);
                             sheet = hssfwb.GetSheetAt(0);//only 1 sheet
                         }
                         else
                         {
-                            XSSFWorkbook xssfwb = new XSSFWorkbook(fileContent.InputStream);
+                            XSSFWorkbook xssfwb = new XSSFWorkbook(stream);
                             sheet = xssfwb.GetSheetAt(0);//only 1 sheet
                         }
 
@@ -776,6 +805,15 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
 
                     }
+                }
+                if (System.IO.File.Exists(@savePath))
+                {
+                    System.IO.File.Delete(@savePath);
+                }
+                if (System.IO.File.Exists(@savePath2))
+                {
+                    System.IO.File.Delete(@savePath2);
+
                 }
             }
             catch (Exception e)

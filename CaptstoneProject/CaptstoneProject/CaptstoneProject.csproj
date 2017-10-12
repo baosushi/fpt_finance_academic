@@ -489,6 +489,7 @@
     <Folder Include="Areas\TrainingManagement\Models\" />
     <Folder Include="Areas\TrainingManagement\Views\Shared\" />
     <Folder Include="UploadFile\" />
+    <Folder Include="UploadTempFile\" />
     <Folder Include="Views\DataImport\" />
     <Folder Include="Views\MyBase\" />
   </ItemGroup>
