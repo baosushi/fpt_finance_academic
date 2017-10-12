@@ -16,7 +16,7 @@
     <div class="container-default animate fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Your courses </div>
-            <form action="@Url.Action("Index","Course")" id="semesterForm">
+            <form action="@Url.Action("Index","Management")" id="semesterForm">
                 <label>Term: </label>
                 <select id="semesterSelector" style="width:100px" name="semesterId">
                     @foreach (var item in ViewBag.semList)
@@ -71,11 +71,11 @@
                                 <td>
                                     @if (Model[i - 1].Status.Equals("Open"))
                                     {
-                                        <i style="background-color:#6dc16d;" class="col-md-2 p-2 status">@Model[i-1].Status</i>
+                                        <i style="background-color:#6dc16d;" class="col-md-2 p-2 status">@Model[i - 1].Status</i>
                                     }
                                     else
                                     {
-                                        <i  style="background-color:#ef7470;" class="col-md-2 p-2 status">@Model[i-1].Status</i>
+                                        <i style="background-color:#ef7470;" class="col-md-2 p-2 status">@Model[i - 1].Status</i>
                                     }
                                 </td>
                             </tr>
@@ -88,28 +88,30 @@
 </div>
 <script>
     $(document).ready(function () {
-        debugger
         var selectedSem = '@ViewBag.selectedSem';
         if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
         }
         $('#testTable').DataTable({
             "searching": true,
-
+            "columnDefs": [
+                {"className": "dt-center","targets": "_all"}
+            ]
         });
-    });
-    $("#semesterSelector").on('change', function () {
-        @*$.ajax({
-            url: '@Url.Action("Index","Course")',
-            data: { semesterId: $('#semesterSelector').val() },
-            type: "POST",
-            success: function (result) {
-                location.reload();
-            },
-            error: function (error) {
-                alert("Error, please try again later.");
-            }
-        });*@
-        $('#semesterForm').submit();
+
+        $("#semesterSelector").on('change', function () {
+            @*$.ajax({
+                url: '@Url.Action("Index","Management")',
+                data: { semesterId: $('#semesterSelector').val() },
+                type: "POST",
+                success: function (result) {
+
+                },
+                error: function (error) {
+                    alert("Error, please try again later.");
+                }
+            });*@
+            $('#semesterForm').submit();
+        });
     });
 </script>

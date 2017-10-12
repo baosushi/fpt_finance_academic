@@ -49,7 +49,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
                           where c.Id == semesterId
                           select new StudentMarkInSemester
                           {
-                              RollNumber = sc.Student.StudentCode,
+                              RollNumber = sc.StudentMajor.StudentCode,
                               SubjectCode = c.Subject.SubjectCode,
                               ClassName = c.ClassName,
                               AverageMark = sc.Average,

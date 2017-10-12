@@ -1,6 +1,5 @@
-﻿
-@using CaptstoneProject.Models
-@model MyLoginViewModel
+﻿@model CaptstoneProject.Models.MyLoginViewModel
+
 @{
     Layout = null;
 }
@@ -16,14 +15,16 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
     <title>Login</title>
+
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/plugin/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <style>
         .li-body {
             overflow: hidden;
             margin: 0px;
-            background-color: #292929;
+            /*background-color: #292929;*/
         }
 
         .li-form {
@@ -31,12 +32,14 @@
             width: 29%;
             height: 100%;
             padding: 45px;
-            background: white;
             margin-bottom: 52px;
+            background: rgba(59, 57, 57, 0.8);
+            border-radius: 8px;
         }
 
         .inp-form {
-            padding: 14px;
+            border-radius: 4px;
+            padding: 12px;
             border: none;
             background: #f2f2f2;
             margin: 0 0 14px;
@@ -44,16 +47,16 @@
             font-family: "Roboto", sans-serif;
             font-size: 14px;
             box-sizing: border-box;
+            height: 42px;
         }
 
         #customBtnSignin {
+            border-radius: 4px;
             display: inline-block;
-            background: #4285f4;
+            background: #d32c2c;
             color: white;
             width: 100%;
             text-align: center;
-            border: thin solid #888;
-            box-shadow: 1px 1px 1px grey;
             overflow: hidden;
             white-space: nowrap;
         }
@@ -62,75 +65,93 @@
                 cursor: pointer;
             }
 
-        span.icon {
-            background: url('https://google-developers.appspot.com/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+        .icon-input {
+            position: absolute;
+            padding: 0px 7px;
+            font-size: 25px;
+        }
+
+        .iconG {
             display: inline-block;
             vertical-align: middle;
             width: 42px;
+            font-size: 42px;
             height: 42px;
+        }
+
+        .input-padding {
+            padding-left: 35px;
         }
 
         span.buttonText {
             display: inline-block;
             vertical-align: middle;
-            padding-left: 42px;
             padding-right: 42px;
             font-size: 14px;
-            font-weight: bold;
             /* Use the Roboto font that is loaded in the <head> */
             font-family: 'Roboto', sans-serif;
         }
+
+        .login-background {
+            background: url('../../Content/img/HCMC.png') no-repeat fixed;
+            background-size: cover;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.18);
+        }
     </style>
 </head>
-<body class="li-body">
-
-
+<body style="margin:0px">
     <!--Temporary image for view only, just switch to something better-->
-    <div style="text-align:center;overflow:hidden;">
-        <img src="~/Images/Icon/images.png" alt="logo-fpt" />
-    </div>
-    <div class="" style="background: #292929;padding:8% 0 0;">
-        <div class="li-form">
-            <form class="" method="post" action="@Url.Action("Login","Account")">
-                @Html.AntiForgeryToken()
-                <div class="">
-                    @*<input class="inp-form" type="text" placeholder="username" />*@
-                    @Html.TextBoxFor(m => m.Username, new { @class = "inp-form", @placeholder="Username" })
-                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger"})
-                </div>
-                <div class="">
-                    @*<input class="inp-form" type="password" placeholder="Password" />*@
-                    @Html.PasswordFor(m => m.Password, new { @class = "inp-form", @placeholder = "Password"})
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                </div>
-                <input type="submit" class="inp-form" value="Sign In" style="background:#42bae0;color:white" />
-            </form>
-            <form id="gForm" action="@Url.Action("ExternalLogin","Account")" method="post">
-                @Html.AntiForgeryToken()
-                <div id="gSignInWrapper">
-                    <div id="customBtnSignin" class="customGPlusSignIn">
-                        <span class="icon"><img src="~/Images/g-logo.png" /></span>
-                        <span class="buttonText">Sign in with Google</span>
+    <div class="login-background">
+        <div style="text-align:center;overflow:hidden;">
+            <img src="~/Content/img/img-logo-fe.jpg" alt="logo-fpt" />
+        </div>
+        <div class="" style="padding:6%;">
+            <div class="li-form">
+                <form class="" method="post" action="@Url.Action("Login","Account")">
+                    @Html.AntiForgeryToken()
+                    <div class="">
+                        @*<input class="inp-form" type="text" placeholder="username" />*@
+                        <span class="icon-input"><i class="fa fa-user"></i></span>
+                        @Html.TextBoxFor(m => m.Username, new { @class = "inp-form input-padding", @placeholder = "Username" })
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                     </div>
-                </div>
-            </form>
-        </div>
-        @*<form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">
-                <input type="hidden" value="" id="idtxt" name="id"/>
-                <input type="hidden" value="" id="fullNametxt" name="fullName"/>
-                <input type="hidden" value="" id="givenNametxt" name="givenName"/>
-                <input type="hidden" value="" id="imgUrltxt" name="imgUrl"/>
-                <input type="hidden" value="" id="emailtxt" name="email"/>
-                <input type="submit" id="gSignInbtn" hidden />
-            </form>*@
+                    <div class="">
+                        <span class="icon-input"><i class="fa fa-lock"></i></span>
+                        @*<input class="inp-form" type="password" placeholder="Password" />*@
+                        @Html.PasswordFor(m => m.Password, new { @class = "inp-form input-padding", @placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <input type="submit" class="inp-form" value="Sign In" style="background:#0d529e;color:white" />
+                </form>
+                <form id="gForm" action="@Url.Action("ExternalLogin","Account")" method="post">
+                    @Html.AntiForgeryToken()
+                    <div id="gSignInWrapper">
+                        <div id="customBtnSignin" class="customGPlusSignIn">
+                            @*<span class="icon"><img src="~/Images/g-logo.png" /></span>*@
+                            <i class="fa fa-google-plus-official iconG buttonText"></i>
+                            <span class="buttonText">Sign in with Google</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @*<form style="display:none;" action="@Url.Action("GoogleSignIn")" enctype="application/x-www-form-urlencoded" method="post">
+                    <input type="hidden" value="" id="idtxt" name="id"/>
+                    <input type="hidden" value="" id="fullNametxt" name="fullName"/>
+                    <input type="hidden" value="" id="givenNametxt" name="givenName"/>
+                    <input type="hidden" value="" id="imgUrltxt" name="imgUrl"/>
+                    <input type="hidden" value="" id="emailtxt" name="email"/>
+                    <input type="submit" id="gSignInbtn" hidden />
+                </form>*@
 
-        <!-- Google Login-->
-        <!-- Start Footer -->
-        <div class="row footer" style="border-top: 1px solid #505050; color:lightgray">
-            <div class="col-md-6 text-left"> Copyright &copy; 2017 Fpt University All rights reserved. </div>
-            <div class="col-md-6 text-right"> Design and Developed by Developer </div>
+            <!-- Google Login-->
+            <!-- Start Footer -->
+            @*<div class="row footer" style="border-top: 1px solid #505050; color:lightgray">
+                    <div class="col-md-6 text-left"> Copyright &copy; 2017 Fpt University All rights reserved. </div>
+                    <div class="col-md-6 text-right"> Design and Developed by Developer </div>
+                </div>*@
+            <!-- End Footer -->
         </div>
-        <!-- End Footer -->
     </div>
     <script>
 

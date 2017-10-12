@@ -8,19 +8,20 @@
 <div class="content">
     <div class="container-default animated fadeInRight">
         <div class="panel panel-default">
-            <i class="fa fa-graduation-cap"></i>Students
+            <div class="panel-title"><i class="fa fa-graduation-cap"></i>Students</div>
+            <div class="panel-body">
+                <div class="row col-md-2">
+                    <button id="upload-btn" class="btn btn-primary"><i class="fa fa-upload"></i>Import Students</button>
+                    <span id="file-name">Nothing has been selected...</span>
+                    <input type="file" value="Import Students" class="hidden" id="upload-file" />
+                </div>
+                <div class="row col-md-2">
+                    <button class="btn btn-success" disabled="disabled" id="submit-btn">
+                        Submit file
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <button id="upload-btn" class="btn btn-primary"><i class="fa fa-upload"></i>Import Students</button>
-            <span id="file-name">Nothing has been selected...</span>
-            <input type="file" value="Import Students" class="hidden" id="upload-file" />
-        </div>
-        <div>
-            <button class="btn btn-success" disabled="disabled" id="submit-btn">
-                Submit file
-            </button>
-        </div>
-
     </div>
 </div>
 <script>
@@ -41,15 +42,16 @@
 
         $("#submit-btn").on("click", function () {
             var form = new FormData();
-            for (var i = 0; i < $("#upload-file").files.length; i++) {
-                form.append("file" + i, $("#upload-file").files[i]);
+            for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+                form.append("file" + i, $("#upload-file")[0].files[i]);
             }
 
             $.ajax({
                 type: "post",
-                url: @Url.Action("ImportStudent","Management"),
+                url: "@Url.Action("UploadStudent", "Management")",
                 contentType: false,
                 processData: false,
+                data: form,
                 success: function (result) {
                     if (result.success) {
                         toastr.success(result.message);
