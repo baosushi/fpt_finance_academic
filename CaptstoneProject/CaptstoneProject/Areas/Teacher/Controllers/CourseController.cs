@@ -75,16 +75,16 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                         var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
                         {
-                            UserName = q.Student.LoginName,
-                            StudentCode = q.Student.StudentCode,
+                            UserName = q.StudentMajor.LoginName,
+                            StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "N/A",
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = Enum.GetName(typeof(StudentCourseStatus),q.Status.Value)
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
-                        //    q.Student.StudentCode,
-                        //    q.Student.LoginName,
+                        //    q.StudentMajor.StudentCode,
+                        //    q.StudentMajor.LoginName,
                         //    //q.StudentCourseMarks.Select(s => s.Mark),
                         //    q.Average,
                         //    q.Status
@@ -136,8 +136,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     int StartHeaderNumber = 1;
                     #region Headers
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "No";
-                    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "Student ID";
-                    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "Student login";
+                    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "StudentMajor ID";
+                    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "StudentMajor login";
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "Name";
 
                     foreach (var component in course.CourseMarks)
@@ -169,12 +169,12 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     #endregion
                     #region Set values for available fields
                     var count = 1;
-                    foreach (var student in course.StudentInCourses)
+                    foreach (var StudentMajor in course.StudentInCourses)
                     {
                         ws.Cells["" + (StartHeaderChar++) + (++StartHeaderNumber)].Value = count++;
-                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.Student.StudentCode;
-                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = student.Student.LoginName;
-                        ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = student.Student.LoginName;
+                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.StudentCode;
+                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
+                        ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
                         //foreach(var mark in student.StudentCourseMarks)
                         //{
                         //    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue ? mark.Mark.Value : -1;
@@ -236,7 +236,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                     for (int i = firstRecordRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
                                     {
                                         var studentCode = ws.Cells[i, studentCodeCol].Text.Trim().ToUpper();
-                                        var studentInCourse = context.StudentInCourses.Where(q => q.Student.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+                                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
 
                                         if (studentInCourse != null)
                                         {
@@ -400,19 +400,19 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
-                var student = course.StudentInCourses.Where(q => q.Student.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
+                var StudentMajor = course.StudentInCourses.Where(q => q.StudentMajor.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
                     Id = q.Id,
                     Class = course.ClassName,
                     CourseId = courseId,
-                    Name = q.Student.LoginName,
-                    Code = q.Student.StudentCode,
+                    Name = q.StudentMajor.LoginName,
+                    Code = q.StudentMajor.StudentCode,
                     Average = q.Average != null ? q.Average.ToString() : "N/A",
                     MarksComponent = q.StudentCourseMarks.ToList(),
 
                 }).FirstOrDefault();
-                student.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
-                return View("EditMark", student);
+                StudentMajor.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
+                return View("EditMark", StudentMajor);
 
             }
 

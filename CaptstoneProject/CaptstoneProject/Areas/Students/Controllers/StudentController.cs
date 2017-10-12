@@ -18,7 +18,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
         // GET: Student
         public ActionResult Index()
         {
-            var studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.Student);
+            var studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.StudentMajor);
             return View(studentInCourses.ToList());
         }
 
@@ -142,11 +142,11 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
             if (!string.IsNullOrEmpty(param.sSearch))
             {
-                studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.Student).Where(s => s.Student.StudentCode.Contains(param.sSearch)).ToList();
+                studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.StudentMajor).Where(s => s.StudentMajor.StudentCode.Contains(param.sSearch)).ToList();
             }
             else
             {
-                studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.Student).ToList();
+                studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.StudentMajor).ToList();
             }
             
             int totalRecords = studentInCourses.Count();
@@ -156,13 +156,13 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
             var rs = studentInCourses
                     //searchResult
-                    .OrderBy(a => a.Student.StudentCode)
+                    .OrderBy(a => a.StudentMajor.StudentCode)
                     .Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength)
                     .Select(a => new IConvertible[]
                         {
                         //count++,
-                        a.Student.StudentCode,
+                        a.StudentMajor.StudentCode,
                         a.StudentId,
                         a.Course.SubjectId,
                         a.CourseId,
