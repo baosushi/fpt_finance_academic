@@ -76,6 +76,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
                         {
                             UserName = q.StudentMajor.LoginName,
+                            StudentName = q.StudentMajor.Student.Name,
                             StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "N/A",
                             MarksComponent = q.StudentCourseMarks.ToList(),

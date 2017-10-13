@@ -8,6 +8,10 @@
         padding-left: 20px;
         padding-bottom: 15px;
     }
+
+    .min-width-100 {
+        min-width: 100px;
+    }
 </style>
 <div class="content">
     <!-- Start Container -->
@@ -58,7 +62,7 @@
                                 #
                             </th>
                             <th>
-                                Login Name
+                                Student Name
                             </th>
                             <th>
                                 Student Code
@@ -91,11 +95,10 @@
                                     }
                                     else
                                     {
-                                        <div>@Model.StudentInCourse[i - 1].UserName</div>
+                                        <div>@Model.StudentInCourse[i - 1].StudentName</div>
                                     }
                                 </td>
                                 <td>
-                                    #
                                     @Model.StudentInCourse[i - 1].StudentCode
                                 </td>
                                 @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
@@ -226,7 +229,13 @@
 
     $(document).ready(function () {
         $('#mark-table').DataTable({
-            "searching": true
+            "searching": true,
+            "columnDefs": [
+                {
+                    className: "min-width-100",
+                    targets: 1
+                }
+            ]
         });
 
     });
