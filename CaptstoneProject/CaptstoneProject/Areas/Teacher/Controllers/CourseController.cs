@@ -91,7 +91,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //    q.Status
                         //});
 
-                        var columns = data.ElementAt(0).MarksComponent.Select(q => q.CourseMark.ComponentName).ToList();
+                        var columns = course.CourseMarks.Select(q => q.ComponentName).ToList();
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {

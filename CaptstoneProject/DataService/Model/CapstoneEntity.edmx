@@ -117,6 +117,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ComponentName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="IsFinal" Type="bit" />
           <Property Name="CourseId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="StudentCourseMark">
@@ -653,6 +654,7 @@
           <Property Name="CourseId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Course" Relationship="DB_Finance_AcademicModel.FK_CourseMark_Course" FromRole="CourseMark" ToRole="Course" />
           <NavigationProperty Name="StudentCourseMarks" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" FromRole="CourseMark" ToRole="StudentCourseMark" />
+          <Property Name="IsFinal" Type="Boolean" />
         </EntityType>
         <EntityType Name="StudentInCourse">
           <Key>
@@ -1001,6 +1003,7 @@
           <EntitySetMapping Name="CourseMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.CourseMark">
               <MappingFragment StoreEntitySet="CourseMark">
+                <ScalarProperty Name="IsFinal" ColumnName="IsFinal" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
                 <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
