@@ -11,7 +11,7 @@
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Your courses </div>
             <form action="@Url.Action("Index","Course")" id="semesterForm">
                 <label>Term: </label>
-                <select id="semesterSelector" style="width:100px" name="semesterId">
+                <select id="semesterSelector" style="width:120px" name="semesterId">
                     @foreach (var item in ViewBag.semList)
                     {
                         <option value="@item.Value">

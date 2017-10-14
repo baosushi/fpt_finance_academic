@@ -39,6 +39,13 @@
             <param name="column">The column</param>
             <param name="pos">Position</param>
         </member>
+        <member name="M:OfficeOpenXml.CompatibilityExtensions.DateTimeExtensions.FromOADate(System.Double)">
+            <summary>Returns a <see cref="T:System.DateTime" /> equivalent to the specified OLE Automation Date.</summary>
+            <returns>An object that represents the same date and time as <paramref name="d" />.</returns>
+            <param name="d">An OLE Automation Date value. </param>
+            <exception cref="T:System.ArgumentException">The date is not a valid OLE Automation Date value. </exception>
+            <filterpriority>1</filterpriority>
+        </member>
         <member name="T:OfficeOpenXml.ConditionalFormatting.Contracts.IExcelConditionalFormattingAverageGroup">
             <summary>
             IExcelConditionalFormattingAverageGroup
@@ -4265,6 +4272,2086 @@
             <param name="address"></param>
             <param name="worksheet"></param>
         </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable">
+            <summary>
+            Datatable on chart level. 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.ShowHorizontalBorder">
+            <summary>
+            The horizontal borders shall be shown in the data table
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.ShowVerticalBorder">
+            <summary>
+            The vertical borders shall be shown in the data table
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.ShowOutline">
+            <summary>
+            The outline shall be shown on the data table
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.ShowKeys">
+            <summary>
+            The legend keys shall be shown in the data table
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.Fill">
+            <summary>
+            Access fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.Border">
+            <summary>
+            Access border properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataTable.Font">
+            <summary>
+            Access font properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie">
+            <summary>
+            A serie for a scatter chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie.DataLabel">
+            <summary>
+            Datalabel
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChartSerie">
+            <summary>
+            A serie for a surface chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChart">
+            <summary>
+            A Surface chart
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelRadarChart">
+            <summary>
+            Provides access to line chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChart.RadarStyle">
+            <summary>
+            The type of radarchart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChart.DataLabel">
+            <summary>
+            Access to datalabel properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie">
+            <summary>
+            A serie for a scatter chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie.DataLabel">
+            <summary>
+            Datalabel
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie">
+            <summary>
+            A serie for a line chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.DataLabel">
+            <summary>
+            Datalabels
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.Marker">
+            <summary>
+            Marker symbol 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.Smooth">
+            <summary>
+            Smoth lines
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.LineColor">
+             <summary>
+             Line color.
+             </summary>
+            
+             <value>
+             The color of the line.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.MarkerSize">
+             <summary>
+             Gets or sets the size of the marker.
+             </summary>
+            
+             <remarks>
+             value between 2 and 72.
+             </remarks>
+            
+             <value>
+             The size of the marker.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.LineWidth">
+             <summary>
+             Gets or sets the width of the line in pt.
+             </summary>
+            
+             <value>
+             The width of the line.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.MarkerLineColor">
+             <summary>
+             Marker Line color. 
+             (not to be confused with LineColor)
+             </summary>
+            
+             <value>
+             The color of the Marker line.
+             </value>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eChartType">
+            <summary>
+            Chart type
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eDirection">
+            <summary>
+            Bar or column
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eGrouping">
+            <summary>
+            How the series are grouped
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eShape">
+            <summary>
+            Shape for bar charts
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eScatterStyle">
+            <summary>
+            Smooth or lines markers
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Filled">
+            <summary>
+            Specifies that the radar chart shall be filled and have lines but no markers.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Marker">
+            <summary>
+            Specifies that the radar chart shall have lines and markers but no fill.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Standard">
+            <summary>
+            Specifies that the radar chart shall have lines but no markers and no fill.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ePieType">
+            <summary>
+            Bar or pie
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eLabelPosition">
+            <summary>
+            Position of the labels
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eTickLabelPosition">
+            <summary>
+            Axis label position
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eMarkerStyle">
+            <summary>
+            Markerstyle
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eTimeUnit">
+            <summary>
+            The time unit of major and minor datetime axis values
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eChartStyle">
+            <summary>
+            The build in style of the chart.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eTrendLine">
+            <summary>
+            Type of Trendline for a chart
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Exponential">
+            <summary>
+            Specifies the trendline shall be an exponential curve in the form
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Linear">
+            <summary>
+            Specifies the trendline shall be a logarithmic curve in the form , where log is the natural
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Logarithmic">
+            <summary>
+            Specifies the trendline shall be a logarithmic curve in the form , where log is the natural
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.MovingAvgerage">
+            <summary>
+            Specifies the trendline shall be a moving average of period Period
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Polynomial">
+            <summary>
+            Specifies the trendline shall be a polynomial curve of order Order in the form 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Power">
+            <summary>
+            Specifies the trendline shall be a power curve in the form
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs">
+            <summary>
+            Specifies the possible ways to display blanks
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Gap">
+            <summary>
+            Blank values shall be left as a gap
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Span">
+            <summary>
+            Blank values shall be spanned with a line (Line charts)
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Zero">
+            <summary>
+            Blank values shall be treated as zero
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eSizeRepresents.Area">
+            <summary>
+            Specifies the area of the bubbles shall be proportional to the bubble size value.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eSizeRepresents.Width">
+            <summary>
+            Specifies the radius of the bubbles shall be proportional to the bubble size value.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChart">
+            <summary>
+            Base class for Chart object.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.GetChartNodeText">
+            <summary>
+            Get the name of the chart node
+            </summary>
+            <returns>The name</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.AddAxis">
+            <summary>
+            Add a secondary axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.WorkSheet">
+            <summary>
+            Reference to the worksheet
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ChartXml">
+            <summary>
+            The chart xml document
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ChartType">
+            <summary>
+            Type of chart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Title">
+            <summary>
+            Titel of the chart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Series">
+            <summary>
+            Chart series
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Axis">
+            <summary>
+            An array containg all axis of all Charttypes
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.XAxis">
+            <summary>
+            The XAxis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.YAxis">
+            <summary>
+            The YAxis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.UseSecondaryAxis">
+            <summary>
+            If true the charttype will use the secondary axis.
+            The chart must contain a least one other charttype that uses the primary axis.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Style">
+            <summary>
+            The build-in chart styles. 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.RoundedCorners">
+            <summary>
+            Border rounded corners
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ShowHiddenData">
+            <summary>
+            Show data in hidden rows and columns
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.DisplayBlanksAs">
+            <summary>
+            Specifies the possible ways to display blanks
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ShowDataLabelsOverMaximum">
+            <summary>
+            Specifies data labels over the maximum of the chart shall be shown
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.CheckRemoveAxis(OfficeOpenXml.Drawing.Chart.ExcelChartAxis)">
+            <summary>
+            Remove all axis that are not used any more
+            </summary>
+            <param name="excelChartAxis"></param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.PlotArea">
+            <summary>
+            Plotarea
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Legend">
+            <summary>
+            Legend
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Fill">
+            <summary>
+            Fill
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.View3D">
+            <summary>
+            3D-settings
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.VaryColors">
+            <summary>
+            If the chart has only one serie this varies the colors for each point.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.UriChart">
+            <summary>
+            Package internal URI
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartCollection">
+            <summary>
+            Enumerates charttypes 
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartCollection.Add(OfficeOpenXml.Drawing.Chart.eChartType)">
+            <summary>
+            Add a new charttype to the chart
+            </summary>
+            <param name="chartType">The type of the new chart</param>
+            <returns></returns>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartCollection.Item(System.Int32)">
+            <summary>
+            Returns a chart at the specific position.  
+            </summary>
+            <param name="PositionID">The position of the chart. 0-base</param>
+            <returns></returns>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTrendlineCollection">
+            <summary>
+            A collection of trendlines.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartTrendlineCollection.Add(OfficeOpenXml.Drawing.Chart.eTrendLine)">
+            <summary>
+            Add a new trendline
+            </summary>
+            <param name="Type"></param>
+            <returns>The trendline</returns>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline">
+            <summary>
+            A trendline object
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Type">
+            <summary>
+            Type of Trendline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Name">
+            <summary>
+            Name in the legend
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Order">
+            <summary>
+            Order for polynominal trendlines
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Period">
+            <summary>
+            Period for monthly average trendlines
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Forward">
+            <summary>
+            Forcast forward periods
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Backward">
+            <summary>
+            Forcast backwards periods
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Intercept">
+            <summary>
+            Specify the point where the trendline crosses the vertical axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.DisplayRSquaredValue">
+            <summary>
+            Display the R-squared value for a trendline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.DisplayEquation">
+            <summary>
+            Display the trendline equation on the chart
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart">
+            <summary>
+            Provides access to bubble chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.BubbleScale">
+            <summary>
+            Specifies the scale factor for the bubble chart. Can range from 0 to 300, corresponding to a percentage of the default size,
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.ShowNegativeBubbles">
+            <summary>
+            Specifies negative sized bubbles shall be shown on a bubble chart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.Bubble3D">
+            <summary>
+            Specifies if the bubblechart is three dimensional
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.SizeRepresents">
+            <summary>
+            Specifies the scale factor for the bubble chart. Can range from 0 to 300, corresponding to a percentage of the default size,
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSurface">
+            <summary>
+            Chart surface settings
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Thickness">
+            <summary>
+            Show the values 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Fill">
+            <summary>
+            Access fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Border">
+            <summary>
+            Access border properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie">
+            <summary>
+            A serie for a scatter chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.DataLabel">
+            <summary>
+            Datalabel
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.Marker">
+            <summary>
+            Marker symbol 
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelLineChart">
+            <summary>
+            Provides access to line chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.Marker">
+            <summary>
+            If the series has markers
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.Smooth">
+            <summary>
+            If the series has smooth lines
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.DataLabel">
+            <summary>
+            Access to datalabel properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eLegendPosition">
+            <summary>
+            Position of the legend
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartLegend">
+            <summary>
+            Chart ledger
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Position">
+            <summary>
+            Position of the Legend
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Overlay">
+            <summary>
+            If the legend overlays other objects
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Fill">
+            <summary>
+            Fill style
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Border">
+            <summary>
+            Border style
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Font">
+            <summary>
+            Font properties
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Remove">
+            <summary>
+            Remove the legend
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Add">
+            <summary>
+            Add a legend to the chart
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea">
+            <summary>
+            A charts plot area
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.CreateDataTable">
+            <summary>
+            Creates a data table in the plotarea
+            The datatable can also be accessed via the DataTable propery
+            <see cref="P:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.DataTable"/>
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.RemoveDataTable">
+            <summary>
+            Remove the data table if it's created in the plotarea
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.DataTable">
+            <summary>
+            The data table object.
+            Use the CreateDataTable method to create a datatable if it does not exist.
+            <see cref="M:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.CreateDataTable"/>
+            <see cref="M:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea.RemoveDataTable"/>
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel">
+            <summary>
+            Datalabel properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Position">
+            <summary>
+            Position of the labels
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Fill">
+            <summary>
+            Access fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Border">
+            <summary>
+            Access border properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Font">
+            <summary>
+            Access font properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie">
+            <summary>
+            A serie for a scatter chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.DataLabel">
+            <summary>
+            Datalabel
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.Smooth">
+            <summary>
+            Smooth for scattercharts
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.Marker">
+            <summary>
+            Marker symbol 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.LineColor">
+             <summary>
+             Line color.
+             </summary>
+            
+             <value>
+             The color of the line.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerSize">
+             <summary>
+             Gets or sets the size of the marker.
+             </summary>
+            
+             <remarks>
+             value between 2 and 72.
+             </remarks>
+            
+             <value>
+             The size of the marker.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerColor">
+             <summary>
+             Marker color.
+             </summary>
+            
+             <value>
+             The color of the Marker.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.LineWidth">
+             <summary>
+             Gets or sets the width of the line in pt.
+             </summary>
+            
+             <value>
+             The width of the line.
+             </value>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerLineColor">
+             <summary>
+             Marker Line color.
+             (not to be confused with LineColor)
+             </summary>
+            
+             <value>
+             The color of the Marker line.
+             </value>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.setAlphaChannel(System.Drawing.Color,System.String)">
+            <summary>
+            write alpha value (if Color.A != 255)
+            </summary>
+            <param name="c">Color</param>
+            <param name="xPath">where to write</param>
+            <remarks>
+            alpha-values may only written to color-nodes
+            eg: a:prstClr (preset), a:hslClr (hsl), a:schemeClr (schema), a:sysClr (system), a:scrgbClr (rgb percent) or a:srgbClr (rgb hex)
+                .../a:prstClr/a:alpha/@val
+            </remarks>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.getAlphaChannel(System.String)">
+            <summary>
+            read AlphaChannel from a:solidFill
+            </summary>
+            <param name="xPath"></param>
+            <returns>alpha or 255 if their is no such node</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.xPath4Alpha(System.String)">
+            <summary>
+            creates xPath to alpha attribute for a color 
+            eg: a:prstClr/a:alpha/@val
+            </summary>
+            <param name="xPath">xPath to color node</param>
+            <returns></returns>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTitle">
+            <summary>
+            The title of a chart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Text">
+            <summary>
+            The text
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Border">
+            <summary>
+            A reference to the border properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Fill">
+            <summary>
+            A reference to the fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Font">
+            <summary>
+            A reference to the font properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.RichText">
+            <summary>
+            Richtext
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Overlay">
+            <summary>
+            Show without overlaping the chart.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.AnchorCtr">
+            <summary>
+            Specifies the centering of the text box. 
+            The way it works fundamentally is to determine the smallest possible "bounds box" for the text and then to center that "bounds box" accordingly. 
+            This is different than paragraph alignment, which aligns the text within the "bounds box" for the text. 
+            This flag is compatible with all of the different kinds of anchoring. 
+            If this attribute is omitted, then a value of 0 or false is implied.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.TextVertical">
+            <summary>
+            Vertical text
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Rotation">
+            <summary>
+            Rotation in degrees (0-360)
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart">
+            <summary>
+            Provides access to ofpie-chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart.OfPieType">
+            <summary>
+            Type, pie or bar
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart.GapWidth">
+            <summary>
+            The size of the gap between two adjacent bars/columns
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie">
+            <summary>
+            A serie for a pie chart
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.Explosion">
+            <summary>
+            Explosion for Piecharts
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.DataLabel">
+            <summary>
+            DataLabels
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBarChart">
+            <summary>
+            Bar chart
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.Direction">
+            <summary>
+            Direction, Bar or columns
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.Shape">
+            <summary>
+            The shape of the bar/columns
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.DataLabel">
+            <summary>
+            Access to datalabel properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.GapWidth">
+            <summary>
+            The size of the gap between two adjacent bars/columns
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisPosition">
+            <summary>
+            Position of the axis.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eYAxisPosition">
+            <summary>
+            Position of the Y-Axis
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eXAxisPosition">
+            <summary>
+            Position of the X-Axis
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisOrientation">
+            <summary>
+            Axis orientaion
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eCrossBetween">
+            <summary>
+            How the axis are crossed
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eCrossBetween.Between">
+            <summary>
+            Specifies the value axis shall cross the category axis between data markers
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eCrossBetween.MidCat">
+            <summary>
+            Specifies the value axis shall cross the category axis at the midpoint of a category.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eCrosses">
+            <summary>
+            Where the axis cross. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.AutoZero">
+            <summary>
+            (Axis Crosses at Zero) The category axis crosses at the zero point of the valueaxis (if possible), or the minimum value (if theminimum is greater than zero) or the maximum (if the maximum is less than zero).
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.Max">
+            <summary>
+            The axis crosses at the maximum value
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.Min">
+            <summary>
+            (Axis crosses at the minimum value of the chart.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisTickMark">
+            <summary>
+            Tickmarks
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.Cross">
+            <summary>
+            Specifies the tick marks shall cross the axis. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.In">
+            <summary>
+            Specifies the tick marks shall be inside the plot area. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.None">
+            <summary>
+            Specifies there shall be no tick marks.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.Out">
+            <summary>
+            Specifies the tick marks shall be outside the plot area.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartAxis">
+            <summary>
+            An axis for a chart
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType">
+            <summary>
+            Type of axis
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Val">
+            <summary>
+            Value axis
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Cat">
+            <summary>
+            Category axis
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Date">
+            <summary>
+            Date axis
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Serie">
+            <summary>
+            Series axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorTickMark">
+            <summary>
+            majorTickMark 
+            This element specifies the major tick marks for the axis. 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorTickMark">
+            <summary>
+            minorTickMark 
+            This element specifies the minor tick marks for the axis. 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.AxisType">
+            <summary>
+            Type of axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.AxisPosition">
+            <summary>
+            Where the axis is located
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Crosses">
+            <summary>
+            Where the axis cross
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.CrossBetween">
+            <summary>
+            How the axis are crossed
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.CrossesAt">
+            <summary>
+            The value where the axis cross. 
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Format">
+            <summary>
+            Numberformat
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.LabelPosition">
+            <summary>
+            Position of the labels
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Fill">
+            <summary>
+            Access to fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Border">
+            <summary>
+            Access to border properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Font">
+            <summary>
+            Access to font properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Deleted">
+            <summary>
+            If the axis is deleted
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.TickLabelPosition">
+            <summary>
+            Position of the Lables
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Title">
+            <summary>
+            Chart axis title
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinValue">
+            <summary>
+            Minimum value for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MaxValue">
+            <summary>
+            Max value for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorUnit">
+            <summary>
+            Major unit for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorTimeUnit">
+            <summary>
+            Major time unit for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorUnit">
+            <summary>
+            Minor unit for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorTimeUnit">
+            <summary>
+            Minor time unit for the axis.
+            Null is automatic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.LogBase">
+            <summary>
+            The base for a logaritmic scale
+            Null for a normal scale
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Orientation">
+            <summary>
+            Axis orientation
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorGridlines">
+            <summary> 
+            Major Gridlines for the Axis 
+            </summary> 
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorGridlines">
+            <summary> 
+            Minor Gridlines for the Axis 
+            </summary> 
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.RemoveGridlines">
+            <summary> 
+            Removes Major and Minor gridlines from the Axis 
+            </summary> 
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.RemoveGridlines(System.Boolean,System.Boolean)">
+            <summary>
+             Removes gridlines from the Axis
+            </summary>
+            <param name="removeMajor">Indicates if the Major gridlines should be removed</param>
+            <param name="removeMinor">Indicates if the Minor gridlines should be removed</param>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel">
+            <summary>
+            Datalabel on chart level. 
+            This class is inherited by ExcelChartSerieDataLabel
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowValue">
+            <summary>
+            Show the values 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowCategory">
+            <summary>
+            Show category names
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowSeriesName">
+            <summary>
+            Show series names
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowPercent">
+            <summary>
+            Show percent values
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowLeaderLines">
+            <summary>
+            Show the leader lines
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowBubbleSize">
+            <summary>
+            Bubble Size.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Separator">
+            <summary>
+            Separator string 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Fill">
+            <summary>
+            Access fill properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Border">
+            <summary>
+            Access border properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Font">
+            <summary>
+            Access font properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSerie">
+            <summary>
+            A chart serie
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="chartSeries">Parent collection</param>
+            <param name="ns">Namespacemanager</param>
+            <param name="node">Topnode</param>
+            <param name="isPivot">Is pivotchart</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.Header">
+            <summary>
+            Header for the serie.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.HeaderAddress">
+            <summary>
+            Header address for the serie.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.Series">
+            <summary>
+            Set this to a valid address or the drawing will be invalid.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.XSeries">
+            <summary>
+            Set an address for the horisontal labels
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.TrendLines">
+            <summary>
+            Access to the trendline collection
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSeries">
+            <summary>
+            Collection class for chart series
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Item(System.Int32)">
+            <summary>
+            Returns the serie at the specified position.  
+            </summary>
+            <param name="PositionID">The position of the series.</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Delete(System.Int32)">
+            <summary>
+            Delete the chart at the specific position
+            </summary>
+            <param name="PositionID">Zero based</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Chart">
+            <summary>
+            A reference to the chart object
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Add(OfficeOpenXml.ExcelRangeBase,OfficeOpenXml.ExcelRangeBase)">
+            <summary>
+            Add a new serie to the chart. Do not apply to pivotcharts.
+            </summary>
+            <param name="Serie">The Y-Axis range</param>
+            <param name="XSerie">The X-Axis range</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Add(System.String,System.String)">
+            <summary>
+            Add a new serie to the chart.Do not apply to pivotcharts.
+            </summary>
+            <param name="SerieAddress">The Y-Axis range</param>
+            <param name="XSerieAddress">The X-Axis range</param>
+            <returns></returns>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart">
+            <summary>
+            Provides access to doughnut chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart.FirstSliceAngle">
+            <summary>
+            Angle of the first slize
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart.HoleSize">
+            <summary>
+            Size of the doubnut hole
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelPieChart">
+            <summary>
+            Provides access to pie chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChart.DataLabel">
+            <summary>
+            Access to datalabel properties
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelScatterChart">
+            <summary>
+            Provides access to scatter chart specific properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChart.ScatterStyle">
+            <summary>
+            If the scatter has LineMarkers or SmoothMarkers
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChart.Marker">
+            <summary>
+            If the series has markers
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.eTextAnchoringType">
+            <summary>
+            Text anchoring
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.eTextVerticalType">
+            <summary>
+            Vertical text type
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.eEditAs">
+            <summary>
+            How the drawing will be resized.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.eEditAs.Absolute">
+            <summary>
+            Specifies that the current start and end positions shall
+            be maintained with respect to the distances from the
+            absolute start point of the worksheet.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.eEditAs.OneCell">
+             <summary>
+             Specifies that the current drawing shall move with its
+            row and column (i.e. the object is anchored to the
+             actual from row and column), but that the size shall
+            remain absolute.
+             </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.eEditAs.TwoCell">
+            <summary>
+            Specifies that the current drawing shall move and
+            resize to maintain its row and column anchors (i.e. the
+            object is anchored to the actual from and to row and column).
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawing">
+            <summary>
+            Base class for twoanchored drawings. 
+            Drawings are Charts, shapes and Pictures.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition">
+            <summary>
+            Position of the a drawing.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition.ColumnOff">
+            <summary>
+            Column Offset
+            
+            EMU units   1cm         =   1/360000 
+                        1US inch    =   1/914400
+                        1pixel      =   1/9525
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition.RowOff">
+            <summary>
+            Row Offset
+            
+            EMU units   1cm         =   1/360000 
+                        1US inch    =   1/914400
+                        1pixel      =   1/9525
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Name">
+            <summary>
+            The name of the drawing object
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.EditAs">
+            <summary>
+            How Excel resize drawings when the column width is changed within Excel.
+            The width of drawings are currently NOT resized in EPPLus when the column width changes
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Locked">
+            <summary>
+            Lock drawing
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Print">
+            <summary>
+            Print drawing with sheet
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.From">
+            <summary>
+            Top Left position
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.ExcelDrawing._to">
+            <summary>
+            Bottom right position
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.GetDrawing(OfficeOpenXml.Drawing.ExcelDrawings,System.Xml.XmlNode)">
+            <summary>
+            Add new Drawing types here
+            </summary>
+            <param name="drawings">The drawing collection</param>
+            <param name="node">Xml top node</param>
+            <returns>The Drawing object</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetPosition(System.Int32,System.Int32)">
+            <summary>
+            Set the top left corner of a drawing. 
+            Note that resizing columns / rows after using this function will effect the position of the drawing
+            </summary>
+            <param name="PixelTop">Top pixel</param>
+            <param name="PixelLeft">Left pixel</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetPosition(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Set the top left corner of a drawing. 
+            Note that resizing columns / rows after using this function will effect the position of the drawing
+            </summary>
+            <param name="Row">Start row - 0-based index.</param>
+            <param name="RowOffsetPixels">Offset in pixels</param>
+            <param name="Column">Start Column - 0-based index.</param>
+            <param name="ColumnOffsetPixels">Offset in pixels</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetSize(System.Int32)">
+            <summary>
+            Set size in Percent
+            Note that resizing columns / rows after using this function will effect the size of the drawing
+            </summary>
+            <param name="Percent"></param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetSize(System.Int32,System.Int32)">
+            <summary>
+            Set size in pixels
+            Note that resizing columns / rows after using this function will effect the size of the drawing
+            </summary>
+            <param name="PixelWidth">Width in pixels</param>
+            <param name="PixelHeight">Height in pixels</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.AdjustPositionAndSize">
+            <summary>
+            Will adjust the position and size of the drawing according to chages in font of rows and to the Normal style.
+            This method will be called before save, so use it only if you need the coordinates of the drawing.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingLineEnd">
+            <summary>
+            Properties for drawing line ends
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEnd">
+            <summary>
+            HeaderEnd
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEnd">
+            <summary>
+            HeaderEnd
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEndSizeWidth">
+            <summary>
+            TailEndSizeWidth
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEndSizeHeight">
+            <summary>
+            TailEndSizeHeight
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEndSizeWidth">
+            <summary>
+            TailEndSizeWidth
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEndSizeHeight">
+            <summary>
+            TailEndSizeHeight
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelPicture">
+            <summary>
+            An image object
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Image">
+            <summary>
+            The Image
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.ImageFormat">
+            <summary>
+            Image format
+            If the picture is created from an Image this type is always Jpeg
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelPicture.SetSize(System.Int32)">
+            <summary>
+            Set the size of the image in percent from the orginal size
+            Note that resizing columns / rows after using this function will effect the size of the picture
+            </summary>
+            <param name="Percent">Percent</param>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Fill">
+            <summary>
+            Fill
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Hyperlink">
+            <summary>
+            Hyperlink
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureCollection.Item(System.Int32)">
+            <summary>
+            Indexer
+            </summary>
+            <param name="Index">Index</param>
+            <returns>The VML Drawing Picture object</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureCollection.GetNewId">
+            <summary>
+            returns the next drawing id.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingCommentCollection.GetNewId">
+            <summary>
+            returns the next drawing id.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture">
+            <summary>
+            Drawing object used for header and footer pictures
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Position">
+            <summary>
+            Position ID
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Width">
+            <summary>
+            The width in points
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Height">
+            <summary>
+            The height in points
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Left">
+            <summary>
+            Margin Left in points
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Top">
+            <summary>
+            Margin top in points
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Title">
+            <summary>
+            The Title of the image
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Image">
+            <summary>
+            The image
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.BiLevel">
+            <summary>
+            Determines whether an image will be displayed in black and white
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.GrayScale">
+            <summary>
+            Determines whether a picture will be displayed in grayscale mode
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Gain">
+            <summary>
+            Defines the intensity of all colors in an image
+            Default value is 1
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Gamma">
+            <summary>
+            Defines the amount of contrast for an image
+            Default value is 0;
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.BlackLevel">
+            <summary>
+            Defines the intensity of black in an image
+            Default value is 0
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.eTextAlignHorizontalVml">
+            <summary>
+            Horizontal Alingment
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.eTextAlignVerticalVml">
+            <summary>
+            Vertical Alingment
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.eLineStyleVml">
+            <summary>
+            Linestyle
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingBase">
+            <summary>
+            Drawing object used for comments
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingBase.AlternativeText">
+            <summary>
+            Alternative text to be displayed instead of a graphic.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment">
+            <summary>
+            Drawing object used for comments
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Address">
+            <summary>
+            Address in the worksheet
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.VerticalAlignment">
+            <summary>
+            Vertical alignment for text
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.HorizontalAlignment">
+            <summary>
+            Horizontal alignment for text
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Visible">
+            <summary>
+            If the drawing object is visible.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.BackgroundColor">
+            <summary>
+            Background color
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineStyle">
+            <summary>
+            Linestyle for border
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineColor">
+            <summary>
+            Line color 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineWidth">
+            <summary>
+            Width of the border
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.AutoFit">
+            <summary>
+            Autofits the drawingobject 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Locked">
+            <summary>
+            If the object is locked when the sheet is protected
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LockText">
+            <summary>
+            Specifies that the object's text is locked
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.From">
+            <summary>
+            From position. For comments only when Visible=true.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.To">
+            <summary>
+            To position. For comments only when Visible=true.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Row">
+            <summary>
+            Row position for a comment
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Column">
+            <summary>
+            Column position for a comment
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition">
+            <summary>
+            The position of a VML drawing. Used for comments
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.Row">
+            <summary>
+            Row. Zero based
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.RowOffset">
+            <summary>
+            Row offset in pixels. Zero based
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.Column">
+            <summary>
+            Column. Zero based
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.ColumnOffset">
+            <summary>
+            Column offset. Zero based
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawings">
+            <summary>
+            Collection for Drawing objects.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.DrawingXml">
+            <summary>
+            A reference to the drawing xml document
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.CreateNSM">
+            <summary>
+            Creates the NamespaceManager. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Drawing.ExcelDrawings._nsManager">
+            <summary>
+            Provides access to a namespace manager instance to allow XPath searching
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.Item(System.Int32)">
+            <summary>
+            Returns the drawing at the specified position.  
+            </summary>
+            <param name="PositionID">The position of the drawing. 0-base</param>
+            <returns></returns>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.Item(System.String)">
+            <summary>
+            Returns the drawing matching the specified name
+            </summary>
+            <param name="Name">The name of the worksheet</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddChart(System.String,OfficeOpenXml.Drawing.Chart.eChartType,OfficeOpenXml.Table.PivotTable.ExcelPivotTable)">
+            <summary>
+            Add a new chart to the worksheet.
+            Do not support Bubble-, Radar-, Stock- or Surface charts. 
+            </summary>
+            <param name="Name"></param>
+            <param name="ChartType">Type of chart</param>
+            <param name="PivotTableSource">The pivottable source for a pivotchart</param>    
+            <returns>The chart</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddChart(System.String,OfficeOpenXml.Drawing.Chart.eChartType)">
+            <summary>
+            Add a new chart to the worksheet.
+            Do not support Bubble-, Radar-, Stock- or Surface charts. 
+            </summary>
+            <param name="Name"></param>
+            <param name="ChartType">Type of chart</param>
+            <returns>The chart</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.Drawing.Image)">
+            <summary>
+            Add a picure to the worksheet
+            </summary>
+            <param name="Name"></param>
+            <param name="image">An image. Allways saved in then JPeg format</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.Drawing.Image,System.Uri)">
+            <summary>
+            Add a picure to the worksheet
+            </summary>
+            <param name="Name"></param>
+            <param name="image">An image. Allways saved in then JPeg format</param>
+            <param name="Hyperlink">Picture Hyperlink</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.IO.FileInfo)">
+            <summary>
+            Add a picure to the worksheet
+            </summary>
+            <param name="Name"></param>
+            <param name="ImageFile">The image file</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.IO.FileInfo,System.Uri)">
+            <summary>
+            Add a picure to the worksheet
+            </summary>
+            <param name="Name"></param>
+            <param name="ImageFile">The image file</param>
+            <param name="Hyperlink">Picture Hyperlink</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddShape(System.String,eShapeStyle)">
+            <summary>
+            Add a new shape to the worksheet
+            </summary>
+            <param name="Name">Name</param>
+            <param name="Style">Shape style</param>
+            <returns>The shape object</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddShape(System.String,OfficeOpenXml.Drawing.ExcelShape)">
+            <summary>
+            Add a new shape to the worksheet
+            </summary>
+            <param name="Name">Name</param>
+            <param name="Source">Source shape</param>
+            <returns>The shape object</returns>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(System.Int32)">
+            <summary>
+            Removes a drawing.
+            </summary>
+            <param name="Index">The index of the drawing</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(OfficeOpenXml.Drawing.ExcelDrawing)">
+            <summary>
+            Removes a drawing.
+            </summary>
+            <param name="Drawing">The drawing</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(System.String)">
+            <summary>
+            Removes a drawing.
+            </summary>
+            <param name="Name">The name of the drawing</param>
+        </member>
+        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Clear">
+            <summary>
+            Removes all drawings from the collection
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelShape">
+            <summary>
+            An Excel shape.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Style">
+            <summary>
+            Shape style
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Fill">
+            <summary>
+            Fill
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.LineEnds">
+            <summary>
+            Line Ends
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Text">
+            <summary>
+            Text inside the shape
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.LockText">
+            <summary>
+            Lock drawing
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.RichText">
+            <summary>
+            Richtext collection. Used to format specific parts of the text
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAnchoring">
+            <summary>
+            Text Anchoring
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAnchoringControl">
+            <summary>
+            Specifies the centering of the text box.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAlignment">
+            <summary>
+            How the text is aligned
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Indent">
+            <summary>
+            Indentation
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextVertical">
+            <summary>
+            Vertical text
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.eLineCap">
+            <summary>
+            Type of Line cap
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.eLineStyle">
+            <summary>
+            Line style.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingBorder">
+            <summary>
+            Border for drawings
+            </summary>    
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.Fill">
+            <summary>
+            Fill
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.LineStyle">
+            <summary>
+            Linestyle
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.LineCap">
+            <summary>
+            Linecap
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.Width">
+            <summary>
+            Width in pixels
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingFill">
+            <summary>
+            Fill properties for drawing objects
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Style">
+            <summary>
+            Fill style
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Color">
+            <summary>
+            Fill color for solid fills
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Transparancy">
+            <summary>
+            Transparancy in percent
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.ExcelView3D">
+            <summary>
+            3D settings
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.Perspective">
+            <summary>
+            Degree of perspective 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RotX">
+            <summary>
+            Rotation X-axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RotY">
+            <summary>
+            Rotation Y-axis
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RightAngleAxes">
+            <summary>
+            Right Angle Axes
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.DepthPercent">
+            <summary>
+            Depth % of base
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.HeightPercent">
+            <summary>
+            Height % of base
+            </summary>
+        </member>
         <member name="T:OfficeOpenXml.DataValidation.Contracts.IExcelDataValidation">
             <summary>
             Interface for data validation
@@ -5284,1999 +7371,6 @@
             List of allowed values
             </summary>
         </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie">
-            <summary>
-            A serie for a scatter chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChartSerie.DataLabel">
-            <summary>
-            Datalabel
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChartSerie">
-            <summary>
-            A serie for a surface chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelSurfaceChart">
-            <summary>
-            A Surface chart
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelRadarChart">
-            <summary>
-            Provides access to line chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChart.RadarStyle">
-            <summary>
-            The type of radarchart
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChart.DataLabel">
-            <summary>
-            Access to datalabel properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie">
-            <summary>
-            A serie for a scatter chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChartSerie.DataLabel">
-            <summary>
-            Datalabel
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie">
-            <summary>
-            A serie for a line chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.DataLabel">
-            <summary>
-            Datalabels
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.Marker">
-            <summary>
-            Marker symbol 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.Smooth">
-            <summary>
-            Smoth lines
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.LineColor">
-             <summary>
-             Line color.
-             </summary>
-            
-             <value>
-             The color of the line.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.MarkerSize">
-             <summary>
-             Gets or sets the size of the marker.
-             </summary>
-            
-             <remarks>
-             value between 2 and 72.
-             </remarks>
-            
-             <value>
-             The size of the marker.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.LineWidth">
-             <summary>
-             Gets or sets the width of the line in pt.
-             </summary>
-            
-             <value>
-             The width of the line.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChartSerie.MarkerLineColor">
-             <summary>
-             Marker Line color. 
-             (not to be confused with LineColor)
-             </summary>
-            
-             <value>
-             The color of the Marker line.
-             </value>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eChartType">
-            <summary>
-            Chart type
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eDirection">
-            <summary>
-            Bar or column
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eGrouping">
-            <summary>
-            How the series are grouped
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eShape">
-            <summary>
-            Shape for bar charts
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eScatterStyle">
-            <summary>
-            Smooth or lines markers
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Filled">
-            <summary>
-            Specifies that the radar chart shall be filled and have lines but no markers.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Marker">
-            <summary>
-            Specifies that the radar chart shall have lines and markers but no fill.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eRadarStyle.Standard">
-            <summary>
-            Specifies that the radar chart shall have lines but no markers and no fill.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ePieType">
-            <summary>
-            Bar or pie
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eLabelPosition">
-            <summary>
-            Position of the labels
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eTickLabelPosition">
-            <summary>
-            Axis label position
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eMarkerStyle">
-            <summary>
-            Markerstyle
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eTimeUnit">
-            <summary>
-            The time unit of major and minor datetime axis values
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eChartStyle">
-            <summary>
-            The build in style of the chart.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eTrendLine">
-            <summary>
-            Type of Trendline for a chart
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Exponential">
-            <summary>
-            Specifies the trendline shall be an exponential curve in the form
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Linear">
-            <summary>
-            Specifies the trendline shall be a logarithmic curve in the form , where log is the natural
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Logarithmic">
-            <summary>
-            Specifies the trendline shall be a logarithmic curve in the form , where log is the natural
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.MovingAvgerage">
-            <summary>
-            Specifies the trendline shall be a moving average of period Period
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Polynomial">
-            <summary>
-            Specifies the trendline shall be a polynomial curve of order Order in the form 
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eTrendLine.Power">
-            <summary>
-            Specifies the trendline shall be a power curve in the form
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs">
-            <summary>
-            Specifies the possible ways to display blanks
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Gap">
-            <summary>
-            Blank values shall be left as a gap
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Span">
-            <summary>
-            Blank values shall be spanned with a line (Line charts)
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eDisplayBlanksAs.Zero">
-            <summary>
-            Blank values shall be treated as zero
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eSizeRepresents.Area">
-            <summary>
-            Specifies the area of the bubbles shall be proportional to the bubble size value.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eSizeRepresents.Width">
-            <summary>
-            Specifies the radius of the bubbles shall be proportional to the bubble size value.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChart">
-            <summary>
-            Base class for Chart object.
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.GetChartNodeText">
-            <summary>
-            Get the name of the chart node
-            </summary>
-            <returns>The name</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.AddAxis">
-            <summary>
-            Add a secondary axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.WorkSheet">
-            <summary>
-            Reference to the worksheet
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ChartXml">
-            <summary>
-            The chart xml document
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ChartType">
-            <summary>
-            Type of chart
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Title">
-            <summary>
-            Titel of the chart
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Series">
-            <summary>
-            Chart series
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Axis">
-            <summary>
-            An array containg all axis of all Charttypes
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.XAxis">
-            <summary>
-            The XAxis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.YAxis">
-            <summary>
-            The YAxis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.UseSecondaryAxis">
-            <summary>
-            If true the charttype will use the secondary axis.
-            The chart must contain a least one other charttype that uses the primary axis.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Style">
-            <summary>
-            The build-in chart styles. 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ShowHiddenData">
-            <summary>
-            Show data in hidden rows and columns
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.DisplayBlanksAs">
-            <summary>
-            Specifies the possible ways to display blanks
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.ShowDataLabelsOverMaximum">
-            <summary>
-            Specifies data labels over the maximum of the chart shall be shown
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChart.CheckRemoveAxis(OfficeOpenXml.Drawing.Chart.ExcelChartAxis)">
-            <summary>
-            Remove all axis that are not used any more
-            </summary>
-            <param name="excelChartAxis"></param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.PlotArea">
-            <summary>
-            Plotarea
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Legend">
-            <summary>
-            Legend
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Border">
-            <summary>
-            Border
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.Fill">
-            <summary>
-            Fill
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.View3D">
-            <summary>
-            3D-settings
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.VaryColors">
-            <summary>
-            If the chart has only one serie this varies the colors for each point.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChart.UriChart">
-            <summary>
-            Package internal URI
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartCollection">
-            <summary>
-            Enumerates charttypes 
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartCollection.Add(OfficeOpenXml.Drawing.Chart.eChartType)">
-            <summary>
-            Add a new charttype to the chart
-            </summary>
-            <param name="chartType">The type of the new chart</param>
-            <returns></returns>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartCollection.Item(System.Int32)">
-            <summary>
-            Returns a chart at the specific position.  
-            </summary>
-            <param name="PositionID">The position of the chart. 0-base</param>
-            <returns></returns>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTrendlineCollection">
-            <summary>
-            A collection of trendlines.
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartTrendlineCollection.Add(OfficeOpenXml.Drawing.Chart.eTrendLine)">
-            <summary>
-            Add a new trendline
-            </summary>
-            <param name="Type"></param>
-            <returns>The trendline</returns>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline">
-            <summary>
-            A trendline object
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Type">
-            <summary>
-            Type of Trendline
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Name">
-            <summary>
-            Name in the legend
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Order">
-            <summary>
-            Order for polynominal trendlines
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Period">
-            <summary>
-            Period for monthly average trendlines
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Forward">
-            <summary>
-            Forcast forward periods
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Backward">
-            <summary>
-            Forcast backwards periods
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.Intercept">
-            <summary>
-            Specify the point where the trendline crosses the vertical axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.DisplayRSquaredValue">
-            <summary>
-            Display the R-squared value for a trendline
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTrendline.DisplayEquation">
-            <summary>
-            Display the trendline equation on the chart
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart">
-            <summary>
-            Provides access to bubble chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.BubbleScale">
-            <summary>
-            Specifies the scale factor for the bubble chart. Can range from 0 to 300, corresponding to a percentage of the default size,
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.ShowNegativeBubbles">
-            <summary>
-            Specifies the scale factor for the bubble chart. Can range from 0 to 300, corresponding to a percentage of the default size,
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.Bubble3D">
-            <summary>
-            Specifies if the bubblechart is three dimensional
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBubbleChart.SizeRepresents">
-            <summary>
-            Specifies the scale factor for the bubble chart. Can range from 0 to 300, corresponding to a percentage of the default size,
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSurface">
-            <summary>
-            Chart surface settings
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Thickness">
-            <summary>
-            Show the values 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Fill">
-            <summary>
-            Access fill properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSurface.Border">
-            <summary>
-            Access border properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie">
-            <summary>
-            A serie for a scatter chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.DataLabel">
-            <summary>
-            Datalabel
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelRadarChartSerie.Marker">
-            <summary>
-            Marker symbol 
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelLineChart">
-            <summary>
-            Provides access to line chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.Marker">
-            <summary>
-            If the series has markers
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.Smooth">
-            <summary>
-            If the series has smooth lines
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelLineChart.DataLabel">
-            <summary>
-            Access to datalabel properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eLegendPosition">
-            <summary>
-            Position of the legend
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartLegend">
-            <summary>
-            Chart ledger
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Position">
-            <summary>
-            Position of the Legend
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Overlay">
-            <summary>
-            If the legend overlays other objects
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Fill">
-            <summary>
-            Fill style
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Border">
-            <summary>
-            Border style
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Font">
-            <summary>
-            Font properties
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Remove">
-            <summary>
-            Remove the legend
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Add">
-            <summary>
-            Add a legend to the chart
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartPlotArea">
-            <summary>
-            A charts plot area
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel">
-            <summary>
-            Datalabel properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Position">
-            <summary>
-            Position of the labels
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Fill">
-            <summary>
-            Access fill properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Border">
-            <summary>
-            Access border properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerieDataLabel.Font">
-            <summary>
-            Access font properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie">
-            <summary>
-            A serie for a scatter chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.DataLabel">
-            <summary>
-            Datalabel
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.Smooth">
-            <summary>
-            Smooth for scattercharts
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.Marker">
-            <summary>
-            Marker symbol 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.LineColor">
-             <summary>
-             Line color.
-             </summary>
-            
-             <value>
-             The color of the line.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerSize">
-             <summary>
-             Gets or sets the size of the marker.
-             </summary>
-            
-             <remarks>
-             value between 2 and 72.
-             </remarks>
-            
-             <value>
-             The size of the marker.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerColor">
-             <summary>
-             Marker color.
-             </summary>
-            
-             <value>
-             The color of the Marker.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.LineWidth">
-             <summary>
-             Gets or sets the width of the line in pt.
-             </summary>
-            
-             <value>
-             The width of the line.
-             </value>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.MarkerLineColor">
-             <summary>
-             Marker Line color.
-             (not to be confused with LineColor)
-             </summary>
-            
-             <value>
-             The color of the Marker line.
-             </value>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.setAlphaChannel(System.Drawing.Color,System.String)">
-            <summary>
-            write alpha value (if Color.A != 255)
-            </summary>
-            <param name="c">Color</param>
-            <param name="xPath">where to write</param>
-            <remarks>
-            alpha-values may only written to color-nodes
-            eg: a:prstClr (preset), a:hslClr (hsl), a:schemeClr (schema), a:sysClr (system), a:scrgbClr (rgb percent) or a:srgbClr (rgb hex)
-                .../a:prstClr/a:alpha/@val
-            </remarks>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.getAlphaChannel(System.String)">
-            <summary>
-            read AlphaChannel from a:solidFill
-            </summary>
-            <param name="xPath"></param>
-            <returns>alpha or 255 if their is no such node</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelScatterChartSerie.xPath4Alpha(System.String)">
-            <summary>
-            creates xPath to alpha attribute for a color 
-            eg: a:prstClr/a:alpha/@val
-            </summary>
-            <param name="xPath">xPath to color node</param>
-            <returns></returns>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartTitle">
-            <summary>
-            The title of a chart
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Text">
-            <summary>
-            The text
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Border">
-            <summary>
-            A reference to the border properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Fill">
-            <summary>
-            A reference to the fill properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Font">
-            <summary>
-            A reference to the font properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.RichText">
-            <summary>
-            Richtext
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Overlay">
-            <summary>
-            Show without overlaping the chart.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.AnchorCtr">
-            <summary>
-            Specifies the centering of the text box. 
-            The way it works fundamentally is to determine the smallest possible "bounds box" for the text and then to center that "bounds box" accordingly. 
-            This is different than paragraph alignment, which aligns the text within the "bounds box" for the text. 
-            This flag is compatible with all of the different kinds of anchoring. 
-            If this attribute is omitted, then a value of 0 or false is implied.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.TextVertical">
-            <summary>
-            Vertical text
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartTitle.Rotation">
-            <summary>
-            Rotation in degrees (0-360)
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart">
-            <summary>
-            Provides access to ofpie-chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart.OfPieType">
-            <summary>
-            Type, pie or bar
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelOfPieChart.GapWidth">
-            <summary>
-            The size of the gap between two adjacent bars/columns
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie">
-            <summary>
-            A serie for a pie chart
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.Explosion">
-            <summary>
-            Explosion for Piecharts
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChartSerie.DataLabel">
-            <summary>
-            DataLabels
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelBarChart">
-            <summary>
-            Bar chart
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.Direction">
-            <summary>
-            Direction, Bar or columns
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.Shape">
-            <summary>
-            The shape of the bar/columns
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.DataLabel">
-            <summary>
-            Access to datalabel properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelBarChart.GapWidth">
-            <summary>
-            The size of the gap between two adjacent bars/columns
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisPosition">
-            <summary>
-            Position of the axis.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eYAxisPosition">
-            <summary>
-            Position of the Y-Axis
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eXAxisPosition">
-            <summary>
-            Position of the X-Axis
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisOrientation">
-            <summary>
-            Axis orientaion
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eCrossBetween">
-            <summary>
-            How the axis are crossed
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eCrossBetween.Between">
-            <summary>
-            Specifies the value axis shall cross the category axis between data markers
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eCrossBetween.MidCat">
-            <summary>
-            Specifies the value axis shall cross the category axis at the midpoint of a category.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eCrosses">
-            <summary>
-            Where the axis cross. 
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.AutoZero">
-            <summary>
-            (Axis Crosses at Zero) The category axis crosses at the zero point of the valueaxis (if possible), or the minimum value (if theminimum is greater than zero) or the maximum (if the maximum is less than zero).
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.Max">
-            <summary>
-            The axis crosses at the maximum value
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eCrosses.Min">
-            <summary>
-            (Axis crosses at the minimum value of the chart.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.eAxisTickMark">
-            <summary>
-            Tickmarks
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.Cross">
-            <summary>
-            Specifies the tick marks shall cross the axis. 
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.In">
-            <summary>
-            Specifies the tick marks shall be inside the plot area. 
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.None">
-            <summary>
-            Specifies there shall be no tick marks.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.eAxisTickMark.Out">
-            <summary>
-            Specifies the tick marks shall be outside the plot area.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartAxis">
-            <summary>
-            An axis for a chart
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType">
-            <summary>
-            Type of axis
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Val">
-            <summary>
-            Value axis
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Cat">
-            <summary>
-            Category axis
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Date">
-            <summary>
-            Date axis
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.eAxisType.Serie">
-            <summary>
-            Series axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorTickMark">
-            <summary>
-            majorTickMark 
-            This element specifies the major tick marks for the axis. 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorTickMark">
-            <summary>
-            minorTickMark 
-            This element specifies the minor tick marks for the axis. 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.AxisType">
-            <summary>
-            Type of axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.AxisPosition">
-            <summary>
-            Where the axis is located
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Crosses">
-            <summary>
-            Where the axis cross
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.CrossBetween">
-            <summary>
-            How the axis are crossed
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.CrossesAt">
-            <summary>
-            The value where the axis cross. 
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Format">
-            <summary>
-            Numberformat
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.LabelPosition">
-            <summary>
-            Position of the labels
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Fill">
-            <summary>
-            Access to fill properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Border">
-            <summary>
-            Access to border properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Font">
-            <summary>
-            Access to font properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Deleted">
-            <summary>
-            If the axis is deleted
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.TickLabelPosition">
-            <summary>
-            Position of the Lables
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Title">
-            <summary>
-            Chart axis title
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinValue">
-            <summary>
-            Minimum value for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MaxValue">
-            <summary>
-            Max value for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorUnit">
-            <summary>
-            Major unit for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MajorTimeUnit">
-            <summary>
-            Major time unit for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorUnit">
-            <summary>
-            Minor unit for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.MinorTimeUnit">
-            <summary>
-            Minor time unit for the axis.
-            Null is automatic
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.LogBase">
-            <summary>
-            The base for a logaritmic scale
-            Null for a normal scale
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartAxis.Orientation">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel">
-            <summary>
-            Datalabel on chart level. 
-            This class is inherited by ExcelChartSerieDataLabel
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowValue">
-            <summary>
-            Show the values 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowCategory">
-            <summary>
-            Show category names
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowSeriesName">
-            <summary>
-            Show series names
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowPercent">
-            <summary>
-            Show percent values
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowLeaderLines">
-            <summary>
-            Show the leader lines
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.ShowBubbleSize">
-            <summary>
-            Bubble Size.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Separator">
-            <summary>
-            Separator string 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Fill">
-            <summary>
-            Access fill properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Border">
-            <summary>
-            Access border properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartDataLabel.Font">
-            <summary>
-            Access font properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSerie">
-            <summary>
-            A chart serie
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.#ctor(OfficeOpenXml.Drawing.Chart.ExcelChartSeries,System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.Boolean)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="chartSeries">Parent collection</param>
-            <param name="ns">Namespacemanager</param>
-            <param name="node">Topnode</param>
-            <param name="isPivot">Is pivotchart</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.Header">
-            <summary>
-            Header for the serie.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.HeaderAddress">
-            <summary>
-            Header address for the serie.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.Series">
-            <summary>
-            Set this to a valid address or the drawing will be invalid.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.XSeries">
-            <summary>
-            Set an address for the horisontal labels
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSerie.TrendLines">
-            <summary>
-            Access to the trendline collection
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartSeries">
-            <summary>
-            Collection class for chart series
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Item(System.Int32)">
-            <summary>
-            Returns the serie at the specified position.  
-            </summary>
-            <param name="PositionID">The position of the series.</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Delete(System.Int32)">
-            <summary>
-            Delete the chart at the specific position
-            </summary>
-            <param name="PositionID">Zero based</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Chart">
-            <summary>
-            A reference to the chart object
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Add(OfficeOpenXml.ExcelRangeBase,OfficeOpenXml.ExcelRangeBase)">
-            <summary>
-            Add a new serie to the chart. Do not apply to pivotcharts.
-            </summary>
-            <param name="Serie">The Y-Axis range</param>
-            <param name="XSerie">The X-Axis range</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartSeries.Add(System.String,System.String)">
-            <summary>
-            Add a new serie to the chart.Do not apply to pivotcharts.
-            </summary>
-            <param name="SerieAddress">The Y-Axis range</param>
-            <param name="XSerieAddress">The X-Axis range</param>
-            <returns></returns>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart">
-            <summary>
-            Provides access to doughnut chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart.FirstSliceAngle">
-            <summary>
-            Angle of the first slize
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelDoughnutChart.HoleSize">
-            <summary>
-            Size of the doubnut hole
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelPieChart">
-            <summary>
-            Provides access to pie chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelPieChart.DataLabel">
-            <summary>
-            Access to datalabel properties
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelScatterChart">
-            <summary>
-            Provides access to scatter chart specific properties
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChart.ScatterStyle">
-            <summary>
-            If the scatter has LineMarkers or SmoothMarkers
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelScatterChart.Marker">
-            <summary>
-            If the series has markers
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.eTextAnchoringType">
-            <summary>
-            Text anchoring
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.eTextVerticalType">
-            <summary>
-            Vertical text type
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.eEditAs">
-            <summary>
-            How the drawing will be resized.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.eEditAs.Absolute">
-            <summary>
-            Specifies that the current start and end positions shall
-            be maintained with respect to the distances from the
-            absolute start point of the worksheet.
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.eEditAs.OneCell">
-             <summary>
-             Specifies that the current drawing shall move with its
-            row and column (i.e. the object is anchored to the
-             actual from row and column), but that the size shall
-            remain absolute.
-             </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.eEditAs.TwoCell">
-            <summary>
-            Specifies that the current drawing shall move and
-            resize to maintain its row and column anchors (i.e. the
-            object is anchored to the actual from and to row and column).
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawing">
-            <summary>
-            Base class for twoanchored drawings. 
-            Drawings are Charts, shapes and Pictures.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition">
-            <summary>
-            Position of the a drawing.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition.ColumnOff">
-            <summary>
-            Column Offset
-            
-            EMU units   1cm         =   1/360000 
-                        1US inch    =   1/914400
-                        1pixel      =   1/9525
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.ExcelPosition.RowOff">
-            <summary>
-            Row Offset
-            
-            EMU units   1cm         =   1/360000 
-                        1US inch    =   1/914400
-                        1pixel      =   1/9525
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Name">
-            <summary>
-            The name of the drawing object
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.EditAs">
-            <summary>
-            How Excel resize drawings when the column width is changed within Excel.
-            The width of drawings are currently NOT resized in EPPLus when the column width changes
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Locked">
-            <summary>
-            Lock drawing
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.Print">
-            <summary>
-            Print drawing with sheet
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawing.From">
-            <summary>
-            Top Left position
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.ExcelDrawing._to">
-            <summary>
-            Bottom right position
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.GetDrawing(OfficeOpenXml.Drawing.ExcelDrawings,System.Xml.XmlNode)">
-            <summary>
-            Add new Drawing types here
-            </summary>
-            <param name="drawings">The drawing collection</param>
-            <param name="node">Xml top node</param>
-            <returns>The Drawing object</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetPosition(System.Int32,System.Int32)">
-            <summary>
-            Set the top left corner of a drawing. 
-            Note that resizing columns / rows after using this function will effect the position of the drawing
-            </summary>
-            <param name="PixelTop">Top pixel</param>
-            <param name="PixelLeft">Left pixel</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetPosition(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Set the top left corner of a drawing. 
-            Note that resizing columns / rows after using this function will effect the position of the drawing
-            </summary>
-            <param name="Row">Start row - 0-based index.</param>
-            <param name="RowOffsetPixels">Offset in pixels</param>
-            <param name="Column">Start Column - 0-based index.</param>
-            <param name="ColumnOffsetPixels">Offset in pixels</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetSize(System.Int32)">
-            <summary>
-            Set size in Percent
-            Note that resizing columns / rows after using this function will effect the size of the drawing
-            </summary>
-            <param name="Percent"></param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.SetSize(System.Int32,System.Int32)">
-            <summary>
-            Set size in pixels
-            Note that resizing columns / rows after using this function will effect the size of the drawing
-            </summary>
-            <param name="PixelWidth">Width in pixels</param>
-            <param name="PixelHeight">Height in pixels</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawing.AdjustPositionAndSize">
-            <summary>
-            Will adjust the position and size of the drawing according to chages in font of rows and to the Normal style.
-            This method will be called before save, so use it only if you need the coordinates of the drawing.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingLineEnd">
-            <summary>
-            Properties for drawing line ends
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEnd">
-            <summary>
-            HeaderEnd
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEnd">
-            <summary>
-            HeaderEnd
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEndSizeWidth">
-            <summary>
-            TailEndSizeWidth
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.TailEndSizeHeight">
-            <summary>
-            TailEndSizeHeight
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEndSizeWidth">
-            <summary>
-            TailEndSizeWidth
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingLineEnd.HeadEndSizeHeight">
-            <summary>
-            TailEndSizeHeight
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelPicture">
-            <summary>
-            An image object
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Image">
-            <summary>
-            The Image
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.ImageFormat">
-            <summary>
-            Image format
-            If the picture is created from an Image this type is always Jpeg
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelPicture.SetSize(System.Int32)">
-            <summary>
-            Set the size of the image in percent from the orginal size
-            Note that resizing columns / rows after using this function will effect the size of the picture
-            </summary>
-            <param name="Percent">Percent</param>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Fill">
-            <summary>
-            Fill
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Border">
-            <summary>
-            Border
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelPicture.Hyperlink">
-            <summary>
-            Hyperlink
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureCollection.Item(System.Int32)">
-            <summary>
-            Indexer
-            </summary>
-            <param name="Index">Index</param>
-            <returns>The VML Drawing Picture object</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureCollection.GetNewId">
-            <summary>
-            returns the next drawing id.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingCommentCollection.GetNewId">
-            <summary>
-            returns the next drawing id.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture">
-            <summary>
-            Drawing object used for header and footer pictures
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Position">
-            <summary>
-            Position ID
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Width">
-            <summary>
-            The width in points
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Height">
-            <summary>
-            The height in points
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Left">
-            <summary>
-            Margin Left in points
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Top">
-            <summary>
-            Margin top in points
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Title">
-            <summary>
-            The Title of the image
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Image">
-            <summary>
-            The image
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.BiLevel">
-            <summary>
-            Determines whether an image will be displayed in black and white
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.GrayScale">
-            <summary>
-            Determines whether a picture will be displayed in grayscale mode
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Gain">
-            <summary>
-            Defines the intensity of all colors in an image
-            Default value is 1
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.Gamma">
-            <summary>
-            Defines the amount of contrast for an image
-            Default value is 0;
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPicture.BlackLevel">
-            <summary>
-            Defines the intensity of black in an image
-            Default value is 0
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.eTextAlignHorizontalVml">
-            <summary>
-            Horizontal Alingment
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.eTextAlignVerticalVml">
-            <summary>
-            Vertical Alingment
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.eLineStyleVml">
-            <summary>
-            Linestyle
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingBase">
-            <summary>
-            Drawing object used for comments
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingBase.AlternativeText">
-            <summary>
-            Alternative text to be displayed instead of a graphic.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment">
-            <summary>
-            Drawing object used for comments
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Address">
-            <summary>
-            Address in the worksheet
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.VerticalAlignment">
-            <summary>
-            Vertical alignment for text
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.HorizontalAlignment">
-            <summary>
-            Horizontal alignment for text
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Visible">
-            <summary>
-            If the drawing object is visible.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.BackgroundColor">
-            <summary>
-            Background color
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineStyle">
-            <summary>
-            Linestyle for border
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineColor">
-            <summary>
-            Line color 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LineWidth">
-            <summary>
-            Width of the border
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.AutoFit">
-            <summary>
-            Autofits the drawingobject 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Locked">
-            <summary>
-            If the object is locked when the sheet is protected
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.LockText">
-            <summary>
-            Specifies that the object's text is locked
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.From">
-            <summary>
-            From position. For comments only when Visible=true.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.To">
-            <summary>
-            To position. For comments only when Visible=true.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Row">
-            <summary>
-            Row position for a comment
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Column">
-            <summary>
-            Column position for a comment
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition">
-            <summary>
-            The position of a VML drawing. Used for comments
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.Row">
-            <summary>
-            Row. Zero based
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.RowOffset">
-            <summary>
-            Row offset in pixels. Zero based
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.Column">
-            <summary>
-            Column. Zero based
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPosition.ColumnOffset">
-            <summary>
-            Column offset. Zero based
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawings">
-            <summary>
-            Collection for Drawing objects.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.DrawingXml">
-            <summary>
-            A reference to the drawing xml document
-            </summary>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.CreateNSM">
-            <summary>
-            Creates the NamespaceManager. 
-            </summary>
-        </member>
-        <member name="F:OfficeOpenXml.Drawing.ExcelDrawings._nsManager">
-            <summary>
-            Provides access to a namespace manager instance to allow XPath searching
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.Item(System.Int32)">
-            <summary>
-            Returns the drawing at the specified position.  
-            </summary>
-            <param name="PositionID">The position of the drawing. 0-base</param>
-            <returns></returns>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawings.Item(System.String)">
-            <summary>
-            Returns the drawing matching the specified name
-            </summary>
-            <param name="Name">The name of the worksheet</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddChart(System.String,OfficeOpenXml.Drawing.Chart.eChartType,OfficeOpenXml.Table.PivotTable.ExcelPivotTable)">
-            <summary>
-            Add a new chart to the worksheet.
-            Do not support Bubble-, Radar-, Stock- or Surface charts. 
-            </summary>
-            <param name="Name"></param>
-            <param name="ChartType">Type of chart</param>
-            <param name="PivotTableSource">The pivottable source for a pivotchart</param>    
-            <returns>The chart</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddChart(System.String,OfficeOpenXml.Drawing.Chart.eChartType)">
-            <summary>
-            Add a new chart to the worksheet.
-            Do not support Bubble-, Radar-, Stock- or Surface charts. 
-            </summary>
-            <param name="Name"></param>
-            <param name="ChartType">Type of chart</param>
-            <returns>The chart</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.Drawing.Image)">
-            <summary>
-            Add a picure to the worksheet
-            </summary>
-            <param name="Name"></param>
-            <param name="image">An image. Allways saved in then JPeg format</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.Drawing.Image,System.Uri)">
-            <summary>
-            Add a picure to the worksheet
-            </summary>
-            <param name="Name"></param>
-            <param name="image">An image. Allways saved in then JPeg format</param>
-            <param name="Hyperlink">Picture Hyperlink</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.IO.FileInfo)">
-            <summary>
-            Add a picure to the worksheet
-            </summary>
-            <param name="Name"></param>
-            <param name="ImageFile">The image file</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddPicture(System.String,System.IO.FileInfo,System.Uri)">
-            <summary>
-            Add a picure to the worksheet
-            </summary>
-            <param name="Name"></param>
-            <param name="ImageFile">The image file</param>
-            <param name="Hyperlink">Picture Hyperlink</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddShape(System.String,eShapeStyle)">
-            <summary>
-            Add a new shape to the worksheet
-            </summary>
-            <param name="Name">Name</param>
-            <param name="Style">Shape style</param>
-            <returns>The shape object</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.AddShape(System.String,OfficeOpenXml.Drawing.ExcelShape)">
-            <summary>
-            Add a new shape to the worksheet
-            </summary>
-            <param name="Name">Name</param>
-            <param name="Source">Source shape</param>
-            <returns>The shape object</returns>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(System.Int32)">
-            <summary>
-            Removes a drawing.
-            </summary>
-            <param name="Index">The index of the drawing</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(OfficeOpenXml.Drawing.ExcelDrawing)">
-            <summary>
-            Removes a drawing.
-            </summary>
-            <param name="Drawing">The drawing</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Remove(System.String)">
-            <summary>
-            Removes a drawing.
-            </summary>
-            <param name="Name">The name of the drawing</param>
-        </member>
-        <member name="M:OfficeOpenXml.Drawing.ExcelDrawings.Clear">
-            <summary>
-            Removes all drawings from the collection
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelShape">
-            <summary>
-            An Excel shape.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Style">
-            <summary>
-            Shape style
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Fill">
-            <summary>
-            Fill
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Border">
-            <summary>
-            Border
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.LineEnds">
-            <summary>
-            Line Ends
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Text">
-            <summary>
-            Text inside the shape
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.LockText">
-            <summary>
-            Lock drawing
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.RichText">
-            <summary>
-            Richtext collection. Used to format specific parts of the text
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAnchoring">
-            <summary>
-            Text Anchoring
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAnchoringControl">
-            <summary>
-            Specifies the centering of the text box.
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextAlignment">
-            <summary>
-            How the text is aligned
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.Indent">
-            <summary>
-            Indentation
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelShape.TextVertical">
-            <summary>
-            Vertical text
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.eLineCap">
-            <summary>
-            Type of Line cap
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.eLineStyle">
-            <summary>
-            Line style.
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingBorder">
-            <summary>
-            Border for drawings
-            </summary>    
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.Fill">
-            <summary>
-            Fill
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.LineStyle">
-            <summary>
-            Linestyle
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.LineCap">
-            <summary>
-            Linecap
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingBorder.Width">
-            <summary>
-            Width in pixels
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelDrawingFill">
-            <summary>
-            Fill properties for drawing objects
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Style">
-            <summary>
-            Fill style
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Color">
-            <summary>
-            Fill color for solid fills
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelDrawingFill.Transparancy">
-            <summary>
-            Transparancy in percent
-            </summary>
-        </member>
-        <member name="T:OfficeOpenXml.Drawing.ExcelView3D">
-            <summary>
-            3D settings
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.Perspective">
-            <summary>
-            Degree of perspective 
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RotX">
-            <summary>
-            Rotation X-axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RotY">
-            <summary>
-            Rotation Y-axis
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.RightAngleAxes">
-            <summary>
-            Right Angle Axes
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.DepthPercent">
-            <summary>
-            Depth % of base
-            </summary>
-        </member>
-        <member name="P:OfficeOpenXml.Drawing.ExcelView3D.HeightPercent">
-            <summary>
-            Height % of base
-            </summary>
-        </member>
         <member name="T:OfficeOpenXml.Encryption.EncryptedPackageHandler">
             <summary>
             Handels encrypted Excel documents 
@@ -7744,7 +7838,7 @@
         </member>
         <member name="P:OfficeOpenXml.ExcelColumn.StyleID">
             <summary>
-            Sets the style for the entire column using the style ID.  
+            Sets the style for the entire column using the style ID.           
             </summary>
         </member>
         <member name="P:OfficeOpenXml.ExcelColumn.PageBreak">
@@ -8197,6 +8291,13 @@
             <param name="template">An existing xlsx file to use as a template</param>
             <param name="password">The password to decrypt the package.</param>
             <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.WriteFileToStream(System.String,System.IO.Stream)">
+            <summary>
+            Pull request from  perkuypers to read open Excel workbooks
+            </summary>
+            <param name="path">Path</param>
+            <param name="stream">Stream</param>
         </member>
         <member name="P:OfficeOpenXml.ExcelPackage.Package">
             <summary>
@@ -8691,6 +8792,14 @@
             <param name="worksheetName">The name of the worksheet</param>
             <param name="row">Row</param>
             <param name="column">Column</param>
+            <param name="address">The reference address</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.FormulaParsing.ExcelDataProvider.GetRange(System.String,System.String)">
+            <summary>
+            Returns values from the required range.
+            </summary>
+            <param name="worksheetName">The name of the worksheet</param>
             <param name="address">The reference address</param>
             <returns></returns>
         </member>
@@ -10002,13 +10111,6 @@
             <param name="message">The message in the exception.</param>
             <param name="innerException">The innerException for this exception.</param>
         </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.BadPasswordException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
-        </member>
         <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.BadReadException">
             <summary>
             Indicates that a read was attempted on a stream, and bad or incomplete data was
@@ -10033,13 +10135,6 @@
             <param name="message">The message in the exception.</param>
             <param name="innerException">The innerException for this exception.</param>
         </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.BadReadException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
-        </member>
         <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.BadCrcException">
             <summary>
             Issued when an CRC check fails upon extracting an entry from a zip archive.
@@ -10056,13 +10151,6 @@
             </summary>
             <param name="message">The message in the exception.</param>
         </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.BadCrcException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
-        </member>
         <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.SfxGenerationException">
             <summary>
             Issued when errors occur saving a self-extracting archive.
@@ -10078,20 +10166,6 @@
             Come on, you know how exceptions work. Why are you looking at this documentation?
             </summary>
             <param name="message">The message in the exception.</param>
-        </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.SfxGenerationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
-        </member>
-        <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.BadStateException">
-            <summary>
-            Indicates that an operation was attempted on a ZipFile which was not possible
-            given the state of the instance. For example, if you call <c>Save()</c> on a ZipFile
-            which has no filename set, you can get this exception.
-            </summary>
         </member>
         <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.BadStateException.#ctor">
             <summary>
@@ -10110,13 +10184,6 @@
             </summary>
             <param name="message">The message in the exception.</param>
             <param name="innerException">The innerException for this exception.</param>
-        </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.BadStateException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
         </member>
         <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.ZipException">
             <summary>
@@ -10140,13 +10207,6 @@
             </summary>
             <param name="message">The message in the exception.</param>
             <param name="innerException">The innerException for this exception.</param>
-        </member>
-        <member name="M:OfficeOpenXml.Packaging.Ionic.Zip.ZipException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Come on, you know how exceptions work. Why are you looking at this documentation?
-            </summary>
-            <param name="info">The serialization info for the exception.</param>
-            <param name="context">The streaming context from which to deserialize.</param>
         </member>
         <member name="T:OfficeOpenXml.Packaging.Ionic.Zip.ExtractExistingFileAction">
              <summary>
@@ -26383,6 +26443,41 @@
             Check the size and double the size if out of bound
             </summary>
         </member>
+        <member name="T:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentFile">
+            <summary>
+            Read and write a compound document.
+            Read spec here https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-CFB/[MS-CFB].pdf
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentFile.IsCompoundDocument(System.IO.FileInfo)">
+            <summary>
+            Verifies that the header is correct.
+            </summary>
+            <param name="fi">The file</param>
+            <returns></returns>
+        </member>
+        <member name="P:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentItem.ColorFlag">
+            <summary>
+            0=Red
+            1=Black
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentItem.ObjectType">
+            <summary>
+            Type of object
+            0x00 - Unknown or unallocated 
+            0x01 - Storage Object
+            0x02 - Stream Object 
+            0x05 - Root Storage Object
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentItem.CompareTo(OfficeOpenXml.Utils.CompundDocument.CompoundDocumentItem)">
+            <summary>
+            Compare length first, then sort by name in upper invariant
+            </summary>
+            <param name="other">The other item</param>
+            <returns></returns>
+        </member>
         <member name="M:OfficeOpenXml.Utils.ConvertUtil.TryParseNumericString(System.Object,System.Double@)">
             <summary>
             Tries to parse a double from the specified <paramref name="candidate"/> which is expected to be a string value.
@@ -26451,6 +26546,48 @@
             <param name="t"></param>
             <returns></returns>
         </member>
+        <member name="M:OfficeOpenXml.Utils.ConvertUtil.GetTypedCellValue``1(System.Object)">
+            <summary>
+                Convert cell value to desired type, including nullable structs.
+                When converting blank string to nullable struct (e.g. ' ' to int?) null is returned.
+                When attempted conversion fails exception is passed through.
+            </summary>
+            <typeparam name="T">
+                The type to convert to.
+            </typeparam>
+            <returns>
+                The <paramref name="value"/> converted to <typeparamref name="T"/>.
+            </returns>
+            <remarks>
+                If input is string, parsing is performed for output types of DateTime and TimeSpan, which if fails throws <see cref="T:System.FormatException"/>.
+                Another special case for output types of DateTime and TimeSpan is when input is double, in which case <see cref="M:System.DateTime.FromOADate(System.Double)"/>
+                is used for conversion. This special case does not work through other types convertible to double (e.g. integer or string with number).
+                In all other cases 'direct' conversion <see cref="M:System.Convert.ChangeType(System.Object,System.Type)"/> is performed.
+            </remarks>
+            <exception cref="T:System.FormatException">
+                <paramref name="value"/> is string and its format is invalid for conversion (parsing fails)
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                <paramref name="value"/> is not string and direct conversion fails
+            </exception>
+        </member>
+        <member name="M:OfficeOpenXml.Utils.VBACompression.CompressPart(System.Byte[])">
+            <summary>
+            Compression using a run length encoding algorithm.
+            See MS-OVBA Section 2.4
+            </summary>
+            <param name="part">Byte array to decompress</param>
+            <returns></returns>
+        </member>
+        <member name="M:OfficeOpenXml.Utils.VBACompression.DecompressPart(System.Byte[],System.Int32)">
+            <summary>
+            Decompression using a run length encoding algorithm.
+            See MS-OVBA Section 2.4
+            </summary>
+            <param name="part">Byte array to decompress</param>
+            <param name="startPos"></param>
+            <returns></returns>
+        </member>
         <member name="T:OfficeOpenXml.Utils.ArgumentExtensions">
             <summary>
             Extension methods for guarding
@@ -26483,31 +26620,6 @@
             <param name="max">Max value of the supplied range</param>
             <param name="argumentName">parameter/argument name</param>
             <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-        </member>
-        <member name="M:OfficeOpenXml.Utils.CompoundDocument.CompressPart(System.Byte[])">
-            <summary>
-            Compression using a run length encoding algorithm.
-            See MS-OVBA Section 2.4
-            </summary>
-            <param name="part">Byte array to decompress</param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Utils.CompoundDocument.DecompressPart(System.Byte[],System.Int32)">
-            <summary>
-            Decompression using a run length encoding algorithm.
-            See MS-OVBA Section 2.4
-            </summary>
-            <param name="part">Byte array to decompress</param>
-            <param name="startPos"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OfficeOpenXml.Utils.CompoundDocument.GetOleStream(OfficeOpenXml.Utils.CompoundDocument.IStorage,System.Runtime.InteropServices.ComTypes.STATSTG)">
-            <summary>
-            Read the stream and return it as a byte-array
-            </summary>
-            <param name="storage"></param>
-            <param name="statstg"></param>
-            <returns></returns>
         </member>
         <member name="T:OfficeOpenXml.Utils.IArgument`1">
             <summary>
@@ -27076,8 +27188,20 @@
         </member>
         <member name="P:OfficeOpenXml.ExcelWorksheetView.TabSelected">
             <summary>
-            Indicates if the worksheet is selected within the workbook
+            Indicates if the worksheet is selected within the workbook. NOTE: Setter clears other selected tabs.
             </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.TabSelectedMulti">
+            <summary>
+            Indicates if the worksheet is selected within the workbook. NOTE: Setter keeps other selected tabs.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelWorksheetView.SetTabSelected(System.Boolean,System.Boolean)">
+            <summary>
+            Sets whether the worksheet is selected within the workbook.
+            </summary>
+            <param name="isSelected">Whether the tab is selected, defaults to true.</param>
+            <param name="allowMultiple">Whether to allow multiple active tabs, defaults to false.</param>
         </member>
         <member name="P:OfficeOpenXml.ExcelWorksheetView.PageLayoutView">
             <summary>
@@ -29569,7 +29693,7 @@
             Collection of comments
             </summary>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.GetAttributeLength(System.Xml.XmlTextReader)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.GetAttributeLength(System.Xml.XmlReader)">
             <summary>
             Get the lenth of the attributes
             Conditional formatting attributes can be extremly long som get length of the attributes to finetune position.
@@ -29590,7 +29714,7 @@
             <param name="encoding">Encoding</param>
             <returns>The worksheet xml, with an empty sheetdata. (Sheetdata is in memory in the worksheet)</returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.ReadXmlReaderUntil(System.Xml.XmlTextReader,System.String,System.String)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.ReadXmlReaderUntil(System.Xml.XmlReader,System.String,System.String)">
             <summary>
             Read until the node is found. If not found the xmlreader is reseted.
             </summary>
@@ -29599,19 +29723,19 @@
             <param name="altNode">Alternative text to search for</param>
             <returns></returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadHyperLinks(System.Xml.XmlTextReader)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadHyperLinks(System.Xml.XmlReader)">
             <summary>
             Load Hyperlinks
             </summary>
             <param name="xr">The reader</param>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadCells(System.Xml.XmlTextReader)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadCells(System.Xml.XmlReader)">
             <summary>
             Load cells
             </summary>
             <param name="xr">The reader</param>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadMergeCells(System.Xml.XmlTextReader)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.LoadMergeCells(System.Xml.XmlReader)">
             <summary>
             Load merged cells
             </summary>
@@ -29623,7 +29747,7 @@
             </summary>
             <param name="sw">The writer</param>
         </member>
-        <member name="M:OfficeOpenXml.ExcelWorksheet.AddRow(System.Xml.XmlTextReader,System.Int32)">
+        <member name="M:OfficeOpenXml.ExcelWorksheet.AddRow(System.Xml.XmlReader,System.Int32)">
             <summary>
             Reads a row from the XML reader
             </summary>
@@ -31883,10 +32007,28 @@
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.GetValue``1">
             <summary>
-            Get the strongly typed value of the cell.
+                Convert cell value to desired type, including nullable structs.
+                When converting blank string to nullable struct (e.g. ' ' to int?) null is returned.
+                When attempted conversion fails exception is passed through.
             </summary>
-            <typeparam name="T">The type</typeparam>
-            <returns>The value. If the value can't be converted to the specified type, the default value will be returned</returns>
+            <typeparam name="T">
+                The type to convert to.
+            </typeparam>
+            <returns>
+                The <see cref="P:OfficeOpenXml.ExcelRangeBase.Value"/> converted to <typeparamref name="T"/>.
+            </returns>
+            <remarks>
+                If  <see cref="P:OfficeOpenXml.ExcelRangeBase.Value"/> is string, parsing is performed for output types of DateTime and TimeSpan, which if fails throws <see cref="T:System.FormatException"/>.
+                Another special case for output types of DateTime and TimeSpan is when input is double, in which case <see cref="M:System.DateTime.FromOADate(System.Double)"/>
+                is used for conversion. This special case does not work through other types convertible to double (e.g. integer or string with number).
+                In all other cases 'direct' conversion <see cref="M:System.Convert.ChangeType(System.Object,System.Type)"/> is performed.
+            </remarks>
+            <exception cref="T:System.FormatException">
+                 <see cref="P:OfficeOpenXml.ExcelRangeBase.Value"/> is string and its format is invalid for conversion (parsing fails)
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                 <see cref="P:OfficeOpenXml.ExcelRangeBase.Value"/> is not string and direct conversion fails
+            </exception>
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.Offset(System.Int32,System.Int32)">
             <summary>
@@ -31949,6 +32091,27 @@
             <summary>
             The current range when enumerating
             </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.Sort">
+            <summary>
+            Sort the range by value of the first column, Ascending.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.Sort(System.Int32,System.Boolean)">
+            <summary>
+            Sort the range by value of the supplied column, Ascending.
+            <param name="column">The column to sort by within the range. Zerobased</param>
+            <param name="descending">Descending if true, otherwise Ascending. Default Ascending. Zerobased</param>
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.Sort(System.Int32[],System.Boolean[],System.Globalization.CultureInfo,System.Globalization.CompareOptions)">
+            <summary>
+            Sort the range by value
+            </summary>
+            <param name="columns">The column(s) to sort by within the range. Zerobased</param>
+            <param name="descending">Descending if true, otherwise Ascending. Default Ascending. Zerobased</param>
+            <param name="culture">The CultureInfo used to compare values. A null value means CurrentCulture</param>
+            <param name="compareOptions">String compare option</param>
         </member>
         <member name="T:OfficeOpenXml.IRangeID">
             <summary>

@@ -150,9 +150,18 @@
                     <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="@Url.Action("Index", "Course", new { area = "Teacher" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">My courses</span></a>
-            </li>
+            @if (User.IsInRole("Teacher"))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Course", new { area = "Teacher" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">My courses</span></a>
+                </li>
+            }
+            @if (User.IsInRole("Training Management"))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Management", new { area = "TrainingManagement" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">Training Management</span></a>
+                </li>
+            }
             <li class="sidetitle">FEATURES</li>
             <li>
                 <a href="#"><span class="icon color7"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>Register course</a>
