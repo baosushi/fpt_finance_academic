@@ -29,6 +29,7 @@ namespace CaptstoneProject
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Home/Login"),
+                ExpireTimeSpan = TimeSpan.FromMinutes(30),
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
