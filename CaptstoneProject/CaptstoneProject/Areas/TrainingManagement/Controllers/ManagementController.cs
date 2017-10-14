@@ -116,13 +116,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Access denied." });
+                        return Json(new { success = false, message = "Access denied." },JsonRequestBehavior.AllowGet);
                     }
                 }
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = e.Message });
+                return Json(new { success = false, message = e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
