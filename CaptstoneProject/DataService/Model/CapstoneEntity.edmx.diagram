@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Course" Width="1.5" PointX="3" PointY="6.875" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.CourseMark" Width="1.5" PointX="5.25" PointY="11" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentInCourse" Width="1.5" PointX="5.25" PointY="4.5" />
+		<EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="8.5" PointY="7.625" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentMajor" Width="1.5" PointX="3" PointY="11.625" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="3" PointY="15.25" />
@@ -32,7 +33,6 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentCourseMark" Width="1.5" PointX="8.5" PointY="7.625" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
       </Diagram>
