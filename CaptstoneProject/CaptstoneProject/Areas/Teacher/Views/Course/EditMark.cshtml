@@ -17,30 +17,47 @@
                 <div class="row col-md-12">
                     @for (int i = 1; i <= Model.ComponentNames.Count; i++)
                     {
-                        if (Model.ComponentNames[i - 1] != "FE" && Model.ComponentNames[i - 1] != "Final Exam" && Model.ComponentNames[i - 1] != "RE" && Model.ComponentNames[i - 1] != "Retake Exam")
+                        if (Model.MarksComponent[i - 1].CourseMark.IsFinal == null || Model.MarksComponent[i - 1].CourseMark.IsFinal != true)
                         {
-                        <div class="col-md-3">
-                            <label>@Model.ComponentNames[i - 1]</label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                        </div>
+
+                            <div class="col-md-3">
+                                <label>@Model.ComponentNames[i - 1]</label>
+                            </div>
+                            if (Model.MarksComponent[i - 1].Mark != -1)
+                            {
+                                <div class="col-md-3">
+                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-3">
+                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" required name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                </div>
+                            }
                         }
                     }
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <h5 id="aver"><b>Average: </b> @Model.Average</h5>
-                        </div>
+                    </div>
                     <div class="col-md-2" style="margin:auto">
-                    <input class="btn btn-success btn-lg" type="submit" />
+                        <a class="btn btn-primary btn-lg" href="@Url.Action("CourseDetails", "Course", new { courseId =Model.CourseId , semesterId = Model.SemesterId })"> Go Back
+                        </a>
+                    </div>
+                    <div class="col-md-2" style="margin:auto">
+                        <input class="btn btn-success btn-lg" type="submit" />
                     </div>
                 </div>
-               
+
 
             </form>
         </div>
     </div>
 </div>
 <script>
+    function goBack() {
+        window.history.back();
+    }
     function onSubmit(form) {
         $.ajax({
             url: '@Url.Action("GetEdit","Course")',
@@ -54,7 +71,6 @@
                 alert("Error, please try again later.");
             }
         });
-        return false;
     }
 
     $("input").on('change', function () {

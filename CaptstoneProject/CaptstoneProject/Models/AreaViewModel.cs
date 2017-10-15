@@ -32,6 +32,7 @@ namespace CaptstoneProject.Models
             public List<string> ComponentNames { get; set; }
             public List<StudentCourseMark> MarksComponent { get; set; }
             public string Average { get; set; }
+            public int SemesterId { get; set; }
         }
 
         public class CourseRecordViewModel
