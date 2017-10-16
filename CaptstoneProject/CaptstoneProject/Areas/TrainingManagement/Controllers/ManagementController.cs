@@ -660,7 +660,14 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         savePath = myPath + fileContent.FileName;
                         savePath2 = myPath + fileNameWithoutExt + "_2" + "." + fileExt;
 
-
+                        if (System.IO.File.Exists(@savePath))
+                        {
+                            System.IO.File.Delete(@savePath);
+                        }
+                        if (System.IO.File.Exists(@savePath2))
+                        {
+                            System.IO.File.Delete(@savePath2);
+                        }
                         fileContent.SaveAs(savePath);
 
                         var app = new Microsoft.Office.Interop.Excel.Application(); //Interop not receive stream

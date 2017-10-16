@@ -78,9 +78,12 @@ namespace CaptstoneProject.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, false, shouldLockout: false);
+           
             switch (result)
             {
                 case SignInStatus.Success:
+                    var uId = User.Identity.GetUserId();
+                    var role = UserManager.GetRoles(uId).FirstOrDefault();
                     Session["uName"] = model.Username;
                     Session["uImgUrl"] = "/Images/prideKappa.jpg";
 
@@ -510,7 +513,7 @@ namespace CaptstoneProject.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await SignInManager.SignInAsync(user, isPersistent: true, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
