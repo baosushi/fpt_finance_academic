@@ -45,7 +45,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         Class = q.ClassName,
                         StartDate = q.StartDate.Value,
                         EndDate = q.EndDate.Value,
-                        Status = Enum.GetName(typeof(CourseStatus), q.Status.Value)
+                        Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                     }).ToList();
                 var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
                 if (randomCourse != null)

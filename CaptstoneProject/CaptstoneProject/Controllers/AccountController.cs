@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CaptstoneProject.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Security;
 
 namespace CaptstoneProject.Controllers
 {
@@ -78,12 +79,13 @@ namespace CaptstoneProject.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, false, shouldLockout: false);
-           
+
             switch (result)
             {
                 case SignInStatus.Success:
-                    var uId = User.Identity.GetUserId();
-                    var role = UserManager.GetRoles(uId).FirstOrDefault();
+                    //get Roles when log in, User.Identity is store in respone context to add cookie in browser when log in.
+                    var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+                    var role = UserManager.GetRoles(uId);
                     Session["uName"] = model.Username;
                     Session["uImgUrl"] = "/Images/prideKappa.jpg";
 
@@ -386,24 +388,38 @@ namespace CaptstoneProject.Controllers
                 //}
 
 
+
                 //var user = new ApplicationUser { UserName = "sensei", Email = "sensei@mail.com" };
                 //var result = await UserManager.CreateAsync(user, "@Qawsed321");
 
-                var user2 = new ApplicationUser { UserName = "gakusei", Email = "gakusei@mail.com" };
-                var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
+                //var user2 = new ApplicationUser { UserName = "gakusei", Email = "gakusei@mail.com" };
+                //var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
 
                 //var user3 = new ApplicationUser { UserName = "bosshere", Email = "bosshere@mail.com" };
                 //var result3 = await UserManager.CreateAsync(user3, "@Qawsed123");
 
-                var user =  UserManager.FindByEmail("sensei@mail.com");
-                var user3 =  UserManager.FindByEmail("bosshere@mail.com");
+                //var user =  UserManager.FindByEmail("sensei@mail.com");
+                //var user2 =  UserManager.FindByEmail("gakusei@mail.com");
+                //var user3 =  UserManager.FindByEmail("bosshere@mail.com");
 
 
-                UserManager.AddToRole(user.Id, "Teacher");
-                UserManager.AddToRole(user2.Id, "Student");
-                UserManager.AddToRole(user3.Id, "Training Management");
+                //UserManager.AddToRole(user.Id, "Teacher");
+                //UserManager.AddToRole(user2.Id, "Student");
+                //UserManager.AddToRole(user3.Id, "Training Management");
 
 
+                //var user = new ApplicationUser { UserName = "admin", Email = "admin@mail.com" };
+                //var result = await UserManager.CreateAsync(user, "@Qawsed123");
+
+                //var user2 = new ApplicationUser { UserName = "student", Email = "student@mail.com" };
+                //var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
+
+                //var user3 = new ApplicationUser { UserName = "daotao", Email = "daotao@mail.com" };
+                //var result3 = await UserManager.CreateAsync(user3, "@Qawsed123");
+
+                //UserManager.AddToRole(user.Id, "Admin");
+                //UserManager.AddToRole(user2.Id, "Student");
+                //UserManager.AddToRole(user3.Id, "Training Management");
 
                 //bao
                 //ExternalLoginInfo info = new ExternalLoginInfo { DefaultUserName = "baotdse62099@fpt.edu.vn", Email = "baotdse62099@fpt.edu.vn" };
@@ -419,12 +435,32 @@ namespace CaptstoneProject.Controllers
                 //UserLoginInfo uinfo2 = new UserLoginInfo("Google", "107166571606205395096");
                 //info2.Login = uinfo2;
 
+                //Phuong
+                //try
+                //{
+
+                //    ExternalLoginInfo info4 = new ExternalLoginInfo { DefaultUserName = "phuonglhk@fpt.edu.vn", Email = "phuonglhk@fpt.edu.vn" };
+                //    UserLoginInfo uinfo4 = new UserLoginInfo("Google", "phuonglhk@fpt.edu.vn");
+                //    info4.Login = uinfo4;
+
+                //    var phuong = new ApplicationUser { UserName = info4.Email, Email = info4.Email, Name = "Lâm Hữu Khánh Phương", FullName = "Lâm Hữu Khánh Phương" };
+                //    var result = await UserManager.CreateAsync(phuong);
+
+                //    var t = await UserManager.AddLoginAsync(phuong.Id, info4.Login);
+                //    UserManager.AddToRole(phuong.Id, "Teacher");
+
+                //}
+                //catch (Exception e)
+                //{
+
+                //    throw e;
+                //}
+
 
 
 
                 //var bao = new ApplicationUser { UserName = info.Email, Email = info.Email, Name = "Trần Đức Bảo", FullName = "Bao Tran Duc" };
                 //var danh = new ApplicationUser { UserName = info2.Email, Email = info2.Email, Name = "Đổng Công Danh", FullName = "(K10_HCM) Đổng Công Danh" };
-                ////var phuong = new ApplicationUser { UserName = info3.Email, Email = info3.Email, Name = "Phạm Hồng Sơn", FullName = "(K10_HCM) Phạm Hồng Sơn" };
 
 
                 //var result = await UserManager.CreateAsync(bao);
@@ -434,11 +470,14 @@ namespace CaptstoneProject.Controllers
                 //await UserManager.AddLoginAsync(bao.Id, info.Login);
                 //await UserManager.AddLoginAsync(danh.Id, info2.Login);
 
+
                 //var son= UserManager.FindByEmail("sonphse61822@fpt.edu.vn");
 
                 //UserManager.AddToRole(bao.Id, "Admin");
                 //UserManager.AddToRole(danh.Id, "Admin");
                 //UserManager.AddToRole(son.Id, "Admin");
+
+
             }
 
             return RedirectToAction("Login", "Home");
@@ -455,8 +494,11 @@ namespace CaptstoneProject.Controllers
 
             var name = claims.Where(q => q.Type == ClaimTypes.Name).Select(q => q.Value).SingleOrDefault();
             //var fullName = claims.Where(q => q.Type == ClaimTypes.Surname).Select(q => q.Value).SingleOrDefault();
-            //var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
+            var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
             var imageUrl = claims.Where(q => q.Type == ClaimTypes.Uri).Select(q => q.Value).SingleOrDefault();
+
+            loginInfo.Login.ProviderKey = email;
+
 
             Session["uImgUrl"] = imageUrl;
             Session["uName"] = name;
