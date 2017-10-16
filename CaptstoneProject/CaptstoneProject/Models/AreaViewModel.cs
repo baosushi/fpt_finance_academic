@@ -15,6 +15,12 @@ namespace CaptstoneProject.Models
             public string Value { get; set; }
             public int Id { get; set; }
         }
+        public class MarkPoint
+        {
+            public string Name { get; set; }
+            public double Value { get; set; }
+            public double Per { get; set; }
+        }
         public class PerComp
         {
             public int Id { get; set; }

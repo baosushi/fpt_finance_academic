@@ -37,11 +37,21 @@
                             }
                         }
                     }
-                    <div class="col-md-8">
-                        <h5 id="aver"><b>Average: </b> @Model.Average</h5>
-                    </div>
+                    @if (Model.Average != "-1")
+                    {
+                        <div class="col-md-8">
+                            <h5 id="aver"><b>Average: </b> @Model.Average</h5>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-8">
+                            <h5 id="aver"><b>Average: </b> N/A</h5>
+                        </div>
+                    }
                     <div class="col-md-2" style="margin:auto">
-                        <a class="btn btn-primary btn-lg" href="@Url.Action("CourseDetails", "Course", new { courseId =Model.CourseId , semesterId = Model.SemesterId })"> Go Back
+                        <a class="btn btn-primary btn-lg" href="@Url.Action("CourseDetails", "Course", new { courseId =Model.CourseId , semesterId = Model.SemesterId })">
+                            Go Back
                         </a>
                     </div>
                     <div class="col-md-2" style="margin:auto">

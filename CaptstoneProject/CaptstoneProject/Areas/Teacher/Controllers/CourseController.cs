@@ -251,7 +251,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                 double value = 0;
                                                 if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value) && !ws.Cells[titleRow, j].Text.Trim().Contains("Final") && !ws.Cells[titleRow, j].Text.Trim().Contains("FE"))
                                                 {
-
                                                     StudentCourseMark studentCourseMark = null;
 
                                                     var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
