@@ -116,7 +116,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Access denied." },JsonRequestBehavior.AllowGet);
+                        return Json(new { success = false, message = "Access denied." }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
@@ -194,7 +194,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                     foreach (var component in course.CourseMarks)
                     {
-                        if (component.ComponentName.Equals("FE") || component.ComponentName.Equals("RE"))
+                        if (component.IsFinal != null && component.IsFinal == true)
                         {
                             ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Value = component.Percentage / 100;
                             ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Style.Numberformat.Format = "0%";
@@ -325,6 +325,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 }
                 var student = course.StudentInCourses.Where(q => q.StudentMajor.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
+                    SemesterId = course.Semester.Id,
                     Id = q.Id,
                     Class = course.ClassName,
                     CourseId = courseId,
@@ -377,167 +378,177 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     for (int i = firstRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
                                     {
                                         var studentCode = ws.Cells[i, studentCodeCol].Text.Trim().ToUpper();
-                                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+                                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode) && q.CourseId == courseId).FirstOrDefault();
 
                                         if (studentInCourse != null)
                                         {
                                             double? average = 0;
                                             foreach (var item in studentInCourse.StudentCourseMarks)
                                             {
-                                                if (item.CourseMark.ComponentName != "FE" && item.CourseMark.ComponentName != "Final Exam" && item.CourseMark.ComponentName != "RE" && item.CourseMark.ComponentName != "Retake Exam")
+                                                if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
                                                 {
                                                     average += item.Mark * item.CourseMark.Percentage / 100;
                                                 }
                                             }
-
                                             double value = 0;
+                                            double TotalFinal = 0; //for FE with component 
                                             if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value) || ws.Cells[i, j].Text.Trim().Equals('/'))
                                             {
-                                                if (!ws.Cells[i, j].Text.Trim().Equals('/'))
+                                                #region FE with component
+                                                if (ws.Cells[titleRow, j].Text.Trim().Contains("FE"))
                                                 {
-                                                    var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
-                                                    var RE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j + 1].Text.Trim())).FirstOrDefault();
-
-                                                    var studentCourseMarkFE = context.StudentCourseMarks.
-                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
-                                                    var studentCourseMarkRE = context.StudentCourseMarks.
-                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
-
-                                                    var recordExistedFE = true;
-                                                    var recordExistedRE = true;
-                                                    //remake null check
-                                                    if (studentCourseMarkFE == null)
+                                                    if (!ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
                                                     {
-                                                        studentCourseMarkFE = context.StudentCourseMarks.Create();
-                                                        recordExistedFE = false;
+                                                        if (!ws.Cells[i, j].Text.Trim().Equals('/'))
+                                                        {
+                                                            var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+                                                            var studentCourseMarkFE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
+                                                        }
+                                                        else
+                                                        {
+                                                            var RE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+                                                            var studentCourseMarkFE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
+
+                                                        }
                                                     }
-                                                    if (studentCourseMarkRE == null)
+                                                }
+                                                #endregion
+                                                #region Normal FE
+                                                else
+                                                {
+                                                    if (!ws.Cells[i, j].Text.Trim().Equals('/'))
                                                     {
-                                                        studentCourseMarkRE = context.StudentCourseMarks.Create();
-                                                        recordExistedRE = false;
+                                                        var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+                                                        var RE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j + 1].Text.Trim())).FirstOrDefault();
+                                                        var studentCourseMarkFE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
+                                                        var studentCourseMarkRE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
+                                                        var recordExistedFE = true;
+                                                        var recordExistedRE = true;
+                                                        //remake null check
+                                                        if (studentCourseMarkFE == null)
+                                                        {
+                                                            studentCourseMarkFE = context.StudentCourseMarks.Create();
+                                                            recordExistedFE = false;
+                                                        }
+                                                        if (studentCourseMarkRE == null)
+                                                        {
+                                                            studentCourseMarkRE = context.StudentCourseMarks.Create();
+                                                            recordExistedRE = false;
+                                                        }
+                                                        studentCourseMarkFE.Mark = value;
+                                                        double FEMark = 0;
+                                                        if (double.TryParse(ws.Cells[i, j].Text.Trim(), out FEMark))
+                                                        {
+                                                            studentCourseMarkFE.Mark = FEMark;
+                                                        }
+                                                        else
+                                                        {
+                                                            studentCourseMarkFE.Mark = null;
+
+                                                        }
+
+                                                        double REMark = 0;
+                                                        if (double.TryParse(ws.Cells[i, j + 1].Text.Trim(), out REMark))
+                                                        {
+
+                                                            studentCourseMarkRE.Mark = REMark;
+                                                        }
+                                                        else
+                                                        {
+                                                            studentCourseMarkRE.Mark = null;
+
+                                                        }
+                                                        studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
+                                                        studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
+                                                        if (studentCourseMarkFE.Mark != null && studentCourseMarkRE.Mark == null)
+                                                        {
+                                                            //average = studentInCourse.Average.Value;
+                                                            average += studentCourseMarkFE.Mark.Value * FE.Percentage / 100;
+                                                        }
+                                                        else if (studentCourseMarkRE.Mark != null)
+                                                        {
+                                                            //average = studentInCourse.Average.Value;
+                                                            average += studentCourseMarkRE.Mark.Value * RE.Percentage / 100;
+                                                        }
+                                                        if (!recordExistedFE)
+                                                        {
+                                                            studentCourseMarkFE.CourseMarkId = FE.Id;
+                                                            context.StudentCourseMarks.Add(studentCourseMarkFE);
+                                                        }
+                                                        if (!recordExistedRE)
+                                                        {
+                                                            studentCourseMarkRE.CourseMarkId = RE.Id;
+                                                            context.StudentCourseMarks.Add(studentCourseMarkRE);
+                                                        }
+
+                                                        studentInCourse.Average = average;
+                                                        if (studentCourseMarkFE == null || studentCourseMarkFE.Mark < 4)
+                                                        {
+                                                            if (studentCourseMarkRE == null || studentCourseMarkRE.Mark < 4)
+                                                            {
+                                                                studentInCourse.Status = 3;
+                                                            }
+                                                            else if (average < 5)
+                                                            {
+                                                                studentInCourse.Status = 3;
+                                                            }
+                                                            else
+                                                            {
+                                                                studentInCourse.Status = 2;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (average < 5)
+                                                            {
+                                                                studentInCourse.Status = 3;
+                                                            }
+                                                            else
+                                                            {
+                                                                studentInCourse.Status = 2;
+                                                            }
+                                                        }
                                                     }
 
-
-                                                    studentCourseMarkFE.Mark = value;
-                                                    double FEMark = 0;
-                                                    if (double.TryParse(ws.Cells[i, j].Text.Trim(), out FEMark))
-                                                    {
-
-                                                        studentCourseMarkFE.Mark = FEMark;
-                                                    }
                                                     else
                                                     {
+                                                        var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+                                                        var RE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j + 1].Text.Trim())).FirstOrDefault();
+                                                        var studentCourseMarkFE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
+                                                        var studentCourseMarkRE = context.StudentCourseMarks.
+                                                            Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
+                                                        //remake null check
+                                                        if (studentCourseMarkFE == null)
+                                                        {
+                                                            studentCourseMarkFE = context.StudentCourseMarks.Create();
+                                                            context.StudentCourseMarks.Add(studentCourseMarkFE);
+                                                        }
+                                                        if (studentCourseMarkRE == null)
+                                                        {
+                                                            studentCourseMarkRE = context.StudentCourseMarks.Create();
+                                                            context.StudentCourseMarks.Add(studentCourseMarkRE);
+                                                        }
+                                                        studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
+                                                        studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
+                                                        studentCourseMarkFE.CourseMarkId = FE.Id;
+                                                        studentCourseMarkRE.CourseMarkId = RE.Id;
+                                                        studentCourseMarkRE.Mark = null;
                                                         studentCourseMarkFE.Mark = null;
 
-                                                    }
-
-                                                    double REMark = 0;
-                                                    if (double.TryParse(ws.Cells[i, j + 1].Text.Trim(), out REMark))
-                                                    {
-
-                                                        studentCourseMarkRE.Mark = REMark;
-                                                    }
-                                                    else
-                                                    {
-                                                        studentCourseMarkRE.Mark = null;
-
-                                                    }
-                                                    studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
-                                                    studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
-                                                    if (studentCourseMarkFE.Mark != null && studentCourseMarkRE.Mark == null)
-                                                    {
-                                                        //average = studentInCourse.Average.Value;
-                                                        average += studentCourseMarkFE.Mark.Value * FE.Percentage / 100;
-
-
-                                                    }
-                                                    else if (studentCourseMarkRE.Mark != null)
-                                                    {
-                                                        //average = studentInCourse.Average.Value;
-                                                        average += studentCourseMarkRE.Mark.Value * RE.Percentage / 100;
-
-
-
-                                                    }
-                                                    if (!recordExistedFE)
-                                                    {
-                                                        studentCourseMarkFE.CourseMarkId = FE.Id;
-                                                        context.StudentCourseMarks.Add(studentCourseMarkFE);
-
-                                                    }
-                                                    if (!recordExistedRE)
-                                                    {
-                                                        studentCourseMarkRE.CourseMarkId = RE.Id;
-                                                        context.StudentCourseMarks.Add(studentCourseMarkRE);
-                                                    }
-
-                                                    studentInCourse.Average = average;
-                                                    if (studentCourseMarkFE == null || studentCourseMarkFE.Mark < 4)
-                                                    {
-                                                        if (studentCourseMarkRE == null || studentCourseMarkRE.Mark < 4)
-                                                        {
-                                                            studentInCourse.Status = 3;
-                                                        }
-                                                        else if (average < 5)
-                                                        {
-                                                            studentInCourse.Status = 3;
-                                                        }
-                                                        else
-                                                        {
-                                                            studentInCourse.Status = 2;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (average < 5)
-                                                        {
-                                                            studentInCourse.Status = 3;
-                                                        }
-                                                        else
-                                                        {
-                                                            studentInCourse.Status = 2;
-                                                        }
+                                                        studentInCourse.Average = null;
+                                                        studentInCourse.Status = 3;
                                                     }
                                                 }
+                                                #endregion
 
                                             }
-                                            else
-                                            {
-                                                var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
-                                                var RE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j + 1].Text.Trim())).FirstOrDefault();
-                                                var studentCourseMarkFE = context.StudentCourseMarks.
-                                                    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
-                                                var studentCourseMarkRE = context.StudentCourseMarks.
-                                                    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
-                                                //remake null check
-
-                                                if (studentCourseMarkFE == null)
-                                                {
-                                                    studentCourseMarkFE = context.StudentCourseMarks.Create();
-                                                    context.StudentCourseMarks.Add(studentCourseMarkFE);
-                                                }
-                                                if (studentCourseMarkRE == null)
-                                                {
-                                                    studentCourseMarkRE = context.StudentCourseMarks.Create();
-                                                    context.StudentCourseMarks.Add(studentCourseMarkRE);
-                                                }
-                                                studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
-                                                studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
-                                                studentCourseMarkFE.CourseMarkId = FE.Id;
-                                                studentCourseMarkRE.CourseMarkId = RE.Id;
-                                                studentCourseMarkRE.Mark = null;
-                                                studentCourseMarkFE.Mark = null;
-
-                                                studentInCourse.Average = null;
-                                                studentInCourse.Status = 3;
-                                            }
-
-
-
-
+                                            context.SaveChanges();
                                         }
-
-                                        context.SaveChanges();
                                     }
                                 }
                             }
