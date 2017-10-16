@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+</style>
+
+<div class="content">
+    <div class="container-default animate fadeInRight">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-cogs">Administration</i></div>
+
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <a href="@Url.Action("SemesterManagement")">
+                            <div class="btn btn-warning btn-lg">
+                                <i class="fa fa-calendar"></i>Semester
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="@Url.Action("AccountManagement")">
+                            <div class="btn btn-warning btn-lg">
+                                <i class="fa fa-users">
+                                </i>
+                                    Account Manage
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
