@@ -427,6 +427,7 @@
     </Content>
     <Content Include="Areas\TrainingManagement\Views\Management\ManageStudent.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\Management\ImportSubject.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\EditCourseMark.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

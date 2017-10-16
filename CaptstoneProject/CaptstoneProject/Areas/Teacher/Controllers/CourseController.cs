@@ -71,6 +71,12 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                     if (course != null && course.Teacher.LoginName == loginName)
                     {
+                        var componentsEdit = course.CourseMarks.Where(q => q.IsFinal != true || q.IsFinal == null).Select(q => new MarkComp
+                        {
+                            Name = q.ComponentName,
+                            Id = q.Id,
+                        });
+                        ViewBag.Components = componentsEdit;
                         ViewBag.ClassName = course.ClassName;
 
                         var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
