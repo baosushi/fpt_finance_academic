@@ -27,7 +27,7 @@
                     }
                 </select>
             </form>
-            @if (ViewBag.courseStatus == (int)CourseStatus.Open)
+            @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
             {
                 <form method="post" action="@Url.Action("LockAllCourseForTeacher","Management")">
                     <span>
@@ -35,8 +35,9 @@
                         <input class="btn btn-danger" title="Lock edited all teacher of all course in @ViewBag.selectedSemName semester" type="submit" value="LockTeacher" />
                     </span>
                 </form>
-            }
-            @if (ViewBag.courseStatus != (int)CourseStatus.LockTM)
+            }*@
+
+            @if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
             {
                 <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement","Management")">
                     <span>

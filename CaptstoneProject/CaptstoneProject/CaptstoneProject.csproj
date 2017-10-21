@@ -274,6 +274,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\animate.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\plugin\bootstrap-daterangepicker\daterangepicker.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\blue-loading-icon.gif" />
     <Content Include="Content\img\comp-2.gif" />
@@ -283,6 +285,9 @@
     <Content Include="Content\img\img-logo-fe.jpg" />
     <Content Include="Content\jquery-ui-1.10.4.custom.min.css" />
     <Content Include="Content\js\alert\main.js" />
+    <Content Include="Content\js\bootstrap-daterangepicker\daterangepicker.js" />
+    <Content Include="Content\js\bootstrap-daterangepicker\moment.js" />
+    <Content Include="Content\js\bootstrap-daterangepicker\moment.min.js" />
     <Content Include="Content\js\bootstrap-select\bootstrap-select.js" />
     <Content Include="Content\js\bootstrap-toggle\bootstrap-toggle.min.js" />
     <Content Include="Content\js\bootstrap-tour\bootstrap-tour.js" />
@@ -336,6 +341,7 @@
     <Content Include="Content\js\validate\jquery.validate.min.js" />
     <Content Include="Content\plugin\awesome-bootstrap-checkbox\awesome-bootstrap-checkbox.css" />
     <Content Include="Content\plugin\bootstrap-select\bootstrap-select.css" />
+    <Content Include="Content\plugin\bootstrap-select\bootstrap-select.min.css" />
     <Content Include="Content\plugin\bootstrap-toggle\bootstrap-toggle.min.css" />
     <Content Include="Content\plugin\bootstrap-tour\bootstrap-tour.min.css" />
     <Content Include="Content\plugin\bootstrap-wysihtml5\bootstrap-wysihtml5.css" />

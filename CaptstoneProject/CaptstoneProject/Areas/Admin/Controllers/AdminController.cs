@@ -12,10 +12,16 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Collections;
+using System.Globalization;
 
 namespace CaptstoneProject.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Training Management")]
     public class AdminController : Controller
     {
         // GET: Admin/Admin
@@ -48,21 +54,32 @@ namespace CaptstoneProject.Areas.Admin.Controllers
                         EndDate = q.EndDate.Value,
                         Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                     }).ToList();
-                var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
-                if (randomCourse != null)
-                {
-                    status = randomCourse.Status;
-                }
+
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
                 var semesterList = semesters.Select(q => new SelectListItem
                 {
                     Text = q.Title + " " + q.Year,
                     Value = q.Id.ToString(),
                 }).ToList();
+
+                var subjectList = context.Subjects.Select(q => new SelectListItem
+                {
+                    Text = q.SubjectName + " - " + q.SubjectCode,
+                    Value = q.Id.ToString()
+                }).ToList();
+
+                var teacherList = context.Teachers.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Id.ToString()
+                }).ToList();
+
                 ViewBag.semList = semesterList;
                 ViewBag.selectedSem = semesterId;
                 ViewBag.selectedSemName = semester.Title + "" + semester.Year;
-                ViewBag.courseStatus = status;
+                ViewBag.semesterStatus = semester.Status;
+                ViewBag.subjectList = subjectList;
+                ViewBag.teacherList = teacherList;
             }
 
             return View(courses);
@@ -198,15 +215,15 @@ namespace CaptstoneProject.Areas.Admin.Controllers
 
                             for (int i = headerRow + 1; i <= ws.Dimension.End.Row; i++)
                             {
-                               
-                               
-                                    var email = ws.Cells[i, headerColumn].Value.ToString();
-                                    var fullname = ws.Cells[i, headerColumn+1].Value.ToString();
-                                    var role = ws.Cells[i, headerColumn+2].Value.ToString();
 
-                               var userExist = userManager.FindByEmail(email);
 
-                                if(userExist == null)
+                                var email = ws.Cells[i, headerColumn].Value.ToString();
+                                var fullname = ws.Cells[i, headerColumn + 1].Value.ToString();
+                                var role = ws.Cells[i, headerColumn + 2].Value.ToString();
+
+                                var userExist = userManager.FindByEmail(email);
+
+                                if (userExist == null)
                                 {
                                     // using email instead of providerKey for automatic import google account
                                     UserLoginInfo userInfo = new UserLoginInfo("Google", email);
@@ -243,5 +260,183 @@ namespace CaptstoneProject.Areas.Admin.Controllers
 
             return Json(new { success = true, message = "Import Account successed" });
         }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateRole(string inputRole)
+        {
+            try
+            {
+
+                inputRole = inputRole.Trim();
+                using (var context = new ApplicationDbContext())
+                {
+
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    if (inputRole != null && inputRole.Count() > 0)
+                    {
+                        await roleManager.CreateAsync(new IdentityRole { Name = inputRole });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+            return Json(new { success = true, message = "Create role successed!" });
+        }
+
+        public ActionResult GetRole()
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                try
+                {
+                    int count = 0;
+                    var roleName = context.AspNetRoles.ToList();
+                    var roleList = roleName.Select(q => new IConvertible[] { (++count), q.Name }).ToList();
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = roleList.Count(),
+                        iTotalDisplayRecords = roleList.Count(),
+                        aaData = roleList
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
+                {
+
+                    return Json(new { success = false });
+                }
+            }
+        }
+
+        public ActionResult GetAccount()
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            //var list = userManager.Users.Select(q => new AccountViewModel4Admin { Email = q.Email, Role = q.Roles. }).ToList();
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult LockAllCourseForTeacher(int semesterId, string returnUrl)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
+                if (semester.Status != (int)SememsterStatus.Closed)
+                {
+                    var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
+                    foreach (var course in courseList)
+                    {
+                        course.Status = (int)CourseStatus.Submmitted;
+                    }
+                    context.SaveChanges();
+                }
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        [HttpPost]
+        public ActionResult LockAllCourseForTrainingMangement(int semesterId, string returnUrl)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
+                if (semester.Status != (int)SememsterStatus.Closed)
+                {
+                    var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
+                    foreach (var course in courseList)
+                    {
+                        course.Status = (int)CourseStatus.Closed;
+                    }
+                    semester.Status = (int)SememsterStatus.Closed;
+                    context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult UnlockSemester(int semesterId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
+                var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
+                //foreach (var course in courseList)
+                //{
+                //    course.Status = (int)CourseStatus.Open;
+                //}
+                semester.Status = (int)SememsterStatus.Open;
+                context.SaveChanges();
+            }
+
+            return Json("Index");
+
+        }
+
+
+        private bool CreateCourse(string courseName,
+                string className, DateTime startDate, DateTime endDate,
+                int subjectId, int teacherId, int semesterId, int status)
+        {
+            try
+            {
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    context.Courses.Add(new Course()
+                    {
+                        CourseName = courseName,
+                        ClassName = className,
+                        StartDate = startDate,
+                        EndDate = endDate,
+                        SubjectId = subjectId,
+                        TeacherId = teacherId,
+                        SemesterId = semesterId,
+                        Status = status
+                    });
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return true;
+        }
+
+        [HttpPost]
+        public ActionResult CreateCourse(string courseName,
+            string className, string startDate, string endDate,
+            int subjectId, int teacherId, int semesterId)
+        {
+            var startD = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            var endD = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+
+            CreateCourse(courseName.Trim(), className.Trim(), startD, endD, subjectId, teacherId, semesterId, (int)CourseStatus.New);
+
+
+
+
+            return RedirectToAction("Index", new { semesterId = semesterId});
+        }
+
+        public class AccountViewModel4Admin
+        {
+            public string Email { get; set; }
+            public string[] Role { get; set; }
+
+        }
+
     }
 }

@@ -411,15 +411,15 @@ namespace CaptstoneProject.Controllers
                 //var user = new ApplicationUser { UserName = "admin", Email = "admin@mail.com" };
                 //var result = await UserManager.CreateAsync(user, "@Qawsed123");
 
-                //var user2 = new ApplicationUser { UserName = "student", Email = "student@mail.com" };
+                //var user2 = new ApplicationUser { UserName = "admindaotao", Email = "admindaotao@mail.com" };
                 //var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
 
                 //var user3 = new ApplicationUser { UserName = "daotao", Email = "daotao@mail.com" };
                 //var result3 = await UserManager.CreateAsync(user3, "@Qawsed123");
 
                 //UserManager.AddToRole(user.Id, "Admin");
-                //UserManager.AddToRole(user2.Id, "Student");
-                //UserManager.AddToRole(user3.Id, "Training Management");
+                //UserManager.AddToRole(user2.Id, "Admin Training Management");
+                //UserManager.AddToRole(user3.Id, "Training Management"); // Employee
 
                 //bao
                 //ExternalLoginInfo info = new ExternalLoginInfo { DefaultUserName = "baotdse62099@fpt.edu.vn", Email = "baotdse62099@fpt.edu.vn" };
