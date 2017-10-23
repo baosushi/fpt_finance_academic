@@ -8,6 +8,19 @@ namespace CaptstoneProject.Models
 {
     public class AreaViewModel
     {
+        public class EditCourseSingleComponentModel
+        {
+            public int CourseId { get; set; }
+            public string ComponentName { get; set; }
+            public List<StudentComponent> StudentComponents { get; set; }
+        }
+
+        public class StudentComponent
+        {
+            public string StudentCode { get; set; }
+            public string StudentName { get; set; }
+            public double ComponentMark { get; set; }
+        }
 
         public class MarkComp
         {
@@ -70,7 +83,7 @@ namespace CaptstoneProject.Models
             public string SubCode { get; set; }
             public string Semester { get; set; }
             public int CourseId { get; set; }
-            public bool isEditable { get; set; } // true: able to edit mark, false: vice versa
+            public bool IsEditable { get; set; } // true: able to edit mark, false: vice versa
 
             public class CourseRecordViewModel
             {

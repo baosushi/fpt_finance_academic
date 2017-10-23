@@ -1,29 +1,84 @@
-﻿<div class="content" style="min-height:800px">
+﻿@model CaptstoneProject.Models.AreaViewModel.EditCourseSingleComponentModel
+@{
+    var componentName = Model.ComponentName;
+}
+<div class="content" style="min-height:800px">
     <div class="panel">
         <div class="panel-heading">
-            <h4><i style="color:#4db748" class="fa fa-address-card"></i> Edit marks</h4>
+            <h4><i style="color:#4db748" class="fa fa-address-card"></i> Edit @componentName</h4>
         </div>
         <div class="panel-body">
-            <form>
+            <form id="singleMarkCompForm" action="@Url.Action("EditSingleCourseComponent", "Course")" method="post">
+                <table id="testTable" class="table display dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Student Code</th>
+                            <th>Student Name</th>
+                            <th>@componentName</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 1; i <= this.Model.StudentComponents.Count; i++)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>
+                                    @Html.DisplayFor(q => q.StudentComponents[i - 1].StudentCode)
+                                    @Html.HiddenFor(q => q.StudentComponents[i - 1].StudentCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(q => q.StudentComponents[i - 1].StudentName)
+                                    @Html.HiddenFor(q => q.StudentComponents[i - 1].StudentName)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(q => q.StudentComponents[i - 1].ComponentMark, new { @Value = (Model.StudentComponents[i - 1].ComponentMark == -1) ? "0" : Model.StudentComponents[i - 1].ComponentMark.ToString() })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.HiddenFor(q => q.ComponentName)
+                @Html.HiddenFor(q => q.CourseId)
                 @*Add student here*@
                 <div class="row col-md-12">
-                    
+
                     <div class="col-md-2" style="margin:auto">
-                        <a class="btn btn-primary btn-lg" href="@Url.Action("CourseDetails", "Course", new { courseId =Model.CourseId , semesterId = Model.SemesterId })">
+                        @*<a class="btn btn-primary btn-lg" href="@Url.Action("CourseDetails", "Course", new { courseId = Model.CourseId })">
+                                Go Back
+                            </a>*@
+                        <button class="btn btn-primary btn-lg" onclick="parent.history.back();">
                             Go Back
-                        </a>
+                        </button>
                     </div>
                     <div class="col-md-2" style="margin:auto">
                         <input class="btn btn-success btn-lg" type="submit" />
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>
 </div>
 <script>
+    $("singleMarkCompForm").on("submit", function (e) {
+        e.preventDefault();
 
+        var formData = $(this).serialize();
 
+        $.ajax({
+            type: "POST",
+            data: formData,
+            url: @Url.Action("EditSingleCourseComponent", "Course"),
+            success: function (result) {
+                if (result.success) {
+
+                } else {
+
+                }
+            },
+            error: function (result) {
+
+            }
+        });
+    });
 </script>

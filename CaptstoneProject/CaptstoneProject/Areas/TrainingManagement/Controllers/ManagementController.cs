@@ -108,7 +108,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status != (int)CourseStatus.LockTM ? true : false
+                            IsEditable = course.Status != (int)CourseStatus.LockTM ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -148,7 +148,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         }
 
-
         [HttpPost]
         public ActionResult LockAllCourseForTrainingMangement(int semesterId, string returnUrl)
         {
@@ -168,7 +167,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
             return RedirectToAction("Index");
         }
-
 
         [HttpPost]
         public ActionResult DownloadTemplate(int courseId)
@@ -254,7 +252,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
         }
 
-
         public JsonResult GetSemesters()
         {
             using (var context = new DB_Finance_AcademicEntities())
@@ -339,7 +336,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 return View("EditMark", student);
 
             }
-
         }
 
         public ActionResult UploadFinalExamExcel(int courseId)
@@ -617,9 +613,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
             return Json(new { success = true, message = "Upload Students successed" });
         }
-
-
-
+        
         public ActionResult ImportSubject()
         {
             return View();
