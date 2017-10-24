@@ -109,7 +109,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status == (int)CourseStatus.InProgress ? true : false
+                            IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
