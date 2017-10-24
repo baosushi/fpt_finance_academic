@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fpt University</title>
     @*@Styles.Render("~/Content/css")*@
+    <script type="text/javascript" src="~/Content/js/bootstrap-daterangepicker/moment.min.js"></script>
     <!-- jQuery Library -->
     <script type="text/javascript" src="~/Content/js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript File -->
@@ -20,12 +21,23 @@
     <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
     <script type="text/javascript" src="~/Content/js/bootstrap-select/bootstrap-select.js"></script>
     <script type="text/javascript" src="~/Content/js/sweet-alert/sweet-alert.min.js"></script>
+    
+    <script type="text/javascript" src="~/Content/js/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="~/Content/js/highchart/highcharts.src.js"></script>
+     
+
     @*<script type="text/javascript" src="~/fonts/"></script>*@
 
 
     @Styles.Render("~/Content/plugins")
     @Scripts.Render("~/bundles/plugins")
     @*@Scripts.Render("~/bundles/modernizr")*@
+    
+    @*Link css*@
+    <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-select/bootstrap-select.min.css" />
+
+
 
     <link href="~/Content/root.css" rel="stylesheet">
     <style>

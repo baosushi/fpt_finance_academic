@@ -18,23 +18,39 @@ namespace CaptstoneProject.Models
 
     public enum StudentCourseStatus
     {
-        [Display(Name = "Register")]
+        [Display(Name = "Register")] // = new
         Register = 0,
-        [Display(Name = "Studying")]
+        [Display(Name = "Studying")]  // = in progress
         Studying = 1,
+        [Display(Name = "Submitted")]
+        Submitted = 2,
+        [Display(Name = "Publishable")]
+        FirstPublish = 3,
+        [Display(Name = "Final Publish")]
+        FinalPublish = 4,
         [Display(Name = "Passed")]
-        Passed = 2,
+        Passed = 5,
         [Display(Name = "Failed")]
-        Failed = 3,
+        Failed = 6,
+        [Display(Name = "Cancel")]
+        Cancel = -1,
     }
     public enum CourseStatus
     {
-        [Display(Name = "Open")]
-        Open = 0,
-        [Display(Name ="LockTeacher")]
-        LockTeacher= 1,
-        [Display(Name = "LockTM")] //Lock Training Mangement
-        LockTM = 2,
+        [Display(Name = "New")]
+        New = 0,
+        [Display(Name = "In Progress")]
+        InProgress = 1,
+        [Display(Name = "Submitted")]
+        Submitted = 2,
+        [Display(Name = "Publishable")]
+        FirstPublish = 3,
+        [Display(Name = "Final Publish")]
+        FinalPublish = 4,
+        [Display(Name = "Closed")]
+        Closed = 5,
+        [Display(Name = "Cancel")]
+        Cancel = -1,
 
     }
 

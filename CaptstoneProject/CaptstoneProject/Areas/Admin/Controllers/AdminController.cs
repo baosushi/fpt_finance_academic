@@ -12,10 +12,16 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Collections;
+using System.Globalization;
 
 namespace CaptstoneProject.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Training Management")]
     public class AdminController : Controller
     {
         // GET: Admin/Admin
@@ -25,48 +31,6 @@ namespace CaptstoneProject.Areas.Admin.Controllers
         }
 
 
-        public ActionResult SemesterManagement(int semesterId = -1)
-        {
-            IEnumerable<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
-            using (var context = new DB_Finance_AcademicEntities())
-            {
-                int? status = null;
-                //DateTime startDate, endDate;
-                var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
-
-                //startDate = semester.StartDate.Value;
-                //endDate = semester.EndDate.Value;
-
-                courses = context.Courses.Where(q => q.SemesterId == semester.Id).AsEnumerable()
-                    .Select(q => new CourseRecordViewModel
-                    {
-                        CourseId = q.Id,
-                        Name = q.Subject.SubjectName,
-                        Code = q.Subject.SubjectCode,
-                        Class = q.ClassName,
-                        StartDate = q.StartDate.Value,
-                        EndDate = q.EndDate.Value,
-                        Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
-                    }).ToList();
-                var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
-                if (randomCourse != null)
-                {
-                    status = randomCourse.Status;
-                }
-                var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
-                var semesterList = semesters.Select(q => new SelectListItem
-                {
-                    Text = q.Title + " " + q.Year,
-                    Value = q.Id.ToString(),
-                }).ToList();
-                ViewBag.semList = semesterList;
-                ViewBag.selectedSem = semesterId;
-                ViewBag.selectedSemName = semester.Title + "" + semester.Year;
-                ViewBag.courseStatus = status;
-            }
-
-            return View(courses);
-        }
 
         public ActionResult AccountManagement()
         {
@@ -198,15 +162,15 @@ namespace CaptstoneProject.Areas.Admin.Controllers
 
                             for (int i = headerRow + 1; i <= ws.Dimension.End.Row; i++)
                             {
-                               
-                               
-                                    var email = ws.Cells[i, headerColumn].Value.ToString();
-                                    var fullname = ws.Cells[i, headerColumn+1].Value.ToString();
-                                    var role = ws.Cells[i, headerColumn+2].Value.ToString();
 
-                               var userExist = userManager.FindByEmail(email);
 
-                                if(userExist == null)
+                                var email = ws.Cells[i, headerColumn].Value.ToString();
+                                var fullname = ws.Cells[i, headerColumn + 1].Value.ToString();
+                                var role = ws.Cells[i, headerColumn + 2].Value.ToString();
+
+                                var userExist = userManager.FindByEmail(email);
+
+                                if (userExist == null)
                                 {
                                     // using email instead of providerKey for automatic import google account
                                     UserLoginInfo userInfo = new UserLoginInfo("Google", email);
@@ -243,5 +207,73 @@ namespace CaptstoneProject.Areas.Admin.Controllers
 
             return Json(new { success = true, message = "Import Account successed" });
         }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateRole(string inputRole)
+        {
+            try
+            {
+
+                inputRole = inputRole.Trim();
+                using (var context = new ApplicationDbContext())
+                {
+
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    if (inputRole != null && inputRole.Count() > 0)
+                    {
+                        await roleManager.CreateAsync(new IdentityRole { Name = inputRole });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+            return Json(new { success = true, message = "Create role successed!" });
+        }
+
+        public ActionResult GetRole()
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                try
+                {
+                    int count = 0;
+                    var roleName = context.AspNetRoles.ToList();
+                    var roleList = roleName.Select(q => new IConvertible[] { (++count), q.Name }).ToList();
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = roleList.Count(),
+                        iTotalDisplayRecords = roleList.Count(),
+                        aaData = roleList
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
+                {
+
+                    return Json(new { success = false });
+                }
+            }
+        }
+
+        public ActionResult GetAccount()
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            //var list = userManager.Users.Select(q => new AccountViewModel4Admin { Email = q.Email, Role = q.Roles. }).ToList();
+
+            return Json(new { success = true });
+        }
+        
+
+        public class AccountViewModel4Admin
+        {
+            public string Email { get; set; }
+            public string[] Role { get; set; }
+
+        }
+
     }
 }

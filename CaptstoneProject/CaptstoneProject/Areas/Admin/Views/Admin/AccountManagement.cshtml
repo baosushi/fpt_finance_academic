@@ -10,11 +10,48 @@
 
             <div class="panel-body">
                 <div class="row">
-                    <div class="offset-8 col-md-4">
+                    <div class="col-md-6 pull-left">
+                        <div class="btn btn-default" data-toggle="modal" data-target="#create-role-modal">
+                            Add Role
+                        </div>
+                        <div class="modal fade" id="create-role-modal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Create Role</h4>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <i class="fa fa-times-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="create-role-form" method="post">
+                                            <input type="text" value="" name="inputRole" id="inputRole" placeholder="Input a Role" />
+                                            <button type="submit" class="btn btn-success">Create</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="table_Role">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+
+                    <div class="col-md-6 pull-right">
                         <div class="pull-right">
                             <form action="@Url.Action("DownloadAccountTemplate")" method="post">
                                 <button type="submit" class="btn-success btn" id="download-template-btn"
                                         title="Template use for import multiple account in the same time">
+                                    <i class="fa fa-upload"></i>
                                     Template Import Account
                                 </button>
                             </form>
@@ -31,13 +68,16 @@
 
                                 </div>
                             </div>
-
+                            <button type="button" id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waiting for file</button>
+                       @*<table id="table_Account">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                       </table>*@
                         </div>
-                    </div>
-                </div><br />
-                <div class="row">
-                    <div class="offset-10 col-md-2">
-                        <button type="button" id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waiting for file</button>
                     </div>
                 </div>
                 <br />
@@ -50,6 +90,23 @@
 <script>
     $(document).ready(function () {
 
+       var roleTable =  $("#table_Role").DataTable({
+            //"Processing": true,
+            //"Serverside": true,
+            "sAjaxSource": "@Url.Action("GetRole")",
+            "aoColumnDefs": [
+                {
+                    "aTargets": [0, 1],
+                    "bSortable": false
+                }
+            ],
+
+        });
+
+        @*$("#table_Account").DataTable({
+            "sAjaxSource": "@Url.Action("")"
+
+        });*@
 
         $('#import-acc-btn').click(function () {
             $('#upload-file').trigger("click");
@@ -132,7 +189,30 @@
                 }
             });
         }
-    });
+        });
+
+        $("#create-role-modal").on("change", function () {
+            $("inputRole").val();
+        });
+
+        $("#create-role-form").submit(function (e) {
+            $.ajax({
+                url: "@Url.Action("CreateRole")",
+                type: "post",
+                data: $("#create-role-form").serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                        roleTable.ajax.reload();
+                        $('#create-role-modal').modal('toggle');
+                    } else {
+                        toastr.error(result.message);
+                        $('#create-role-modal').modal('toggle');
+                    }
+                }
+            });
+            e.preventDefault(); // prevent execute normal submit of form
+        });
 
     })
 </script>

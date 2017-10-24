@@ -107,7 +107,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            IsEditable = course.Status == (int)CourseStatus.Open ? true : false
+                            IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -223,7 +223,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-                            if (course.Status != (int)CourseStatus.Open)
+                            if (course.Status != (int)CourseStatus.InProgress)
                             {
                                 return RedirectToAction("Index", "Home");
                             }
@@ -405,7 +405,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 var status = course.Status;
-                if (status != (int)CourseStatus.Open)
+                if (status != (int)CourseStatus.InProgress)
                 {
                     return RedirectToAction("Index", "Home");
                 }

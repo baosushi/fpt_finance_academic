@@ -47,12 +47,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         EndDate = q.EndDate.Value,
                         Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                     }).ToList();
-                var randomCourse = context.Courses.Where(q => q.SemesterId == semester.Id).FirstOrDefault();
-                if (randomCourse != null)
-                {
-                    status = randomCourse.Status;
-                }
+
+               
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
+
                 var semesterList = semesters.Select(q => new SelectListItem
                 {
                     Text = q.Title + " " + q.Year,
@@ -61,7 +59,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 ViewBag.semList = semesterList;
                 ViewBag.selectedSem = semesterId;
                 ViewBag.selectedSemName = semester.Title + "" + semester.Year;
-                ViewBag.courseStatus = status;
+                ViewBag.semesterStatus = semester.Status;
             }
 
             return View(courses);
@@ -108,7 +106,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            IsEditable = course.Status != (int)CourseStatus.LockTM ? true : false
+                            IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -137,7 +135,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
-                        course.Status = (int)CourseStatus.LockTeacher;
+                        course.Status = (int)CourseStatus.Submitted;
                     }
                     context.SaveChanges();
                 }
@@ -159,7 +157,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
-                        course.Status = (int)CourseStatus.LockTM;
+                        course.Status = (int)CourseStatus.Closed;
                     }
                     semester.Status = (int)SememsterStatus.Closed;
                     context.SaveChanges();
@@ -316,7 +314,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 var status = course.Status;
-                if (status == (int)CourseStatus.LockTM)
+                if (status != (int)CourseStatus.InProgress)
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -351,7 +349,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-                            if (course.Status == (int)CourseStatus.LockTM)
+                            if (course.Status != (int)CourseStatus.InProgress)
                             {
                                 return RedirectToAction("Index", "Home");
                             }
