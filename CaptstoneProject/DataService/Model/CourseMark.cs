@@ -23,8 +23,8 @@ namespace DataService.Model
         public int Id { get; set; }
         public string ComponentName { get; set; }
         public double Percentage { get; set; }
-        public int CourseId { get; set; }
         public Nullable<bool> IsFinal { get; set; }
+        public int CourseId { get; set; }
     
         public virtual Course Course { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

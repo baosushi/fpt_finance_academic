@@ -12,16 +12,18 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class StudentCourseMark
+    public partial class SubjectGroup
     {
-        public int Id { get; set; }
-        public Nullable<double> Mark { get; set; }
-        public Nullable<double> EdittedMark { get; set; }
-        public int CourseMarkId { get; set; }
-        public string Note { get; set; }
-        public int StudentInCourseId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SubjectGroup()
+        {
+            this.Subjects = new HashSet<Subject>();
+        }
     
-        public virtual CourseMark CourseMark { get; set; }
-        public virtual StudentInCourse StudentInCourse { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }
