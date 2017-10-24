@@ -21,7 +21,7 @@
                 </div>*@
             <div class="panel-title">
                 <i class="fa fa-user" style="color:green"></i> Course Details
-                @if (Model.isPublish == 0)
+                @if (Model.IsPublish == 0)
                 {
                     <div style="float:right">
                         <div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 }
-                else if (Model.isPublish == 1)
+                else if (Model.IsPublish == 1)
                 {
                     <div style="float:right">
                         <div>
@@ -52,7 +52,7 @@
                     <br />
                     <label><b>Class:</b> @ViewBag.ClassName</label>
                 </div>
-                @if (Model.isEditable)
+                @if (Model.IsEditable)
                 {
                     <div class="row">
                         <div class="offset-8 col-md-4">
@@ -113,7 +113,7 @@
                                     @i
                                 </td>
                                 <td>
-                                    @if (Model.isEditable)
+                                    @if (Model.IsEditable)
                                     {
 
                                         <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
@@ -239,7 +239,7 @@
                 data.append("file" + i, $("#upload-file")[0].files[i]);
             }
             $(".progress").show();
-            if(@Model.isPublish==0){
+            if(@Model.IsPublish==0){
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("UploadFinalExamExcel")',
