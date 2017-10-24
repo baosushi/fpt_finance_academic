@@ -126,6 +126,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Mark" Type="float" />
+          <Property Name="EdittedMark" Type="float" />
           <Property Name="CourseMarkId" Type="int" Nullable="false" />
           <Property Name="Note" Type="nvarchar" MaxLength="500" />
           <Property Name="StudentInCourseId" Type="int" Nullable="false" />
@@ -865,6 +866,7 @@
           <Property Name="StudentInCourseId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CourseMark" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" FromRole="StudentCourseMark" ToRole="CourseMark" />
           <NavigationProperty Name="StudentInCourse" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" FromRole="StudentCourseMark" ToRole="StudentInCourse" />
+          <Property Name="EdittedMark" Type="Double" />
         </EntityType>
         <Association Name="FK_StudentCourseMark_CourseMark">
           <End Type="DB_Finance_AcademicModel.CourseMark" Role="CourseMark" Multiplicity="1" />
@@ -1063,6 +1065,7 @@
           <EntitySetMapping Name="StudentCourseMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentCourseMark">
               <MappingFragment StoreEntitySet="StudentCourseMark">
+                <ScalarProperty Name="EdittedMark" ColumnName="EdittedMark" />
                 <ScalarProperty Name="StudentInCourseId" ColumnName="StudentInCourseId" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="CourseMarkId" ColumnName="CourseMarkId" />

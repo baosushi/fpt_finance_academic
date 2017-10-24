@@ -109,7 +109,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status == (int)CourseStatus.InProgress ? true : false
+                            IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -435,7 +435,95 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             }
 
         }
-    }
 
+        [HttpGet]
+        public ActionResult EditSingleCourseComponent(int courseId, int componentId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                var component = context.CourseMarks.Find(componentId);
+
+                var list = course.StudentInCourses.Select(q => new StudentComponent
+                {
+                    StudentCode = q.StudentMajor.StudentCode,
+                    StudentName = q.StudentMajor.Student.Name,
+                    ComponentMark = q.StudentCourseMarks.Where(z => z.CourseMarkId == componentId).FirstOrDefault().Mark ?? -1
+                }).ToList();
+
+                var model = new EditCourseSingleComponentModel
+                {
+                    CourseId = courseId,
+                    ComponentName = component.ComponentName,
+                    StudentComponents = list
+                };
+
+                return View("EditCourseMark", model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditSingleCourseComponent(/*int courseId, List<StudentComponent> markList*/ EditCourseSingleComponentModel model)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(model.CourseId);
+
+                if (course != null)
+                {
+                    foreach (var record in model.StudentComponents)
+                    {
+                        var studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourse.StudentMajor.StudentCode == record.StudentCode.ToUpper().Trim() && q.CourseMark.ComponentName.Equals(model.ComponentName.Trim())).FirstOrDefault();
+
+                        if (studentCourseMark == null)
+                        {
+                            studentCourseMark = context.StudentCourseMarks.Create();
+                            var student = context.StudentMajors.Where(q => q.StudentCode == record.StudentCode).FirstOrDefault();
+
+                            if (student == null)
+                            {
+                                return Json(new { success = false, message = "Student is null" });
+                            }
+
+                            var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == student.Id).FirstOrDefault();
+
+                            if (studentInCourse == null)
+                            {
+                                studentInCourse = context.StudentInCourses.Create();
+                                studentInCourse.CourseId = model.CourseId;
+                                studentInCourse.StudentId = student.Id;
+                                studentInCourse.Average = -1;
+                                context.StudentInCourses.Add(studentInCourse);
+
+                                context.SaveChanges();
+                            }
+
+                            var courseMark = context.CourseMarks.Where(q => q.ComponentName.Equals(model.ComponentName.Trim()) && q.CourseId == model.CourseId).FirstOrDefault();
+
+                            if (courseMark == null)
+                            {
+                                return Json(new { success = false, message = "CourseMark is null" });
+                            }
+
+                            studentCourseMark.StudentInCourseId = studentInCourse.Id;
+                            studentCourseMark.CourseMarkId = courseMark.Id;
+                            studentCourseMark.Mark = -1;
+                            context.StudentCourseMarks.Add(studentCourseMark);
+
+                            context.SaveChanges();
+                        }
+
+                        studentCourseMark.Mark = record.ComponentMark;
+                    }
+
+                    context.SaveChanges();
+
+                    return Json(new { success = true, courseId = course.Id, semesterId = course.SemesterId });
+                }
+            }
+
+            return Json(new { success = false, message = "Course is null" });
+        }
+    }
 
 }

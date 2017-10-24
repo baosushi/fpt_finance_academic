@@ -19,6 +19,7 @@ namespace DataService.Model
         public int CourseMarkId { get; set; }
         public string Note { get; set; }
         public int StudentInCourseId { get; set; }
+        public Nullable<double> EdittedMark { get; set; }
     
         public virtual CourseMark CourseMark { get; set; }
         public virtual StudentInCourse StudentInCourse { get; set; }

@@ -242,6 +242,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\AdminTrainingDepartment\AdminTrainingDepartmentAreaRegistration.cs" />
+    <Compile Include="Areas\AdminTrainingDepartment\Controllers\AdminTrainingController.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Areas\MarkComponent\Controllers\MarkComponentController.cs" />
@@ -280,6 +282,7 @@
   <ItemGroup>
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\js\highchart\highcharts.src.js" />
     <Content Include="Content\plugin\bootstrap-daterangepicker\daterangepicker.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\blue-loading-icon.gif" />
@@ -445,8 +448,12 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Admin\SemesterManagement.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\AccountManagement.cshtml" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\web.config" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\SemesterManagement.cshtml" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\Index.cshtml" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\GetMyData.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -506,6 +513,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AdminTrainingDepartment\Models\" />
+    <Folder Include="Areas\AdminTrainingDepartment\Views\Shared\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\MarkComponent\Models\" />

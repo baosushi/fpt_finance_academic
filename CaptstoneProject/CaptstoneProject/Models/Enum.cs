@@ -23,7 +23,7 @@ namespace CaptstoneProject.Models
         [Display(Name = "Studying")]  // = in progress
         Studying = 1,
         [Display(Name = "Submitted")]
-        InProgress = 2,
+        Submitted = 2,
         [Display(Name = "Publishable")]
         FirstPublish = 3,
         [Display(Name = "Final Publish")]
