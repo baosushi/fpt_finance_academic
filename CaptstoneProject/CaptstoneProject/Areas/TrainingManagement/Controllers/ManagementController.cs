@@ -106,7 +106,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status != (int)CourseStatus.Submmitted ? false : true
+                            isEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -135,7 +135,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
-                        course.Status = (int)CourseStatus.Submmitted;
+                        course.Status = (int)CourseStatus.Submitted;
                     }
                     context.SaveChanges();
                 }
