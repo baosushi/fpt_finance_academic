@@ -331,7 +331,7 @@ namespace CaptstoneProject.Areas.Admin.Controllers
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
-                        course.Status = (int)CourseStatus.Submmitted;
+                        course.Status = (int)CourseStatus.Submitted;
                     }
                     context.SaveChanges();
                 }

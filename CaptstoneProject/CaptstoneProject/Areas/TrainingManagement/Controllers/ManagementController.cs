@@ -48,7 +48,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                     }).ToList();
 
-               
+
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
 
                 var semesterList = semesters.Select(q => new SelectListItem
@@ -106,7 +106,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            isEditable = course.Status != (int)CourseStatus.Submmitted ? false : true
+                            //isEditable = course.Status != (int)CourseStatus.Submitted ? false : true
+                            isPublish = course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -135,7 +136,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
-                        course.Status = (int)CourseStatus.Submmitted;
+                        course.Status = (int)CourseStatus.Submitted;
                     }
                     context.SaveChanges();
                 }
@@ -373,10 +374,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     var firstRow = 3;
                                     int tempNo = 0;
                                     bool retaked = false;
-                                    bool comboFE = false;
                                     double FinalAverage = 0;
                                     double FinalPercentage = 0;
-                                    StudentInCourse lastStudent = null;
                                     List<MarkPoint> FEList = new List<MarkPoint>();
                                     List<MarkPoint> REList = new List<MarkPoint>();
                                     for (int i = firstRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
@@ -395,7 +394,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                 }
                                             }
                                             for (var j = 5; j <= totalCol; j++)
-                                            {    
+                                            {
                                                 double value = 0;
                                                 if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value))
                                                 {
@@ -440,7 +439,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                     }
 
                                                 }
-                                                
+
                                             }
                                             if (retaked)
                                             {
@@ -471,26 +470,22 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                             FEList.Clear();
                                             REList.Clear();
                                             retaked = false;
-                                            if (FinalAverage >= 4)
-                                            {
-                                                if (average >= 5)
-                                                {
-                                                    studentInCourse.Status = 2;
-                                                }
-                                                else
-                                                {
-                                                    studentInCourse.Status = 3;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                studentInCourse.Status = 3;
-                                            }
+                                            //if (FinalAverage >= 4)
+                                            //{
+                                            //    if (average >= 5)
+                                            //    {
+                                            //        studentInCourse.Status = 2; //Student pass
+                                            //    }
+                                            //    else
+                                            //    {
+                                            //        studentInCourse.Status = 3; //Student fail
+                                            //    }
+                                            //}
+                                            //else
+                                            //{
+                                            //    studentInCourse.Status = 3; //Student fail
+                                            //}
                                             context.SaveChanges();
-                                        }
-                                        else
-                                        {
-                                           
                                         }
                                     }
                                 }
@@ -510,6 +505,22 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
             return Json(new { success = true, message = "File uploaded successfully" });
+        }
+
+        public ActionResult ChangeToPublish(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.FirstPublish;
+                var students = course.StudentInCourses;
+                foreach(var item in students)
+                {
+                    item.Status = (int)StudentCourseStatus.FirstPublish;
+                }
+                context.SaveChanges();
+            }
+            return Json(new { success = true, message = "Successully submitted!" });
         }
 
         [HttpPost]

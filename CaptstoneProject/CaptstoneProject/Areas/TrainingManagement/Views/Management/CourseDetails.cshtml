@@ -19,7 +19,32 @@
                         <span class="glyphicon glyphicon-export"></span>Export
                     </a>
                 </div>*@
-            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
+            <div class="panel-title">
+                <i class="fa fa-user" style="color:green"></i> Course Details
+                @if (Model.isPublish == 0)
+                {
+                    <div style="float:right">
+                        <div>
+                            <button class="btn-outline-success btn" type="button" id="submit-final-lock">Submit Final</button>
+                        </div>
+                    </div>
+                }
+                else if (Model.isPublish == 1)
+                {
+                    <div style="float:right">
+                        <div>
+                            <button class="btn-outline-success btn" type="button" id="submit-retake-lock">Submit Retake</button>
+                        </div>
+                        <div>
+                            <button class="btn-outline-success btn" type="button" id="close-course">No Retake</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+
+                }
+            </div>
             <div class="panel-body">
                 <div class="course-detail-info">
                     <label><b>Term:</b> @Model.Semester</label>
@@ -39,7 +64,6 @@
                                 <div class="progress" style="display:none">
                                     <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                                          aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-
                                     </div>
                                 </div>
 
@@ -155,6 +179,26 @@
 </form>
 
 <script>
+    $('#submit-final-lock').click(function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("")',
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
+
     $('#download-template-btn').click(function () {
         $('#template-request-form').submit();
     });
@@ -195,50 +239,98 @@
                 data.append("file" + i, $("#upload-file")[0].files[i]);
             }
             $(".progress").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("UploadFinalExamExcel")',
-                contentType: false,
-                processData: false,
-                data: data,
-                xhr: function() {
-                    var settingXhr = $.ajaxSettings.xhr();
-                    if (settingXhr.upload) {
-                        // For handling the progress of the upload
-                        settingXhr.upload.addEventListener('progress', function(e) {
-                            if (e.lengthComputable) {
-                                $('#upload-progress-bar').removeClass('progress-bar-danger');
-                                var percent = Math.ceil(e.loaded/e.total*100);
-                                $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
-                                $('#upload-progress-bar').attr('aria-valuemax', 100);
-                                $('#upload-progress-bar').html(percent+"%");
-                                if(percent==100){
-                                    $('#upload-progress-bar').html("Processing...");
+            if(@Model.isPublish==0){
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadFinalExamExcel")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    xhr: function() {
+                        var settingXhr = $.ajaxSettings.xhr();
+                        if (settingXhr.upload) {
+                            // For handling the progress of the upload
+                            settingXhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                    var percent = Math.ceil(e.loaded/e.total*100);
+                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                    $('#upload-progress-bar').html(percent+"%");
+                                    if(percent==100){
+                                        $('#upload-progress-bar').html("Processing...");
+                                    }
                                 }
-                            }
-                        } , false);
-                    }
-                    return settingXhr;
-                },
-                success: function (result) {
-                    if (result.success) {
-                        toastr.success(result.message);
-                        $('#upload-progress-bar').html("Completed!");
-                        window.location.reload();
+                            } , false);
+                        }
+                        return settingXhr;
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            $('#upload-progress-bar').html("Completed!");
+                            window.location.reload();
 
-                    } else {
-                        toastr.error(result.message);
+                        } else {
+                            toastr.error(result.message);
+                            $('#upload-progress-bar').html("Fail to upload!");
+                            $('#upload-progress-bar').addClass('progress-bar-danger');
+                        }
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        toastr.error(err);
                         $('#upload-progress-bar').html("Fail to upload!");
                         $('#upload-progress-bar').addClass('progress-bar-danger');
                     }
-                },
-                error: function (xhr, status, p3, p4) {
-                    var err = "Error " + " " + status + " " + p3 + " " + p4;
-                    toastr.error(err);
-                    $('#upload-progress-bar').html("Fail to upload!");
-                    $('#upload-progress-bar').addClass('progress-bar-danger');
-                }
-            });
+                });
+            }
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadRetakeExamExcel")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    xhr: function() {
+                        var settingXhr = $.ajaxSettings.xhr();
+                        if (settingXhr.upload) {
+                            // For handling the progress of the upload
+                            settingXhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                    var percent = Math.ceil(e.loaded/e.total*100);
+                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                    $('#upload-progress-bar').html(percent+"%");
+                                    if(percent==100){
+                                        $('#upload-progress-bar').html("Processing...");
+                                    }
+                                }
+                            } , false);
+                        }
+                        return settingXhr;
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            $('#upload-progress-bar').html("Completed!");
+                            window.location.reload();
+
+                        } else {
+                            toastr.error(result.message);
+                            $('#upload-progress-bar').html("Fail to upload!");
+                            $('#upload-progress-bar').addClass('progress-bar-danger');
+                        }
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        toastr.error(err);
+                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').addClass('progress-bar-danger');
+                    }
+                });
+            }
         }
     });
 

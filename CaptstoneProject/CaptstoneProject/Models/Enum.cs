@@ -40,9 +40,9 @@ namespace CaptstoneProject.Models
         [Display(Name = "New")]
         New = 0,
         [Display(Name = "In Progress")]
-        Submmitted = 1,
+        InProgress = 1,
         [Display(Name = "Submitted")]
-        InProgress = 2,
+        Submitted = 2,
         [Display(Name = "Publishable")]
         FirstPublish = 3,
         [Display(Name = "Final Publish")]
@@ -51,7 +51,15 @@ namespace CaptstoneProject.Models
         Closed = 5,
         [Display(Name = "Cancel")]
         Cancel = -1,
-
+    }
+    public enum FinalEditStatus
+    {
+        [Display(Name = "Edit Final")]
+        EditFinal = 0,
+        [Display(Name = "Edit Retake")]
+        EditRetake = 1,
+        [Display(Name = "No Edit")]
+        NoEdit = 2,
     }
 
 }

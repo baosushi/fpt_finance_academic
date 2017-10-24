@@ -2,10 +2,12 @@
 using CaptstoneProject.Models;
 using DataService.Model;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -142,6 +144,12 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     char StartHeaderChar = 'A';
                     int StartHeaderNumber = 1;
                     #region Headers
+                    //ws.Cells[0, 0].Style.WrapText = true;
+                    //Image img = CaptstoneProject.Properties.Resources.img_logo_fe;
+                    //ExcelPicture pic = ws.Drawings.AddPicture("FPTLogo", img);
+                    //pic.From.Column = 0;
+                    //pic.From.Row = 0;
+                    //pic.SetSize(320, 240);
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "No";
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "StudentMajor ID";
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "StudentMajor login";

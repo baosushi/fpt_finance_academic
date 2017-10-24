@@ -71,6 +71,7 @@ namespace CaptstoneProject.Models
             public string Semester { get; set; }
             public int CourseId { get; set; }
             public bool isEditable { get; set; } // true: able to edit mark, false: vice versa
+            public int isPublish { get; set; }
 
             public class CourseRecordViewModel
             {
