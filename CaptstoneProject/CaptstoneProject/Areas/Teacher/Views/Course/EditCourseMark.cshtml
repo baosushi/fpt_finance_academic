@@ -8,7 +8,7 @@
             <h4><i style="color:#4db748" class="fa fa-address-card"></i> Edit @componentName</h4>
         </div>
         <div class="panel-body">
-            <form id="singleMarkCompForm" action="@Url.Action("EditSingleCourseComponent", "Course")" method="post">
+            <form id="singleMarkCompForm" method="post">
                 <table id="testTable" class="table display dataTable">
                     <thead>
                         <tr>
@@ -60,7 +60,7 @@
     </div>
 </div>
 <script>
-    $("singleMarkCompForm").on("submit", function (e) {
+    $("#singleMarkCompForm").on("submit", function (e) {
         e.preventDefault();
 
         var formData = $(this).serialize();
@@ -68,17 +68,19 @@
         $.ajax({
             type: "POST",
             data: formData,
-            url: @Url.Action("EditSingleCourseComponent", "Course"),
+            url: "@Url.Action("EditSingleCourseComponent", "Course")",
             success: function (result) {
                 if (result.success) {
-
+                    window.location.href = "@Url.Action("CourseDetails", "Course", new { courseId = Model.CourseId })";
                 } else {
-
+                    toastr.error(result.message);
                 }
             },
             error: function (result) {
-
+                toastr.error(result);
             }
         });
+
+        return false;
     });
 </script>

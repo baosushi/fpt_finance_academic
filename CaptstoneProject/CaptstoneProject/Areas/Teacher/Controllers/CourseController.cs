@@ -60,7 +60,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             return View(courses);
         }
 
-        public ActionResult CourseDetails(int courseId, int semesterId)
+        public ActionResult CourseDetails(int courseId)
         {
             ViewBag.CourseId = courseId;
             try
@@ -100,7 +100,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //});
 
                         var columns = course.CourseMarks.Select(q => q.ComponentName).ToList();
-                        var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
+                        var semester = course.Semester;
                         var model = new CourseDetailsViewModel
                         {
                             CourseId = courseId,
@@ -514,9 +514,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         }
 
                         studentCourseMark.Mark = record.ComponentMark;
+                        context.SaveChanges();
                     }
-
-                    context.SaveChanges();
 
                     return Json(new { success = true, courseId = course.Id, semesterId = course.SemesterId });
                 }
