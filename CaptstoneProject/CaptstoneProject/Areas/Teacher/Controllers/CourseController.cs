@@ -44,7 +44,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         Code = q.Subject.SubjectCode,
                         Class = q.ClassName,
                         StartDate = q.StartDate.Value,
-                        EndDate = q.EndDate.Value
+                        EndDate = q.EndDate.Value,
+                        Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                     }).ToList();
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
                 var semesterList = semesters.Select(q => new SelectListItem
@@ -86,7 +87,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             UserName = q.StudentMajor.LoginName,
                             StudentName = q.StudentMajor.Student.Name,
                             StudentCode = q.StudentMajor.StudentCode,
-                            Average = q.Average != null ? q.Average.ToString() : "N/A",
+                            Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = q.Status == null ? null : Enum.GetName(typeof(StudentCourseStatus), q.Status.Value)
                         }).ToList();
@@ -441,7 +442,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     CourseId = courseId,
                     Name = q.StudentMajor.LoginName,
                     Code = q.StudentMajor.StudentCode,
-                    Average = q.Average != null ? q.Average.ToString() : "N/A",
+                    Average = q.Average != null ? q.Average.ToString() : "-",
                     MarksComponent = q.StudentCourseMarks.ToList(),
 
                 }).FirstOrDefault();

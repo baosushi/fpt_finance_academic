@@ -8,11 +8,11 @@ namespace CaptstoneProject.Models
 {
     public enum SememsterStatus
     {
-        [Display(Name = "Open")]
+        [Display(Name = "Open")] 
         Open = 0,
-        [Display(Name = "Pending")]
+        [Display(Name = "Pending")] 
         Pending = 1,
-        [Display(Name = "Closed")]
+        [Display(Name = "Closed")] 
         Closed = 2,
     }
 
@@ -37,19 +37,19 @@ namespace CaptstoneProject.Models
     }
     public enum CourseStatus
     {
-        [Display(Name = "New")]
+        [Display(Name = "New")] //gray
         New = 0,
-        [Display(Name = "In Progress")]
+        [Display(Name = "In Progress")]//green
         InProgress = 1,
-        [Display(Name = "Submitted")]
+        [Display(Name = "Submitted")] //blue
         Submitted = 2,
-        [Display(Name = "Publishable")]
+        [Display(Name = "Publishable")] //yellow
         FirstPublish = 3,
-        [Display(Name = "Final Publish")]
+        [Display(Name = "Final Publish")] //orange
         FinalPublish = 4,
-        [Display(Name = "Closed")]
+        [Display(Name = "Closed")] //red
         Closed = 5,
-        [Display(Name = "Cancel")]
+        [Display(Name = "Cancel")] //black
         Cancel = -1,
     }
     public enum FinalEditStatus
