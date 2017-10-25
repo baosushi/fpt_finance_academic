@@ -3,6 +3,44 @@
     ViewBag.Title = "My Course";
     this.Session["loginName"] = "phuonglhk";
 }
+<style>
+    .status-red {
+        background-color: #ef7470;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .status-green {
+        background-color: #0aa20a;
+        color: white;
+        border-radius: 5px;
+    }
+    .status-blue {
+        background-color: #578fdc;
+        color: white;
+        border-radius: 5px;
+    }
+    .status-gray {
+        background-color: #9a9894;
+        color: white;
+        border-radius: 5px;
+    }
+    .status-yellow {
+        background-color: gold;
+        color: white;
+        border-radius: 5px;
+    }
+    .status-orange {
+        background-color: #f37022;
+        color: white;
+        border-radius: 5px;
+    }
+    .status-black {
+        background-color: #4c4c4c;
+        color: white;
+        border-radius: 5px;
+    }
+</style>
 
 <div class="content">
     <!-- Start Container -->
@@ -43,7 +81,47 @@
                                 <td>@Model[i - 1].Class</td>
                                 <td>From @Model[i - 1].StartDate.ToString("dd/MM/yyyy") to @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
                                 <td>@Model[i-1].Status</td>
-                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
+                                <td>
+                                    @switch (Model[i - 1].Status)
+                                    {
+                                        case "New":
+                                            {
+                                                <b class="col-md-2 p-2 status status-gray">New</b>
+                                                break;
+                                            }
+                                        case "InProgress":
+                                            {
+                                                <b class="col-md-2 p-2 status status-green">In Progress</b>
+                                                break;
+                                            }
+                                        case "Submitted":
+                                            {
+                                                <b class="col-md-2 p-2 status status-blue">Submitted</b>
+                                                break;
+                                            }
+                                        case "FirstPublish":
+                                            {
+                                                <b class="col-md-2 p-2 status status-yellow">First Publish</b>
+                                                break;
+                                            }
+                                        case "FinalPublish":
+                                            {
+                                                <b class="col-md-2 p-2 status status-orange">Final Publish</b>
+                                                break;
+                                            }
+                                        case "Closed":
+                                            {
+                                                <b class="col-md-2 p-2 status status-red">Closed</b>
+                                                break;
+                                            }
+                                        default:
+                                            {
+                                                <b class="col-md-2 p-2 status status-black">Cancel</b>
+                                                break;
+                                            }
+                                    }
+                                </td>
+								<td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
                             </tr>
                         }
                     </tbody>
@@ -54,13 +132,13 @@
 </div>
 <script>
     $(document).ready(function () {
-        debugger
-        var selectedSem = '@ViewBag.selectedSem';
-        if (selectedSem != -1 && selectedSem != '') {
+                                        debugger
+                                        var selectedSem = '@ViewBag.selectedSem';
+                                        if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
-        }
+                                        }
         $('#testTable').DataTable({
-            "searching": true
+                                            "searching": true
         });
     });
     $("#semesterSelector").on('change', function () {
