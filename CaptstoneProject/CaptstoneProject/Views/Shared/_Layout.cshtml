@@ -21,10 +21,10 @@
     <script type="text/javascript" src="~/Content/js/counterup/jquery.counterup.min.js"></script>
     <script type="text/javascript" src="~/Content/js/bootstrap-select/bootstrap-select.js"></script>
     <script type="text/javascript" src="~/Content/js/sweet-alert/sweet-alert.min.js"></script>
-    
+
     <script type="text/javascript" src="~/Content/js/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="~/Content/js/highchart/highcharts.src.js"></script>
-     
+
 
     @*<script type="text/javascript" src="~/fonts/"></script>*@
 
@@ -32,7 +32,7 @@
     @Styles.Render("~/Content/plugins")
     @Scripts.Render("~/bundles/plugins")
     @*@Scripts.Render("~/bundles/modernizr")*@
-    
+
     @*Link css*@
     <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-select/bootstrap-select.min.css" />
@@ -59,9 +59,9 @@
         <!-- End Sidebar Show Hide Button -->
         <!-- Start Searchbox -->
         @*<form class="searchform">
-            <input type="text" class="searchbox" id="searchbox" placeholder="Search for course...">
-            <span class="searchbutton"><i class="fa fa-search"></i></span>
-        </form>*@
+                <input type="text" class="searchbox" id="searchbox" placeholder="Search for course...">
+                <span class="searchbutton"><i class="fa fa-search"></i></span>
+            </form>*@
         <!-- End Searchbox -->
         <!-- Start Sidepanel Show-Hide Button -->
         @*<a href="#sidepanel" class="sidepanel-open-button"><i class="fa fa-outdent"></i></a>*@
@@ -140,9 +140,9 @@
                     <li id="btn_Signout">
                         <a href="@Url.Action("LogOff","Account", new { area= ""})">
                             @*<form id="fSignout" action="@Url.Action("LogOff","Account", new { area= ""})" method="post">
-                                @Html.AntiForgeryToken()
-                            </form>*@
-                                <i class="fa falist fa-power-off"></i> Logout
+                                    @Html.AntiForgeryToken()
+                                </form>*@
+                            <i class="fa falist fa-power-off"></i> Logout
                         </a>
                     </li>
                 </ul>
@@ -154,40 +154,97 @@
     <!-- Start Sidabar -->
     <div class="sidebar clearfix">
         <ul class="sidebar-panel nav metismenu" id="side-menu" data-plugin="metismenu">
-            <li>
-                <a href="#"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">Dashboard</span> <i class="fa fa-sort-desc caret"></i></a>
+            @*<li>
+                <a href="#">
+                    <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                    <span class="nav-title">Dashboard</span> <i class="fa fa-sort-desc caret"></i>
+                </a>
                 <ul>
                     <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 1</a></li>
                     <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 2</a></li>
                     <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
                 </ul>
-            </li>
+            </li>*@
             @if (User.IsInRole("Teacher"))
             {
                 <li>
-                    <a href="@Url.Action("Index", "Course", new { area = "Teacher" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">My courses</span></a>
+                    <a href="@Url.Action("Index", "Course", new { area = "Teacher" })">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">My courses</span>
+                    </a>
                 </li>
             }
             @if (User.IsInRole("Training Management"))
             {
                 <li>
-                    <a href="@Url.Action("Index", "Management", new { area = "TrainingManagement" })"><span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span><span class="nav-title">Training Management</span></a>
+                    <a href="@Url.Action("Index", "Management", new { area = "TrainingManagement" })">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Training Management</span>
+                    </a>
                 </li>
             }
-            <li class="sidetitle">FEATURES</li>
-            <li>
-                <a href="#"><span class="icon color7"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>Register course</a>
-            </li>
-            <li>
-                <a href="#"><span class="icon color7"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span>Marks Excel<i class="fa fa-sort-desc caret"></i></a>
-                <ul>
-                    <li><a href="@Url.Action("Index", "MarkComponent", new { area = "MarkComponent" })"><i class="fa fa-upload" aria-hidden="true"></i> Import Component Marks</a></li>
-                    <li><a href="#"><i class="fa fa-download" aria-hidden="true"></i> Export Average Marks</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "Student", new { area = "Students" })"><span class="icon color7"><i class="fa fa-address-book-o" aria-hidden="true"></i></span>Student's marks</a>
-            </li>
+            @if (User.IsInRole("Admin Training Management"))
+            {
+                <li>
+                    <a href="#">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Menu</span><i class="fa fa-sort-desc caret"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index", "AdminTraining", new { area = "AdminTrainingDepartment" })">
+                                @*<span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>*@
+                                <span class="nav-title">Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("SemesterManagement", "AdminTraining", new { area = "AdminTrainingDepartment" })">
+                                @*<span class="nav-title">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>*@
+                                <span class="nav-title">Semester Management</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Admin", new { area = "Admin" })">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Menu</span><i class="fa fa-sort-desc caret"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index", "Admin", new { area = "Admin" })">
+                                @*<span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>*@
+                                <span class="nav-title">Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AccountManagement", "Admin", new { area = "Admin" })">
+                                @*<span class="icon color5"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>*@
+                                <span class="nav-title">Account Management</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            @*<li class="sidetitle">FEATURES</li>*@
+            @*<li>
+                    <a href="#"><span class="icon color7"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>Register course</a>
+                </li>*@
+            @*<li>
+                    <a href="#"><span class="icon color7"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span>Marks Excel<i class="fa fa-sort-desc caret"></i></a>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "MarkComponent", new { area = "MarkComponent" })"><i class="fa fa-upload" aria-hidden="true"></i> Import Component Marks</a></li>
+                        <li><a href="#"><i class="fa fa-download" aria-hidden="true"></i> Export Average Marks</a></li>
+                    </ul>
+                </li>*@
+            @*<li>
+                    <a href="@Url.Action("Index", "Student", new { area = "Students" })"><span class="icon color7"><i class="fa fa-address-book-o" aria-hidden="true"></i></span>Student's marks</a>
+                </li>*@
         </ul>
     </div>
     <!-- End Sidabar -->

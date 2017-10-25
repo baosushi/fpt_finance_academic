@@ -1,4 +1,5 @@
-﻿using CaptstoneProject.Models;
+﻿using CaptstoneProject.Controllers;
+using CaptstoneProject.Models;
 using DataService.Model;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 {
-    public class AdminTrainingController : Controller
+    public class AdminTrainingController : MyBaseController
     {
         // GET: AdminTrainingDepartment/AdminTraining
         public ActionResult Index()
@@ -77,7 +78,6 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             List<IConvertible[]> courses = new List<IConvertible[]>();
             using (var context = new DB_Finance_AcademicEntities())
             {
-                int? status = null;
                 //DateTime startDate, endDate;
                 var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
@@ -211,7 +211,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
         }
 
         //Get result data of SubjectGroup of current and previous semester for chart
-        public ActionResult GetTestResultToCompare(int semesterId = -1)
+        public ActionResult GetTestResultBySubjectGroup(int semesterId = -1)
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
@@ -219,25 +219,49 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                     ThenByDescending(q => q.SemesterInYear).
                     FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                var previousSemester = context.Semesters.OrderByDescending(q => q.Year).
-                    ThenByDescending(q => q.SemesterInYear).Where(q => q.Id < semester.Id).FirstOrDefault();
-
-                var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).Select(q => q.Subject.SubjectGroup.Id).ToList();
+                var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).
+                    Select(q => q.Subject.SubjectGroup.Id).ToList();
                 HashSet<int> currentTempList = new HashSet<int>(currentIdList); // take unique subjectGroup Id, remove redundant
                 List<int> currentSubjectGroupIds = currentTempList.ToList();// easy to interact
 
-                var previousIdList = context.Courses.Where(q => q.SemesterId == previousSemester.Id).Select(q => q.Subject.SubjectGroup.Id).ToList();
-                HashSet<int> previousTempList = new HashSet<int>(previousIdList); // take unique subjectGroup Id, remove redundant
-                List<int> previousSubjectGroupIds = previousTempList.ToList();// easy to interact
-
-                List<int> subjectIds = new List<int>();
-
+               
+                List<string> subjectGroupNames = new List<string>();
+                List<int> sumPassStudents = new List<int>();
+                List<int> sumFailStudents = new List<int>();
                 for (int i = 0; i < currentSubjectGroupIds.Count(); i++)
                 {
+                    var subjectGroupId = currentSubjectGroupIds[i];
+                    var list = context.Courses.Where(q => q.Id == semester.Id &&
+                     q.Subject.SubjectGroup.Id == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Passed).Count(),
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Failed).Count(),
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Studying).Count(),
+
+                     }).ToList();
+                    int totalPassed = 0;
+                    int totalFailed = 0;
+                    int totalStudying = 0;
+                    foreach (var item in list)
+                    {
+                        totalPassed += (int)item[0];
+                        totalFailed += (int)item[1];
+                        totalStudying += (int)item[2];
+                    }
+                    var subjectGroupName = context.SubjectGroups.Where(q => q.Id == subjectGroupId)
+                        .Select(q => q.Name).FirstOrDefault();
+                    subjectGroupNames.Add(subjectGroupName);
+                    sumPassStudents.Add(totalPassed);
+                    sumFailStudents.Add(totalFailed);
                 }
 
 
-                return Json(new { });
+                return Json(new {
+                    success = true,
+                    subjectGroupNameList = subjectGroupNames,
+                    passList = sumPassStudents,
+                    failList = sumFailStudents,
+                    semesterName = semester.Title + semester.Year
+                }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -276,10 +300,12 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         }).ToList();
                         var totalPassed = 0;
                         var totalFailed = 0;
+                        var totalStudying = 0;
                         foreach (var item in list)
                         {
                             totalPassed += (int)item[0]; //pass
                             totalFailed += (int)item[1]; //fail
+                            totalStudying += (int)item[2];//studying
                         }
                         var subjectName = context.Subjects.Where(q => q.Id == subjectId).Select(q => q.SubjectName).FirstOrDefault().ToString();
                         subjectNames.Add(subjectName);
