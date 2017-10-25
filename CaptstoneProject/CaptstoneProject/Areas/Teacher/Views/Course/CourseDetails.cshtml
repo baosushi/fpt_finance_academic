@@ -75,7 +75,7 @@
                     </div>
                     <br />
                 }
-                <table id="mark-table" class="table display dataTable table-responsive">
+                <table id="mark-table" class="table display dataTable table-responsive cell-border">
                     <thead>
                         <tr>
                             <th>
@@ -257,13 +257,24 @@
     });
 
     $('#submit-comp').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit marks anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToSubmit")',
             data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
-                    toastr.success(result.message);
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
                     window.location.reload();
 
                 } else {
@@ -275,6 +286,8 @@
                 toastr.error(err);
             }
         });
+        
+    });
     });
 
     $(document).ready(function () {

@@ -6,7 +6,7 @@
     {
         textBtn = "Import Final";
     }
-    else if(Model.IsPublish==1)
+    else if (Model.IsPublish == 1)
     {
         textBtn = "Import Retake";
     }
@@ -21,6 +21,9 @@
         font-size: 14px;
         padding-left: 20px;
         padding-bottom: 15px;
+    }
+    th{
+        background-color: #3f83e1!important;
     }
 </style>
 
@@ -73,7 +76,46 @@
                     <label style="padding-left: 60px;"><b>Subject:</b> @Model.SubName - @Model.SubCode</label>
                     <br />
                     <label><b>Class:</b> @ViewBag.ClassName</label>
-                    <label><b>Status: </b> @Model.Status</label>
+                    <label style="padding-left: 70px;">
+                        <b>Status: </b> @switch (Model.Status)
+                        {
+                            case "New":
+                                {
+                                    <b class="col-md-2 p-2 status-gray">New</b>
+                                    break;
+                                }
+                            case "InProgress":
+                                {
+                                    <b class="col-md-2 p-2 status-green">In Progress</b>
+                                    break;
+                                }
+                            case "Submitted":
+                                {
+                                    <b class="col-md-2 p-2 status-blue">Submitted</b>
+                                    break;
+                                }
+                            case "FirstPublish":
+                                {
+                                    <b class="col-md-2 p-2 status-yellow">First Publish</b>
+                                    break;
+                                }
+                            case "FinalPublish":
+                                {
+                                    <b class="col-md-2 p-2 status-orange">Final Publish</b>
+                                    break;
+                                }
+                            case "Closed":
+                                {
+                                    <b class="col-md-2 p-2 status-red">Closed</b>
+                                    break;
+                                }
+                            default:
+                                {
+                                    <b class="col-md-2 p-2 status-black">Cancel</b>
+                                    break;
+                                }
+                        }
+                    </label>
                 </div>
                 @if (Model.IsPublish == 0 || Model.IsPublish == 1 || Model.IsPublish == 2)
                 {
@@ -102,7 +144,7 @@
                     </div>
                     <br />
                 }
-                <table id="mark-table" class="table display dataTable table-responsive">
+                <table id="mark-table" class="table display dataTable cell-border">
                     <thead>
                         <tr>
                             <th>
@@ -206,13 +248,24 @@
 
 <script>
     $('#submit-final-lock').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit final anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToPublish")',
             data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
-                    toastr.success(result.message);
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
                     window.location.reload();
 
                 } else {
@@ -224,15 +277,28 @@
                 toastr.error(err);
             }
         });
+        
+    });
     });
     $('#submit-comp').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit marks anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToSubmit")',
             data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
-                    toastr.success(result.message);
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
                     window.location.reload();
 
                 } else {
@@ -244,15 +310,28 @@
                 toastr.error(err);
             }
         });
+        
+    });
     });
     $('#submit-retake-lock').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit retake anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToFinalPublish")',
             data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
-                    toastr.success(result.message);
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
                     window.location.reload();
 
                 } else {
@@ -264,14 +343,27 @@
                 toastr.error(err);
             }
         });
+        
+    });
     });
     $('#close-course').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You are gonna close this course!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
         $.ajax({
             type: "POST",
             url: '@Url.Action("CloseCourse")',
             data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
+                    swal("Success!", "Your marks have been submitted!", "success");
                     toastr.success(result.message);
                     window.location.reload();
 
@@ -284,6 +376,8 @@
                 toastr.error(err);
             }
         });
+        
+    });
     });
 
     $('#download-template-btn').click(function () {
@@ -430,7 +524,11 @@
 
     $(document).ready(function () {
         $('#mark-table').DataTable({
-            "searching": true
+            searching: true,
+            scrollX:true,
+            fixedColumns: {
+                leftColumns: 3
+            } 
         });
 
     });

@@ -108,6 +108,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             SubName = course.Subject.SubjectName,
                             //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                             IsPublish = course.Status == (int)CourseStatus.InProgress ? (int)FinalEditStatus.SubmitComponent : course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
+                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });

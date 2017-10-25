@@ -282,6 +282,20 @@
   <ItemGroup>
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap4.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap4.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.dataTables.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.dataTables.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.foundation.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.foundation.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.jqueryui.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.jqueryui.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.semanticui.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.semanticui.min.css" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\js\dataTables.fixedColumns.js" />
+    <Content Include="Content\js\datatables\FixedColumns-3.2.3\js\dataTables.fixedColumns.min.js" />
     <Content Include="Content\js\highchart\highcharts.src.js" />
     <Content Include="Content\plugin\bootstrap-daterangepicker\daterangepicker.css" />
     <Content Include="Content\font-awesome.min.css" />
