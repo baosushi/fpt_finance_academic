@@ -122,9 +122,9 @@
                     <div class="row">
                         <div class="offset-8 col-md-4">
                             <div class="pull-right">
-                                <button class="btn-success btn" id="download-template-btn">Download Template</button>
-
-                                <button class="btn-primary btn" title="Import Final Exam using Excel" id="import-mark-btn">@textBtn</button>
+                                <button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Template</button>
+                                <button class="btn-primary btn" id="import-mark-btn">Import Excel</button>
+                                <button class="btn btn-primary hidden" id="submit-button">Submit file</button>
                                 <input id="upload-file" class="hidden" type="file" name="upload-file" />
                                 <div class="progress" style="display:none">
                                     <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -137,11 +137,12 @@
                     </div>
                     <br />
 
-                    <div class="row">
-                        <div class="offset-10 col-md-2">
-                            <button id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waitting for file</button>
-                        </div>
+                    <div class="col-md-8">
+                        <p id="file-info" class="pull-right hidden" style="color: red;"><span style="text-decoration: underline;"></span> file has been selected</p>
                     </div>
+                        <div class="col-md-1">
+                            <a id="cancel-file" href="#" class="pull-right hidden">Cancel</a>
+                        </div>
                     <br />
                 }
                 <table id="mark-table" class="table display dataTable cell-border">
@@ -398,18 +399,24 @@
         $("#filename").html(fileName);
 
         if (fileName != null) {
-            $('#submit-button').removeAttr("disabled");
-            $('#submit-button').addClass("active");
-            $('#submit-button').removeClass("disabled");
-            $('#submit-button').html('Ready to submit!')
+            $('#import-mark-btn').addClass("hidden");
+            $('#submit-button').removeClass("hidden");
+            $('#cancel-file').removeClass("hidden");
+            $('#file-info').removeClass("hidden");
+            $('#file-info span').html(fileName);
         } else {
-            $('#submit-button').attr("disabled", "disabled");
-            $('#submit-button').addClass("disabled");
-            $('#submit-button').removeClass("active");
-            $('#icon-upload').removeClass('fa-check-circle');
-            $('#icon-upload').addClass('fa-times-circle');
-            $('#submit-button').html('Waitting for file')
+            $('#import-mark-btn').removeClass("hidden");
+            $('#submit-button').addClass("hidden");
+            $('#cancel-file').addClass("hidden");
+            $('#file-info').addClass("hidden");
         }
+    });
+
+    $('#cancel-file').click(function () {
+        $('#import-mark-btn').removeClass("hidden");
+        $('#submit-button').addClass("hidden");
+        $('#cancel-file').addClass("hidden");
+        $('#file-info').addClass("hidden");
     });
 
     $('#submit-button').on("click", function () {

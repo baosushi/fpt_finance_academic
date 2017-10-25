@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="offset-8 col-md-4">
                             <div class="pull-right">
-                                <button class="btn-success btn" id="download-template-btn">Download Template</button>
+                                <button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Template</button>
                                 <button class="btn-primary btn" id="import-mark-btn">Import Excel</button>
                                 <button class="btn btn-primary hidden" id="submit-button">Submit file</button>
                                 <input id="upload-file" class="hidden" type="file" name="upload-file" />
@@ -79,7 +79,7 @@
                     </div>
                     <br />
                 }
-                <table id="mark-table" class="table display dataTable table-responsive cell-border">
+                <table id="mark-table" class="table display dataTable cell-border">
                     <thead>
                         <tr>
                             <th>
@@ -309,7 +309,11 @@
                     className: "min-width-100",
                     targets: 1
                 }
-            ]
+            ],
+            scrollX:true,
+            fixedColumns: {
+                leftColumns: 3
+            } 
         });
 
     });

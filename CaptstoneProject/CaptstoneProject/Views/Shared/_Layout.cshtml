@@ -24,7 +24,7 @@
 
     <script type="text/javascript" src="~/Content/js/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="~/Content/js/highchart/highcharts.src.js"></script>
-     
+
     <script type="text/javascript" src="~/Content/js/datatables/FixedColumns-3.2.3/js/dataTables.fixedColumns.min.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Content/js/datatables/FixedColumns-3.2.3/css/fixedColumns.dataTables.min.css" />
     @*<script type="text/javascript" src="~/fonts/"></script>*@
@@ -44,6 +44,13 @@
     <style>
         .dropdown-menu li:hover {
             background-color: #d8d4d4;
+        }
+
+        .FMMLogo-menu {
+            width: 80%;
+            margin-left: 26px;
+            margin-top: 10px;
+            border-radius: 6px;
         }
     </style>
 </head>
@@ -154,18 +161,20 @@
     <!-- End Top -->
     <!-- Start Sidabar -->
     <div class="sidebar clearfix">
+        <img src="~/Content/img/FPTMM.PNG" class="FMMLogo-menu" />
         <ul class="sidebar-panel nav metismenu" id="side-menu" data-plugin="metismenu">
             @*<li>
-                <a href="#">
-                    <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
-                    <span class="nav-title">Dashboard</span> <i class="fa fa-sort-desc caret"></i>
-                </a>
-                <ul>
-                    <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 1</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 2</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
-                </ul>
-            </li>*@
+                    <a href="#">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Dashboard</span> <i class="fa fa-sort-desc caret"></i>
+                    </a>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 1</a></li>
+                        <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 2</a></li>
+                        <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
+                    </ul>
+                </li>*@
+
             @if (User.IsInRole("Teacher"))
             {
                 <li>
@@ -201,8 +210,8 @@
                         <li>
                             <a href="@Url.Action("SemesterManagement", "AdminTraining", new { area = "AdminTrainingDepartment" })">
                                 @*<span class="nav-title">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </span>*@
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </span>*@
                                 <span class="nav-title">Semester Management</span>
                             </a>
                         </li>
