@@ -107,7 +107,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
                             //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
-                            IsPublish = course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
+                            IsPublish = course.Status == (int)CourseStatus.InProgress ? (int)FinalEditStatus.SubmitComponent : course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -168,15 +168,22 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult DownloadTemplate(int courseId)
+        public ActionResult DownloadTemplate(int courseId, int isPublish)
         {
             MemoryStream ms = new MemoryStream();
 
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var course = context.Courses.Find(courseId);
-                var fileName = "Final Exam " + course.Subject.SubjectCode + " - " + course.ClassName + " - " + course.CourseName;
-
+                string fileName;
+                if (isPublish == 0)
+                {
+                    fileName = "Final Exam " + course.Subject.SubjectCode + " - " + course.ClassName + " - " + course.CourseName;
+                }
+                else
+                {
+                    fileName = "Retake Exam " + course.Subject.SubjectCode + " - " + course.ClassName + " - " + course.CourseName;
+                }
                 using (ExcelPackage package = new ExcelPackage(ms))
                 {
                     #region Excel format
@@ -189,13 +196,28 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "Student login";
                     ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = "Name";
 
-                    foreach (var component in course.CourseMarks)
+                    if (isPublish == 0)
                     {
-                        if (component.IsFinal != null && component.IsFinal == true)
+                        foreach (var component in course.CourseMarks)
                         {
-                            ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Value = component.Percentage / 100;
-                            ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Style.Numberformat.Format = "0%";
-                            ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = component.ComponentName;
+                            if (component.IsFinal != null && component.IsFinal == true && !component.ComponentName.Contains("2nd"))
+                            {
+                                ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Value = component.Percentage / 100;
+                                ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Style.Numberformat.Format = "0%";
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = component.ComponentName;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var component in course.CourseMarks)
+                        {
+                            if (component.IsFinal != null && component.IsFinal == true && component.ComponentName.Contains("2nd"))
+                            {
+                                ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Value = component.Percentage / 100;
+                                ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber + 1)].Style.Numberformat.Format = "0%";
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = component.ComponentName;
+                            }
                         }
                     }
 
@@ -337,7 +359,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
         }
 
-        public ActionResult UploadFinalExamExcel(int courseId)
+        public ActionResult UploadFinalExamExcel(int courseId, int isPublish)
         {
             try
             {
@@ -350,10 +372,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             var fileContent = Request.Files[file];
 
                             var course = context.Courses.Find(courseId);
-                            if (course.Status != (int)CourseStatus.InProgress)
-                            {
-                                return RedirectToAction("Index", "Home");
-                            }
+                            //if (course.Status != (int)CourseStatus.InProgress)
+                            //{
+                            //    return RedirectToAction("Index", "Home");
+                            //}
                             var subjectCode = course.Subject.SubjectCode;
                             var className = course.ClassName;
                             if (fileContent != null && fileContent.ContentLength > 0)
@@ -394,13 +416,21 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                 double value = 0;
                                                 if (double.TryParse(ws.Cells[i, j].Text.Trim(), out value))
                                                 {
-                                                    //if (ws.Cells[titleRow, j].Text.Trim().Contains("FE"))
+                                                    //if (ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
                                                     //{
-                                                    //    comboFE = true;
+                                                    //    retaked = true;
                                                     //}
-                                                    if (ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
+                                                    if (isPublish == 1 && ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
                                                     {
                                                         retaked = true;
+                                                    }
+                                                    if (isPublish == 0 && ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
+                                                    {
+                                                        return null;
+                                                    }
+                                                    if (isPublish == 1 && !ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
+                                                    {
+                                                        return null;
                                                     }
                                                     var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
                                                     var studentCourseMarkFE = context.StudentCourseMarks.
@@ -510,9 +540,57 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var course = context.Courses.Find(courseId);
                 course.Status = (int)CourseStatus.FirstPublish;
                 var students = course.StudentInCourses;
-                foreach(var item in students)
+                foreach (var item in students)
                 {
                     item.Status = (int)StudentCourseStatus.FirstPublish;
+                }
+                context.SaveChanges();
+            }
+            return Json(new { success = true, message = "Successully submitted!" });
+        }
+
+        public ActionResult ChangeToSubmit(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.Submitted;
+                var students = course.StudentInCourses;
+                foreach (var item in students)
+                {
+                    item.Status = (int)StudentCourseStatus.Submitted;
+                }
+                context.SaveChanges();
+            }
+            return Json(new { success = true, message = "Successully submitted!" });
+        }
+
+        public ActionResult ChangeToFinalPublish(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.FinalPublish;
+                var students = course.StudentInCourses;
+                foreach (var item in students)
+                {
+                    item.Status = (int)StudentCourseStatus.FinalPublish;
+                }
+                context.SaveChanges();
+            }
+            return Json(new { success = true, message = "Successully submitted!" });
+        }
+
+        public ActionResult CloseCourse(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.Closed;
+                var students = course.StudentInCourses;
+                foreach (var item in students)
+                {
+                    item.Status = (int)StudentCourseStatus.FinalPublish;
                 }
                 context.SaveChanges();
             }
@@ -622,7 +700,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
             return Json(new { success = true, message = "Upload Students successed" });
         }
-        
+
         public ActionResult ImportSubject()
         {
             return View();
