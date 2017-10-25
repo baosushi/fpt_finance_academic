@@ -43,6 +43,7 @@
                             <div class="pull-right">
                                 <button class="btn-success btn" id="download-template-btn">Download Template</button>
                                 <button class="btn-primary btn" id="import-mark-btn">Import Excel</button>
+                                <button class="btn btn-primary hidden" id="submit-button">Submit file</button>
                                 <input id="upload-file" class="hidden" type="file" name="upload-file" />
                                 <div class="progress" style="display:none">
                                     <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -54,7 +55,7 @@
                     </div>
                     <br />
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-3">
                             <form action="@Url.Action("EditSingleCourseComponent", "Course")">
                                 <input type="text" hidden value="@Model.CourseId" name="courseId" />
                                 <label>Mark: </label>
@@ -69,8 +70,11 @@
                                 <button type="submit" id="editComMark" class="btn btn-primary btn-sm" style="margin: 5px;">Edit </button>
                             </form>
                         </div>
-                        <div class="col-md-2">
-                            <button id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waitting for file</button>
+                        <div class="col-md-8">
+                            <p id="file-info" class="pull-right hidden" style="color: red;"><span style="text-decoration: underline;"></span> file has been selected</p>
+                        </div>
+                        <div class="col-md-1">
+                            <a id="cancel-file" href="#" class="pull-right hidden">Cancel</a>
                         </div>
                     </div>
                     <br />
@@ -183,18 +187,24 @@
         $("#filename").html(fileName);
 
         if (fileName != null) {
-            $('#submit-button').removeAttr("disabled");
-            $('#submit-button').addClass("active");
-            $('#submit-button').removeClass("disabled");
-            $('#submit-button').html('Ready to submit!')
+            $('#import-mark-btn').addClass("hidden");
+            $('#submit-button').removeClass("hidden");
+            $('#cancel-file').removeClass("hidden");
+            $('#file-info').removeClass("hidden");
+            $('#file-info span').html(fileName);
         } else {
-            $('#submit-button').attr("disabled", "disabled");
-            $('#submit-button').addClass("disabled");
-            $('#submit-button').removeClass("active");
-            $('#icon-upload').removeClass('fa-check-circle');
-            $('#icon-upload').addClass('fa-times-circle');
-            $('#submit-button').html('Waitting for file')
+            $('#import-mark-btn').removeClass("hidden");
+            $('#submit-button').addClass("hidden");
+            $('#cancel-file').addClass("hidden");
+            $('#file-info').addClass("hidden");
         }
+    });
+
+    $('#cancel-file').click(function () {
+        $('#import-mark-btn').removeClass("hidden");
+        $('#submit-button').addClass("hidden");
+        $('#cancel-file').addClass("hidden");
+        $('#file-info').addClass("hidden");
     });
 
     $('#submit-button').on("click", function () {
@@ -236,10 +246,11 @@
                 },
                 success: function (result) {
                     if (result.success) {
-                        toastr.success(result.message);
                         $('#upload-progress-bar').html("Completed!");
-                        window.location.reload();
-
+                        toastr.success(result.message + "\nNumber of failed record: " + result.failRecordCount);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         toastr.error(result.message);
                         $('#upload-progress-bar').html("Fail to upload!");
