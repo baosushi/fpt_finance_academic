@@ -4,7 +4,14 @@
     ViewBag.Title = "SemesterManagement";
 }
 
-<h2>SemesterManagement</h2>
+<style>
+    .my-header-modal {
+        background-color: #ecb028;
+        border-radius: .3rem .3rem 0 0;
+    }
+    
+
+</style>
 
 <div class="content">
     <!-- Start Container -->
@@ -22,42 +29,66 @@
                     }
                 </select>
             </form>
-            <button type="button" data-toggle="modal" data-target="#course-modal" class="btn btn-default">Create Course</button>
+            <br/>
+            <button type="button" data-toggle="modal" data-target="#course-modal" class="btn btn-default"><i class="fa fa-plus"></i>Create Course</button>
             <div class="modal fade" id="course-modal">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header"><h4>Create Role</h4><button class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button></div>
+                        <div class="modal-header my-header-modal"><h4 style="color:white">Create Role</h4><button class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button></div>
                         <div class="modal-body">
-                            <form method="post" action="@Url.Action("CreateCourse")">
-                                <input type="text" value="" placeholder="Course name" name="courseName" />
-                                <input type="text" value="" placeholder="Class name" name="className" />
-                                <input typeof="text" name="date-picker" value="" />
-                                <input type="text" class="hidden" name="startDate" value="" />
-                                <input type="text" class="hidden" name="endDate" value="" />
+                            <form id="form-create-course" method="post" action="@Url.Action("CreateCourse")">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Course Name:</label>
+                                    <input type="text" value="" class="form-control" placeholder="Course name" name="courseName" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Class Name:</label>
+                                    <input type="text" class="form-control" value="" placeholder="Class name" name="className" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Starts - Ends:</label>
+                                    <input typeof="text" name="date-picker" class="form-control" value="" />
+                                    <input type="text" class="hidden" name="startDate" value="" />
+                                    <input type="text" class="hidden" name="endDate" value="" />
+                                </div>
 
-                                <select id="subjectSelector" name="subjectId" data-live-search="true">
-                                    @foreach (var item in ViewBag.subjectList)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
-                                <select id="teacherSelector" name="teacherId" data-live-search="true">
-                                    @foreach (var item in ViewBag.teacherList)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Subject:</label>
+                                    <select id="subjectSelector" class="form-control" name="subjectId" data-live-search="true">
+                                        @foreach (var item in ViewBag.subjectList)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Teacher:</label>
+                                    <select id="teacherSelector" class="form-control" name="teacherId" data-live-search="true">
+                                        @foreach (var item in ViewBag.teacherList)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+
+                                </div>
                                 <input type="text" class="hidden" name="semesterId" id="semesterId-course-form" />
-                                <button type="submit" class="btn btn-success">Create</button>
+
                             </form>
                         </div>
-                        <div class="modal-footer" data-dismiss="modal"></div>
+                        <div class="modal-footer" data-dismiss="modal">
+                            <button style="background-color: #c1c5ca;color: #444444; cursor:pointer;" type="button"
+                                    class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button style="cursor:pointer;" id="btn-create-course"
+                                    type="button" class="btn btn-info">Create</button>
+
+                        </div>
 
                     </div>
                 </div>
             </div>
 
-            @if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
+            @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
             {
                 <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement")">
                     <span>
@@ -74,7 +105,7 @@
                         <input class="btn btn-danger" title="Lock edited of all course in @ViewBag.selectedSemName semester" type="submit" value="Lock Semester" />
                     </span>
                 </form>
-            }
+            }*@
             <button id="my-par-btn" class="btn btn-warning">Partial</button>
             <div class="panel-body table-responsive">
                 <table id="testTable" class="table display dataTable">
@@ -122,6 +153,7 @@
         </div>
     </div>
 </div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function () {
         var selectedSem = '@ViewBag.selectedSem';
@@ -138,6 +170,10 @@
                 }
             })
         });
+
+        $("#btn-create-course").on("click", function () {
+            $("#form-create-course").submit();
+        })
 
 
         $(window).load(function () {
@@ -173,7 +209,7 @@
                     { "Sortable": false, "Targets": [0, 1, 2, 3, 4, 5, 6, 7, 8] }
                 ]
             });
-            
+
 
         });
 

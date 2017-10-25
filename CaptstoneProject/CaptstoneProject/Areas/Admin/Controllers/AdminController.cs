@@ -18,11 +18,12 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Collections;
 using System.Globalization;
+using CaptstoneProject.Controllers;
 
 namespace CaptstoneProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin, Training Management")]
-    public class AdminController : Controller
+    public class AdminController : MyBaseController
     {
         // GET: Admin/Admin
         public ActionResult Index()
@@ -370,7 +371,7 @@ namespace CaptstoneProject.Areas.Admin.Controllers
             var endD = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
 
-            CreateCourse(courseName.Trim(), className.Trim(), startD, endD, subjectId, teacherId, semesterId, (int)CourseStatus.New);
+            //CreateCourse(courseName.Trim(), className.Trim(), startD, endD, subjectId, teacherId, semesterId, (int)CourseStatus.New);
 
 
 

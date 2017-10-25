@@ -39,7 +39,7 @@ namespace CaptstoneProject.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -49,7 +49,8 @@ namespace CaptstoneProject.Controllers
             //{
             //    HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             //}
-            return View("Login");
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
        

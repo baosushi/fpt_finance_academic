@@ -68,11 +68,11 @@ namespace CaptstoneProject.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(MyLoginViewModel model)
+        public async Task<ActionResult> Login(MyLoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Login", "Home");
+                return RedirectToAction("Login", "Home", model);
             }
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
@@ -85,11 +85,24 @@ namespace CaptstoneProject.Controllers
                 case SignInStatus.Success:
                     //get Roles when log in, User.Identity is store in respone context to add cookie in browser when log in.
                     var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
-                    var role = UserManager.GetRoles(uId);
+                    var roleList = UserManager.GetRoles(uId);
                     Session["uName"] = model.Username;
                     Session["uImgUrl"] = "/Images/prideKappa.jpg";
+                    var role = roleList.FirstOrDefault();
+                    if (returnUrl == null)
+                    {
+                        switch (role)
+                        {
+                            case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                            case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
+                            case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
+                            case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                        }
+                    }
+                    return RedirectToLocal(returnUrl);
 
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    return RedirectToLocal(returnUrl);
                 //case SignInStatus.LockedOut:
                 //    return View("Lockout");
                 //case SignInStatus.RequiresVerification:
@@ -97,7 +110,9 @@ namespace CaptstoneProject.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return RedirectToAction("Login", "Home");
+                    model.Username = null;
+                    model.Password = null;
+                    return View("../Home/Login", model);
             }
         }
 
@@ -514,18 +529,34 @@ namespace CaptstoneProject.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Index", "Home");
+                    var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+                    var roleList = UserManager.GetRoles(uId);
+                    var role = roleList.FirstOrDefault();
+                    if (returnUrl == null)
+                    {
+                        switch (role)
+                        {
+                            case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                            case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
+                            case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
+                            case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                        }
+                    }
+                    return RedirectToLocal(returnUrl);
+
                 //case SignInStatus.LockedOut:
                 //    return View("Lockout");
                 //case SignInStatus.RequiresVerification:
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
+                //case SignInStatus.Failure:break;
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     //ViewBag.ReturnUrl = returnUrl;
                     //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-                    return RedirectToAction("Login", "Home");
+                    MyLoginViewModel model = new MyLoginViewModel();
+                    ModelState.AddModelError("", "Invalid account");
+                    return View("../Home/Login", model);
             }
         }
 
