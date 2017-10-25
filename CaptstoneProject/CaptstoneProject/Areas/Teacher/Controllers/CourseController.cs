@@ -237,6 +237,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         [HttpPost]
         public ActionResult UploadExcel(int courseId)
         {
+            var failRecordCount = 0;
+
             try
             {
                 if (Request.Files.Count > 0)
@@ -289,12 +291,13 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                     studentCourseMark = context.StudentCourseMarks.
                                                         Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
 
-                                                    var recordExisted = true;
+                                                    //var recordExisted = true;
                                                     //remake null check
                                                     if (studentCourseMark == null)
                                                     {
-                                                        studentCourseMark = context.StudentCourseMarks.Create();
-                                                        recordExisted = false;
+                                                        failRecordCount++;
+                                                        //studentCourseMark = context.StudentCourseMarks.Create();
+                                                        //recordExisted = false;
                                                     }
 
 
@@ -305,10 +308,10 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                         average += studentCourseMark.Mark.Value * component.Percentage / 100;
                                                         studentCourseMark.CourseMarkId = component.Id;
 
-                                                        if (!recordExisted)
-                                                        {
-                                                            context.StudentCourseMarks.Add(studentCourseMark);
-                                                        }
+                                                        //if (!recordExisted)
+                                                        //{
+                                                        //    context.StudentCourseMarks.Add(studentCourseMark);
+                                                        //}
                                                     }
                                                     //var FE = course.CourseMarks.Where(q => q.ComponentName.Equals("FE")).FirstOrDefault();
                                                     //var RE = course.CourseMarks.Where(q => q.ComponentName.Equals("RE")).FirstOrDefault();
@@ -337,8 +340,15 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                 }
                                             }
 
+                                            var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+                                            average += final > 0 ? final : studentInCourse.StudentCourseMarks.Where(q => !q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+
                                             studentInCourse.Average = average;
                                             studentInCourse.Status = 1;
+                                        }
+                                        else
+                                        {
+                                            failRecordCount++;
                                         }
 
                                         context.SaveChanges();
@@ -359,7 +369,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 return Json(new { success = false, message = e.Message });
             }
 
-            return Json(new { success = true, message = "File uploaded successfully" });
+            return Json(new { success = true, message = "File uploaded successfully", failRecordCount = failRecordCount });
         }
 
         public JsonResult GetSemesters()
@@ -530,7 +540,9 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             context.SaveChanges();
                         }
 
+                        studentCourseMark.StudentInCourse.Average -= studentCourseMark.Mark * studentCourseMark.CourseMark.Percentage / 100;
                         studentCourseMark.Mark = record.ComponentMark;
+                        studentCourseMark.StudentInCourse.Average += record.ComponentMark * studentCourseMark.CourseMark.Percentage / 100;
                         context.SaveChanges();
                     }
 
