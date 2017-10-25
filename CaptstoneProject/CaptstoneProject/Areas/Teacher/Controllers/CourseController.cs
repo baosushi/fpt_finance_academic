@@ -127,6 +127,22 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             }
         }
 
+        public ActionResult ChangeToSubmit(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.Submitted;
+                var students = course.StudentInCourses;
+                foreach (var item in students)
+                {
+                    item.Status = (int)StudentCourseStatus.Submitted;
+                }
+                context.SaveChanges();
+            }
+            return Json(new { success = true, message = "Successully submitted!" });
+        }
+
         [HttpPost]
         public ActionResult DownloadTemplate(int courseId)
         {

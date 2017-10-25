@@ -58,8 +58,10 @@ namespace CaptstoneProject.Models
         EditFinal = 0,
         [Display(Name = "Edit Retake")]
         EditRetake = 1,
+        [Display(Name = "Submit Component")]
+        SubmitComponent = 2,
         [Display(Name = "No Edit")]
-        NoEdit = 2,
+        NoEdit = 3,
     }
 
 }

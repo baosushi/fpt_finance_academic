@@ -1,6 +1,16 @@
 ﻿@model CaptstoneProject.Models.AreaViewModel.CourseDetailsViewModel
 @{
     ViewBag.Title = ViewBag.ClassName;
+    var textBtn = "";
+    if (Model.IsPublish == 0)
+    {
+        textBtn = "Import Final";
+    }
+    else
+    {
+        textBtn = "Import Retake";
+    }
+
 }
 <style>
     .course-detail-info {
@@ -21,22 +31,30 @@
                 </div>*@
             <div class="panel-title">
                 <i class="fa fa-user" style="color:green"></i> Course Details
-                @if (Model.isPublish == 0)
+                @if (Model.IsPublish == 0)
                 {
                     <div style="float:right">
                         <div>
-                            <button class="btn-outline-success btn" type="button" id="submit-final-lock">Submit Final</button>
+                            <button class="btn-outline-success btn margin-5" type="button" id="submit-final-lock">Submit Final</button>
                         </div>
                     </div>
                 }
-                else if (Model.isPublish == 1)
+                else if (Model.IsPublish == 1)
                 {
                     <div style="float:right">
                         <div>
-                            <button class="btn-outline-success btn" type="button" id="submit-retake-lock">Submit Retake</button>
+                            <button class="btn-outline-success btn margin-5" type="button" id="submit-retake-lock">Submit Retake</button>
                         </div>
+                        @*<div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="close-course">No Retake</button>
+                            </div>*@
+                    </div>
+                }
+                else if (Model.IsPublish == 2)
+                {
+                    <div style="float:right">
                         <div>
-                            <button class="btn-outline-success btn" type="button" id="close-course">No Retake</button>
+                            <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
                         </div>
                     </div>
                 }
@@ -52,14 +70,14 @@
                     <br />
                     <label><b>Class:</b> @ViewBag.ClassName</label>
                 </div>
-                @if (Model.isEditable)
+                @if (Model.IsPublish == 0 || Model.IsPublish == 1)
                 {
                     <div class="row">
                         <div class="offset-8 col-md-4">
                             <div class="pull-right">
                                 <button class="btn-success btn" id="download-template-btn">Download Template</button>
 
-                                <button class="btn-primary btn" title="Import Final Exam using Excel" id="import-mark-btn">Import Final</button>
+                                <button class="btn-primary btn" title="Import Final Exam using Excel" id="import-mark-btn">@textBtn</button>
                                 <input id="upload-file" class="hidden" type="file" name="upload-file" />
                                 <div class="progress" style="display:none">
                                     <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -113,7 +131,7 @@
                                     @i
                                 </td>
                                 <td>
-                                    @if (Model.isEditable)
+                                    @if (Model.IsEditable)
                                     {
 
                                         <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
@@ -176,13 +194,75 @@
 </div>
 <form class="hidden" method="post" id="template-request-form" action="@Url.Action("DownloadTemplate")">
     <input type="text" name="courseId" value="@Model.CourseId" />
+    <input type="text" name="isPublish" value="@Model.IsPublish" />
 </form>
 
 <script>
     $('#submit-final-lock').click(function(){
         $.ajax({
             type: "POST",
-            url: '@Url.Action("")',
+            url: '@Url.Action("ChangeToPublish")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
+    $('#submit-comp').click(function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToSubmit")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
+    $('#submit-retake-lock').click(function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToFinalPublish")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+    });
+    $('#close-course').click(function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CloseCourse")',
+            data: { courseId: @Model.CourseId,},
             success: function (result) {
                 if (result.success) {
                     toastr.success(result.message);
@@ -235,102 +315,56 @@
         else{
             var data = new FormData();
             data.append("courseId", @Model.CourseId);
+            data.append("isPublish",@Model.IsPublish);
             for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
                 data.append("file" + i, $("#upload-file")[0].files[i]);
             }
             $(".progress").show();
-            if(@Model.isPublish==0){
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("UploadFinalExamExcel")',
-                    contentType: false,
-                    processData: false,
-                    data: data,
-                    xhr: function() {
-                        var settingXhr = $.ajaxSettings.xhr();
-                        if (settingXhr.upload) {
-                            // For handling the progress of the upload
-                            settingXhr.upload.addEventListener('progress', function(e) {
-                                if (e.lengthComputable) {
-                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
-                                    var percent = Math.ceil(e.loaded/e.total*100);
-                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
-                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
-                                    $('#upload-progress-bar').html(percent+"%");
-                                    if(percent==100){
-                                        $('#upload-progress-bar').html("Processing...");
-                                    }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadFinalExamExcel")',
+                contentType: false,
+                processData: false,
+                data: data,
+                xhr: function() {
+                    var settingXhr = $.ajaxSettings.xhr();
+                    if (settingXhr.upload) {
+                        // For handling the progress of the upload
+                        settingXhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                var percent = Math.ceil(e.loaded/e.total*100);
+                                $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                $('#upload-progress-bar').html(percent+"%");
+                                if(percent==100){
+                                    $('#upload-progress-bar').html("Processing...");
                                 }
-                            } , false);
-                        }
-                        return settingXhr;
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            toastr.success(result.message);
-                            $('#upload-progress-bar').html("Completed!");
-                            window.location.reload();
+                            }
+                        } , false);
+                    }
+                    return settingXhr;
+                },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                        $('#upload-progress-bar').html("Completed!");
+                        window.location.reload();
 
-                        } else {
-                            toastr.error(result.message);
-                            $('#upload-progress-bar').html("Fail to upload!");
-                            $('#upload-progress-bar').addClass('progress-bar-danger');
-                        }
-                    },
-                    error: function (xhr, status, p3, p4) {
-                        var err = "Error " + " " + status + " " + p3 + " " + p4;
-                        toastr.error(err);
+                    } else {
+                        toastr.error(result.message);
                         $('#upload-progress-bar').html("Fail to upload!");
                         $('#upload-progress-bar').addClass('progress-bar-danger');
                     }
-                });
-            }
-            else{
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("UploadRetakeExamExcel")',
-                    contentType: false,
-                    processData: false,
-                    data: data,
-                    xhr: function() {
-                        var settingXhr = $.ajaxSettings.xhr();
-                        if (settingXhr.upload) {
-                            // For handling the progress of the upload
-                            settingXhr.upload.addEventListener('progress', function(e) {
-                                if (e.lengthComputable) {
-                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
-                                    var percent = Math.ceil(e.loaded/e.total*100);
-                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
-                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
-                                    $('#upload-progress-bar').html(percent+"%");
-                                    if(percent==100){
-                                        $('#upload-progress-bar').html("Processing...");
-                                    }
-                                }
-                            } , false);
-                        }
-                        return settingXhr;
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            toastr.success(result.message);
-                            $('#upload-progress-bar').html("Completed!");
-                            window.location.reload();
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    toastr.error(err);
+                    $('#upload-progress-bar').html("Fail to upload!");
+                    $('#upload-progress-bar').addClass('progress-bar-danger');
+                }
+            });
 
-                        } else {
-                            toastr.error(result.message);
-                            $('#upload-progress-bar').html("Fail to upload!");
-                            $('#upload-progress-bar').addClass('progress-bar-danger');
-                        }
-                    },
-                    error: function (xhr, status, p3, p4) {
-                        var err = "Error " + " " + status + " " + p3 + " " + p4;
-                        toastr.error(err);
-                        $('#upload-progress-bar').html("Fail to upload!");
-                        $('#upload-progress-bar').addClass('progress-bar-danger');
-                    }
-                });
-            }
         }
     });
 

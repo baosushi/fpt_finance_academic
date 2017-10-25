@@ -17,7 +17,18 @@
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
-            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Course Details </div>
+            <div class="panel-title">
+                <i class="fa fa-user" style="color:green"></i> Course Details
+                @if (Model.IsEditable)
+                {
+                    <div style="float:right">
+                        <div>
+                            <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                        </div>
+                    </div>
+                }
+            </div>
+
             <div class="panel-body">
                 <div class="course-detail-info">
                     <label><b>Term:</b> @Model.Semester</label>
@@ -243,6 +254,27 @@
                 }
             });
         }
+    });
+
+    $('#submit-comp').click(function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToSubmit")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
     });
 
     $(document).ready(function () {

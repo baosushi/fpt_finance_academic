@@ -210,12 +210,116 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             }
         }
 
+        //Get result data of SubjectGroup of current and previous semester for chart
+        public ActionResult GetTestResultToCompare(int semesterId = -1)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
+                    ThenByDescending(q => q.SemesterInYear).
+                    FirstOrDefault() : context.Semesters.Find(semesterId);
+
+                var previousSemester = context.Semesters.OrderByDescending(q => q.Year).
+                    ThenByDescending(q => q.SemesterInYear).Where(q => q.Id < semester.Id).FirstOrDefault();
+
+                var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).Select(q => q.Subject.SubjectGroup.Id).ToList();
+                HashSet<int> currentTempList = new HashSet<int>(currentIdList); // take unique subjectGroup Id, remove redundant
+                List<int> currentSubjectGroupIds = currentTempList.ToList();// easy to interact
+
+                var previousIdList = context.Courses.Where(q => q.SemesterId == previousSemester.Id).Select(q => q.Subject.SubjectGroup.Id).ToList();
+                HashSet<int> previousTempList = new HashSet<int>(previousIdList); // take unique subjectGroup Id, remove redundant
+                List<int> previousSubjectGroupIds = previousTempList.ToList();// easy to interact
+
+                List<int> subjectIds = new List<int>();
+
+                for (int i = 0; i < currentSubjectGroupIds.Count(); i++)
+                {
+                }
+
+
+                return Json(new { });
+            }
+
+        }
+
+        public ActionResult GetTestResultCurrentSemester(int semesterId = 3)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
+                        ThenByDescending(q => q.SemesterInYear).
+                        FirstOrDefault() : context.Semesters.Find(semesterId);
+
+
+                    var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).Select(q => q.SubjectId).ToList();
+                    HashSet<int> tempList = new HashSet<int>(currentIdList); // take unique subjectGroup Id, remove redundant
+                    List<int> currentSubjectIds = tempList.ToList();
+
+
+
+                    List<string> subjectNames = new List<string>();
+                    List<int> sumPassStudents = new List<int>();
+                    List<int> sumFailStudents = new List<int>();
+
+                    for (int i = 0; i < currentSubjectIds.Count(); i++)
+                    {
+                        var subjectId = currentSubjectIds[i];
+                        var list = context.Courses.Where(q => q.SubjectId == subjectId && q.SemesterId == semester.Id).
+                            AsEnumerable().Select(q => new IConvertible[] {
+
+                           q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Passed).Count(),
+                           q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Failed).Count(),
+                            q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Studying).Count(),
+
+                        }).ToList();
+                        var totalPassed = 0;
+                        var totalFailed = 0;
+                        foreach (var item in list)
+                        {
+                            totalPassed += (int)item[0]; //pass
+                            totalFailed += (int)item[1]; //fail
+                        }
+                        var subjectName = context.Subjects.Where(q => q.Id == subjectId).Select(q => q.SubjectName).FirstOrDefault().ToString();
+                        subjectNames.Add(subjectName);
+                        sumPassStudents.Add(totalPassed);
+                        sumFailStudents.Add(totalFailed);
+                    }
+
+
+                    return Json(new
+                    {
+                        success = true,
+                        subjectNameList = subjectNames,
+                        passList = sumPassStudents,
+                        failList = sumFailStudents,
+                        semesterName = semester.Title + semester.Year
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Json(new { succcess = false, message = e });
+            }
+
+        }
+
+
 
         public class MyData
         {
             public String CourseName { get; set; }
             public String ClassName { get; set; }
             public String SubjectName { get; set; }
+        }
+
+        public class CourseTestResult
+        {
+            public int CourseId { get; set; }
+            //public String
         }
     }
 }

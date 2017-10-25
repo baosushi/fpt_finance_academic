@@ -24,8 +24,10 @@ namespace DataService.Model
     
         public int Id { get; set; }
         public string SubjectName { get; set; }
+        public Nullable<int> SubjectGroupId { get; set; }
         public string SubjectCode { get; set; }
     
+        public virtual SubjectGroup SubjectGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

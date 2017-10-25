@@ -12,16 +12,13 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class StudentCourseMark
+    public partial class Schedule
     {
         public int Id { get; set; }
-        public Nullable<double> Mark { get; set; }
-        public Nullable<double> EdittedMark { get; set; }
-        public int CourseMarkId { get; set; }
-        public string Note { get; set; }
-        public int StudentInCourseId { get; set; }
+        public int TeacherId { get; set; }
+        public int CourseId { get; set; }
     
-        public virtual CourseMark CourseMark { get; set; }
-        public virtual StudentInCourse StudentInCourse { get; set; }
+        public virtual Course Course { get; set; }
+        public virtual Teacher Teacher { get; set; }
     }
 }
