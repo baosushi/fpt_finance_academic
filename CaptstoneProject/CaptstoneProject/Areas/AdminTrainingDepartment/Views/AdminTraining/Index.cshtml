@@ -18,8 +18,85 @@
                         </a>
                     </div>
                 </div>
+                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
             </div>
         </div>
     </div>
+
+    <div></div>
 </div>
+<script>
+    $(window).load(function () {
+
+        $.ajax({
+            type: "get",
+            url: "@Url.Action("GetTestResultCurrentSemester")",
+            success: function (result) {
+                if (result.success) {
+                    subjectStatusCurrentSemester(result);
+                } else {
+                    toastr.error(result.message, "Error! Can't load chart");
+                }
+            }
+        });
+
+
+        //chart for pass and fail of every subject in this semester
+
+
+    })
+
+    function subjectStatusCurrentSemester(data) {
+        Highcharts.chart('container', {
+
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: 'Kết quả thi học kỳ' + data.semesterName
+            },
+
+            xAxis: {
+                //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+                categories: data.subjectNameList
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Số lượng học sinh'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        'Total: ' + this.point.stackTotal;
+                }
+            },
+
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    },
+                }
+            },
+
+            series: [{
+                name: 'Passed',
+                data: data.passList,
+                stack: "subject"
+            }, {
+                name: 'Failed',
+                data: data.failList,
+                stack:"subject"
+            }]
+        });
+    }
+</script>
 
