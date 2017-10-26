@@ -75,7 +75,7 @@
                     <br />
                     <label><b>Class:</b> @ViewBag.ClassName</label>
                     <label style="padding-left: 70px;">
-                        <b>Status: </b> @switch (Model.Status)
+                        <b>Status: </b> @switch (Model.StatusName)
                         {
                             case "New":
                                 {
@@ -231,10 +231,10 @@
                                     @Model.StudentInCourse[i - 1].Status
                                 </td>
                                 <td>
-                                    @if (Model.StudentInCourse[i - 1].Status != Enum.GetName(typeof(StudentCourseStatus), (int)StudentCourseStatus.Failed)
-                     && Model.StudentInCourse[i - 1].Status != Enum.GetName(typeof(StudentCourseStatus), (int)StudentCourseStatus.Passed)
-                     && Model.StudentInCourse[i - 1].Status != Enum.GetName(typeof(StudentCourseStatus), (int)StudentCourseStatus.Cancel)
-                      && Model.StudentInCourse[i - 1].Status != Enum.GetName(typeof(StudentCourseStatus), (int)StudentCourseStatus.Issued))
+                                    @if (Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Failed
+                                         && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Passed
+                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Cancel
+                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Issued)
                                     {
 
                                         <button class="btn btn-warning btn-unlock-student" onclick="unlockStudent(this)">Unlock</button>
@@ -558,7 +558,7 @@
                 //$("form[name='form-issue-student']").submit();
             })
     }
-    
+
 
     $(document).ready(function () {
         $('#mark-table').DataTable({

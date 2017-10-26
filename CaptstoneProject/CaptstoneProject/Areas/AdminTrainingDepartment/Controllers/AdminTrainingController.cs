@@ -93,7 +93,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                             StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = Enum.GetName(typeof(StudentCourseStatus), q.Status == null ? 0 : q.Status.Value)
+                            Status = q.Status == null ? 0 : q.Status.Value
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -119,7 +119,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                             course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : 
                             course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : 
                             (int)FinalEditStatus.NoEdit,
-                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
+                            StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -345,7 +345,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     var studentInCourse = context.StudentInCourses.Where(q => q.CourseId == courseId && q.StudentMajor.StudentCode == studentCode).FirstOrDefault();
-                    studentInCourse.Status = (int)StudentCourseStatus.Issued;
+                    studentInCourse.Status = (int)StudentInCourseStatus.Issued;
                     context.SaveChanges();
                 }
             }
