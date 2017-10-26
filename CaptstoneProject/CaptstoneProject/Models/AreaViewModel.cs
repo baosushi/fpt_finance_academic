@@ -24,9 +24,10 @@ namespace CaptstoneProject.Models
 
         public class MarkComp
         {
+            public int Id { get; set; }
             public string Name { get; set; }
             public string Value { get; set; }
-            public int Id { get; set; }
+            public string Note { get; set; }
         }
         public class MarkPoint
         {
@@ -34,7 +35,7 @@ namespace CaptstoneProject.Models
             public double Value { get; set; }
             public double Per { get; set; }
         }
-        public class PerComp
+        public class ComponentPercentage
         {
             public int Id { get; set; }
             public string CompName { get; set; }
@@ -72,7 +73,8 @@ namespace CaptstoneProject.Models
             public string StudentCode { get; set; }
             public string Average { get; set; }
             public List<StudentCourseMark> MarksComponent { get; set; }
-            public string Status { get; set; }
+            public string StatusName { get; set; }
+            public Nullable<int> Status { get; set; }
         }
 
         public class CourseDetailsViewModel
@@ -85,7 +87,7 @@ namespace CaptstoneProject.Models
             public int CourseId { get; set; }
             public bool IsEditable { get; set; } // true: able to edit mark, false: vice versa
             public int IsPublish { get; set; }
-            public string Status { get; set; }
+            public string StatusName { get; set; }
 
             public class CourseRecordViewModel
             {

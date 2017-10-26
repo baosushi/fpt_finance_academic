@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-md-10">
                             <label>
-                                <b style="margin-right:5px">Status: </b> @switch (Model.Status)
+                                <b style="margin-right:5px">Status: </b> @switch (Model.StatusName)
                                 {
                                     case "New":
                                         {
@@ -199,7 +199,7 @@
                                     @i
                                 </td>
                                 <td>
-                                    @if (Model.IsEditable)
+                                    @if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
                                     {
                                         <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
                                     }
@@ -249,7 +249,7 @@
                                 }
 
                                 <td>
-                                    @Model.StudentInCourse[i - 1].Status
+                                    @Model.StudentInCourse[i - 1].StatusName
                                 </td>
                             </tr>
                         }
@@ -502,7 +502,7 @@
             else{
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("UploadFinalExamExcel")',
+                    url: '@Model.StudentInCourse[i - 1].UserName',
                     contentType: false,
                     processData: false,
                     data: data,
