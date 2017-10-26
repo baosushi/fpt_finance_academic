@@ -110,7 +110,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false
+                            IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false,
+                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });

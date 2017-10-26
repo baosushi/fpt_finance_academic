@@ -4,6 +4,11 @@
     ViewBag.Title = "My Course";
     this.Session["loginName"] = "phuonglhk";
 }
+<style>
+    .min-width-100 {
+        min-width: 100px;
+    }
+</style>
 <div class="content">
     <!-- Start Container -->
     <div class="container-default animate fadeInRight" style="padding-bottom:10px; min-height:700px">
@@ -21,26 +26,26 @@
                 </select>
             </form>
             @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
-            {
-                <form method="post" action="@Url.Action("LockAllCourseForTeacher","Management")">
-                    <span>
-                        <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
-                        <input class="btn btn-danger" title="Lock edited all teacher of all course in @ViewBag.selectedSemName semester" type="submit" value="LockTeacher" />
-                    </span>
-                </form>
-            }*@
+                {
+                    <form method="post" action="@Url.Action("LockAllCourseForTeacher","Management")">
+                        <span>
+                            <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
+                            <input class="btn btn-danger" title="Lock edited all teacher of all course in @ViewBag.selectedSemName semester" type="submit" value="LockTeacher" />
+                        </span>
+                    </form>
+                }*@
 
             @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
-            {
-                <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement","Management")">
-                    <span>
-                        <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
-                        <input class="btn btn-danger" title="Lock edited of all course in @ViewBag.selectedSemName semester" type="submit" value="Lock Semester" />
-                    </span>
-                </form>
-            }*@
+                {
+                    <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement","Management")">
+                        <span>
+                            <input type="hidden" name="semesterId" value="@ViewBag.selectedSem" />
+                            <input class="btn btn-danger" title="Lock edited of all course in @ViewBag.selectedSemName semester" type="submit" value="Lock Semester" />
+                        </span>
+                    </form>
+                }*@
             <div class="panel-body table-responsive">
-                <table id="testTable" class="table display dataTable">
+                <table id="course-table" class="table display dataTable">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -49,7 +54,7 @@
                             <th>Class</th>
                             <th>Date</th>
                             <th>Status</th>
-							<th>Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +106,7 @@
                                             }
                                     }
                                 </td>
-								<td><a href="@Url.Action("CourseDetails", "Management", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">View course</a></td>
+                                <td><a href="@Url.Action("CourseDetails", "Management", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">View course</a></td>
                             </tr>
                         }
                     </tbody>
@@ -112,15 +117,25 @@
 </div>
 <script>
     $(document).ready(function () {
+
         var selectedSem = '@ViewBag.selectedSem';
         if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
         }
-        $('#testTable').DataTable({
+        $('#course-table').DataTable({
             "searching": true,
             "columnDefs": [
-                {"className": "dt-center","targets": "_all"}
-            ]
+                {
+                    targets: [1, 2,3],
+                    className: "min-width-100",
+                    searchable: true,
+                },
+                {
+                    className: "dt-center",
+                    targets: "_all",
+                    searchable: false,
+                }
+            ],
         });
 
         $("#semesterSelector").on('change', function () {
