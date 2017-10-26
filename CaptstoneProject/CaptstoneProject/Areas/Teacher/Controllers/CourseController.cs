@@ -89,7 +89,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = q.Status == null ? null : Enum.GetName(typeof(StudentCourseStatus), q.Status.Value)
+                            Status = q.Status,
+                            StatusName = q.Status == null ? null : Enum.GetName(typeof(StudentInCourseStatus), q.Status.Value)
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -111,7 +112,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
                             IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false,
-                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
+                            StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -138,7 +139,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 var students = course.StudentInCourses;
                 foreach (var item in students)
                 {
-                    item.Status = (int)StudentCourseStatus.Submitted;
+                    item.Status = (int)StudentInCourseStatus.Submitted;
                 }
                 context.SaveChanges();
             }
@@ -301,7 +302,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                         failRecordCount++;
                                                     }
 
-
                                                     studentCourseMark.Mark = value;
                                                     studentCourseMark.StudentInCourseId = studentInCourse.Id;
                                                     if (component != null)
@@ -396,7 +396,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new PerComp
+                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new ComponentPercentage
                 {
                     CompName = q.ComponentName,
                     Id = q.Id,

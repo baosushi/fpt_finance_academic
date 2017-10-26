@@ -71,7 +71,7 @@
     }
     function onSubmit(form) {
         $.ajax({
-            url: '@Url.Action("GetEdit","Course")',
+            url: '@Url.Action("GetEdit", "Management")',
             data: { markList: $(form).serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val() },
             type: "POST",
             success: function (result) {
