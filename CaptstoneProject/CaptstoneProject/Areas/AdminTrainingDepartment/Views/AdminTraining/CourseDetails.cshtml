@@ -1,0 +1,573 @@
+﻿@using CaptstoneProject.Models
+@model CaptstoneProject.Models.AreaViewModel.CourseDetailsViewModel
+@{
+    ViewBag.Title = ViewBag.ClassName;
+    var textBtn = "";
+    if (Model.IsPublish == 0)
+    {
+        textBtn = "Import Final";
+    }
+    else if (Model.IsPublish == 1)
+    {
+        textBtn = "Import Retake";
+    }
+    else
+    {
+        textBtn = "Import Marks";
+    }
+
+}
+<style>
+    .course-detail-info {
+        font-size: 14px;
+        padding-left: 20px;
+        padding-bottom: 15px;
+    }
+
+    th {
+        background-color: #3f83e1 !important;
+    }
+</style>
+
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
+        <div class="panel panel-default">
+            @*<div>
+                    <a href="" class="btn btn-success btn-lg">
+                        <span class="glyphicon glyphicon-export"></span>Export
+                    </a>
+                </div>*@
+            <div class="panel-title">
+                <i class="fa fa-user" style="color:green"></i> Course Details
+                @*@if (Model.IsPublish == 0)
+                    {
+                        <div style="float:right">
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="submit-final-lock">Submit Final</button>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.IsPublish == 1)
+                    {
+                        <div style="float:right">
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="submit-retake-lock">Submit Retake</button>
+                            </div>
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="close-course">No Retake</button>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.IsPublish == 2)
+                    {
+                        <div style="float:right">
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                            </div>
+                        </div>
+                    }*@
+            </div>
+            <div class="panel-body">
+                <div class="course-detail-info">
+                    <label><b>Term:</b> @Model.Semester</label>
+                    <label style="padding-left: 60px;"><b>Subject:</b> @Model.SubName - @Model.SubCode</label>
+                    <br />
+                    <label><b>Class:</b> @ViewBag.ClassName</label>
+                    <label style="padding-left: 70px;">
+                        <b>Status: </b> @switch (Model.StatusName)
+                        {
+                            case "New":
+                                {
+                                    <b class="col-md-2 p-2 status-gray">New</b>
+                                    break;
+                                }
+                            case "InProgress":
+                                {
+                                    <b class="col-md-2 p-2 status-green">In Progress</b>
+                                    break;
+                                }
+                            case "Submitted":
+                                {
+                                    <b class="col-md-2 p-2 status-blue">Submitted</b>
+                                    break;
+                                }
+                            case "FirstPublish":
+                                {
+                                    <b class="col-md-2 p-2 status-yellow">First Publish</b>
+                                    break;
+                                }
+                            case "FinalPublish":
+                                {
+                                    <b class="col-md-2 p-2 status-orange">Final Publish</b>
+                                    break;
+                                }
+                            case "Closed":
+                                {
+                                    <b class="col-md-2 p-2 status-red">Closed</b>
+                                    break;
+                                }
+                            default:
+                                {
+                                    <b class="col-md-2 p-2 status-black">Cancel</b>
+                                    break;
+                                }
+                        }
+                    </label>
+                </div>
+                @if (Model.IsPublish == 0 || Model.IsPublish == 1 || Model.IsPublish == 2)
+                {
+                    <div class="row">
+                        <div class="offset-8 col-md-4">
+                            <div class="pull-right">
+                                <button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Template</button>
+                                <button class="btn-primary btn" id="import-mark-btn">Import Excel</button>
+                                <button class="btn btn-primary hidden" id="submit-button">Submit file</button>
+                                <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                                <div class="progress" style="display:none">
+                                    <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="col-md-8">
+                        <p id="file-info" class="pull-right hidden" style="color: red;"><span style="text-decoration: underline;"></span> file has been selected</p>
+                    </div>
+                    <div class="col-md-1">
+                        <a id="cancel-file" href="#" class="pull-right hidden">Cancel</a>
+                    </div>
+                    <br />
+                }
+                <table id="mark-table" class="table display dataTable cell-border">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                Login Name
+                            </th>
+                            <th>
+                                Student Code
+                            </th>
+                            @foreach (var name in Model.ComponentNames)
+                            {
+                                <th>
+                                    @name
+                                </th>
+                            }
+                            <th>
+                                Average
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 1; i <= Model.StudentInCourse.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @if (Model.IsEditable)
+                                    {
+                                        <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            @Model.StudentInCourse[i - 1].UserName
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @Model.StudentInCourse[i - 1].StudentCode
+                                </td>
+                                @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
+                                {
+                                    if (mark.Mark != null)
+                                    {
+                                        if (mark.Mark.Value == -1)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @mark.Mark
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            -
+                                        </td>
+                                    }
+                                }
+                                @if (Model.StudentInCourse[i - 1].Average != "-1")
+                                {
+                                    <td>
+                                        @Model.StudentInCourse[i - 1].Average
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        -
+                                    </td>
+                                }
+
+                                <td>
+                                    @Model.StudentInCourse[i - 1].Status
+                                </td>
+                                <td>
+                                    @if (Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Failed
+                                         && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Passed
+                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Cancel
+                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Issued)
+                                    {
+
+                                        <button class="btn btn-warning btn-unlock-student" onclick="unlockStudent(this)">Unlock</button>
+                                        <form class="hidden" method="post" action="@Url.Action("UnlockStudent")">
+                                            <input type="text" name="courseId" class="hidden" value="@Model.CourseId" />
+                                            <input type="text" name="studentCode" class="hidden" value="@Model.StudentInCourse[i-1].StudentCode" />
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="hidden" method="post" id="template-final-request-form" action="@Url.Action("DownloadFinalTemplate")">
+    <input type="text" name="courseId" value="@Model.CourseId" />
+    <input type="text" name="isPublish" value="@Model.IsPublish" />
+</form>
+<form class="hidden" method="post" id="template-request-form" action="@Url.Action("DownloadTemplate")">
+    <input type="text" name="courseId" value="@Model.CourseId" />
+</form>
+
+<script>
+    $('#submit-final-lock').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit final anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToPublish")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+
+    });
+    });
+    $('#submit-comp').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit marks anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToSubmit")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+
+    });
+    });
+    $('#submit-retake-lock').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to edit retake anymore!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeToFinalPublish")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+
+    });
+    });
+    $('#close-course').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You are gonna close this course!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, submit it!",
+            closeOnConfirm: false
+        },
+    function(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CloseCourse")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+
+    });
+    });
+
+    $('#download-template-btn').click(function () {
+        if(@Model.IsPublish==2){
+            $('#template-request-form').submit();
+        }
+        else{
+            $('#template-final-request-form').submit();
+        }
+    });
+
+    $('#import-mark-btn').click(function () {
+        $('#upload-file').trigger("click");
+    });
+
+    $('#upload-file').on("change", function () {
+        var fileName = this.files[0].name;
+        $("#filename").html(fileName);
+
+        if (fileName != null) {
+            $('#import-mark-btn').addClass("hidden");
+            $('#submit-button').removeClass("hidden");
+            $('#cancel-file').removeClass("hidden");
+            $('#file-info').removeClass("hidden");
+            $('#file-info span').html(fileName);
+        } else {
+            $('#import-mark-btn').removeClass("hidden");
+            $('#submit-button').addClass("hidden");
+            $('#cancel-file').addClass("hidden");
+            $('#file-info').addClass("hidden");
+        }
+    });
+
+    $('#cancel-file').click(function () {
+        $('#import-mark-btn').removeClass("hidden");
+        $('#submit-button').addClass("hidden");
+        $('#cancel-file').addClass("hidden");
+        $('#file-info').addClass("hidden");
+    });
+
+    $('#submit-button').on("click", function () {
+        var file = $("#upload-file")[0].files[0];
+
+        if (file.size > 20971520) {
+            toastr.error('Max upload size is 20MB!');
+        }
+        else{
+            var data = new FormData();
+            data.append("courseId", @Model.CourseId);
+            data.append("isPublish",@Model.IsPublish);
+            for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+                data.append("file" + i, $("#upload-file")[0].files[i]);
+            }
+            $(".progress").show();
+            if(@Model.IsPublish==2){
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadExcel")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    xhr: function() {
+                        var settingXhr = $.ajaxSettings.xhr();
+                        if (settingXhr.upload) {
+                            // For handling the progress of the upload
+                            settingXhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                    var percent = Math.ceil(e.loaded/e.total*100);
+                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                    $('#upload-progress-bar').html(percent+"%");
+                                    if(percent==100){
+                                        $('#upload-progress-bar').html("Processing...");
+                                    }
+                                }
+                            } , false);
+                        }
+                        return settingXhr;
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            $('#upload-progress-bar').html("Completed!");
+                            window.location.reload();
+
+                        } else {
+                            toastr.error(result.message);
+                            $('#upload-progress-bar').html("Fail to upload!");
+                            $('#upload-progress-bar').addClass('progress-bar-danger');
+                        }
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        toastr.error(err);
+                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').addClass('progress-bar-danger');
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadFinalExamExcel")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    xhr: function() {
+                        var settingXhr = $.ajaxSettings.xhr();
+                        if (settingXhr.upload) {
+                            // For handling the progress of the upload
+                            settingXhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                    var percent = Math.ceil(e.loaded/e.total*100);
+                                    $('#upload-progress-bar').attr('aria-valuenow', percent).css('width',percent+'%');
+                                    $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                    $('#upload-progress-bar').html(percent+"%");
+                                    if(percent==100){
+                                        $('#upload-progress-bar').html("Processing...");
+                                    }
+                                }
+                            } , false);
+                        }
+                        return settingXhr;
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            $('#upload-progress-bar').html("Completed!");
+                            window.location.reload();
+
+                        } else {
+                            toastr.error(result.message);
+                            $('#upload-progress-bar').html("Fail to upload!");
+                            $('#upload-progress-bar').addClass('progress-bar-danger');
+                        }
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        toastr.error(err);
+                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').addClass('progress-bar-danger');
+                    }
+                });
+            }
+
+        }
+    });
+
+    function unlockStudent(e) {
+        swal({
+            title: "Are you sure?",
+            text: "This will unlock student, allow mark to be modified",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes",
+            closeOnConfirm: false
+        },
+            function () {
+                var form = $(e).siblings('form');
+                form.submit();
+                //$("form[name='form-issue-student']").submit();
+            })
+    }
+
+
+    $(document).ready(function () {
+        $('#mark-table').DataTable({
+            searching: true,
+            scrollX:true,
+            fixedColumns: {
+                leftColumns: 3
+            }
+        });
+
+    });
+</script>

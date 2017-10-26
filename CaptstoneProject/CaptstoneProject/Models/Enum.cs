@@ -36,6 +36,7 @@ namespace CaptstoneProject.Models
         Issued = 7,
         [Display(Name = "Cancel")]
         Cancel = -1,
+
     }
     public enum CourseStatus
     {
