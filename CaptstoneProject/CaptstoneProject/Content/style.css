@@ -2468,6 +2468,7 @@ dt, dd {
     background: #e4e4e4;
     color: inherit;
     border-radius: 3px;
+    cursor:pointer;
 }
 
     .btn:hover {
