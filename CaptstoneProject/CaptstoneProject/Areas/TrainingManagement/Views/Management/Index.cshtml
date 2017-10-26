@@ -117,7 +117,7 @@
 </div>
 <script>
     $(document).ready(function () {
-
+        $("#semesterSelector").selectpicker();
         var selectedSem = '@ViewBag.selectedSem';
         if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
