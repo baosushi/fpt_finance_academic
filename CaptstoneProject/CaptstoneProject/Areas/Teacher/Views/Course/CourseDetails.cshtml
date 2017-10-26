@@ -205,6 +205,7 @@
         $('#submit-button').addClass("hidden");
         $('#cancel-file').addClass("hidden");
         $('#file-info').addClass("hidden");
+        $('.progress').css("display", "none");
     });
 
     $('#submit-button').on("click", function () {
@@ -253,14 +254,17 @@
                         }, 2000);
                     } else {
                         toastr.error(result.message);
-                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').html("Operation failed!");
                         $('#upload-progress-bar').addClass('progress-bar-danger');
                     }
                 },
-                error: function (xhr, status, p3, p4) {
-                    var err = "Error " + " " + status + " " + p3 + " " + p4;
-                    toastr.error(err);
-                    $('#upload-progress-bar').html("Fail to upload!");
+                error: function (result) {
+                    if (result.responseJSON != null) {
+                        toastr.error(result.responseJSON.message + "\n" + result.responseJSON.error);
+                    } else {
+                        toastr.error(result.statusText + "\nError: " + result.status);
+                    }
+                    $('#upload-progress-bar').html("Operation failed!");
                     $('#upload-progress-bar').addClass('progress-bar-danger');
                 }
             });

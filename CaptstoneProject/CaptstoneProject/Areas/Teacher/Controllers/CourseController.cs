@@ -252,7 +252,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             var course = context.Courses.Find(courseId);
                             if (course.Status != (int)CourseStatus.InProgress)
                             {
-                                return RedirectToAction("Index", "Home");
+                                return Json(new { success = false, message = "Unauthorized." });
                             }
                             var subjectCode = course.Subject.SubjectCode;
                             var className = course.ClassName;
@@ -268,6 +268,11 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                     var studentCodeCol = 2;
                                     var titleRow = 1;
                                     var firstRecordRow = 3;
+
+                                    if (totalCol - course.CourseMarks.Where(q => !q.IsFinal.HasValue).Count() != 4 || totalRow - course.StudentInCourses.Count != 2)
+                                    {
+                                        return Json(new { success = false, message = "Invalid template for this course." });
+                                    }
 
                                     int tempNo = 0;
                                     for (int i = firstRecordRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
@@ -288,16 +293,11 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                                                     var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
 
-                                                    studentCourseMark = context.StudentCourseMarks.
-                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+                                                    studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
 
-                                                    //var recordExisted = true;
-                                                    //remake null check
                                                     if (studentCourseMark == null)
                                                     {
                                                         failRecordCount++;
-                                                        //studentCourseMark = context.StudentCourseMarks.Create();
-                                                        //recordExisted = false;
                                                     }
 
 
@@ -307,11 +307,10 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                     {
                                                         average += studentCourseMark.Mark.Value * component.Percentage / 100;
                                                         studentCourseMark.CourseMarkId = component.Id;
-
-                                                        //if (!recordExisted)
-                                                        //{
-                                                        //    context.StudentCourseMarks.Add(studentCourseMark);
-                                                        //}
+                                                    }
+                                                    else
+                                                    {
+                                                        return Json(new { success = false, message = "Invalid template for this course." });
                                                     }
                                                     //var FE = course.CourseMarks.Where(q => q.ComponentName.Equals("FE")).FirstOrDefault();
                                                     //var RE = course.CourseMarks.Where(q => q.ComponentName.Equals("RE")).FirstOrDefault();
@@ -366,7 +365,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new { success = false, message = e.Message });
+                return Json(new { error = e.Message, message = "Errors in uploaded file. Please recheck" });
             }
 
             return Json(new { success = true, message = "File uploaded successfully", failRecordCount = failRecordCount });
@@ -490,7 +489,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditSingleCourseComponent(/*int courseId, List<StudentComponent> markList*/ EditCourseSingleComponentModel model)
+        public ActionResult EditSingleCourseComponent(EditCourseSingleComponentModel model)
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
@@ -553,5 +552,4 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             return Json(new { success = false, message = "Course is null" });
         }
     }
-
 }
