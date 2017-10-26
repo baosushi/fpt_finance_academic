@@ -32,8 +32,11 @@ namespace CaptstoneProject.Models
         Passed = 5,
         [Display(Name = "Failed")]
         Failed = 6,
+        [Display(Name = "Issued")]
+        Issued = 7,
         [Display(Name = "Cancel")]
         Cancel = -1,
+
     }
     public enum CourseStatus
     {

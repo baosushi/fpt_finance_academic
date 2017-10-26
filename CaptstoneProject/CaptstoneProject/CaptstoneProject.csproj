@@ -409,6 +409,7 @@
     <Content Include="Images\Icon\images.png" />
     <Content Include="Images\Icon\logo-fpt.png" />
     <Content Include="Images\prideKappa.jpg" />
+    <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\CourseDetails.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

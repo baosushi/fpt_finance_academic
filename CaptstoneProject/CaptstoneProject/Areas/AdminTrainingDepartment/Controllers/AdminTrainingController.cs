@@ -73,6 +73,71 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             return View(courses);
         }
 
+        public ActionResult CourseDetails(int courseId)
+        {
+            ViewBag.CourseId = courseId;
+            try
+            {
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var course = context.Courses.Find(courseId);
+
+                    if (course != null)
+                    {
+                        ViewBag.ClassName = course.ClassName;
+
+                        var data = course.StudentInCourses.Select(q => new StudentInCourseViewModel
+                        {
+                            UserName = q.StudentMajor.LoginName,
+                            StudentCode = q.StudentMajor.StudentCode,
+                            Average = q.Average != null ? q.Average.ToString() : "-",
+                            MarksComponent = q.StudentCourseMarks.ToList(),
+                            Status = Enum.GetName(typeof(StudentCourseStatus), q.Status == null ? 0 : q.Status.Value)
+                        }).ToList();
+
+                        //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
+                        //    q.Student.StudentCode,
+                        //    q.Student.LoginName,
+                        //    //q.StudentCourseMarks.Select(s => s.Mark),
+                        //    q.Average,
+                        //    q.Status
+                        //});
+
+                        var columns = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => q.ComponentName).ToList();
+
+                        var model = new CourseDetailsViewModel
+                        {
+                            CourseId = courseId,
+                            ComponentNames = columns,
+                            StudentInCourse = data,
+                            Semester = course.Semester.Title + " " + course.Semester.Year,
+                            SubCode = course.Subject.SubjectCode,
+                            SubName = course.Subject.SubjectName,
+                            //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
+                            IsPublish = course.Status == (int)CourseStatus.InProgress ?  (int)FinalEditStatus.SubmitComponent :
+                            course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : 
+                            course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : 
+                            (int)FinalEditStatus.NoEdit,
+                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
+                        };
+
+                        //return Json(new { success = true, columns = columns, data = data });
+                        return View("CourseDetails", model);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Access denied." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         public ActionResult TestSemesterManagement(int semesterId = -1)
         {
             List<IConvertible[]> courses = new List<IConvertible[]>();
@@ -224,7 +289,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 HashSet<int> currentTempList = new HashSet<int>(currentIdList); // take unique subjectGroup Id, remove redundant
                 List<int> currentSubjectGroupIds = currentTempList.ToList();// easy to interact
 
-               
+
                 List<string> subjectGroupNames = new List<string>();
                 List<int> sumPassStudents = new List<int>();
                 List<int> sumFailStudents = new List<int>();
@@ -255,7 +320,8 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 }
 
 
-                return Json(new {
+                return Json(new
+                {
                     success = true,
                     subjectGroupNameList = subjectGroupNames,
                     passList = sumPassStudents,
@@ -264,6 +330,31 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+        [HttpPost]
+        public ActionResult UnlockStudent(string studentCode ,int courseId = -1)
+        {
+            if (courseId == -1 || studentCode == null || studentCode.Length == 0)
+            {
+                return Json(new { success = false, message = "Error! No student found" });
+
+            }
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var studentInCourse = context.StudentInCourses.Where(q => q.CourseId == courseId && q.StudentMajor.StudentCode == studentCode).FirstOrDefault();
+                    studentInCourse.Status = (int)StudentCourseStatus.Issued;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Json(new { success = false, message = e });
+            }
+            return RedirectToAction("CourseDetails", new { courseId = courseId});
         }
 
         public ActionResult GetTestResultCurrentSemester(int semesterId = 3)
