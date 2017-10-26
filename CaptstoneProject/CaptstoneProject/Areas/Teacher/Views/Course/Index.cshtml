@@ -21,7 +21,7 @@
                 </select>
             </form>
             <div class="panel-body table-responsive">
-                <table id="testTable" class="table display dataTable">
+                <table id="course-table" class="table display dataTable">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -82,7 +82,7 @@
                                             }
                                     }
                                 </td>
-								<td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
+                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
                             </tr>
                         }
                     </tbody>
@@ -93,13 +93,25 @@
 </div>
 <script>
     $(document).ready(function () {
-                                        debugger
-                                        var selectedSem = '@ViewBag.selectedSem';
-                                        if (selectedSem != -1 && selectedSem != '') {
+        debugger
+        var selectedSem = '@ViewBag.selectedSem';
+        if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
-                                        }
-        $('#testTable').DataTable({
-                                            "searching": true
+        }
+        $('#course-table').DataTable({
+            "searching": true,
+            "columnDefs": [
+    {
+        targets: [1, 2,3],
+        className: "min-width-100",
+        searchable: true,
+    },
+    {
+        className: "dt-center",
+        targets: "_all",
+        searchable:false,
+    }
+            ],
         });
     });
     $("#semesterSelector").on('change', function () {

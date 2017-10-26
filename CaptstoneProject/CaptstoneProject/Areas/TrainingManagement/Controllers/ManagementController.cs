@@ -85,7 +85,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             StudentCode = q.StudentMajor.StudentCode,
                             Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
-                            Status = Enum.GetName(typeof(StudentCourseStatus), q.Status == null ? 0 : q.Status.Value)
+                            Status = q.Status,
+                            StatusName = Enum.GetName(typeof(StudentInCourseStatus), q.Status == null ? 0 : q.Status.Value)
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -108,7 +109,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             SubName = course.Subject.SubjectName,
                             //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                             IsPublish = course.Status == (int)CourseStatus.InProgress ? (int)FinalEditStatus.SubmitComponent : course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
-                            Status = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
+                            StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
                         };
 
                         //return Json(new { success = true, columns = columns, data = data });
@@ -387,26 +388,26 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new PerComp
+                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new ComponentPercentage
                 {
                     CompName = q.ComponentName,
                     Id = q.Id,
                     Per = q.Percentage,
                 }).ToList();
 
-                var studentMarks = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentId).ToList();
+                var studentInCourse = context.StudentInCourses.Find(studentId);
+                var studentMarks = studentInCourse.StudentCourseMarks.ToList();
 
-                var lengh = markList.Count();
                 double average = 0;
-                for (int i = 0; i < lengh; i++)
+                foreach (var record in markList)
                 {
-                    var compId = int.Parse(markList[i].Name);
-                    var mark = double.Parse(markList[i].Value);
-                    var compPer = coursePer.Where(q => q.Id == compId).Select(q => q.Per).FirstOrDefault();
-                    average += mark * compPer;
+                    var componentId = int.Parse(record.Name);
+                    var mark = double.Parse(record.Value);
+                    var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
+                    average += mark * componentPercentage;
                     foreach (var item in studentMarks)
                     {
-                        if (item.CourseMarkId == compId)
+                        if (item.CourseMarkId == componentId)
                         {
                             item.Mark = mark;
 
@@ -414,7 +415,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     }
                 }
                 average = average / 100;
-                var studentInCourse = context.StudentInCourses.Where(q => q.Id == studentId).FirstOrDefault();
                 studentInCourse.Average = average;
                 context.SaveChanges();
                 return null;
@@ -760,7 +760,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var students = course.StudentInCourses;
                 foreach (var item in students)
                 {
-                    item.Status = (int)StudentCourseStatus.FirstPublish;
+                    item.Status = (int)StudentInCourseStatus.FirstPublish;
                 }
                 context.SaveChanges();
             }
@@ -776,7 +776,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var students = course.StudentInCourses;
                 foreach (var item in students)
                 {
-                    item.Status = (int)StudentCourseStatus.Submitted;
+                    item.Status = (int)StudentInCourseStatus.Submitted;
                 }
                 context.SaveChanges();
             }
@@ -792,7 +792,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var students = course.StudentInCourses;
                 foreach (var item in students)
                 {
-                    item.Status = (int)StudentCourseStatus.FinalPublish;
+                    item.Status = (int)StudentInCourseStatus.FinalPublish;
                 }
                 context.SaveChanges();
             }
@@ -808,7 +808,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var students = course.StudentInCourses;
                 foreach (var item in students)
                 {
-                    item.Status = (int)StudentCourseStatus.FinalPublish;
+                    item.Status = (int)StudentInCourseStatus.FinalPublish;
                 }
                 context.SaveChanges();
             }

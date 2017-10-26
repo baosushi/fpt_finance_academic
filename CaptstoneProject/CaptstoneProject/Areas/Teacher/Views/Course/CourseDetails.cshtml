@@ -12,6 +12,14 @@
     .min-width-100 {
         min-width: 100px;
     }
+
+    .text-center {
+        text-align: center;
+    }
+
+    th {
+        background-color: #3f83e1 !important;
+    }
 </style>
 <div class="content">
     <!-- Start Container -->
@@ -31,10 +39,61 @@
 
             <div class="panel-body">
                 <div class="course-detail-info">
-                    <label><b>Term:</b> @Model.Semester</label>
-                    <label style="padding-left: 60px;"><b>Subject:</b> @Model.SubName - @Model.SubCode</label>
-                    <br />
-                    <label><b>Class:</b> @ViewBag.ClassName</label>
+                    <div class="row" style="margin-bottom:5px;">
+                        <div class="col-md-2">
+                            <label><b>Term:</b> @Model.Semester</label>
+                        </div>
+                        <div class="col-md-10">
+                            <label><b>Subject:</b> @Model.SubName - @Model.SubCode</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label><b>Class:</b> @ViewBag.ClassName</label>
+                        </div>
+                        <div class="col-md-10">
+                            <label>
+                                <b style="margin-right:5px">Status: </b> @switch (Model.Status)
+                                {
+                                    case "New":
+                                        {
+                                            <b class="col-md-2 p-2 status-gray">New</b>
+                                            break;
+                                        }
+                                    case "InProgress":
+                                        {
+                                            <b class="col-md-2 p-2 status-green">In Progress</b>
+                                            break;
+                                        }
+                                    case "Submitted":
+                                        {
+                                            <b class="col-md-2 p-2 status-blue">Submitted</b>
+                                            break;
+                                        }
+                                    case "FirstPublish":
+                                        {
+                                            <b class="col-md-2 p-2 status-yellow">First Publish</b>
+                                            break;
+                                        }
+                                    case "FinalPublish":
+                                        {
+                                            <b class="col-md-2 p-2 status-orange">Final Publish</b>
+                                            break;
+                                        }
+                                    case "Closed":
+                                        {
+                                            <b class="col-md-2 p-2 status-red">Closed</b>
+                                            break;
+                                        }
+                                    default:
+                                        {
+                                            <b class="col-md-2 p-2 status-black">Cancel</b>
+                                            break;
+                                        }
+                                }
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 @if (Model.IsEditable)
                 {
@@ -205,6 +264,7 @@
         $('#submit-button').addClass("hidden");
         $('#cancel-file').addClass("hidden");
         $('#file-info').addClass("hidden");
+        $('.progress').css("display", "none");
     });
 
     $('#submit-button').on("click", function () {
@@ -253,14 +313,17 @@
                         }, 2000);
                     } else {
                         toastr.error(result.message);
-                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').html("Operation failed!");
                         $('#upload-progress-bar').addClass('progress-bar-danger');
                     }
                 },
-                error: function (xhr, status, p3, p4) {
-                    var err = "Error " + " " + status + " " + p3 + " " + p4;
-                    toastr.error(err);
-                    $('#upload-progress-bar').html("Fail to upload!");
+                error: function (result) {
+                    if (result.responseJSON != null) {
+                        toastr.error(result.responseJSON.message + "\n" + result.responseJSON.error);
+                    } else {
+                        toastr.error(result.statusText + "\nError: " + result.status);
+                    }
+                    $('#upload-progress-bar').html("Operation failed!");
                     $('#upload-progress-bar').addClass('progress-bar-danger');
                 }
             });
@@ -297,23 +360,35 @@
                 toastr.error(err);
             }
         });
-        
+
     });
     });
 
     $(document).ready(function () {
         $('#mark-table').DataTable({
-            "searching": true,
-            "columnDefs": [
+            searching: true,
+            scrollY: "500px",
+            scrollCollapse: true,
+            language: {
+                searchPlaceholder: "Search students..."
+            },
+            columnDefs: [
                 {
+                    targets: [1,2],
                     className: "min-width-100",
-                    targets: 1
-                }
+                    searchable:true,
+                },
+                {
+                    targets: '_all',
+                    searchable:false,
+                    className:"text-center",
+                },
             ],
             scrollX:true,
             fixedColumns: {
                 leftColumns: 3
-            } 
+            },
+            lengthMenu: [30, 50]
         });
 
     });

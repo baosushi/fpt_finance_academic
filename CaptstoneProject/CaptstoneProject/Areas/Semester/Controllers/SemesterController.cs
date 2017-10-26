@@ -53,7 +53,7 @@ namespace CaptstoneProject.Areas.Semester.Controllers
                               SubjectCode = c.Subject.SubjectCode,
                               ClassName = c.ClassName,
                               AverageMark = sc.Average,
-                              Status = ((StudentCourseStatus)sc.Status).ToString()
+                              Status = ((StudentInCourseStatus)sc.Status).ToString()
                           }).OrderBy(q => q.RollNumber).ToList();
             }
             string fileName = "Export_Mark_" + semesterName;

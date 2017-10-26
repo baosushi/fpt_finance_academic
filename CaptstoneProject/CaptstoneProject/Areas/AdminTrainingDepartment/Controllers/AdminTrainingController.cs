@@ -298,9 +298,9 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                     var subjectGroupId = currentSubjectGroupIds[i];
                     var list = context.Courses.Where(q => q.Id == semester.Id &&
                      q.Subject.SubjectGroup.Id == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Passed).Count(),
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Failed).Count(),
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentCourseStatus.Studying).Count(),
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Passed).Count(),
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Failed).Count(),
+                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Studying).Count(),
 
                      }).ToList();
                     int totalPassed = 0;
@@ -384,9 +384,9 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         var list = context.Courses.Where(q => q.SubjectId == subjectId && q.SemesterId == semester.Id).
                             AsEnumerable().Select(q => new IConvertible[] {
 
-                           q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Passed).Count(),
-                           q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Failed).Count(),
-                            q.StudentInCourses.Where(a => a.Status  == (int)StudentCourseStatus.Studying).Count(),
+                           q.StudentInCourses.Where(a => a.Status  == (int)StudentInCourseStatus.Passed).Count(),
+                           q.StudentInCourses.Where(a => a.Status  == (int)StudentInCourseStatus.Failed).Count(),
+                            q.StudentInCourses.Where(a => a.Status  == (int)StudentInCourseStatus.Studying).Count(),
 
                         }).ToList();
                         var totalPassed = 0;
