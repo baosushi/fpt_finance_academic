@@ -54,6 +54,7 @@ namespace CaptstoneProject.Models
             public string Average { get; set; }
             public int SemesterId { get; set; }
             public int CourseStatus { get; set; }
+            public string StudentInCourseStatus { get; set; }
         }
 
         public class CourseRecordViewModel

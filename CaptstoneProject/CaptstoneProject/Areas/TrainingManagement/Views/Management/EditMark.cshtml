@@ -5,18 +5,45 @@
             <h4><i style="color:#4db748" class="fa fa-address-card"></i> Edit marks</h4>
         </div>
         <div class="panel-body">
-            <form onsubmit='return onSubmit(this)'>
+            <form id="edit-form">
                 <label><b>Name: </b>@Model.Name - @Model.Code</label>
                 <br />
                 <label><b>Class: </b>@Model.Class</label>
                 <br />
+                <label><b>Status: </b>@Model.StudentInCourseStatus</label>
+                <br />
                 <input hidden type="text" value="@Model.CourseId" id="courseId" />
                 <input hidden type="text" value="@Model.Id" id="studentId" />
+                <input hidden type="text" value="@Model.StudentInCourseStatus" id="studentInCourseStatus" />
+                <input hidden type="text" value="@Model.CourseStatus" id="courseStatus" />
                 <b>Marks: </b>
                 <br />
                 <div class="row col-md-12">
                     <div class="row">
-                        @if (Model.CourseStatus == 1)
+                        @if (Model.StudentInCourseStatus == "Issued")
+                        {
+                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                            {
+                                <div class="col-md-3">
+                                    <label>@Model.ComponentNames[i - 1]</label>
+                                </div>
+
+                                if (Model.MarksComponent[i - 1].Mark != -1)
+                                {
+                                    <div class="col-md-3">
+                                        <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-3">
+                                        <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                    </div>
+                                }
+                            }
+                        }
+
+                        else if (Model.CourseStatus == 1)
                         {
                             for (int i = 1; i <= Model.ComponentNames.Count; i++)
                             {
@@ -29,37 +56,25 @@
                                     if (Model.MarksComponent[i - 1].Mark != -1)
                                     {
                                         <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
                                         </div>
                                     }
                                 }
-                                else
-                                {
-                                    <div class="col-md-3 hidden">
-                                        <label>@Model.ComponentNames[i - 1]</label>
-                                    </div>
 
-                                    if (Model.MarksComponent[i - 1].Mark != -1)
-                                    {
-                                        <div class="col-md-3 hidden">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                        </div>
-                                    }
-                                }
                             }
                         }
-                        @if (Model.CourseStatus == 2)
+                        else if (Model.CourseStatus == 2)
                         {
                             for (int i = 1; i <= Model.ComponentNames.Count; i++)
                             {
 
-                                if (!Model.ComponentNames[i-1].Contains("2nd"))
+                                if (!Model.ComponentNames[i - 1].Contains("2nd") && Model.MarksComponent[i - 1].CourseMark.IsFinal == true)
                                 {
                                     <div class="col-md-3">
                                         <label>@Model.ComponentNames[i - 1]</label>
@@ -68,50 +83,41 @@
                                     if (Model.MarksComponent[i - 1].Mark != -1)
                                     {
                                         <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
                                         </div>
                                     }
                                 }
-                                else
+
+                            }
+                        }
+                        else if (Model.CourseStatus == 3)
+                        {
+                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                            {
+                                if (Model.ComponentNames[i - 1].Contains("2nd"))
                                 {
-                                    <div class="col-md-3 hidden">
+                                    <div class="col-md-3">
                                         <label>@Model.ComponentNames[i - 1]</label>
                                     </div>
 
                                     if (Model.MarksComponent[i - 1].Mark != -1)
                                     {
-                                        <div class="col-md-3 hidden">
+                                        <div class="col-md-3">
                                             <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
                                         </div>
                                     }
-                                }
-                            }
-                        }
-                        @if (Model.CourseStatus == 3)
-                        {
-                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
-                            {
-                                <div class="col-md-3">
-                                    <label>@Model.ComponentNames[i - 1]</label>
-                                </div>
-
-                                if (Model.MarksComponent[i - 1].Mark != -1)
-                                {
-                                    <div class="col-md-3">
-                                        <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-3">
-                                        <input type="number" min="0" class="mark-input" max="10" step="0.01"  name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
-                                    </div>
+                                    else
+                                    {
+                                        <div class="col-md-3">
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                        </div>
+                                    }
                                 }
                             }
 
@@ -129,38 +135,50 @@
                                 </div>
                             }*@
                     </div>
+                    @if (Model.StudentInCourseStatus == "Issued")
+                    {
+                        <div class="row col-md-12">
+                            <div class="">
+                                <label>Note: </label>
+                                <input required style="margin:10px" type="text" id="note" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <input hidden style="margin:10px" type="text" id="note" />
+                    }
                     <div class="col-md-8" style="margin:auto">
                         <a class="btn btn-primary btn-lg pull-right" href="@Url.Action("CourseDetails", "Management", new { courseId =Model.CourseId , semesterId = Model.SemesterId })">
                             Go Back
                         </a>
                     </div>
                     <div class="col-md-2" style="margin:auto">
-                        <input class="btn btn-success btn-lg" type="submit" />
+                        <input class="btn btn-success btn-lg" type="submit" onsubmit="$('#edit-form').submit()" />
                     </div>
                 </div>
-
 
             </form>
         </div>
     </div>
 </div>
 <script>
-    function onSubmit(form) {
-        $.ajax({
-            url: '@Url.Action("GetEdit","Management")',
-            data: { markList: $(form).serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val() },
-            type: "POST",
-            success: function (result) {
-                swal("Edit successful!", "success");
-                location.reload();
-            },
-            error: function (error) {
-                alert("Error, please try again later.");
-            }
-        });
+    $('#edit-form').submit(function (e) {
+        e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("GetEdit","Management")',
+                data: { markList: $('#edit-form').serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val(), note: $("#note").val() },
+                type: "POST",
+                success: function (result) {
+                    swal("Success!", "Your marks have been submitted!", "success");
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Error, please try again later.");
+                }
+            });
         return false;
-    }
-
+    });
     $("input").on('change', function () {
         $('#aver').html("<b>Average: </b> N/A");
     });

@@ -383,12 +383,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 });
             }
         }
-
-        public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId)
+        [HttpPost]
+        public ActionResult GetEdit(List<MarkComp> markList, int courseId, int studentId, string note)
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new ComponentPercentage
+                var course = context.Courses.Find(courseId);
+                var coursePer = course.CourseMarks.Select(q => new ComponentPercentage
                 {
                     CompName = q.ComponentName,
                     Id = q.Id,
@@ -398,27 +399,61 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 var studentInCourse = context.StudentInCourses.Find(studentId);
                 var studentMarks = studentInCourse.StudentCourseMarks.ToList();
 
-                double average = 0;
+                double? average = 0;
+                double mark = 0;
                 foreach (var record in markList)
                 {
                     var componentId = int.Parse(record.Name);
-                    var mark = double.Parse(record.Value);
-                    var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
-                    foreach (var item in studentMarks)
+                    if (record.Value != null)
                     {
-                        if (item.CourseMarkId == componentId)
-                        {
-                            item.Mark = mark;
+                        mark = double.Parse(record.Value);
+                    }
+                    else
+                    {
+                        mark = -1;
+                    }
+                    //var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
+                    //average += mark * componentPercentage/100;
 
+                    if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    {
+                        if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
+                        {
+                            var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                            studentMark.EdittedMark = mark;
+                            studentMark.Note = note;
+                            studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
                         }
                     }
+                    else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+                    {
+                        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                        studentMark.Mark = mark;
+                    }
+
+                }
+                context.SaveChanges();
+                foreach (var item in studentInCourse.StudentCourseMarks)
+                {
+                    if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
+                    {
+                        average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                    }
+                }
+                if (studentInCourse.HasRetake == true)
+                {
+                    var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                    average += retake;
+                }
+                else
+                {
+                    var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                    average += final;
                 }
 
                 studentInCourse.Average = average;
-                //average = average / 100;
-                studentInCourse.Average = average;
                 context.SaveChanges();
-                return null;
+                return Json(new { success = true });
             }
         }
 
@@ -443,6 +478,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     Average = q.Average != null ? q.Average.ToString() : "-",
                     MarksComponent = q.StudentCourseMarks.ToList(),
                     CourseStatus = course.Status.Value,
+                    StudentInCourseStatus = Enum.GetName(typeof(StudentInCourseStatus), q.Status != null ? q.Status : 0),
 
                 }).FirstOrDefault();
                 student.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
