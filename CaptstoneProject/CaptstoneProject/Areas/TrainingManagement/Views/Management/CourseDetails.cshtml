@@ -199,16 +199,16 @@
                                     @i
                                 </td>
                                 <td>
-                                    @if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
-                                    {
+                                    @*@if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
+                                    {*@
                                         <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
-                                    }
+                                    @*}
                                     else
                                     {
                                         <div>
                                             @Model.StudentInCourse[i - 1].UserName
                                         </div>
-                                    }
+                                    }*@
                                 </td>
                                 <td>
                                     @Model.StudentInCourse[i - 1].StudentCode
@@ -219,7 +219,7 @@
                                     {
                                         if (mark.Mark.Value == -1)
                                         {
-                                            <td></td>
+                                            <td> - </td>
                                         }
                                         else
                                         {
@@ -502,7 +502,7 @@
             else{
                 $.ajax({
                     type: "POST",
-                    url: '@Model.StudentInCourse[i - 1].UserName',
+                    url: '@Url.Action("UploadFinalExamExcel")',
                     contentType: false,
                     processData: false,
                     data: data,

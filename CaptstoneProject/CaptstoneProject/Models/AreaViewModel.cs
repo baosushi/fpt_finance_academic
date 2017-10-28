@@ -19,7 +19,7 @@ namespace CaptstoneProject.Models
         {
             public string StudentCode { get; set; }
             public string StudentName { get; set; }
-            public double ComponentMark { get; set; }
+            public double? ComponentMark { get; set; }
         }
 
         public class MarkComp
@@ -53,6 +53,7 @@ namespace CaptstoneProject.Models
             public List<StudentCourseMark> MarksComponent { get; set; }
             public string Average { get; set; }
             public int SemesterId { get; set; }
+            public int CourseStatus { get; set; }
         }
 
         public class CourseRecordViewModel

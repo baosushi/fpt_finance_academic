@@ -404,7 +404,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var componentId = int.Parse(record.Name);
                     var mark = double.Parse(record.Value);
                     var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
-                    average += mark * componentPercentage;
                     foreach (var item in studentMarks)
                     {
                         if (item.CourseMarkId == componentId)
@@ -414,7 +413,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         }
                     }
                 }
-                average = average / 100;
+
+                studentInCourse.Average = average;
+                //average = average / 100;
                 studentInCourse.Average = average;
                 context.SaveChanges();
                 return null;
@@ -427,10 +428,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 var status = course.Status;
-                if (status != (int)CourseStatus.InProgress)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                //if (status != (int)CourseStatus.InProgress)
+                //{
+                //    return RedirectToAction("Index", "Home");
+                //}
                 var student = course.StudentInCourses.Where(q => q.StudentMajor.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
                     SemesterId = course.Semester.Id,
@@ -441,6 +442,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     Code = q.StudentMajor.StudentCode,
                     Average = q.Average != null ? q.Average.ToString() : "-",
                     MarksComponent = q.StudentCourseMarks.ToList(),
+                    CourseStatus = course.Status.Value,
 
                 }).FirstOrDefault();
                 student.ComponentNames = course.CourseMarks.Select(q => q.ComponentName).ToList();
@@ -452,6 +454,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         [HttpPost]
         public ActionResult UploadExcel(int courseId)
         {
+            var failRecordCount = 0;
+
             try
             {
                 if (Request.Files.Count > 0)
@@ -465,7 +469,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             var course = context.Courses.Find(courseId);
                             if (course.Status != (int)CourseStatus.InProgress)
                             {
-                                return RedirectToAction("Index", "Home");
+                                return Json(new { success = false, message = "Unauthorized." });
                             }
                             var subjectCode = course.Subject.SubjectCode;
                             var className = course.ClassName;
@@ -482,6 +486,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     var titleRow = 1;
                                     var firstRecordRow = 3;
 
+                                    if (totalCol - course.CourseMarks.Where(q => !q.IsFinal.HasValue).Count() != 4 || totalRow - course.StudentInCourses.Count != 2)
+                                    {
+                                        return Json(new { success = false, message = "Invalid template for this course." });
+                                    }
+
                                     int tempNo = 0;
                                     for (int i = firstRecordRow; int.TryParse(ws.Cells[i, 1].Text.Trim(), out tempNo); i++)
                                     {
@@ -490,7 +499,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                                         if (studentInCourse != null)
                                         {
-                                            double average = 0;
+                                            double? average = 0;
                                             for (var j = 5; j <= totalCol; j++)
                                             {
 
@@ -501,17 +510,12 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                                                     var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
 
-                                                    studentCourseMark = context.StudentCourseMarks.
-                                                        Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+                                                    studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
 
-                                                    var recordExisted = true;
-                                                    //remake null check
                                                     if (studentCourseMark == null)
                                                     {
-                                                        studentCourseMark = context.StudentCourseMarks.Create();
-                                                        recordExisted = false;
+                                                        failRecordCount++;
                                                     }
-
 
                                                     studentCourseMark.Mark = value;
                                                     studentCourseMark.StudentInCourseId = studentInCourse.Id;
@@ -519,41 +523,56 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                     {
                                                         average += studentCourseMark.Mark.Value * component.Percentage / 100;
                                                         studentCourseMark.CourseMarkId = component.Id;
-
-                                                        if (!recordExisted)
-                                                        {
-                                                            context.StudentCourseMarks.Add(studentCourseMark);
-                                                        }
                                                     }
-                                                    //var FE = course.CourseMarks.Where(q => q.ComponentName.Equals("FE")).FirstOrDefault();
-                                                    //var RE = course.CourseMarks.Where(q => q.ComponentName.Equals("RE")).FirstOrDefault();
-                                                    //var studentCourseMarkFE = context.StudentCourseMarks.
-                                                    //    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
-                                                    //var studentCourseMarkRE = context.StudentCourseMarks.
-                                                    //    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
-                                                    ////remake null check
+                                                    else
+                                                    {
+                                                        return Json(new { success = false, message = "Invalid template for this course." });
+                                                    }
 
-                                                    //if (studentCourseMarkFE == null)
-                                                    //{
-                                                    //    studentCourseMarkFE = context.StudentCourseMarks.Create();
-                                                    //    context.StudentCourseMarks.Add(studentCourseMarkFE);
-                                                    //}
-                                                    //if (studentCourseMarkRE == null)
-                                                    //{
-                                                    //    studentCourseMarkRE = context.StudentCourseMarks.Create();
-                                                    //    context.StudentCourseMarks.Add(studentCourseMarkRE);
-                                                    //}
-                                                    //studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
-                                                    //studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
-                                                    //studentCourseMarkFE.CourseMarkId = FE.Id;
-                                                    //studentCourseMarkRE.CourseMarkId = RE.Id;
-                                                    //studentCourseMarkRE.Mark = null;
-                                                    //studentCourseMarkFE.Mark = null;
                                                 }
+                                                else
+                                                {
+                                                    StudentCourseMark studentCourseMark = null;
+                                                    var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+
+                                                    studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+
+                                                    if (studentCourseMark == null)
+                                                    {
+                                                        failRecordCount++;
+                                                    }
+
+                                                    studentCourseMark.Mark = -1;
+                                                    studentCourseMark.StudentInCourseId = studentInCourse.Id;
+                                                    if (component != null)
+                                                    {
+                                                        studentCourseMark.CourseMarkId = component.Id;
+                                                    }
+                                                    else
+                                                    {
+                                                        return Json(new { success = false, message = "Invalid template for this course." });
+                                                    }
+                                                }
+                                            }
+                                            //var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+                                            //average += final > 0 ? final : studentInCourse.StudentCourseMarks.Where(q => !q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+                                            if (studentInCourse.HasRetake == true)
+                                            {
+                                                var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += retake;
+                                            }
+                                            else
+                                            {
+                                                var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += final;
                                             }
 
                                             studentInCourse.Average = average;
-                                            studentInCourse.Status = 1;
+                                            //studentInCourse.Status = 1;
+                                        }
+                                        else
+                                        {
+                                            failRecordCount++;
                                         }
 
                                         context.SaveChanges();
@@ -571,10 +590,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new { success = false, message = e.Message });
+                return Json(new { error = e.Message, message = "Errors in uploaded file. Please recheck" });
             }
 
-            return Json(new { success = true, message = "File uploaded successfully" });
+            return Json(new { success = true, message = "File uploaded successfully", failRecordCount = failRecordCount });
         }
 
         public ActionResult UploadFinalExamExcel(int courseId, int isPublish)
@@ -609,7 +628,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     var titleRow = 1;
                                     var firstRow = 3;
                                     int tempNo = 0;
-                                    bool retaked = false;
                                     double FinalAverage = 0;
                                     double FinalPercentage = 0;
                                     List<MarkPoint> FEList = new List<MarkPoint>();
@@ -621,6 +639,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                                         if (studentInCourse != null)
                                         {
+                                            if (isPublish == 1)
+                                            {
+                                                studentInCourse.HasRetake = null;
+                                            }
                                             double? average = 0;
                                             foreach (var item in studentInCourse.StudentCourseMarks)
                                             {
@@ -638,9 +660,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                     //{
                                                     //    retaked = true;
                                                     //}
-                                                    if (isPublish == 1 && ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
+                                                    if (isPublish == 1 && ws.Cells[titleRow, j].Text.Trim().Contains("2nd") && !studentInCourse.HasRetake.HasValue)
                                                     {
-                                                        retaked = true;
+                                                        studentInCourse.HasRetake = true;
                                                     }
                                                     if (isPublish == 0 && ws.Cells[titleRow, j].Text.Trim().Contains("2nd"))
                                                     {
@@ -667,53 +689,77 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                                         studentCourseMarkFE.CourseMarkId = FE.Id;
                                                         context.StudentCourseMarks.Add(studentCourseMarkFE);
                                                     }
-                                                    if (retaked == false)
+                                                    //if (!studentInCourse.HasRetake.HasValue)
+                                                    //{
+                                                    //    MarkPoint FMark = new MarkPoint();
+                                                    //    FMark.Value = value;
+                                                    //    FMark.Per = FE.Percentage;
+                                                    //    FEList.Add(FMark);
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    //    MarkPoint FMark = new MarkPoint();
+                                                    //    FMark.Value = value;
+                                                    //    FMark.Per = FE.Percentage;
+                                                    //    REList.Add(FMark);
+                                                    //}
+                                                }
+                                                else
+                                                {
+                                                    var FE = course.CourseMarks.Where(q => q.ComponentName.Equals(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+                                                    var studentCourseMarkFE = context.StudentCourseMarks.
+                                                    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
+                                                    var recordExistedFE = true;
+                                                    if (studentCourseMarkFE == null)
                                                     {
-                                                        MarkPoint FMark = new MarkPoint();
-                                                        FMark.Value = value;
-                                                        FMark.Per = FE.Percentage;
-                                                        FEList.Add(FMark);
+                                                        studentCourseMarkFE = context.StudentCourseMarks.Create();
+                                                        recordExistedFE = false;
                                                     }
-                                                    else
+                                                    studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
+                                                    studentCourseMarkFE.CourseMarkId = FE.Id;
+                                                    studentCourseMarkFE.Mark = -1;
+                                                    if (!recordExistedFE)
                                                     {
-                                                        MarkPoint FMark = new MarkPoint();
-                                                        FMark.Value = value;
-                                                        FMark.Per = FE.Percentage;
-                                                        REList.Add(FMark);
+                                                        studentCourseMarkFE.CourseMarkId = FE.Id;
+                                                        context.StudentCourseMarks.Add(studentCourseMarkFE);
                                                     }
-
                                                 }
 
                                             }
-                                            if (retaked)
+                                            if (studentInCourse.HasRetake == true)
                                             {
-                                                foreach (var item in REList)
-                                                {
-                                                    FinalPercentage += item.Per;
-                                                }
-                                                foreach (var item in REList)
-                                                {
-                                                    average += item.Value * item.Per / 100;
-                                                    FinalAverage += item.Value * item.Per / FinalPercentage;
-                                                }
+                                                var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += retake;
+
+                                                //foreach (var item in REList)
+                                                //{
+                                                //    FinalPercentage += item.Per;
+                                                //}
+                                                //foreach (var item in REList)
+                                                //{
+                                                //    average += item.Value * item.Per / 100;
+                                                //    FinalAverage += item.Value * item.Per / FinalPercentage;//Average for finals only
+                                                //}
                                             }
                                             else
                                             {
-                                                foreach (var item in FEList)
-                                                {
-                                                    FinalPercentage += item.Per;
-                                                }
-                                                foreach (var item in FEList)
-                                                {
-                                                    average += item.Value * item.Per / 100;
-                                                    FinalAverage += item.Value * item.Per / FinalPercentage;
-                                                }
+                                                var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += final;
+
+                                                //foreach (var item in FEList)
+                                                //{
+                                                //    FinalPercentage += item.Per;
+                                                //}
+                                                //foreach (var item in FEList)
+                                                //{
+                                                //    average += item.Value * item.Per / 100;
+                                                //    FinalAverage += item.Value * item.Per / FinalPercentage;
+                                                //}
                                             }
 
                                             studentInCourse.Average = average;
                                             FEList.Clear();
                                             REList.Clear();
-                                            retaked = false;
                                             //if (FinalAverage >= 4)
                                             //{
                                             //    if (average >= 5)
@@ -750,6 +796,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
             return Json(new { success = true, message = "File uploaded successfully" });
         }
+
 
         public ActionResult ChangeToPublish(int courseId)
         {

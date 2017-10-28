@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-md-10">
                             <label>
-                                <b style="margin-right:5px">Status: </b> @switch (Model.Status)
+                                <b style="margin-right:5px">Status: </b> @switch (Model.StatusName)
                                 {
                                     case "New":
                                         {
@@ -190,7 +190,7 @@
                                     {
                                         if (mark.Mark.Value == -1)
                                         {
-                                            <td></td>
+                                            <td> - </td>
                                         }
                                         else
                                         {
@@ -219,7 +219,7 @@
                                     </td>
                                 }
                                 <td>
-                                    @Model.StudentInCourse[i - 1].Status
+                                    @Model.StudentInCourse[i - 1].StatusName
                                 </td>
                             </tr>
                         }

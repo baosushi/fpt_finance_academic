@@ -284,7 +284,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                                         if (studentInCourse != null)
                                         {
-                                            double average = 0;
+                                            double? average = 0;
                                             for (var j = 5; j <= totalCol; j++)
                                             {
 
@@ -313,38 +313,49 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                                                     {
                                                         return Json(new { success = false, message = "Invalid template for this course." });
                                                     }
-                                                    //var FE = course.CourseMarks.Where(q => q.ComponentName.Equals("FE")).FirstOrDefault();
-                                                    //var RE = course.CourseMarks.Where(q => q.ComponentName.Equals("RE")).FirstOrDefault();
-                                                    //var studentCourseMarkFE = context.StudentCourseMarks.
-                                                    //    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(FE.Id)).FirstOrDefault();
-                                                    //var studentCourseMarkRE = context.StudentCourseMarks.
-                                                    //    Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(RE.Id)).FirstOrDefault();
-                                                    ////remake null check
 
-                                                    //if (studentCourseMarkFE == null)
-                                                    //{
-                                                    //    studentCourseMarkFE = context.StudentCourseMarks.Create();
-                                                    //    context.StudentCourseMarks.Add(studentCourseMarkFE);
-                                                    //}
-                                                    //if (studentCourseMarkRE == null)
-                                                    //{
-                                                    //    studentCourseMarkRE = context.StudentCourseMarks.Create();
-                                                    //    context.StudentCourseMarks.Add(studentCourseMarkRE);
-                                                    //}
-                                                    //studentCourseMarkFE.StudentInCourseId = studentInCourse.Id;
-                                                    //studentCourseMarkRE.StudentInCourseId = studentInCourse.Id;
-                                                    //studentCourseMarkFE.CourseMarkId = FE.Id;
-                                                    //studentCourseMarkRE.CourseMarkId = RE.Id;
-                                                    //studentCourseMarkRE.Mark = null;
-                                                    //studentCourseMarkFE.Mark = null;
+                                                }
+                                                else
+                                                {
+                                                    StudentCourseMark studentCourseMark = null;
+                                                    var component = course.CourseMarks.Where(q => q.ComponentName.Contains(ws.Cells[titleRow, j].Text.Trim())).FirstOrDefault();
+
+                                                    studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourseId.Equals(studentInCourse.Id) && q.CourseMarkId.Equals(component.Id)).FirstOrDefault();
+
+                                                    if (studentCourseMark == null)
+                                                    {
+                                                        failRecordCount++;
+                                                    }
+
+                                                    studentCourseMark.Mark = -1;
+                                                    studentCourseMark.StudentInCourseId = studentInCourse.Id;
+                                                    if (component != null)
+                                                    {
+                                                        studentCourseMark.CourseMarkId = component.Id;
+                                                    }
+                                                    else
+                                                    {
+                                                        return Json(new { success = false, message = "Invalid template for this course." });
+                                                    }
                                                 }
                                             }
 
-                                            var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
-                                            average += final > 0 ? final : studentInCourse.StudentCourseMarks.Where(q => !q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+
+                                            //var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+                                            //average += final > 0 ? final : studentInCourse.StudentCourseMarks.Where(q => !q.CourseMark.ComponentName.Contains("(2nd)") && q.CourseMark.IsFinal.HasValue && q.CourseMark.IsFinal.Value).Sum(q => q.Mark.Value == -1 ? 0 : q.Mark.Value * q.CourseMark.Percentage / 100);
+                                            if (studentInCourse.HasRetake == true)
+                                            {
+                                                var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += retake;
+                                            }
+                                            else
+                                            {
+                                                var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                                                average += final;
+                                            }
 
                                             studentInCourse.Average = average;
-                                            studentInCourse.Status = 1;
+                                            //studentInCourse.Status = 1;
                                         }
                                         else
                                         {
@@ -501,18 +512,21 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     foreach (var record in model.StudentComponents)
                     {
                         var studentCourseMark = context.StudentCourseMarks.Where(q => q.StudentInCourse.StudentMajor.StudentCode == record.StudentCode.ToUpper().Trim() && q.CourseMark.ComponentName.Equals(model.ComponentName.Trim())).FirstOrDefault();
+                        var student = context.StudentMajors.Where(q => q.StudentCode == record.StudentCode).FirstOrDefault();
+                        var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == student.Id&&q.CourseId==model.CourseId).FirstOrDefault();
+                        double? average = 0;
 
                         if (studentCourseMark == null)
                         {
                             studentCourseMark = context.StudentCourseMarks.Create();
-                            var student = context.StudentMajors.Where(q => q.StudentCode == record.StudentCode).FirstOrDefault();
+                            //var student = context.StudentMajors.Where(q => q.StudentCode == record.StudentCode).FirstOrDefault();
 
                             if (student == null)
                             {
                                 return Json(new { success = false, message = "Student is null" });
                             }
 
-                            var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == student.Id).FirstOrDefault();
+                            //var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == student.Id).FirstOrDefault();
 
                             if (studentInCourse == null)
                             {
@@ -526,7 +540,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             }
 
                             var courseMark = context.CourseMarks.Where(q => q.ComponentName.Equals(model.ComponentName.Trim()) && q.CourseId == model.CourseId).FirstOrDefault();
-
+                            
                             if (courseMark == null)
                             {
                                 return Json(new { success = false, message = "CourseMark is null" });
@@ -539,10 +553,39 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                             context.SaveChanges();
                         }
+                        if (record.ComponentMark == null)
+                        {
+                            studentCourseMark.Mark = -1;
+                        }
+                        else
+                        {
+                            studentCourseMark.Mark = record.ComponentMark;
+                        }
 
-                        studentCourseMark.StudentInCourse.Average -= studentCourseMark.Mark * studentCourseMark.CourseMark.Percentage / 100;
-                        studentCourseMark.Mark = record.ComponentMark;
-                        studentCourseMark.StudentInCourse.Average += record.ComponentMark * studentCourseMark.CourseMark.Percentage / 100;
+                        //studentCourseMark.StudentInCourse.Average -= studentCourseMark.Mark * studentCourseMark.CourseMark.Percentage / 100;
+
+                        //average += record.ComponentMark * studentCourseMark.CourseMark.Percentage / 100;
+                        foreach (var item in studentInCourse.StudentCourseMarks)
+                        {
+                            if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
+                            {
+                                average += item.Mark!=-1?item.Mark * item.CourseMark.Percentage / 100:0*item.CourseMark.Percentage;
+                            }
+                        }
+                        if (studentInCourse.HasRetake == true)
+                        {
+                            var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                            average += retake;
+                        }
+                        else
+                        {
+                            var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
+                            average += final;
+                        }
+
+                        studentInCourse.Average = average;
+                        //studentInCourse.Status = 1;
+
                         context.SaveChanges();
                     }
 
