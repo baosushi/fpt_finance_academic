@@ -502,7 +502,7 @@
             else{
                 $.ajax({
                     type: "POST",
-                    url: '@Model.StudentInCourse[i - 1].UserName',
+                    url: '@Url.Action("UploadFinalExamExcel")',
                     contentType: false,
                     processData: false,
                     data: data,
