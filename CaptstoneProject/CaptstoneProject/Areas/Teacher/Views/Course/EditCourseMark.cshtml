@@ -32,7 +32,7 @@
                                     @Html.HiddenFor(q => q.StudentComponents[i - 1].StudentName)
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(q => q.StudentComponents[i - 1].ComponentMark, new { @Value = (Model.StudentComponents[i - 1].ComponentMark == -1) ? "0" : Model.StudentComponents[i - 1].ComponentMark.ToString() })
+                                    @Html.TextBoxFor(q => q.StudentComponents[i - 1].ComponentMark, new {@type = "number", @min = "0",@max ="10", @step = "0.01", @Value = (Model.StudentComponents[i - 1].ComponentMark == -1) ? "" : Model.StudentComponents[i - 1].ComponentMark.ToString() })
                                 </td>
                             </tr>
                         }
