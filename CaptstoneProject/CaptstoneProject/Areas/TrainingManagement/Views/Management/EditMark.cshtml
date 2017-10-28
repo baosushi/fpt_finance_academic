@@ -54,8 +54,6 @@
                     <input class="btn btn-success btn-lg" type="submit" />
                     </div>
                 </div>
-               
-
             </form>
         </div>
     </div>
@@ -64,7 +62,7 @@
     function onSubmit(form) {
         $.ajax({
             url: '@Url.Action("GetEdit","Management")',
-            data: { markList: $(form).serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val() },
+            data: { markList: $(form).serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val(), note: $("#note") },
             type: "POST",
             success: function (result) {
                 swal("Edit successful!", "success");

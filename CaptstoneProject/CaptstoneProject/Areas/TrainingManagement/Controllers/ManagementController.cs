@@ -384,11 +384,12 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
         }
 
-        public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId)
+        public JsonResult GetEdit(List<MarkComp> markList, int courseId, int studentId, string note)
         {
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var coursePer = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => new ComponentPercentage
+                var course = context.Courses.Find(courseId);
+                var coursePer = course.CourseMarks.Select(q => new ComponentPercentage
                 {
                     CompName = q.ComponentName,
                     Id = q.Id,
@@ -405,15 +406,24 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var mark = double.Parse(record.Value);
                     var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
                     average += mark * componentPercentage;
-                    foreach (var item in studentMarks)
-                    {
-                        if (item.CourseMarkId == componentId)
-                        {
-                            item.Mark = mark;
 
+                    if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    {
+                        if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
+                        {
+                            var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                            studentMark.EdittedMark = mark;
+                            studentMark.Note = note;
+                            studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
                         }
                     }
+                    else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+                    {
+                        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                        studentMark.Mark = mark;
+                    }
                 }
+
                 average = average / 100;
                 studentInCourse.Average = average;
                 context.SaveChanges();
@@ -431,6 +441,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
+
                 var student = course.StudentInCourses.Where(q => q.StudentMajor.StudentCode.Equals(studentCode)).Select(q => new StudentEditViewModel
                 {
                     SemesterId = course.Semester.Id,
