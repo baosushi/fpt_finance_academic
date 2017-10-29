@@ -19,7 +19,7 @@
                 </div>
                 <div class="">
                     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                    @*<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>*@
+                    <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
                 <div class="row">
                     <select id="subjectGroups-selector" data-live-search="true">
@@ -73,40 +73,51 @@
 
 
 
-         @*$.ajax({
+         $.ajax({
             type: "get",
             url: "@Url.Action("GetTestResultBySubjectGroup")",
             success: function (result) {
                 if (result.success) {
-                    subjectGroupNameList(result);
+                    subjectGroupCurrentSemester(result);
                 } else {
                     toastr.error(result.message, "Error! Can't load chart");
                 }
             }
-        });*@
+        });
 
 
         //chart for pass and fail of every subject in this semester
 
 
-    })
+    });
 
     $(document).ready(function () {
         var table_4_subjectGroup = $("#table-4-subjectGroupSelector").DataTable({
-
-            "sAjaxSources": "@Url.Action("StudyStatisticBySubjectGroup")",
+            "retrieve": true,
+            "processing": true, //display loading screen
+            //"ServerSide": true,
+            "sAjaxSource": '@Url.Action("StudyStatisticBySubjectGroup")',
             "fnServerParams": function (aoData) {
-                aoData.push({
-                    "subjectGroupId": $("#subjectGroups-selector").val(),
-                    "semesterId": $("#semester-selector").val()
-                });
-            }
-        })
-
-        $("#subjectGroups-selector, #semester-selector").on("change", function () {
-
-         table_4_subjectGroup.ajax.reload(null, false);
-        })
+                aoData.push(
+                    { "name": "subjectGroupId", "value": $("#subjectGroups-selector").val() },
+                    { "name": "semesterId", "value": $("#semester-selector").val() }
+                );
+            },
+           // "aoColumnDefs": [
+           //     {
+           //                 "aTargets": [0, 1, 2, 3],
+           //         "bSortable": false
+           //     }
+           // ],
+                   
+        });
+        var i = 0;
+        $("#subjectGroups-selector").on("change", function () {
+            table_4_subjectGroup.ajax.reload(null, false);
+        });
+        $("#semester-selector").on("change", function () {
+            table_4_subjectGroup.ajax.reload(null, false);
+        });
 
         $("#subjectGroups-selector").selectpicker();
         $("#semester-selector").selectpicker();
@@ -182,7 +193,7 @@
             };
             Highcharts.setOptions(Highcharts.theme);
 
-            Highcharts.chart('container', {
+            Highcharts.chart('container2', {
 
                 chart: {
                     type: 'column'

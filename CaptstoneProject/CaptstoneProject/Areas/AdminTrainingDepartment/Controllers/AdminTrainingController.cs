@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
@@ -25,7 +26,8 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                     Text = q.Name,
                     Value = q.Id.ToString()
                 }).ToList();
-                var semesterList = context.Semesters.Select(q => new SelectListItem
+                var semesterList = context.Semesters.OrderByDescending(q => q.Year)
+                    .ThenByDescending(q =>q.SemesterInYear).Select(q => new SelectListItem
                 {
                     Text = q.Title + " " + q.Year,
                     Value = q.Id.ToString()
@@ -295,56 +297,68 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
         //Get result data of SubjectGroup of current and previous semester for chart
         public ActionResult GetTestResultBySubjectGroup(int semesterId = -1)
         {
-            using (var context = new DB_Finance_AcademicEntities())
+            try
             {
-                var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
-                    ThenByDescending(q => q.SemesterInYear).
-                    FirstOrDefault() : context.Semesters.Find(semesterId);
-
-                var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).
-                    Select(q => q.Subject.SubjectGroup.Id).ToList();
-                HashSet<int> currentTempList = new HashSet<int>(currentIdList); // take unique subjectGroup Id, remove redundant
-                List<int> currentSubjectGroupIds = currentTempList.ToList();// easy to interact
-
-
-                List<string> subjectGroupNames = new List<string>();
-                List<int> sumPassStudents = new List<int>();
-                List<int> sumFailStudents = new List<int>();
-                for (int i = 0; i < currentSubjectGroupIds.Count(); i++)
+                using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var subjectGroupId = currentSubjectGroupIds[i];
-                    var list = context.Courses.Where(q => q.Id == semester.Id &&
-                     q.Subject.SubjectGroup.Id == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Passed).Count(),
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Failed).Count(),
-                        q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Studying).Count(),
+                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
+                        ThenByDescending(q => q.SemesterInYear).
+                        FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                     }).ToList();
-                    int totalPassed = 0;
-                    int totalFailed = 0;
-                    int totalStudying = 0;
-                    foreach (var item in list)
+                    var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).
+                        Select(q => (int?)q.Subject.SubjectGroup.Id).ToList();
+                    HashSet<int?> currentTempList = new HashSet<int?>(currentIdList); // take unique subjectGroup Id, remove redundant
+                    List<int?> currentSubjectGroupIds = currentTempList.ToList();// easy to interact
+
+
+                    List<string> subjectGroupNames = new List<string>();
+                    List<int> sumPassStudents = new List<int>();
+                    List<int> sumFailStudents = new List<int>();
+                    for (int i = 0; i < currentSubjectGroupIds.Count(); i++)
                     {
-                        totalPassed += (int)item[0];
-                        totalFailed += (int)item[1];
-                        totalStudying += (int)item[2];
+                        var subjectGroupId = currentSubjectGroupIds[i];
+                        if (subjectGroupId != null)
+                        {
+                            var list = context.Courses.Where(q => q.Id == semester.Id &&
+                             q.Subject.SubjectGroup.Id == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
+                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Passed).Count(),
+                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Failed).Count(),
+                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Studying).Count(),
+
+                             }).ToList();
+                            int totalPassed = 0;
+                            int totalFailed = 0;
+                            int totalStudying = 0;
+                            foreach (var item in list)
+                            {
+                                totalPassed += (int)item[0];
+                                totalFailed += (int)item[1];
+                                totalStudying += (int)item[2];
+                            }
+                            var subjectGroupName = context.SubjectGroups.Where(q => q.Id == subjectGroupId)
+                                .Select(q => q.Name).FirstOrDefault();
+                            subjectGroupNames.Add(subjectGroupName);
+                            sumPassStudents.Add(totalPassed);
+                            sumFailStudents.Add(totalFailed);
+                        }
                     }
-                    var subjectGroupName = context.SubjectGroups.Where(q => q.Id == subjectGroupId)
-                        .Select(q => q.Name).FirstOrDefault();
-                    subjectGroupNames.Add(subjectGroupName);
-                    sumPassStudents.Add(totalPassed);
-                    sumFailStudents.Add(totalFailed);
+
+
+                    return Json(new
+                    {
+                        success = true,
+                        subjectGroupNameList = subjectGroupNames,
+                        passList = sumPassStudents,
+                        failList = sumFailStudents,
+                        semesterName = semester.Title + semester.Year
+                    }, JsonRequestBehavior.AllowGet);
                 }
 
-
-                return Json(new
-                {
-                    success = true,
-                    subjectGroupNameList = subjectGroupNames,
-                    passList = sumPassStudents,
-                    failList = sumFailStudents,
-                    semesterName = semester.Title + semester.Year
-                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e });
             }
 
         }
@@ -374,7 +388,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             return RedirectToAction("CourseDetails", new { courseId = courseId });
         }
 
-        public ActionResult GetTestResultCurrentSemester(int semesterId = 3)
+        public ActionResult GetTestResultCurrentSemester(int semesterId = -1)
         {
             try
             {
@@ -443,7 +457,8 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 
 
         //get study statistic of every subject in subjectGroup
-        public ActionResult StudyStatisticBySubjectGroup(int subjectGroupId, int semesterId = -1)
+
+        public ActionResult StudyStatisticBySubjectGroup(int? subjectGroupId, int? semesterId = -1)
         {
             try
             {
@@ -466,7 +481,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                     //List<double> minMarks = new List<double>();
                     //List<double> maxMarks = new List<double>();
 
-                    List<SubjectStudyStatistic> statisticList = new List<SubjectStudyStatistic>();
+                    List<IConvertible[]> statisticList = new List<IConvertible[]>();
 
                     for (int i = 0; i < currentSubjectIds.Count(); i++)
                     {
@@ -493,30 +508,30 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         {
                             total += (int)item[0]; //total
                             totalPassed += (int)item[1]; //pass
-                            if ((int)item[2] > maxMark)
+                            if ((double)item[2] > maxMark)
                             {
-                                maxMark = (int)item[2];
+                                maxMark = (double)item[2];
                             }
-                            if ((int)item[3] < minMark)
+                            if ((double)item[3] < minMark)
                             {
-                                minMark = (int)item[3];
+                                minMark = (double)item[3];
                             }
                         }
-                        passPercent = totalPassed / total * 100;
+                        passPercent = Math.Round((totalPassed * 1.0 / total * 100), 2);
                         var subjectName = context.Subjects.Where(q => q.Id == subjectId).Select(q => q.SubjectName).FirstOrDefault().ToString();
                         //subjectNames.Add(subjectName);
                         //totalStudents.Add(total);
                         //totalPassStudents.Add(totalPassed);
                         //maxMarks.Add(maxMark);
                         //minMarks.Add(minMark);
-                        statisticList.Add(new SubjectStudyStatistic
+                        statisticList.Add(new IConvertible[]
                         {
-                            SubjectName = subjectName,
-                            TotalStudent = total,
-                            TotalPassedStudent = totalPassed,
-                            PassPecentage = passPercent,
-                            MaxMark = maxMark,
-                            MinMark = minMark
+                           subjectName,
+                           total,
+                           totalPassed,
+                           passPercent,
+                           maxMark,
+                           minMark
                         });
                     }
 
@@ -561,7 +576,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                               Status = Enum.GetName(typeof(StudentInCourseStatus), sc.Status == null ? 0 : sc.Status.Value)
                           }).OrderBy(q => q.RollNumber).ToList();
 
-                semesterName= context.Semesters.Where(q => q.Id == semesterId).Select(q => q.Title + q.Year).FirstOrDefault();
+                semesterName = context.Semesters.Where(q => q.Id == semesterId).Select(q => q.Title + q.Year).FirstOrDefault();
                 fileName += semesterName;
             }
             MemoryStream ms = new MemoryStream();
