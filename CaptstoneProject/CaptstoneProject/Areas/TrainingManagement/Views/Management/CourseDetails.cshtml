@@ -222,24 +222,40 @@
                                 </td>
                                 @foreach (var mark in Model.StudentInCourse[i - 1].MarksComponent)
                                 {
-                                    if (mark.Mark != null)
+                                    if (mark.EdittedMark == null)
                                     {
-                                        if (mark.Mark.Value == -1)
+                                        if (mark.Mark != null)
+                                        {
+                                            if (mark.Mark.Value == -1)
+                                            {
+                                            <td> - </td>
+                                            }
+                                            else
+                                            {
+                                            <td>
+                                                @mark.Mark
+                                            </td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                        <td>
+                                            -
+                                        </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (mark.EdittedMark.Value == -1)
                                         {
                                             <td> - </td>
                                         }
                                         else
                                         {
                                             <td>
-                                                @mark.Mark
+                                               <b style="color:red"> @mark.EdittedMark </b>
                                             </td>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            -
-                                        </td>
                                     }
                                 }
                                 @if (Model.StudentInCourse[i - 1].Average != "-1")
