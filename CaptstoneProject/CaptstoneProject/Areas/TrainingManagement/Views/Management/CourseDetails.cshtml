@@ -199,16 +199,23 @@
                                     @i
                                 </td>
                                 <td>
-                                    @*@if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
-                                    {*@
+                                    @if (Model.IsPublish == 0 || Model.IsPublish == 1 || Model.IsPublish == 2)
+                                    {
+                                        @*@if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
+                                            {*@
                                         <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
-                                    @*}
+                                        @*}
+                                            else
+                                            {
+                                                <div>
+                                                    @Model.StudentInCourse[i - 1].UserName
+                                                </div>
+                                            }*@
+                                    }
                                     else
                                     {
-                                        <div>
-                                            @Model.StudentInCourse[i - 1].UserName
-                                        </div>
-                                    }*@
+                                        @Model.StudentInCourse[i - 1].UserName
+                                    }
                                 </td>
                                 <td>
                                     @Model.StudentInCourse[i - 1].StudentCode

@@ -415,17 +415,30 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     //var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
                     //average += mark * componentPercentage/100;
 
-                    if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    //if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    //{
+                    //    if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
+                    //    {
+                    //        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                    //        studentMark.EdittedMark = mark;
+                    //        studentMark.Note = note;
+                    //        studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                    //    }
+                    //}
+                    //else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+                    //{
+                    //    var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                    //    studentMark.Mark = mark;
+                    //}
+                    if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
                     {
-                        if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
-                        {
-                            var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
-                            studentMark.EdittedMark = mark;
-                            studentMark.Note = note;
-                            studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
-                        }
+                        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                        studentMark.EdittedMark = mark;
+                        studentMark.Note = note;
+                        studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
                     }
-                    else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+
+                    else
                     {
                         var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
                         studentMark.Mark = mark;
