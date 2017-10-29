@@ -155,6 +155,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="CourseId" Type="int" Nullable="false" />
           <Property Name="StudentId" Type="int" Nullable="false" />
+          <Property Name="HasRetake" Type="bit" />
         </EntityType>
         <EntityType Name="StudentMajor">
           <Key>
@@ -782,6 +783,7 @@
           <NavigationProperty Name="Course" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Course" FromRole="StudentInCourse" ToRole="Course" />
           <NavigationProperty Name="StudentCourseMarks" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" FromRole="StudentInCourse" ToRole="StudentCourseMark" />
           <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Student" FromRole="StudentInCourse" ToRole="StudentMajor" />
+          <Property Name="HasRetake" Type="Boolean" />
         </EntityType>
         <EntityType Name="StudentMajor">
           <Key>
@@ -1183,6 +1185,7 @@
           <EntitySetMapping Name="StudentInCourses">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentInCourse">
               <MappingFragment StoreEntitySet="StudentInCourse">
+                <ScalarProperty Name="HasRetake" ColumnName="HasRetake" />
                 <ScalarProperty Name="StudentId" ColumnName="StudentId" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
