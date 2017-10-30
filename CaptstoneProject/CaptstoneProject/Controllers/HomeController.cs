@@ -1,6 +1,7 @@
 ﻿using CaptstoneProject.Models;
 using DataService.Model;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
@@ -42,8 +43,21 @@ namespace CaptstoneProject.Controllers
         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index");
+            { 
+                var UserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var uId = User.Identity.GetUserId();
+                var roleList = UserManager.GetRoles(uId);
+                var role = roleList.FirstOrDefault();
+                if (returnUrl == null)
+                {
+                    switch (role)
+                    {
+                        case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                        case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
+                        case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
+                        case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                    }
+                }
             }
             //else
             //{

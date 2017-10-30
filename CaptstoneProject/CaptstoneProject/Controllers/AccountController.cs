@@ -599,13 +599,14 @@ namespace CaptstoneProject.Controllers
 
         //
         // POST: /Account/LogOff to Custom Login at HomeController
-        //[HttpPost]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             Session.Abandon();
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login", "Home", new { returnUrl = ""});
         }
 
         //
