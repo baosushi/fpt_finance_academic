@@ -118,5 +118,20 @@ namespace CaptstoneProject.Models
             public int Index { get; set; }
             public string Name { get; set; }
         }
+
+        public class CourseRegisterInfoModel
+        {
+            public string SubjectCode { get; set; }
+            public int PreferredSlot { get; set; }
+            public DateTime RegisteredBy { get; set; }
+            public int AssignedSlot { get; set; }
+        }
+
+        public class StudentRegisterModel
+        {
+            public string Name { get; set; }
+            public string StudentCode { get; set; }
+            public List<CourseRegisterInfoModel> RegisteredCourses { get; set; }
+        }
     }
 }

@@ -1198,6 +1198,18 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         {
             return View();
         }
+
+        public ActionResult ArrangeCourse()
+        {
+            using(var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault();
+
+
+            }
+
+            return null;
+        }
     }
 
 }

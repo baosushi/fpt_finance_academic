@@ -40,6 +40,10 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AvailableSubject" Width="1.5" PointX="8.25" PointY="3.125" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Semester" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -5,6 +5,24 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DB_Finance_AcademicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AvailableSubject">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="StudentMajorId" />
+            <PropertyRef Name="SubjectId" />
+            <PropertyRef Name="SemesterId" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="PreferredSlot" Type="int" />
+          <Property Name="IsInProgram" Type="bit" />
+          <Property Name="IsRelearn" Type="bit" />
+          <Property Name="RegeisteredBy" Type="datetime" />
+          <Property Name="StudentMajorId" Type="int" Nullable="false" />
+          <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="SemesterId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Schedule">
           <Key>
             <PropertyRef Name="Id" />
@@ -185,6 +203,42 @@
           <Property Name="Percentage" Type="float" Nullable="false" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_AvailableSubject_Semester">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
+          <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="SemesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableSubject_StudentMajor">
+          <End Role="StudentMajor" Type="Self.StudentMajor" Multiplicity="1" />
+          <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableSubject_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Course_Semester">
           <End Role="Semester" Type="Self.Semester" Multiplicity="0..1" />
           <End Role="Course" Type="Self.Course" Multiplicity="*" />
@@ -440,6 +494,30 @@
           <EntitySet Name="StudentMajor" EntityType="Self.StudentMajor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectMark" EntityType="Self.SubjectMark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AvailableSubject" EntityType="Self.AvailableSubject" store:Type="Tables" store:Schema="db_owner">
+            <DefiningQuery>SELECT 
+    [AvailableSubject].[Id] AS [Id], 
+    [AvailableSubject].[PreferredSlot] AS [PreferredSlot], 
+    [AvailableSubject].[IsInProgram] AS [IsInProgram], 
+    [AvailableSubject].[IsRelearn] AS [IsRelearn], 
+    [AvailableSubject].[RegeisteredBy] AS [RegeisteredBy], 
+    [AvailableSubject].[StudentMajorId] AS [StudentMajorId], 
+    [AvailableSubject].[SubjectId] AS [SubjectId], 
+    [AvailableSubject].[SemesterId] AS [SemesterId]
+    FROM [db_owner].[AvailableSubject] AS [AvailableSubject]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AvailableSubject_Semester" Association="Self.FK_AvailableSubject_Semester">
+            <End Role="Semester" EntitySet="Semester" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableSubject_StudentMajor" Association="Self.FK_AvailableSubject_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajor" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableSubject_Subject" Association="Self.FK_AvailableSubject_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubject" />
+          </AssociationSet>
           <AssociationSet Name="FK_Course_Semester" Association="Self.FK_Course_Semester">
             <End Role="Semester" EntitySet="Semester" />
             <End Role="Course" EntitySet="Course" />
@@ -611,6 +689,19 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="AvailableSubjects" EntityType="DB_Finance_AcademicModel.AvailableSubject" />
+          <AssociationSet Name="FK_AvailableSubject_Semester" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Semester">
+            <End Role="Semester" EntitySet="Semesters" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableSubject_StudentMajor" Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajors" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableSubject_Subject" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Schedule">
           <Key>
@@ -634,6 +725,7 @@
           <Property Name="SemesterInYear" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Semester" FromRole="Semester" ToRole="Course" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Semester" FromRole="Semester" ToRole="AvailableSubject" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -796,6 +888,7 @@
           <Property Name="OldStudentId" Type="Int32" />
           <NavigationProperty Name="Student" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="StudentMajor" ToRole="Student" />
           <NavigationProperty Name="StudentInCourses" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Student" FromRole="StudentMajor" ToRole="StudentInCourse" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
@@ -809,6 +902,7 @@
           <NavigationProperty Name="TeacherSubjects" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" FromRole="Subject" ToRole="TeacherSubject" />
           <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Subject" FromRole="Subject" ToRole="Course" />
           <NavigationProperty Name="SubjectMarks" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="Subject" ToRole="SubjectMark" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="Subject" ToRole="AvailableSubject" />
         </EntityType>
         <EntityType Name="SubjectMark">
           <Key>
@@ -1032,6 +1126,61 @@
           <End Type="DB_Finance_AcademicModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="DB_Finance_AcademicModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="AvailableSubject">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="StudentMajorId" />
+            <PropertyRef Name="SubjectId" />
+            <PropertyRef Name="SemesterId" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="PreferredSlot" Type="Int32" />
+          <Property Name="IsInProgram" Type="Boolean" />
+          <Property Name="IsRelearn" Type="Boolean" />
+          <Property Name="RegeisteredBy" Type="DateTime" Precision="3" />
+          <Property Name="StudentMajorId" Type="Int32" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <Property Name="SemesterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Semester" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Semester" FromRole="AvailableSubject" ToRole="Semester" />
+          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="AvailableSubject" ToRole="StudentMajor" />
+          <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="AvailableSubject" ToRole="Subject" />
+        </EntityType>
+        <Association Name="FK_AvailableSubject_Semester">
+          <End Type="DB_Finance_AcademicModel.Semester" Role="Semester" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="SemesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableSubject_StudentMajor">
+          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableSubject_Subject">
+          <End Type="DB_Finance_AcademicModel.Subject" Role="Subject" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1233,6 +1382,20 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="AvailableSubjects">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
+              <MappingFragment StoreEntitySet="AvailableSubject">
+                <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
+                <ScalarProperty Name="RegeisteredBy" ColumnName="RegeisteredBy" />
+                <ScalarProperty Name="IsRelearn" ColumnName="IsRelearn" />
+                <ScalarProperty Name="IsInProgram" ColumnName="IsInProgram" />
+                <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -18,6 +18,7 @@ namespace DataService.Model
         public StudentMajor()
         {
             this.StudentInCourses = new HashSet<StudentInCourse>();
+            this.AvailableSubjects = new HashSet<AvailableSubject>();
         }
     
         public int Id { get; set; }
@@ -29,5 +30,7 @@ namespace DataService.Model
         public virtual Student Student { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentInCourse> StudentInCourses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
     }
 }
