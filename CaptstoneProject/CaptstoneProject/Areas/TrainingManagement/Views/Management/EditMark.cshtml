@@ -22,105 +22,228 @@
                     <div class="row">
                         @if (Model.StudentInCourseStatus == "Issued")
                         {
-                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                            if (Model.CourseStatus == 2)
                             {
-                                <div class="col-md-3">
-                                    <label>@Model.ComponentNames[i - 1]</label>
-                                </div>
+                                for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                                {
+                                    if (!Model.ComponentNames[i - 1].Contains("2nd"))
+                                    {
+                                        <div class="col-md-3">
+                                            <label>@Model.ComponentNames[i - 1]</label>
+                                        </div>
+                                        if (Model.MarksComponent[i - 1].EdittedMark ==null)
+                                        {
+                                            if (Model.MarksComponent[i - 1].Mark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                    }
 
-                                if (Model.MarksComponent[i - 1].Mark != -1)
-                                {
-                                    <div class="col-md-3">
-                                        <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-3">
-                                        <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
-                                    </div>
                                 }
                             }
-                        }
-
-                        else if (Model.CourseStatus == 1)
-                        {
-                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                            else if (Model.CourseStatus == 3)
                             {
-                                if (Model.MarksComponent[i - 1].CourseMark.IsFinal == null || Model.MarksComponent[i - 1].CourseMark.IsFinal == false)
+                                for (int i = 1; i <= Model.ComponentNames.Count; i++)
                                 {
+
                                     <div class="col-md-3">
                                         <label>@Model.ComponentNames[i - 1]</label>
                                     </div>
 
-                                    if (Model.MarksComponent[i - 1].Mark != -1)
+                                    if (Model.MarksComponent[i - 1].EdittedMark == null)
                                     {
-                                        <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                        </div>
+                                        if (Model.MarksComponent[i - 1].Mark != -1)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                            </div>
+                                        }
                                     }
                                     else
                                     {
-                                        <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
-                                        </div>
+                                        if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                            </div>
+                                        }
                                     }
+
                                 }
 
                             }
                         }
-                        else if (Model.CourseStatus == 2)
+                        else
                         {
-                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                            if (Model.CourseStatus == 1)
                             {
-
-                                if (!Model.ComponentNames[i - 1].Contains("2nd") && Model.MarksComponent[i - 1].CourseMark.IsFinal == true)
+                                for (int i = 1; i <= Model.ComponentNames.Count; i++)
                                 {
-                                    <div class="col-md-3">
-                                        <label>@Model.ComponentNames[i - 1]</label>
-                                    </div>
+                                    if (Model.MarksComponent[i - 1].CourseMark.IsFinal == null || Model.MarksComponent[i - 1].CourseMark.IsFinal == false)
+                                    {
+                                        <div class="col-md-3">
+                                            <label>@Model.ComponentNames[i - 1]</label>
+                                        </div>
 
-                                    if (Model.MarksComponent[i - 1].Mark != -1)
-                                    {
-                                        <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                        </div>
+                                        if (Model.MarksComponent[i - 1].EdittedMark == null)
+                                        {
+                                            if (Model.MarksComponent[i - 1].Mark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
                                     }
-                                    else
+
+                                }
+                            }
+                            else if (Model.CourseStatus == 2)
+                            {
+                                for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                                {
+
+                                    if (!Model.ComponentNames[i - 1].Contains("2nd") && Model.MarksComponent[i - 1].CourseMark.IsFinal == true)
                                     {
                                         <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                            <label>@Model.ComponentNames[i - 1]</label>
                                         </div>
+
+                                        if (Model.MarksComponent[i - 1].EdittedMark == null)
+                                        {
+                                            if (Model.MarksComponent[i - 1].Mark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                            else if (Model.CourseStatus == 3)
+                            {
+                                for (int i = 1; i <= Model.ComponentNames.Count; i++)
+                                {
+                                    if (Model.ComponentNames[i - 1].Contains("2nd"))
+                                    {
+                                        <div class="col-md-3">
+                                            <label>@Model.ComponentNames[i - 1]</label>
+                                        </div>
+
+                                        if (Model.MarksComponent[i - 1].EdittedMark == null)
+                                        {
+                                            if (Model.MarksComponent[i - 1].Mark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">
+                                                    <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                                </div>
+                                            }
+                                        }
                                     }
                                 }
 
                             }
-                        }
-                        else if (Model.CourseStatus == 3)
-                        {
-                            for (int i = 1; i <= Model.ComponentNames.Count; i++)
-                            {
-                                if (Model.ComponentNames[i - 1].Contains("2nd"))
-                                {
-                                    <div class="col-md-3">
-                                        <label>@Model.ComponentNames[i - 1]</label>
-                                    </div>
-
-                                    if (Model.MarksComponent[i - 1].Mark != -1)
-                                    {
-                                        <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-3">
-                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
-                                        </div>
-                                    }
-                                }
-                            }
-
                         }
                         @*@if (Model.Average != "-1")
                             {
@@ -165,18 +288,18 @@
 <script>
     $('#edit-form').submit(function (e) {
         e.preventDefault();
-            $.ajax({
-                url: '@Url.Action("GetEdit","Management")',
-                data: { markList: $('#edit-form').serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val(), note: $("#note").val() },
-                type: "POST",
-                success: function (result) {
-                    swal("Success!", "Your marks have been submitted!", "success");
-                    location.reload();
-                },
-                error: function (error) {
-                    alert("Error, please try again later.");
-                }
-            });
+        $.ajax({
+            url: '@Url.Action("GetEdit","Management")',
+            data: { markList: $('#edit-form').serializeArray(), courseId: $('#courseId').val(), studentId: $('#studentId').val(), note: $("#note").val() },
+            type: "POST",
+            success: function (result) {
+                swal("Success!", "Your marks have been submitted!", "success");
+                location.reload();
+            },
+            error: function (error) {
+                alert("Error, please try again later.");
+            }
+        });
         return false;
     });
     $("input").on('change', function () {

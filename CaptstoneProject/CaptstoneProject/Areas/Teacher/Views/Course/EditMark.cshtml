@@ -28,17 +28,35 @@
                                 <div class="col-md-3">
                                     <label>@Model.ComponentNames[i - 1]</label>
                                 </div>
-                                if (Model.MarksComponent[i - 1].Mark != -1)
+                                if (Model.MarksComponent[i - 1].EdittedMark == null)
                                 {
+                                    if (Model.MarksComponent[i - 1].Mark != -1)
+                                    {
                                     <div class="col-md-3">
                                         <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].Mark" title="Please enter number format" />
                                     </div>
-                                }
-                                else
-                                {
+                                    }
+                                    else
+                                    {
                                     <div class="col-md-3">
                                         <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
                                     </div>
+                                    }
+                                }
+                                else
+                                {
+                                    if (Model.MarksComponent[i - 1].EdittedMark != -1)
+                                    {
+                                        <div class="col-md-3">
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="@Model.MarksComponent[i - 1].EdittedMark" title="Please enter number format" /><b style="color:red"> Editted </b>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-3">
+                                            <input type="number" min="0" class="mark-input" max="10" step="0.01" name="@Model.MarksComponent[i - 1].CourseMarkId" autocomplete="off" value="" title="Please enter number format" />
+                                        </div>
+                                    }
                                 }
                             }
                         }

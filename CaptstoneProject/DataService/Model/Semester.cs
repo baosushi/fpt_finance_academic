@@ -18,6 +18,7 @@ namespace DataService.Model
         public Semester()
         {
             this.Courses = new HashSet<Course>();
+            this.AvailableSubjects = new HashSet<AvailableSubject>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,7 @@ namespace DataService.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
     }
 }

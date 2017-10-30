@@ -415,17 +415,30 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     //var componentPercentage = coursePer.Where(q => q.Id == componentId).Select(q => q.Per).FirstOrDefault();
                     //average += mark * componentPercentage/100;
 
-                    if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    //if (course.Status.HasValue && (course.Status.Value == (int)CourseStatus.FirstPublish || course.Status.Value == (int)CourseStatus.FinalPublish))
+                    //{
+                    //    if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
+                    //    {
+                    //        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                    //        studentMark.EdittedMark = mark;
+                    //        studentMark.Note = note;
+                    //        studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                    //    }
+                    //}
+                    //else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+                    //{
+                    //    var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                    //    studentMark.Mark = mark;
+                    //}
+                    if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
                     {
-                        if (studentInCourse.Status.HasValue && studentInCourse.Status.Value == (int)StudentInCourseStatus.Issued)
-                        {
-                            var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
-                            studentMark.EdittedMark = mark;
-                            studentMark.Note = note;
-                            studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
-                        }
+                        var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
+                        studentMark.EdittedMark = mark;
+                        studentMark.Note = note;
+                        studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
                     }
-                    else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
+
+                    else
                     {
                         var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
                         studentMark.Mark = mark;
@@ -437,7 +450,14 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
                     {
-                        average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        if (item.EdittedMark == null)
+                        {
+                            average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        }
+                        else
+                        {
+                            average += item.EdittedMark != -1 ? item.EdittedMark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        }
                     }
                 }
                 if (studentInCourse.HasRetake == true)
@@ -682,9 +702,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                             double? average = 0;
                                             foreach (var item in studentInCourse.StudentCourseMarks)
                                             {
-                                                if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
+                                                if (item.EdittedMark == null)
                                                 {
-                                                    average += item.Mark * item.CourseMark.Percentage / 100;
+                                                    average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                                                }
+                                                else
+                                                {
+                                                    average += item.EdittedMark != -1 ? item.EdittedMark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
                                                 }
                                             }
                                             for (var j = 5; j <= totalCol; j++)
@@ -1177,6 +1201,18 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         public ActionResult ManageStudent()
         {
             return View();
+        }
+
+        public ActionResult ArrangeCourse()
+        {
+            using(var context = new DB_Finance_AcademicEntities())
+            {
+                var semester = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault();
+
+
+            }
+
+            return null;
         }
     }
 

@@ -456,7 +456,14 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 {
                     if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
                     {
-                        average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        if (item.EdittedMark == null)
+                        {
+                            average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        }
+                        else
+                        {
+                            average += item.EdittedMark != -1 ? item.EdittedMark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                        }
                     }
                 }
                 if (studentInCourse.HasRetake == true)
@@ -601,7 +608,14 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         {
                             if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
                             {
-                                average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                                if (item.EdittedMark == null)
+                                {
+                                    average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                                }
+                                else
+                                {
+                                    average += item.EdittedMark != -1 ? item.EdittedMark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
+                                }
                             }
                         }
                         if (studentInCourse.HasRetake == true)
