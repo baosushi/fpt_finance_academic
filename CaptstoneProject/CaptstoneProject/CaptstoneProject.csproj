@@ -459,7 +459,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\TrainingManagement\Views\Management\ManageStudent.cshtml" />
-    <Content Include="Areas\TrainingManagement\Views\Management\ImportSubject.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\SubjectManagement.cshtml" />
     <Content Include="Areas\Teacher\Views\Course\EditCourseMark.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />

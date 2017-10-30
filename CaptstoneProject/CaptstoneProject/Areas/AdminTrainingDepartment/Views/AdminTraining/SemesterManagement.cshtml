@@ -29,10 +29,10 @@
                     </select>
                 </form>
                 <div>
-                    <button id="btn-eport-allstudentmark" class="btn btn-success" title="Export all mark of student by semester">
+                    <button id="btn-export-allstudentmark" class="btn btn-success" title="Export all mark of student by semester">
                         <i class="fa fa-download"></i>Export All Students Mark
                     </button>
-                    <form class="hidden" action="@Url.Action("")" id="form-export-allstudentmark">
+                    <form class="hidden" action="@Url.Action("ExportAllStudentMarkExcelbySemester")" id="form-export-allstudentmark">
                         <input class="hidden" name="semesterId" value="">
                     </form>
                 </div>
@@ -280,7 +280,7 @@
             $('#semesterForm').submit();
         });
 
-        $('#btn-eport-allstudentmark').on("click", function () {
+        $('#btn-export-allstudentmark').on("click", function () {
             $('#form-export-allstudentmark').submit();
         });
     });

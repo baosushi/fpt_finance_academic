@@ -933,7 +933,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         }
                         else
                         {
-
                             stream = fileContent.InputStream;
                         }
 
@@ -952,18 +951,23 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     var totalRow = ws.Dimension.Rows;
 
                                     //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
-                                    if (ws.Cells[4, 2].Text.Trim().ToUpper().Equals("SUBJECT CODE")
-                                        & ws.Cells[4, 4].Text.Trim().ToUpper().Equals("SUBJECT NAME"))
+                                    var queryCell =from cell in ws.Cells
+                                                   where cell.Value.ToString().
+                                                   Trim().ToUpper().Equals("SUBJECT CODE") select cell;
+                                    var resultCell = queryCell.FirstOrDefault();
+                                    var headerRow = resultCell.Start.Row;
+                                    var headerColumn = resultCell.Start.Column;
+
+
+                                    if (ws.Cells[headerRow, headerColumn+2].Text.Trim().ToUpper().Equals("SUBJECT NAME"))
                                     {
 
-                                        for (int i = 5; i <= totalRow; i++) //data start from row 5 in template
+                                        for (int i = headerRow+1; i <= totalRow; i++) //data start from row 5 in template
                                         {
-                                            var subCode = ws.Cells[i, 2].Text.Trim();
-                                            var subName = ws.Cells[i, 4].Text.Trim();
-                                            var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
-                                            if (existList.Count == 0)
-                                                context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
-
+                                            var subjectCode = ws.Cells[i, headerColumn].Text.Trim(); //Subject Code
+                                            var subjectName = ws.Cells[i, headerColumn+2].Text.Trim(); //Subject Name
+                                            if (!context.Subjects.Any(q => q.SubjectCode.Equals(subjectCode)))
+                                                context.Subjects.Add(new Subject { SubjectCode = subjectCode, SubjectName = subjectName });
                                         }
                                     }
 

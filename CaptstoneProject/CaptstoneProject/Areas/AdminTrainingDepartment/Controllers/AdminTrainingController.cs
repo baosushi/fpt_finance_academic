@@ -319,11 +319,11 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         var subjectGroupId = currentSubjectGroupIds[i];
                         if (subjectGroupId != null)
                         {
-                            var list = context.Courses.Where(q => q.Id == semester.Id &&
-                             q.Subject.SubjectGroup.Id == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
-                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Passed).Count(),
-                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Failed).Count(),
-                             q.StudentInCourses.Select(a => a.Status == (int)StudentInCourseStatus.Studying).Count(),
+                            var list = context.Courses.Where(q => q.SemesterId == semester.Id &&
+                             q.Subject.SubjectGroupId == subjectGroupId).AsEnumerable().Select(q => new IConvertible[]{
+                             q.StudentInCourses.Where(a => a.Status == (int)StudentInCourseStatus.Passed).Count(),
+                             q.StudentInCourses.Where(a => a.Status == (int)StudentInCourseStatus.Failed).Count(),
+                             q.StudentInCourses.Where(a => a.Status == (int)StudentInCourseStatus.Studying).Count(),
 
                              }).ToList();
                             int totalPassed = 0;
