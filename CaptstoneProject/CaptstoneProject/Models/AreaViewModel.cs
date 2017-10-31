@@ -90,6 +90,8 @@ namespace CaptstoneProject.Models
             public bool IsEditable { get; set; } // true: able to edit mark, false: vice versa
             public int IsPublish { get; set; }
             public string StatusName { get; set; }
+            public List<int> FinalCol { get; set; }
+            public bool ReadySubmit { get; set; }
 
             public class CourseRecordViewModel
             {

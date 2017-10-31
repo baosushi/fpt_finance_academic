@@ -86,7 +86,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = q.Status,
-                            StatusName = Enum.GetName(typeof(StudentInCourseStatus), q.Status == null ? 0 : q.Status.Value)
+                            StatusName = Enum.GetName(typeof(StudentInCourseStatus), q.Status == null ? 0 : q.Status.Value),
+
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -96,8 +97,25 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         //    q.Average,
                         //    q.Status
                         //});
+                        DateTime currentDate = DateTime.Now;
+                        bool readySub = false;
+                        if ((course.EndDate.Value == null ? currentDate : course.EndDate.Value).Subtract(currentDate).Days <= 14)
+                        {
+                            readySub = true;
+                        }
 
                         var columns = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => q.ComponentName).ToList();
+                        var components = context.CourseMarks.Where(q => q.CourseId == courseId).ToList();
+                        List<int> finalColumns = new List<int>();
+                        int i = 3;
+                        foreach (var com in components)
+                        {
+                            if (com.IsFinal == true)
+                            {
+                                finalColumns.Add(i);
+                            }
+                            i++;
+                        }
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {
@@ -107,6 +125,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
+                            FinalCol = finalColumns,
+                            ReadySubmit = readySub,
                             //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                             IsPublish = course.Status == (int)CourseStatus.InProgress ? (int)FinalEditStatus.SubmitComponent : course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
                             StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
