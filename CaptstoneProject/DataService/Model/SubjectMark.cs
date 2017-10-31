@@ -18,6 +18,7 @@ namespace DataService.Model
         public string ComponentName { get; set; }
         public double Percentage { get; set; }
         public int SubjectId { get; set; }
+        public Nullable<System.DateTime> EffectivenessDate { get; set; }
     
         public virtual Subject Subject { get; set; }
     }

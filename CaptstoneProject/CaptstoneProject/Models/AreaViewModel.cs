@@ -133,5 +133,14 @@ namespace CaptstoneProject.Models
             public string StudentCode { get; set; }
             public List<CourseRegisterInfoModel> RegisteredCourses { get; set; }
         }
+
+        public class SubjectMarkViewModel
+        {
+            public int Index { get; set; }
+            public int Id { get; set; }
+            public string ComponentName { get; set; }
+            public double Percentage { get; set; }
+            public string EffectivenessDate { get; set; }
+        }
     }
 }
