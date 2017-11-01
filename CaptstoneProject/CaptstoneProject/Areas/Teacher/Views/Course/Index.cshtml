@@ -8,18 +8,42 @@
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
-            <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Your courses </div>
-            <form action="@Url.Action("Index","Course")" id="semesterForm">
-                <label>Term: </label>
-                <select id="semesterSelector" style="width:120px" name="semesterId">
-                    @foreach (var item in ViewBag.semList)
-                    {
-                        <option value="@item.Value">
-                            @item.Text
-                        </option>
-                    }
-                </select>
-            </form>
+            
+            @if (ViewBag.showAll)
+            {
+                <div class="panel-title"><i class="fa fa-address-book-o" style="color:green"></i> All courses </div>
+                <form action="@Url.Action("Index", "Course")" id="semesterForm">
+                    <div class="row" style="padding: 10px 0px;">
+                        <div class="col-md-4">
+                            <label>Term: </label>
+                            <select id="semesterSelector" style="width:120px" name="semesterId">
+                                @foreach (var item in ViewBag.semList)
+                                {
+                                    <option value="@item.Value">
+                                        @item.Text
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Subjects: </label>
+                            <select id="subjectSelector" style="width:120px" name="subjectId">
+                                @foreach (var item in ViewBag.subjectList)
+                                {
+                                    <option value="@item.Value">
+                                        @item.Text
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <input hidden type="text" name="all" value="true" />
+                </form>
+            }
+            else
+            {
+                <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Current courses </div>
+            }
             <div class="panel-body table-responsive">
                 <table id="course-table" class="table display dataTable">
                     <thead>
@@ -93,24 +117,32 @@
 </div>
 <script>
     $(document).ready(function () {
-        $("#semesterSelector").selectpicker();
+        
         var selectedSem = '@ViewBag.selectedSem';
         if (selectedSem != -1 && selectedSem != '') {
             $('#semesterSelector').val(selectedSem);
+            $("#semesterSelector").selectpicker();
         }
+        var selectedSub = '@ViewBag.selectedSub';
+        if (selectedSub != -1 && selectedSub != '') {
+            $('#subjectSelector').val(selectedSub);
+            $("#subjectSelector").selectpicker();
+        }
+
+
         $('#course-table').DataTable({
             "searching": true,
             "columnDefs": [
-    {
-        targets: [1, 2,3],
+         {
+        targets: [1, 2, 3],
         className: "min-width-100",
         searchable: true,
-    },
-    {
+        },
+        {
         className: "dt-center",
         targets: "_all",
-        searchable:false,
-    }
+        searchable: false,
+        }
             ],
         });
     });
@@ -126,6 +158,9 @@
                 alert("Error, please try again later.");
             }
         });*@
+        $('#semesterForm').submit();
+    });
+    $("#subjectSelector").on('change', function () {
         $('#semesterForm').submit();
     });
 </script>

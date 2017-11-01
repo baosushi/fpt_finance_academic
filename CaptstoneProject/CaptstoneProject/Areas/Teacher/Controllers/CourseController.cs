@@ -22,7 +22,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
     public class CourseController : MyBaseController
     {
         // GET: Teacher/Course
-        public ActionResult Index(int semesterId = -1)
+        public ActionResult Index(bool all, int subjectId = -1, int semesterId = -1)
         {
             this.Session["loginName"] = "phuonglhk";
             var loginName = (string)Session["loginName"];
@@ -32,32 +32,57 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 //DateTime startDate, endDate;
                 var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
+                var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
+                //var subjects = context.TeacherSubjects.Where(q => q.Id == teacher.Id && q.SubjectId == subjectId).ToList();
+                subjectId = subjectId == -1 ? context.TeacherSubjects.Where(q => q.Id == teacher.Id).FirstOrDefault().SubjectId : subjectId;
                 //startDate = semester.StartDate.Value;
                 //endDate = semester.EndDate.Value;
-
-                courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
-                    .Courses.Where(q => q.SemesterId == semester.Id)
-                    .Select(q => new CourseRecordViewModel
-                    {
-                        CourseId = q.Id,
-                        Name = q.Subject.SubjectName,
-                        Code = q.Subject.SubjectCode,
-                        Class = q.ClassName,
-                        StartDate = q.StartDate.Value,
-                        EndDate = q.EndDate.Value,
-                        Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
-                    }).ToList();
+                if (all)
+                {
+                    courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
+                        .Courses.Where(q => q.SemesterId == semester.Id && q.SubjectId == subjectId)
+                        .Select(q => new CourseRecordViewModel
+                        {
+                            CourseId = q.Id,
+                            Name = q.Subject.SubjectName,
+                            Code = q.Subject.SubjectCode,
+                            Class = q.ClassName,
+                            StartDate = q.StartDate.Value,
+                            EndDate = q.EndDate.Value,
+                            Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                        }).ToList();
+                }
+                else
+                {
+                    courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
+                      .Courses.Where(q => q.SemesterId == semester.Id && q.Status != (int)CourseStatus.Closed && q.Status != (int)CourseStatus.Cancel)
+                      .Select(q => new CourseRecordViewModel
+                      {
+                          CourseId = q.Id,
+                          Name = q.Subject.SubjectName,
+                          Code = q.Subject.SubjectCode,
+                          Class = q.ClassName,
+                          StartDate = q.StartDate.Value,
+                          EndDate = q.EndDate.Value,
+                          Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                      }).ToList();
+                }
                 var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
                 var semesterList = semesters.Select(q => new SelectListItem
                 {
                     Text = q.Title + " " + q.Year,
                     Value = q.Id.ToString(),
                 }).ToList();
+                var subjects = context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).Select(q => new SelectListItem{
+                    Value=q.Subject.Id.ToString(),
+                    Text=q.Subject.SubjectName,
+                }).ToList();
                 ViewBag.semList = semesterList;
                 ViewBag.selectedSem = semester.Id;
+                ViewBag.showAll = all;
+                ViewBag.subjectList = subjects;
+                ViewBag.selectedSub = subjectId;
             }
-
-
             return View(courses);
         }
 
@@ -100,8 +125,24 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //    q.Average,
                         //    q.Status
                         //});
-
+                        DateTime currentDate = DateTime.Now;
+                        bool readySub = false;
+                        if ((course.EndDate.Value == null ? currentDate : course.EndDate.Value).Subtract(currentDate).Days <= 14)
+                        {
+                            readySub = true;
+                        }
                         var columns = course.CourseMarks.Select(q => q.ComponentName).ToList();
+                        var components = context.CourseMarks.Where(q => q.CourseId == courseId).ToList();
+                        List<int> finalColumns = new List<int>();
+                        int i = 3;
+                        foreach (var com in components)
+                        {
+                            if (com.IsFinal == true)
+                            {
+                                finalColumns.Add(i);
+                            }
+                            i++;
+                        }
                         var semester = course.Semester;
                         var model = new CourseDetailsViewModel
                         {
@@ -110,6 +151,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             StudentInCourse = data,
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
+                            FinalCol = finalColumns,
+                            ReadySubmit = readySub,
                             SubName = course.Subject.SubjectName,
                             IsEditable = course.Status == (int)CourseStatus.InProgress ? true : false,
                             StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
@@ -402,6 +445,27 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 });
             }
         }
+
+        //public JsonResult GetSubjectsByTeacher()
+        //{
+        //    this.Session["loginName"] = "phuonglhk";
+        //    var loginName = (string)Session["loginName"];
+        //    using (var context = new DB_Finance_AcademicEntities())
+        //    {
+        //        var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
+        //        var subjects = context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).Select(q => new SelectListItem{
+        //            Value=q.Subject.Id.ToString(),
+        //            Text=q.Subject.SubjectName,
+        //        });
+
+
+        //        return Json(new
+        //        {
+        //            subjectList = subjects,
+        //        });
+        //    }
+        //}
+
         [HttpPost]
         public ActionResult GetEdit(List<MarkComp> markList, int courseId, int studentId, string note)
         {
