@@ -161,13 +161,13 @@
                     if (last !== group) {
                         var formattedDate = moment(group, "DD/MM/YYYY hh:mm:ss").format("DD/MM/YYYY");
 
-                        if (i != 0)
+                        if (i == 0 && rows.page() == 0)
                             $(rows).eq(i).before(
-                                '<tr class="group"><th class="my-header text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><button class="btn btn-default">Apply</button></td></tr>'
+                                '<tr class="group"><th class="my-header-active text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><btn class="btn btn-warning active-status">Active</div></td></tr>'
                             );
                         else
                             $(rows).eq(i).before(
-                                '<tr class="group"><th class="my-header-active text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><btn class="btn btn-warning active-status">Active</div></td></tr>'
+                                '<tr class="group"><th class="my-header text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><button class="btn btn-default">Apply</button></td></tr>'
                             );
                         last = group;
                     }
