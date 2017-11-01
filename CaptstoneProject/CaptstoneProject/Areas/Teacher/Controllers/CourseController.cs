@@ -22,7 +22,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
     public class CourseController : MyBaseController
     {
         // GET: Teacher/Course
-        public ActionResult Index(bool all, int subjectId = -1, int semesterId = -1)
+        public ActionResult Index(bool all = false, int subjectId = -1, int semesterId = -1)
         {
             this.Session["loginName"] = "phuonglhk";
             var loginName = (string)Session["loginName"];
