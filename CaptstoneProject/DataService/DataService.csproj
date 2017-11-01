@@ -90,6 +90,9 @@
     <Compile Include="Model\CourseMark.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ExpectedCourse.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Schedule.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>

@@ -5,22 +5,27 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DB_Finance_AcademicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="AvailableSubject">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="StudentMajorId" />
-            <PropertyRef Name="SubjectId" />
-            <PropertyRef Name="SemesterId" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="PreferredSlot" Type="int" />
           <Property Name="IsInProgram" Type="bit" />
           <Property Name="IsRelearn" Type="bit" />
-          <Property Name="RegeisteredBy" Type="datetime" />
+          <Property Name="RegisteredBy" Type="datetime" />
           <Property Name="StudentMajorId" Type="int" Nullable="false" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="SemesterId" Type="int" Nullable="false" />
+          <Property Name="ExpectedCourseId" Type="int" />
+        </EntityType>
+        <EntityType Name="ExpectedCourse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="TeacherId" Type="int" />
           <Property Name="SemesterId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Schedule">
@@ -202,7 +207,20 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <Property Name="ComponentName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Percentage" Type="float" Nullable="false" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="EffectivenessDate" Type="datetime" />
         </EntityType>
+        <Association Name="FK_AvailableSubject_ExpectedCourse">
+          <End Role="ExpectedCourse" Type="Self.ExpectedCourse" Multiplicity="0..1" />
+          <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpectedCourse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="ExpectedCourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_AvailableSubject_Semester">
           <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
           <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
@@ -476,6 +494,8 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DB_Finance_AcademicModelStoreContainer">
+          <EntitySet Name="AvailableSubject" EntityType="Self.AvailableSubject" Schema="db_owner" store:Type="Tables" />
+          <EntitySet Name="ExpectedCourse" EntityType="Self.ExpectedCourse" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="db_owner" store:Type="Tables" />
@@ -494,18 +514,10 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <EntitySet Name="StudentMajor" EntityType="Self.StudentMajor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectMark" EntityType="Self.SubjectMark" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AvailableSubject" EntityType="Self.AvailableSubject" store:Type="Tables" store:Schema="db_owner">
-            <DefiningQuery>SELECT 
-    [AvailableSubject].[Id] AS [Id], 
-    [AvailableSubject].[PreferredSlot] AS [PreferredSlot], 
-    [AvailableSubject].[IsInProgram] AS [IsInProgram], 
-    [AvailableSubject].[IsRelearn] AS [IsRelearn], 
-    [AvailableSubject].[RegeisteredBy] AS [RegeisteredBy], 
-    [AvailableSubject].[StudentMajorId] AS [StudentMajorId], 
-    [AvailableSubject].[SubjectId] AS [SubjectId], 
-    [AvailableSubject].[SemesterId] AS [SemesterId]
-    FROM [db_owner].[AvailableSubject] AS [AvailableSubject]</DefiningQuery>
-          </EntitySet>
+          <AssociationSet Name="FK_AvailableSubject_ExpectedCourse" Association="Self.FK_AvailableSubject_ExpectedCourse">
+            <End Role="ExpectedCourse" EntitySet="ExpectedCourse" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubject" />
+          </AssociationSet>
           <AssociationSet Name="FK_AvailableSubject_Semester" Association="Self.FK_AvailableSubject_Semester">
             <End Role="Semester" EntitySet="Semester" />
             <End Role="AvailableSubject" EntitySet="AvailableSubject" />
@@ -702,7 +714,12 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
             <End Role="Subject" EntitySet="Subjects" />
             <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="ExpectedCourses" EntityType="DB_Finance_AcademicModel.ExpectedCourse" />
+          <AssociationSet Name="FK_AvailableSubject_ExpectedCourse" Association="DB_Finance_AcademicModel.FK_AvailableSubject_ExpectedCourse">
+            <End Role="ExpectedCourse" EntitySet="ExpectedCourses" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Schedule">
           <Key>
             <PropertyRef Name="Id" />
@@ -913,6 +930,7 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <Property Name="Percentage" Type="Double" Nullable="false" />
           <Property Name="SubjectId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="SubjectMark" ToRole="Subject" />
+          <Property Name="EffectivenessDate" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_Schedule_Course">
           <End Type="DB_Finance_AcademicModel.Course" Role="Course" Multiplicity="1" />
@@ -1137,13 +1155,15 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <Property Name="PreferredSlot" Type="Int32" />
           <Property Name="IsInProgram" Type="Boolean" />
           <Property Name="IsRelearn" Type="Boolean" />
-          <Property Name="RegeisteredBy" Type="DateTime" Precision="3" />
+          <Property Name="RegisteredBy" Type="DateTime" Precision="3" />
           <Property Name="StudentMajorId" Type="Int32" Nullable="false" />
           <Property Name="SubjectId" Type="Int32" Nullable="false" />
           <Property Name="SemesterId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Semester" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Semester" FromRole="AvailableSubject" ToRole="Semester" />
           <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="AvailableSubject" ToRole="StudentMajor" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="AvailableSubject" ToRole="Subject" />
+          <Property Name="ExpectedCourseId" Type="Int32" />
+          <NavigationProperty Name="ExpectedCourse" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_ExpectedCourse" FromRole="AvailableSubject" ToRole="ExpectedCourse" />
         </EntityType>
         <Association Name="FK_AvailableSubject_Semester">
           <End Type="DB_Finance_AcademicModel.Semester" Role="Semester" Multiplicity="1" />
@@ -1178,6 +1198,28 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
             </Principal>
             <Dependent Role="AvailableSubject">
               <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ExpectedCourse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <Property Name="TeacherId" Type="Int32" />
+          <Property Name="SemesterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_ExpectedCourse" FromRole="ExpectedCourse" ToRole="AvailableSubject" />
+        </EntityType>
+        <Association Name="FK_AvailableSubject_ExpectedCourse">
+          <End Type="DB_Finance_AcademicModel.ExpectedCourse" Role="ExpectedCourse" Multiplicity="0..1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpectedCourse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="ExpectedCourseId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1367,6 +1409,7 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <EntitySetMapping Name="SubjectMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.SubjectMark">
               <MappingFragment StoreEntitySet="SubjectMark">
+                <ScalarProperty Name="EffectivenessDate" ColumnName="EffectivenessDate" />
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
                 <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
@@ -1385,13 +1428,24 @@ warning 6002: The table/view 'CapstoneDB.db_owner.AvailableSubject' does not hav
           <EntitySetMapping Name="AvailableSubjects">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
               <MappingFragment StoreEntitySet="AvailableSubject">
+                <ScalarProperty Name="ExpectedCourseId" ColumnName="ExpectedCourseId" />
                 <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
-                <ScalarProperty Name="RegeisteredBy" ColumnName="RegeisteredBy" />
+                <ScalarProperty Name="RegisteredBy" ColumnName="RegisteredBy" />
                 <ScalarProperty Name="IsRelearn" ColumnName="IsRelearn" />
                 <ScalarProperty Name="IsInProgram" ColumnName="IsInProgram" />
                 <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpectedCourses">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.ExpectedCourse">
+              <MappingFragment StoreEntitySet="ExpectedCourse">
+                <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

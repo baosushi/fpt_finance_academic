@@ -1201,11 +1201,34 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         public ActionResult ArrangeCourse()
         {
-            using(var context = new DB_Finance_AcademicEntities())
+            var smallRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["SmallRoom"];
+            var largeRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["LargeRoom"];
+
+            List<dynamic> result = new List<dynamic>();
+            using (var context = new DB_Finance_AcademicEntities())
             {
                 var semester = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault();
 
+                var availableSubjects = semester.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new {
+                    Count = q.Count(),
+                    SubjectId = q.Key
+                });
 
+                foreach (var registeredSubject in availableSubjects)
+                {
+                    var subject = context.Subjects.Find(registeredSubject.SubjectId);
+
+                    if (subject != null)
+                    {
+                        var registrationCount = registeredSubject.Count;
+
+
+                    }
+                    else
+                    {
+                        //TODO
+                    }
+                }
             }
 
             return null;
