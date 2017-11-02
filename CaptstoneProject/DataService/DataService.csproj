@@ -93,19 +93,19 @@
     <Compile Include="Model\CourseMark.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Curriculum.cs">
+    <Compile Include="Model\Receipt.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Program.cs">
+    <Compile Include="Model\ReceiptDetail.cs">
+      <DependentUpon>CapstoneEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ReceiptType.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Registration.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\RegistrationDetail.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Schedule.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Semester.cs">
@@ -130,9 +130,6 @@
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\SubjectMark.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Subject_Curriculum.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Teacher.cs">

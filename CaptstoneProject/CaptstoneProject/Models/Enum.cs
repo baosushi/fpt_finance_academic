@@ -16,6 +16,14 @@ namespace CaptstoneProject.Models
         Closed = 2,
     }
 
+    public enum BlockStatus
+    {
+        [Display(Name = "Registering")]
+        Registering = 0,
+        [Display(Name = "Closed")]
+        Closed = 1
+    }
+
     public enum StudentInCourseStatus
     {
         [Display(Name = "Register")] // = new

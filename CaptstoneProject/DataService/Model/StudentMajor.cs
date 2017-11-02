@@ -17,8 +17,8 @@ namespace DataService.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public StudentMajor()
         {
-            this.StudentInCourses = new HashSet<StudentInCourse>();
             this.AvailableSubjects = new HashSet<AvailableSubject>();
+            this.StudentInCourses = new HashSet<StudentInCourse>();
         }
     
         public int Id { get; set; }
@@ -27,10 +27,10 @@ namespace DataService.Model
         public Nullable<int> StudentId { get; set; }
         public Nullable<int> OldStudentId { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
         public virtual Student Student { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentInCourse> StudentInCourses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
     }
 }

@@ -137,6 +137,5 @@ namespace CaptstoneProject.Models
             public double Percentage { get; set; }
             public string EffectivenessDate { get; set; }
         }
-   
     }
 }

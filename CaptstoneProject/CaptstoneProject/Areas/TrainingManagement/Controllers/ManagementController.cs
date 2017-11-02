@@ -1207,9 +1207,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             List<dynamic> result = new List<dynamic>();
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var semester = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault();
+                var block = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault().Blocks.Where(q => q.Status == (int)BlockStatus.Registering).FirstOrDefault();
 
-                var availableSubjects = semester.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new {
+                var availableSubjects = block.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new {
                     Count = q.Count(),
                     SubjectId = q.Key
                 });
@@ -1221,8 +1221,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     if (subject != null)
                     {
                         var registrationCount = registeredSubject.Count;
-
-
+                        
                     }
                     else
                     {

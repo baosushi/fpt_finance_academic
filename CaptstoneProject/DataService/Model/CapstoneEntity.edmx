@@ -24,15 +24,6 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="SemesterId" Type="int" Nullable="false" />
-          <Property Name="ExpectedCourseId" Type="int" />
-        </EntityType>
-        <EntityType Name="Program">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="25" />
-          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Registration">
           <Key>
@@ -46,14 +37,6 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="RegistrationId" Type="int" Nullable="false" />
-          <Property Name="CourseId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Schedule">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="TeacherId" Type="int" Nullable="false" />
           <Property Name="CourseId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Semester">
@@ -74,15 +57,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" />
-        </EntityType>
-        <EntityType Name="Subject_Curriculum">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubjectId" Type="int" />
-          <Property Name="CurriculumId" Type="int" />
-          <Property Name="TermNumber" Type="int" />
         </EntityType>
         <EntityType Name="SubjectGroup">
           <Key>
@@ -192,13 +166,23 @@
           <Property Name="IsFinal" Type="bit" />
           <Property Name="CourseId" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Curriculum">
+        <EntityType Name="Receipt">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProgramId" Type="int" />
-          <Property Name="Name" Type="nvarchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="ReceiptDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReceiptType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="StudentCourseMark">
           <Key>
@@ -348,18 +332,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Curriculum_Program">
-          <End Role="Program" Type="Self.Program" Multiplicity="0..1" />
-          <End Role="Curriculum" Type="Self.Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Program">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Curriculum">
-              <PropertyRef Name="ProgramId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -428,30 +400,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Course">
-          <End Role="Course" Type="Self.Course" Multiplicity="1" />
-          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Schedule_Teacher">
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
-          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Teacher">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="TeacherId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_StudentCourseMark_CourseMark">
           <End Role="CourseMark" Type="Self.CourseMark" Multiplicity="1" />
           <End Role="StudentCourseMark" Type="Self.StudentCourseMark" Multiplicity="*" />
@@ -512,30 +460,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Subject_Curriculum_Curriculum">
-          <End Role="Curriculum" Type="Self.Curriculum" Multiplicity="0..1" />
-          <End Role="Subject_Curriculum" Type="Self.Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Curriculum">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="CurriculumId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Subject_Curriculum_Subject">
-          <End Role="Subject" Type="Self.Subject" Multiplicity="0..1" />
-          <End Role="Subject_Curriculum" Type="Self.Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subject">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="SubjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Subject_SubjectGroup">
           <End Role="SubjectGroup" Type="Self.SubjectGroup" Multiplicity="0..1" />
           <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
@@ -587,13 +511,10 @@
         <EntityContainer Name="DB_Finance_AcademicModelStoreContainer">
           <EntitySet Name="AvailableSubject" EntityType="Self.AvailableSubject" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Block" EntityType="Self.Block" Schema="db_owner" store:Type="Tables" />
-          <EntitySet Name="Program" EntityType="Self.Program" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Registration" EntityType="Self.Registration" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="RegistrationDetail" EntityType="Self.RegistrationDetail" Schema="db_owner" store:Type="Tables" />
-          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="db_owner" store:Type="Tables" />
-          <EntitySet Name="Subject_Curriculum" EntityType="Self.Subject_Curriculum" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="SubjectGroup" EntityType="Self.SubjectGroup" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="TeacherSubject" EntityType="Self.TeacherSubject" Schema="db_owner" store:Type="Tables" />
@@ -604,7 +525,9 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseMark" EntityType="Self.CourseMark" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Curriculum" EntityType="Self.Curriculum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptType" EntityType="Self.ReceiptType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentCourseMark" EntityType="Self.StudentCourseMark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentInCourse" EntityType="Self.StudentInCourse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentMajor" EntityType="Self.StudentMajor" Schema="dbo" store:Type="Tables" />
@@ -642,10 +565,6 @@
             <End Role="Course" EntitySet="Course" />
             <End Role="CourseMark" EntitySet="CourseMark" />
           </AssociationSet>
-          <AssociationSet Name="FK_Curriculum_Program" Association="Self.FK_Curriculum_Program">
-            <End Role="Program" EntitySet="Program" />
-            <End Role="Curriculum" EntitySet="Curriculum" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -666,14 +585,6 @@
             <End Role="Registration" EntitySet="Registration" />
             <End Role="RegistrationDetail" EntitySet="RegistrationDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Course" Association="Self.FK_Schedule_Course">
-            <End Role="Course" EntitySet="Course" />
-            <End Role="Schedule" EntitySet="Schedule" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Teacher" Association="Self.FK_Schedule_Teacher">
-            <End Role="Teacher" EntitySet="Teacher" />
-            <End Role="Schedule" EntitySet="Schedule" />
-          </AssociationSet>
           <AssociationSet Name="FK_StudentCourseMark_CourseMark" Association="Self.FK_StudentCourseMark_CourseMark">
             <End Role="CourseMark" EntitySet="CourseMark" />
             <End Role="StudentCourseMark" EntitySet="StudentCourseMark" />
@@ -693,14 +604,6 @@
           <AssociationSet Name="FK_StudentMajor_Student" Association="Self.FK_StudentMajor_Student">
             <End Role="Student" EntitySet="Student" />
             <End Role="StudentMajor" EntitySet="StudentMajor" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subject_Curriculum_Curriculum" Association="Self.FK_Subject_Curriculum_Curriculum">
-            <End Role="Curriculum" EntitySet="Curriculum" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subject_Curriculum_Subject" Association="Self.FK_Subject_Curriculum_Subject">
-            <End Role="Subject" EntitySet="Subject" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
           </AssociationSet>
           <AssociationSet Name="FK_Subject_SubjectGroup" Association="Self.FK_Subject_SubjectGroup">
             <End Role="SubjectGroup" EntitySet="SubjectGroup" />
@@ -724,11 +627,12 @@
     <edmx:ConceptualModels>
       <Schema Namespace="DB_Finance_AcademicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="DB_Finance_AcademicEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Programs" EntityType="DB_Finance_AcademicModel.Program" />
-          <EntitySet Name="Schedules" EntityType="DB_Finance_AcademicModel.Schedule" />
+          <EntitySet Name="AvailableSubjects" EntityType="DB_Finance_AcademicModel.AvailableSubject" />
+          <EntitySet Name="Blocks" EntityType="DB_Finance_AcademicModel.Block" />
+          <EntitySet Name="Registrations" EntityType="DB_Finance_AcademicModel.Registration" />
+          <EntitySet Name="RegistrationDetails" EntityType="DB_Finance_AcademicModel.RegistrationDetail" />
           <EntitySet Name="Semesters" EntityType="DB_Finance_AcademicModel.Semester" />
           <EntitySet Name="Students" EntityType="DB_Finance_AcademicModel.Student" />
-          <EntitySet Name="Subject_Curriculum" EntityType="DB_Finance_AcademicModel.Subject_Curriculum" />
           <EntitySet Name="SubjectGroups" EntityType="DB_Finance_AcademicModel.SubjectGroup" />
           <EntitySet Name="Teachers" EntityType="DB_Finance_AcademicModel.Teacher" />
           <EntitySet Name="TeacherSubjects" EntityType="DB_Finance_AcademicModel.TeacherSubject" />
@@ -738,23 +642,30 @@
           <EntitySet Name="AspNetUsers" EntityType="DB_Finance_AcademicModel.AspNetUser" />
           <EntitySet Name="Courses" EntityType="DB_Finance_AcademicModel.Course" />
           <EntitySet Name="CourseMarks" EntityType="DB_Finance_AcademicModel.CourseMark" />
-          <EntitySet Name="Curricula" EntityType="DB_Finance_AcademicModel.Curriculum" />
           <EntitySet Name="StudentCourseMarks" EntityType="DB_Finance_AcademicModel.StudentCourseMark" />
           <EntitySet Name="StudentInCourses" EntityType="DB_Finance_AcademicModel.StudentInCourse" />
           <EntitySet Name="StudentMajors" EntityType="DB_Finance_AcademicModel.StudentMajor" />
           <EntitySet Name="Subjects" EntityType="DB_Finance_AcademicModel.Subject" />
           <EntitySet Name="SubjectMarks" EntityType="DB_Finance_AcademicModel.SubjectMark" />
-          <AssociationSet Name="FK_Curriculum_Program" Association="DB_Finance_AcademicModel.FK_Curriculum_Program">
-            <End Role="Program" EntitySet="Programs" />
-            <End Role="Curriculum" EntitySet="Curricula" />
+          <AssociationSet Name="FK_AvailableSubject_Block" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Block">
+            <End Role="Block" EntitySet="Blocks" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Course" Association="DB_Finance_AcademicModel.FK_Schedule_Course">
-            <End Role="Course" EntitySet="Courses" />
-            <End Role="Schedule" EntitySet="Schedules" />
+          <AssociationSet Name="FK_AvailableSubject_StudentMajor" Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajors" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Teacher" Association="DB_Finance_AcademicModel.FK_Schedule_Teacher">
-            <End Role="Teacher" EntitySet="Teachers" />
-            <End Role="Schedule" EntitySet="Schedules" />
+          <AssociationSet Name="FK_AvailableSubject_Subject" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Block_Semester" Association="DB_Finance_AcademicModel.FK_Block_Semester">
+            <End Role="Semester" EntitySet="Semesters" />
+            <End Role="Block" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RegistrationDetail_Registration" Association="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration">
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="RegistrationDetail" EntitySet="RegistrationDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Course_Semester" Association="DB_Finance_AcademicModel.FK_Course_Semester">
             <End Role="Semester" EntitySet="Semesters" />
@@ -763,14 +674,6 @@
           <AssociationSet Name="FK_StudentMajor_Student" Association="DB_Finance_AcademicModel.FK_StudentMajor_Student">
             <End Role="Student" EntitySet="Students" />
             <End Role="StudentMajor" EntitySet="StudentMajors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subject_Curriculum_Curriculum" Association="DB_Finance_AcademicModel.FK_Subject_Curriculum_Curriculum">
-            <End Role="Curriculum" EntitySet="Curricula" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subject_Curriculum_Subject" Association="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject">
-            <End Role="Subject" EntitySet="Subjects" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
           </AssociationSet>
           <AssociationSet Name="FK_Subject_SubjectGroup" Association="DB_Finance_AcademicModel.FK_Subject_SubjectGroup">
             <End Role="SubjectGroup" EntitySet="SubjectGroups" />
@@ -828,49 +731,50 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <EntitySet Name="AvailableSubjects" EntityType="DB_Finance_AcademicModel.AvailableSubject" />
-          <EntitySet Name="Blocks" EntityType="DB_Finance_AcademicModel.Block" />
-          <EntitySet Name="Registrations" EntityType="DB_Finance_AcademicModel.Registration" />
-          <EntitySet Name="RegistrationDetails" EntityType="DB_Finance_AcademicModel.RegistrationDetail" />
-          <AssociationSet Name="FK_AvailableSubject_Block" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Block">
-            <End Role="Block" EntitySet="Blocks" />
-            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AvailableSubject_StudentMajor" Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor">
-            <End Role="StudentMajor" EntitySet="StudentMajors" />
-            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AvailableSubject_Subject" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject">
-            <End Role="Subject" EntitySet="Subjects" />
-            <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Block_Semester" Association="DB_Finance_AcademicModel.FK_Block_Semester">
-            <End Role="Semester" EntitySet="Semesters" />
-            <End Role="Block" EntitySet="Blocks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RegistrationDetail_Registration" Association="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration">
-            <End Role="Registration" EntitySet="Registrations" />
-            <End Role="RegistrationDetail" EntitySet="RegistrationDetails" />
-          </AssociationSet>
+          <EntitySet Name="Receipts" EntityType="DB_Finance_AcademicModel.Receipt" />
+          <EntitySet Name="ReceiptDetails" EntityType="DB_Finance_AcademicModel.ReceiptDetail" />
+          <EntitySet Name="ReceiptTypes" EntityType="DB_Finance_AcademicModel.ReceiptType" />
         </EntityContainer>
-        <EntityType Name="Program">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Curricula" Relationship="DB_Finance_AcademicModel.FK_Curriculum_Program" FromRole="Program" ToRole="Curriculum" />
-        </EntityType>
-        <EntityType Name="Schedule">
+        <EntityType Name="AvailableSubject">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="TeacherId" Type="Int32" Nullable="false" />
+          <Property Name="PreferredSlot" Type="Int32" />
+          <Property Name="IsInProgram" Type="Boolean" />
+          <Property Name="IsRelearn" Type="Boolean" />
+          <Property Name="StudentMajorId" Type="Int32" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <Property Name="BlockId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Block" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Block" FromRole="AvailableSubject" ToRole="Block" />
+          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="AvailableSubject" ToRole="StudentMajor" />
+          <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="AvailableSubject" ToRole="Subject" />
+        </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="SemesterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Block" FromRole="Block" ToRole="AvailableSubject" />
+          <NavigationProperty Name="Semester" Relationship="DB_Finance_AcademicModel.FK_Block_Semester" FromRole="Block" ToRole="Semester" />
+        </EntityType>
+        <EntityType Name="Registration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RegistrationDetails" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="Registration" ToRole="RegistrationDetail" />
+        </EntityType>
+        <EntityType Name="RegistrationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="RegistrationId" Type="Int32" Nullable="false" />
           <Property Name="CourseId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Course" Relationship="DB_Finance_AcademicModel.FK_Schedule_Course" FromRole="Schedule" ToRole="Course" />
-          <NavigationProperty Name="Teacher" Relationship="DB_Finance_AcademicModel.FK_Schedule_Teacher" FromRole="Schedule" ToRole="Teacher" />
+          <NavigationProperty Name="Registration" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="RegistrationDetail" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Semester">
           <Key>
@@ -883,8 +787,8 @@
           <Property Name="Year" Type="Int32" Nullable="false" />
           <Property Name="SemesterInYear" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Semester" FromRole="Semester" ToRole="Course" />
           <NavigationProperty Name="Blocks" Relationship="DB_Finance_AcademicModel.FK_Block_Semester" FromRole="Semester" ToRole="Block" />
+          <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Semester" FromRole="Semester" ToRole="Course" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -893,17 +797,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="StudentMajors" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="Student" ToRole="StudentMajor" />
-        </EntityType>
-        <EntityType Name="Subject_Curriculum">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubjectId" Type="Int32" />
-          <Property Name="CurriculumId" Type="Int32" />
-          <Property Name="TermNumber" Type="Int32" />
-          <NavigationProperty Name="Curriculum" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Curriculum" FromRole="Subject_Curriculum" ToRole="Curriculum" />
-          <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject" FromRole="Subject_Curriculum" ToRole="Subject" />
         </EntityType>
         <EntityType Name="SubjectGroup">
           <Key>
@@ -921,14 +814,13 @@
           <Property Name="TeacherCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Schedules" Relationship="DB_Finance_AcademicModel.FK_Schedule_Teacher" FromRole="Teacher" ToRole="Schedule" />
-          <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Teacher" FromRole="Teacher" ToRole="Course" />
-          <NavigationProperty Name="TeacherSubjects" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Teacher" FromRole="Teacher" ToRole="TeacherSubject" />
           <Property Name="Gender" Type="Boolean" Nullable="false" />
           <Property Name="ContractName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="EduEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="FeEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Teacher" FromRole="Teacher" ToRole="Course" />
+          <NavigationProperty Name="TeacherSubjects" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Teacher" FromRole="Teacher" ToRole="TeacherSubject" />
         </EntityType>
         <EntityType Name="TeacherSubject">
           <Key>
@@ -1006,7 +898,6 @@
           <Property Name="TeacherId" Type="Int32" />
           <Property Name="SemesterId" Type="Int32" />
           <Property Name="Status" Type="Int32" />
-          <NavigationProperty Name="Schedules" Relationship="DB_Finance_AcademicModel.FK_Schedule_Course" FromRole="Course" ToRole="Schedule" />
           <NavigationProperty Name="Semester" Relationship="DB_Finance_AcademicModel.FK_Course_Semester" FromRole="Course" ToRole="Semester" />
           <NavigationProperty Name="Teacher" Relationship="DB_Finance_AcademicModel.FK_Course_Teacher" FromRole="Course" ToRole="Teacher" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_Course_Subject" FromRole="Course" ToRole="Subject" />
@@ -1024,16 +915,6 @@
           <Property Name="CourseId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Course" Relationship="DB_Finance_AcademicModel.FK_CourseMark_Course" FromRole="CourseMark" ToRole="Course" />
           <NavigationProperty Name="StudentCourseMarks" Relationship="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" FromRole="CourseMark" ToRole="StudentCourseMark" />
-        </EntityType>
-        <EntityType Name="Curriculum">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProgramId" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Program" Relationship="DB_Finance_AcademicModel.FK_Curriculum_Program" FromRole="Curriculum" ToRole="Program" />
-          <NavigationProperty Name="Subject_Curriculum" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Curriculum" FromRole="Curriculum" ToRole="Subject_Curriculum" />
         </EntityType>
         <EntityType Name="StudentCourseMark">
           <Key>
@@ -1071,9 +952,9 @@
           <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StudentId" Type="Int32" />
           <Property Name="OldStudentId" Type="Int32" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
           <NavigationProperty Name="Student" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="StudentMajor" ToRole="Student" />
           <NavigationProperty Name="StudentInCourses" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Student" FromRole="StudentMajor" ToRole="StudentInCourse" />
-          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
@@ -1081,15 +962,14 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubjectName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreditValue" Type="Int32" />
           <Property Name="SubjectGroupId" Type="Int32" />
           <Property Name="SubjectCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Subject_Curriculum" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject" FromRole="Subject" ToRole="Subject_Curriculum" />
+          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="Subject" ToRole="AvailableSubject" />
           <NavigationProperty Name="SubjectGroup" Relationship="DB_Finance_AcademicModel.FK_Subject_SubjectGroup" FromRole="Subject" ToRole="SubjectGroup" />
           <NavigationProperty Name="TeacherSubjects" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" FromRole="Subject" ToRole="TeacherSubject" />
           <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Subject" FromRole="Subject" ToRole="Course" />
           <NavigationProperty Name="SubjectMarks" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="Subject" ToRole="SubjectMark" />
-          <Property Name="CreditValue" Type="Int32" />
-          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="Subject" ToRole="AvailableSubject" />
         </EntityType>
         <EntityType Name="SubjectMark">
           <Key>
@@ -1101,41 +981,64 @@
           <Property Name="SubjectId" Type="Int32" Nullable="false" />
           <Property Name="EffectivenessDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="SubjectMark" ToRole="Subject" />
-          <Property Name="EffectivenessDate" Type="DateTime" Precision="3" />
         </EntityType>
-        <Association Name="FK_Curriculum_Program">
-          <End Type="DB_Finance_AcademicModel.Program" Role="Program" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Curriculum" Role="Curriculum" Multiplicity="*" />
+        <Association Name="FK_AvailableSubject_Block">
+          <End Type="DB_Finance_AcademicModel.Block" Role="Block" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Program">
+            <Principal Role="Block">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Curriculum">
-              <PropertyRef Name="ProgramId" />
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="BlockId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Course">
-          <End Type="DB_Finance_AcademicModel.Course" Role="Course" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.Schedule" Role="Schedule" Multiplicity="*" />
+        <Association Name="FK_AvailableSubject_StudentMajor">
+          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Course">
+            <Principal Role="StudentMajor">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="CourseId" />
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="StudentMajorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Teacher">
-          <End Type="DB_Finance_AcademicModel.Teacher" Role="Teacher" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.Schedule" Role="Schedule" Multiplicity="*" />
+        <Association Name="FK_AvailableSubject_Subject">
+          <End Type="DB_Finance_AcademicModel.Subject" Role="Subject" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Teacher">
+            <Principal Role="Subject">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="TeacherId" />
+            <Dependent Role="AvailableSubject">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Block_Semester">
+          <End Type="DB_Finance_AcademicModel.Semester" Role="Semester" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.Block" Role="Block" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Block">
+              <PropertyRef Name="SemesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RegistrationDetail_Registration">
+          <End Type="DB_Finance_AcademicModel.Registration" Role="Registration" Multiplicity="1" />
+          <End Type="DB_Finance_AcademicModel.RegistrationDetail" Role="RegistrationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RegistrationDetail">
+              <PropertyRef Name="RegistrationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1160,30 +1063,6 @@
             </Principal>
             <Dependent Role="StudentMajor">
               <PropertyRef Name="StudentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Subject_Curriculum_Curriculum">
-          <End Type="DB_Finance_AcademicModel.Curriculum" Role="Curriculum" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Subject_Curriculum" Role="Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Curriculum">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="CurriculumId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Subject_Curriculum_Subject">
-          <End Type="DB_Finance_AcademicModel.Subject" Role="Subject" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Subject_Curriculum" Role="Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subject">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="SubjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1351,129 +1230,64 @@
           <End Type="DB_Finance_AcademicModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="DB_Finance_AcademicModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <EntityType Name="AvailableSubject">
+        <EntityType Name="Receipt">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="PreferredSlot" Type="Int32" />
-          <Property Name="IsInProgram" Type="Boolean" />
-          <Property Name="IsRelearn" Type="Boolean" />
-          <Property Name="StudentMajorId" Type="Int32" Nullable="false" />
-          <Property Name="SubjectId" Type="Int32" Nullable="false" />
-          <Property Name="BlockId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Block" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Block" FromRole="AvailableSubject" ToRole="Block" />
-          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="AvailableSubject" ToRole="StudentMajor" />
-          <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="AvailableSubject" ToRole="Subject" />
-          <Property Name="ExpectedCourseId" Type="Int32" />
-          <NavigationProperty Name="ExpectedCourse" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_ExpectedCourse" FromRole="AvailableSubject" ToRole="ExpectedCourse" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="Block">
+        <EntityType Name="ReceiptDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="SemesterId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Block" FromRole="Block" ToRole="AvailableSubject" />
-          <NavigationProperty Name="Semester" Relationship="DB_Finance_AcademicModel.FK_Block_Semester" FromRole="Block" ToRole="Semester" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="Registration">
+        <EntityType Name="ReceiptType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="RegistrationDetails" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="Registration" ToRole="RegistrationDetail" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="RegistrationDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="RegistrationId" Type="Int32" Nullable="false" />
-          <Property Name="CourseId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Registration" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="RegistrationDetail" ToRole="Registration" />
-        </EntityType>
-        <Association Name="FK_AvailableSubject_Block">
-          <End Type="DB_Finance_AcademicModel.Block" Role="Block" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Block">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableSubject">
-              <PropertyRef Name="BlockId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AvailableSubject_StudentMajor">
-          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StudentMajor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableSubject">
-              <PropertyRef Name="StudentMajorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AvailableSubject_Subject">
-          <End Type="DB_Finance_AcademicModel.Subject" Role="Subject" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subject">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableSubject">
-              <PropertyRef Name="SubjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Block_Semester">
-          <End Type="DB_Finance_AcademicModel.Semester" Role="Semester" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.Block" Role="Block" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Semester">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Block">
-              <PropertyRef Name="SemesterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RegistrationDetail_Registration">
-          <End Type="DB_Finance_AcademicModel.Registration" Role="Registration" Multiplicity="1" />
-          <End Type="DB_Finance_AcademicModel.RegistrationDetail" Role="RegistrationDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Registration">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RegistrationDetail">
-              <PropertyRef Name="RegistrationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DB_Finance_AcademicModelStoreContainer" CdmEntityContainer="DB_Finance_AcademicEntities">
-          <EntitySetMapping Name="Programs">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Program">
-              <MappingFragment StoreEntitySet="Program">
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+          <EntitySetMapping Name="AvailableSubjects">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
+              <MappingFragment StoreEntitySet="AvailableSubject">
+                <ScalarProperty Name="BlockId" ColumnName="BlockId" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
+                <ScalarProperty Name="IsRelearn" ColumnName="IsRelearn" />
+                <ScalarProperty Name="IsInProgram" ColumnName="IsInProgram" />
+                <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Schedules">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Schedule">
-              <MappingFragment StoreEntitySet="Schedule">
+          <EntitySetMapping Name="Blocks">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Block">
+              <MappingFragment StoreEntitySet="Block">
+                <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registrations">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Registration">
+              <MappingFragment StoreEntitySet="Registration">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RegistrationDetails">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.RegistrationDetail">
+              <MappingFragment StoreEntitySet="RegistrationDetail">
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="RegistrationId" ColumnName="RegistrationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1495,16 +1309,6 @@
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Student">
               <MappingFragment StoreEntitySet="Student">
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Subject_Curriculum">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Subject_Curriculum">
-              <MappingFragment StoreEntitySet="Subject_Curriculum">
-                <ScalarProperty Name="TermNumber" ColumnName="TermNumber" />
-                <ScalarProperty Name="CurriculumId" ColumnName="CurriculumId" />
-                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1616,15 +1420,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Curricula">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Curriculum">
-              <MappingFragment StoreEntitySet="Curriculum">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="StudentCourseMarks">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.StudentCourseMark">
               <MappingFragment StoreEntitySet="StudentCourseMark">
@@ -1663,9 +1458,9 @@
           <EntitySetMapping Name="Subjects">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Subject">
               <MappingFragment StoreEntitySet="Subject">
-                <ScalarProperty Name="CreditValue" ColumnName="CreditValue" />
                 <ScalarProperty Name="SubjectCode" ColumnName="SubjectCode" />
                 <ScalarProperty Name="SubjectGroupId" ColumnName="SubjectGroupId" />
+                <ScalarProperty Name="CreditValue" ColumnName="CreditValue" />
                 <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1690,40 +1485,23 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="AvailableSubjects">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
-              <MappingFragment StoreEntitySet="AvailableSubject">
-                <ScalarProperty Name="BlockId" ColumnName="BlockId" />
-                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
-                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
-                <ScalarProperty Name="IsRelearn" ColumnName="IsRelearn" />
-                <ScalarProperty Name="IsInProgram" ColumnName="IsInProgram" />
-                <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
+          <EntitySetMapping Name="Receipts">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Receipt">
+              <MappingFragment StoreEntitySet="Receipt">
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Blocks">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Block">
-              <MappingFragment StoreEntitySet="Block">
-                <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
+          <EntitySetMapping Name="ReceiptDetails">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.ReceiptDetail">
+              <MappingFragment StoreEntitySet="ReceiptDetail">
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Registrations">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Registration">
-              <MappingFragment StoreEntitySet="Registration">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RegistrationDetails">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.RegistrationDetail">
-              <MappingFragment StoreEntitySet="RegistrationDetail">
-                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="RegistrationId" ColumnName="RegistrationId" />
+          <EntitySetMapping Name="ReceiptTypes">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.ReceiptType">
+              <MappingFragment StoreEntitySet="ReceiptType">
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
