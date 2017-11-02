@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using CaptstoneProject.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Security;
+using System.Text.RegularExpressions;
 
 namespace CaptstoneProject.Controllers
 {
@@ -86,6 +87,9 @@ namespace CaptstoneProject.Controllers
                     //get Roles when log in, User.Identity is store in respone context to add cookie in browser when log in.
                     var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
                     var roleList = UserManager.GetRoles(uId);
+                    var email = UserManager.GetEmail(uId);
+                    var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
+                    Session[loginName] = loginName;
                     Session["uName"] = model.Username;
                     Session["uImgUrl"] = "/Images/prideKappa.jpg";
                     var role = roleList.FirstOrDefault();
@@ -532,6 +536,8 @@ namespace CaptstoneProject.Controllers
                     var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
                     var roleList = UserManager.GetRoles(uId);
                     var role = roleList.FirstOrDefault();
+                    var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
+                    Session[loginName] = loginName;
                     if (returnUrl == null)
                     {
                         switch (role)
@@ -606,7 +612,7 @@ namespace CaptstoneProject.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             Session.Abandon();
-            return RedirectToAction("Login", "Home", new { returnUrl = ""});
+            return RedirectToAction("Login", "Home", new { returnUrl = "" });
         }
 
         //

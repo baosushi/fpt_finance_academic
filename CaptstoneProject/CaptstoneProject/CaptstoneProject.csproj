@@ -283,6 +283,7 @@
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\img\FPTMM.PNG" />
+    <Content Include="Content\img\orange-and-white-bg.png" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.css" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.min.css" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap4.css" />
@@ -410,6 +411,7 @@
     <Content Include="Images\Icon\logo-fpt.png" />
     <Content Include="Images\prideKappa.jpg" />
     <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\CourseDetails.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\SubjectDetails.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -459,7 +461,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\TrainingManagement\Views\Management\ManageStudent.cshtml" />
-    <Content Include="Areas\TrainingManagement\Views\Management\ImportSubject.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\Management\SubjectManagement.cshtml" />
     <Content Include="Areas\Teacher\Views\Course\EditCourseMark.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />

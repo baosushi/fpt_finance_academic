@@ -1,0 +1,181 @@
+﻿@model List<CaptstoneProject.Models.AreaViewModel.SubjectMarkViewModel>
+@{
+    ViewBag.Title = "SubjectDetails";
+}
+<style>
+    .my-header {
+        background-color: #0ec59b;
+        color: white;
+    }
+
+    .my-header-active {
+        background-color: #ffbf0a;
+        color: white;
+    }
+
+    .text_mid {
+        text-align: center;
+    }
+
+    .active-status {
+        padding: 7px 20px 7px 20px;
+        cursor: default;
+        background: #ffbf0a;
+    }
+    .btn_remove_subjectComp {
+        float: right;
+        background: rgba(239, 65, 12, 0.77);
+        color:white;
+    }
+    .input-create-subComponent{
+        margin-bottom: 19px;
+    }
+    .my-panel-footer {
+        border-top: 1px solid rgba(128, 128, 128, 0.42);
+        padding: 20px;
+        overflow: hidden;
+    }
+</style>
+<link href=" https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" rel="stylesheet" type="text/css" />
+<div class="content">
+    <!-- Start Container -->
+    <div class="container-default animate fadeInRight" style="padding-bottom:10px; min-height:700px">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-info-circle" style="color:green"></i> Subject Details </div>
+            <br />
+            <button type="button" data-toggle="modal" data-target="#course-modal" class="btn btn-default"><i class="fa fa-plus"></i>Create Course</button>
+            <div class="modal fade" id="course-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header my-header-modal"><h4 style="color:white">Create Subject Component</h4><button class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button></div>
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <button style="background-color: #c1c5ca;color: #444444; cursor:pointer;" type="button"
+                                    class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button style="cursor:pointer;" id="btn-create-course"
+                                    type="button" class="btn btn-info">
+                                Create
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="table-responsive col-md-5">
+                        <table id="subjectComponent_table" class="table display dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Component Name</th>
+                                    <th>Percentage</th>
+                                    <th>Created Date</th>
+                                    @*<th>Action</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < this.Model.Count(); i++)
+                                {
+                                    <tr>
+                                        <td>@Model[i].Index</td>
+                                        <td>@Model[i].ComponentName</td>
+                                        <td>@Model[i].Percentage%</td>
+                                        <td>@Model[i].EffectivenessDate</td>
+                                        @*<td><button class="btn btn-default"></button></td>*@
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-7">
+
+                        <div class="panel panel-default">
+                            <div class="panel-title">Create Subject Component</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div>
+                                            <input type="text" class="input-create-subComponent" value="" placeholder="Name" />
+                                            <input type="text" class="input-create-subComponent" value="" placeholder="Quantity" />
+                                            <input type="number" class="input-create-subComponent" style="width:45%" step="1" max="100" min="0" value="" placeholder="Percentage" />
+                                        </div>
+                                        <div class="pretty p-default p-curve p-thick p-smooth">
+                                            <input type="checkbox" />
+                                            <div class="state p-warning">
+                                                <label>IsFinal</label>
+                                            </div>
+                                        </div>
+                                        <div class="pretty p-default p-curve p-thick p-smooth">
+                                            <input type="checkbox" />
+                                            <div class="state p-warning">
+                                                <label>Has Retake</label>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success">Create Component</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="container table-responsive" style="overflow-x:hidden;">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><div>Quiz 1</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                                <li class="list-group-item"><div>Quiz 2</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                                <li class="list-group-item"><div>Final Exam</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer my-panel-footer">
+                                <button style="float:right;" class="btn btn-default">Apply this Component</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div id="myPartial">
+                @*@{ Html.RenderPartial("GetMyData"); }*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#subjectComponent_table').DataTable({
+            //rowGroup: {
+            //    dataSrc: 2
+            //},
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                api.column(3, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        var formattedDate = moment(group, "DD/MM/YYYY hh:mm:ss").format("DD/MM/YYYY");
+
+                        if (i == 0 && rows.page() == 0)
+                            $(rows).eq(i).before(
+                                '<tr class="group"><th class="my-header-active text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><btn class="btn btn-warning active-status">Active</div></td></tr>'
+                            );
+                        else
+                            $(rows).eq(i).before(
+                                '<tr class="group"><th class="my-header text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><button class="btn btn-default">Apply</button></td></tr>'
+                            );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs": [{ "visible": false, "targets": [0, 3] }, { "className": "dt-center", "targets": "_all" },],
+            "order": [[0, "asc"]]
+        });
+
+    });
+</script>

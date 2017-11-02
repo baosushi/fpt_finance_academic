@@ -28,12 +28,27 @@
     }
 
     th {
-        background-color: #3f83e1 !important;
+        background-color: #399bff !important;
     }
 
     .text-center {
         text-align: center;
     }
+
+    .toggle-handle {
+        background-color: #b8d0e8;
+    }
+
+    .toggle.ios, .toggle-on.ios, .toggle-off.ios {
+        border-radius: 20px;
+        border: solid 0.5px #bbbbbb;
+    }
+
+        .toggle.ios .toggle-handle {
+            border-radius: 20px;
+        }
+
+
 </style>
 
 <div class="content">
@@ -47,6 +62,7 @@
                 </div>*@
             <div class="panel-title">
                 <i class="fa fa-info-circle" style="color:green"></i> Course Details
+
                 @if (Model.IsPublish == 0)
                 {
                     <div style="float:right">
@@ -68,15 +84,18 @@
                 }
                 else if (Model.IsPublish == 2)
                 {
-                    <div style="float:right">
-                        <div>
-                            <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                    if (Model.ReadySubmit)
+                    {
+                        <div style="float:right">
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                            </div>
                         </div>
-                    </div>
-                }
-                else
-                {
+                    }
+                    else
+                    {
 
+                    }
                 }
             </div>
             <div class="panel-body">
@@ -165,16 +184,22 @@
                     </div>
                     <br />
                 }
+                <div style="padding-left:15px">
+                    <label class="checkbox-inline">
+                        <input id="hide-final" type="checkbox" data-size="small" data-on="Show" data-off="Hide" checked data-toggle="toggle" data-onstyle="default" data-offstyle="outline" data-column="1" data-style="ios"> Final
+                    </label>
+                </div>
+
                 <table id="mark-table" class="table display dataTable cell-border">
                     <thead>
                         <tr>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 #
                             </th>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Login Name
                             </th>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Student Code
                             </th>
                             @foreach (var name in Model.ComponentNames)
@@ -183,10 +208,10 @@
                                     @name
                                 </th>
                             }
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Average
                             </th>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Status
                             </th>
                         </tr>
@@ -228,20 +253,20 @@
                                         {
                                             if (mark.Mark.Value == -1)
                                             {
-                                            <td> - </td>
+                                                <td> - </td>
                                             }
                                             else
                                             {
-                                            <td>
-                                                @mark.Mark
-                                            </td>
+                                                <td>
+                                                    @mark.Mark
+                                                </td>
                                             }
                                         }
                                         else
                                         {
-                                        <td>
-                                            -
-                                        </td>
+                                            <td>
+                                                -
+                                            </td>
                                         }
                                     }
                                     else
@@ -253,7 +278,7 @@
                                         else
                                         {
                                             <td>
-                                               <b style="color:red"> @mark.EdittedMark </b>
+                                                <b style="color:red"> @mark.EdittedMark </b>
                                             </td>
                                         }
                                     }
@@ -573,7 +598,8 @@
     });
 
     $(document).ready(function () {
-        $('#mark-table').DataTable({
+        $('#hide-final').bootstrapToggle();
+        var table =  $('#mark-table').DataTable({
             searching: true,
             scrollX:true,
             scrollY: "500px",
@@ -592,12 +618,23 @@
                    searchable:false,
                    className:"text-center",
                },
+
             ],
             lengthMenu: [30, 50],
             fixedColumns: {
                 leftColumns: 3
             }
         });
+        $("#hide-final").on( 'change', function (e) {
+            // Get the column API object
+            var finals= @Html.Raw(Json.Encode(Model.FinalCol));
+            for(var i =0;i<finals.length;i++){
+                var column = table.column(finals[i]);
 
+                // Toggle the visibility
+                column.visible( ! column.visible() );
+            }
+        } );
     });
+
 </script>

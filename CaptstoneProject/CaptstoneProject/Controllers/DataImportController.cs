@@ -6,6 +6,7 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -19,14 +20,14 @@ using System.Web.Mvc;
 
 namespace CaptstoneProject.Controllers
 {
-    public class DataImportController : MyBaseController
+    public class DataImportController : Controller
     {
         // If modifying these scopes, delete your previously saved credentials
         // at ~/.credentials/drive-dotnet-quickstart.json
         static string[] Scopes = { DriveService.Scope.DriveReadonly };
         static string ApplicationName = "Drive API .NET Quickstart";
 
-        public void Sgbjfxdkfbhk()
+        public void DriveImport()
         {
             UserCredential credential;
             var path = Server.MapPath("~");
@@ -74,7 +75,7 @@ namespace CaptstoneProject.Controllers
 
         }
 
-        public void Toast()
+        public void MarkImport()
         {
             string searchPattern = "*";
             var path = Server.MapPath("~");
@@ -285,6 +286,79 @@ namespace CaptstoneProject.Controllers
             {
                 Debug.WriteLine(e.Message);
             }
+        }
+
+        [HttpGet]
+        public ActionResult TeacherImport()
+        {
+            string searchPattern = "*";
+            var path = Server.MapPath("~");
+
+            DirectoryInfo di = new DirectoryInfo(path + "DSGV/");
+
+            FileInfo[] files =
+                di.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
+
+            try
+            {
+                //Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    foreach (var excel in files)
+                    {
+                        XSSFWorkbook xssfwb;
+                        using (FileStream file = excel.OpenRead())
+                        {
+                            xssfwb = new XSSFWorkbook(file);
+                        }
+
+                        ISheet component = xssfwb.GetSheetAt(0);
+
+                        var titleRow = 0;
+                        var tempTitleRow = component.GetRow(titleRow);
+
+                        for (int i = 1; i <= component.LastRowNum; i++)
+                        {
+                            var row = component.GetRow(i);
+                            if (row != null) //null is when the row only contains empty cells
+                            {
+                                var eduEmail = row.Cells[7].ToString().Trim();
+                                var feEmail = row.Cells[8].ToString().Trim();
+
+                                var teacher = context.Teachers.Where(q => q.EduEmail.ToUpper() == eduEmail.ToUpper() || q.FeEmail.ToUpper() == feEmail.ToUpper()).FirstOrDefault();
+
+                                if(teacher == null)
+                                {
+                                    teacher = context.Teachers.Create();
+                                }
+
+                                teacher.EduEmail = eduEmail;
+                                teacher.FeEmail = feEmail;
+
+                                teacher.TeacherCode = row.Cells[2].ToString().Trim();
+                                teacher.LoginName = eduEmail.Contains("@fpt.") ? eduEmail.Split(new char[] { '@' })[0].ToLower() : feEmail.Split(new char[] { '@' })[0].ToLower();
+                                teacher.Name = row.Cells[3].ToString().Trim();
+                                teacher.Gender = row.Cells[4].ToString().Trim() == "Nam" ? true : false;
+                                teacher.ContractName = row.Cells[5].ToString().Trim();
+                                teacher.Position = row.Cells[6].ToString().Trim();
+
+                                if (teacher.Id == 0)
+                                {
+                                    context.Teachers.Add(teacher);
+                                }
+
+                                context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { message = "exception" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { message = "success" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

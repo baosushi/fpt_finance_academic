@@ -26,6 +26,11 @@ namespace DataService.Model
         public string TeacherCode { get; set; }
         public string LoginName { get; set; }
         public string Name { get; set; }
+        public bool Gender { get; set; }
+        public string ContractName { get; set; }
+        public string Position { get; set; }
+        public string EduEmail { get; set; }
+        public string FeEmail { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Schedule> Schedules { get; set; }

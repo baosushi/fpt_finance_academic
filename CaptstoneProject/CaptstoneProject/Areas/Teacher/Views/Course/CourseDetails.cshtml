@@ -18,8 +18,21 @@
     }
 
     th {
-        background-color: #3f83e1 !important;
+        background-color: #399bff !important;
     }
+
+    .toggle-handle {
+        background-color: #b8d0e8;
+    }
+
+    .toggle.ios, .toggle-on.ios, .toggle-off.ios {
+        border-radius: 20px;
+        border: solid 0.5px #bbbbbb;
+    }
+
+        .toggle.ios .toggle-handle {
+            border-radius: 20px;
+        }
 </style>
 <div class="content">
     <!-- Start Container -->
@@ -53,7 +66,8 @@
                         </div>
                         <div class="col-md-10">
                             <label>
-                                <b style="margin-right:5px">Status: </b> @switch (Model.StatusName)
+                                <b style="margin-right:5px">Status: </b>
+                                 @switch (Model.StatusName)
                                 {
                                     case "New":
                                         {
@@ -114,7 +128,7 @@
                     </div>
                     <br />
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-5">
                             <form action="@Url.Action("EditSingleCourseComponent", "Course")">
                                 <input type="text" hidden value="@Model.CourseId" name="courseId" />
                                 <label>Mark: </label>
@@ -138,16 +152,21 @@
                     </div>
                     <br />
                 }
+                <div style="padding-left:15px">
+                    <label class="checkbox-inline">
+                        <input id="hide-final" type="checkbox" data-size="small" data-on="Show" data-off="Hide" checked data-toggle="toggle" data-onstyle="default" data-offstyle="outline" data-column="1" data-style="ios"> Final
+                    </label>
+                </div>
                 <table id="mark-table" class="table display dataTable cell-border">
                     <thead>
                         <tr>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 #
                             </th>
-                            <th>
-                                Student Name
+                            <th style="background-color:#d1601d !important">
+                                Login Name
                             </th>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Student Code
                             </th>
                             @foreach (var name in Model.ComponentNames)
@@ -156,10 +175,10 @@
                                     @name
                                 </th>
                             }
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Average
                             </th>
-                            <th>
+                            <th style="background-color:#d1601d !important">
                                 Status
                             </th>
                         </tr>
@@ -381,7 +400,9 @@
     });
 
     $(document).ready(function () {
-        $('#mark-table').DataTable({
+        $("#componentId").selectpicker();
+        $('#hide-final').bootstrapToggle();
+        var table = $('#mark-table').DataTable({
             searching: true,
             scrollY: "500px",
             scrollCollapse: true,
@@ -406,6 +427,15 @@
             },
             lengthMenu: [30, 50]
         });
+        $("#hide-final").on( 'change', function (e) {
+            // Get the column API object
+            var finals= @Html.Raw(Json.Encode(Model.FinalCol));
+            for(var i =0;i<finals.length;i++){
+                var column = table.column(finals[i]);
 
+                // Toggle the visibility
+                column.visible( ! column.visible() );
+            }
+        } );
     });
 </script>

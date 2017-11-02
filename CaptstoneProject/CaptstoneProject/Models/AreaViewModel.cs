@@ -90,17 +90,12 @@ namespace CaptstoneProject.Models
             public bool IsEditable { get; set; } // true: able to edit mark, false: vice versa
             public int IsPublish { get; set; }
             public string StatusName { get; set; }
-
-            public class CourseRecordViewModel
-            {
-                public int CourseId { get; set; }
-                public string Name { get; set; }
-                public string Code { get; set; }
-                public string Class { get; set; }
-                public DateTime StartDate { get; set; }
-                public DateTime EndDate { get; set; }
-            }
+            public List<int> FinalCol { get; set; }
+            public bool ReadySubmit { get; set; }
         }
+
+
+        
 
         public class JQueryDataTableParamModel
         {
@@ -133,5 +128,15 @@ namespace CaptstoneProject.Models
             public string StudentCode { get; set; }
             public List<CourseRegisterInfoModel> RegisteredCourses { get; set; }
         }
+
+        public class SubjectMarkViewModel
+        {
+            public int Index { get; set; }
+            public int Id { get; set; }
+            public string ComponentName { get; set; }
+            public double Percentage { get; set; }
+            public string EffectivenessDate { get; set; }
+        }
+   
     }
 }
