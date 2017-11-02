@@ -17,7 +17,7 @@ namespace DataService.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Semester()
         {
-            this.AvailableSubjects = new HashSet<AvailableSubject>();
+            this.Blocks = new HashSet<Block>();
             this.Courses = new HashSet<Course>();
         }
     
@@ -30,7 +30,7 @@ namespace DataService.Model
         public int Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
+        public virtual ICollection<Block> Blocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
     }

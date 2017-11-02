@@ -12,18 +12,20 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class AvailableSubject
+    public partial class ExpectedCourse
     {
-        public int Id { get; set; }
-        public Nullable<int> PreferredSlot { get; set; }
-        public Nullable<bool> IsInProgram { get; set; }
-        public Nullable<bool> IsRelearn { get; set; }
-        public int StudentMajorId { get; set; }
-        public int SubjectId { get; set; }
-        public int BlockId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ExpectedCourse()
+        {
+            this.AvailableSubjects = new HashSet<AvailableSubject>();
+        }
     
-        public virtual Block Block { get; set; }
-        public virtual StudentMajor StudentMajor { get; set; }
-        public virtual Subject Subject { get; set; }
+        public int Id { get; set; }
+        public int SubjectId { get; set; }
+        public Nullable<int> TeacherId { get; set; }
+        public int SemesterId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
     }
 }

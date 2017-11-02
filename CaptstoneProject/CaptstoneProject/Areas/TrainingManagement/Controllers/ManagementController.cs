@@ -18,7 +18,6 @@ using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Ajax.Utilities;
-using System.Globalization;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -87,8 +86,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Average = q.Average != null ? q.Average.ToString() : "-",
                             MarksComponent = q.StudentCourseMarks.ToList(),
                             Status = q.Status,
-                            StatusName = Enum.GetName(typeof(StudentInCourseStatus), q.Status == null ? 0 : q.Status.Value),
-
+                            StatusName = Enum.GetName(typeof(StudentInCourseStatus), q.Status == null ? 0 : q.Status.Value)
                         }).ToList();
 
                         //var datatest = course.StudentInCourses.Select(q => new IConvertible[] {
@@ -98,25 +96,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         //    q.Average,
                         //    q.Status
                         //});
-                        DateTime currentDate = DateTime.Now;
-                        bool readySub = false;
-                        if ((course.EndDate.Value == null ? currentDate : course.EndDate.Value).Subtract(currentDate).Days <= 14)
-                        {
-                            readySub = true;
-                        }
 
                         var columns = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => q.ComponentName).ToList();
-                        var components = context.CourseMarks.Where(q => q.CourseId == courseId).ToList();
-                        List<int> finalColumns = new List<int>();
-                        int i = 3;
-                        foreach (var com in components)
-                        {
-                            if (com.IsFinal == true)
-                            {
-                                finalColumns.Add(i);
-                            }
-                            i++;
-                        }
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {
@@ -126,8 +107,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
-                            FinalCol = finalColumns,
-                            ReadySubmit = readySub,
                             //IsEditable = course.Status != (int)CourseStatus.Submitted ? false : true
                             IsPublish = course.Status == (int)CourseStatus.InProgress ? (int)FinalEditStatus.SubmitComponent : course.Status == (int)CourseStatus.Submitted ? (int)FinalEditStatus.EditFinal : course.Status == (int)CourseStatus.FirstPublish ? (int)FinalEditStatus.EditRetake : (int)FinalEditStatus.NoEdit,
                             StatusName = Enum.GetName(typeof(CourseStatus), course.Status == null ? 0 : course.Status.Value),
@@ -981,6 +960,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         }
                         else
                         {
+
                             stream = fileContent.InputStream;
                         }
 
@@ -998,77 +978,24 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                 {
                                     var totalRow = ws.Dimension.Rows;
 
-
-                                    var queryCell = from cell in ws.Cells
-                                                    where cell.Value.ToString().
-                                                    Trim().ToUpper().Equals("SUBJECT CODE")
-                                                    select cell;
-                                    var resultCell = queryCell.FirstOrDefault();
-                                    var headerRow = resultCell.Start.Row;
-                                    var headerColumn = resultCell.Start.Column;
-
-
-                                    if (ws.Cells[headerRow, headerColumn + 1].Text.Trim().ToUpper().Equals("SUBJECT NAME"))
+                                    //Cell[Row, Col]. [4,2] -> Subject Code; [4,4] -> SUBJECTNAME
+                                    if (ws.Cells[4, 2].Text.Trim().ToUpper().Equals("SUBJECT CODE")
+                                        & ws.Cells[4, 4].Text.Trim().ToUpper().Equals("SUBJECT NAME"))
                                     {
 
-                                        for (int i = headerRow + 1; i <= totalRow; i++) //data start from row 5 in template
+                                        for (int i = 5; i <= totalRow; i++) //data start from row 5 in template
                                         {
-                                            var subjectCode = ws.Cells[i, headerColumn].Text.Trim(); //Subject Code
-                                            var subjectName = ws.Cells[i, headerColumn + 1].Text.Trim(); //Subject Name
-                                            var subjectGroupName = ws.Cells[i, headerColumn + 2].Text.Trim();
-                                            SubjectGroup subjectGroup;
-                                            if (subjectGroupName != null || subjectGroupName.Length > 0)
-                                            {
-                                                if (!context.SubjectGroups.Any(q => q.Name.Equals(subjectGroupName)))
-                                                {
-                                                    subjectGroup = context.SubjectGroups.Add(new SubjectGroup { Name = subjectGroupName });
-                                                    context.SaveChanges();
+                                            var subCode = ws.Cells[i, 2].Text.Trim();
+                                            var subName = ws.Cells[i, 4].Text.Trim();
+                                            var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
+                                            if (existList.Count == 0)
+                                                context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
 
-                                                }
-                                                else
-                                                {
-                                                    subjectGroup = context.SubjectGroups.Where(q => q.Name.Equals(subjectGroupName)).FirstOrDefault();
-                                                }
-
-                                                if (!context.Subjects.Any(q => q.SubjectCode.Equals(subjectCode)))
-                                                {
-                                                    context.Subjects.Add(new Subject
-                                                    {
-                                                        SubjectCode = subjectCode,
-                                                        SubjectName = subjectName,
-                                                        SubjectGroupId = subjectGroup.Id
-                                                    });
-                                                }
-                                                else
-                                                {
-                                                    var subject = context.Subjects.
-                                                        Where(q => q.SubjectCode.Equals(subjectCode)).FirstOrDefault();
-                                                    subject.SubjectName = subjectName;
-                                                    subject.SubjectGroupId = subjectGroup.Id;
-                                                }
-                                            }
-
-                                            ////if subject import has no subjectGroup
-                                            //if (!context.Subjects.Any(q => q.SubjectCode.Equals(subjectCode)))
-                                            //{
-                                            //    context.Subjects.Add(new Subject
-                                            //    {
-                                            //        SubjectCode = subjectCode,
-                                            //        SubjectName = subjectName,
-                                            //    });
-                                            //}
-                                            //else
-                                            //{
-                                            //    var subject = context.Subjects.
-                                            //        Where(q => q.SubjectCode.Equals(subjectCode)).FirstOrDefault();
-                                            //    subject.SubjectName = subjectName;
-                                            //}
-
-                                            context.SaveChanges();
                                         }
                                     }
 
                                 }
+                                context.SaveChanges();
                             }
                         }
                         stream.Close();
@@ -1096,13 +1023,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     empFileName += item + " ,";
                 }
-                return Json(new { success = false, message = "Upload Subject successed! But " + empFileName + " file are empty" });
+                return Json(new { success = false, message = "Upload Students successed! But " + empFileName + " file are empty" });
             }
 
-            return Json(new { success = true, message = "Upload Subject successed" });
+            return Json(new { success = true, message = "Upload Students successed" });
         }
 
-        public ActionResult SubjectManagement()
+        public ActionResult ImportSubject()
         {
             return View();
         }
@@ -1270,8 +1197,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return Json(new { success = true, message = "Upload Student Success" });
         }
 
-
-
         public ActionResult ManageStudent()
         {
             return View();
@@ -1279,109 +1204,37 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         public ActionResult ArrangeCourse()
         {
+            var smallRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["SmallRoom"];
+            var largeRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["LargeRoom"];
+
+            List<dynamic> result = new List<dynamic>();
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var semester = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault();
+                var block = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault().Blocks.Where(q => q.Status == (int)BlockStatus.Registering).FirstOrDefault();
 
+                var availableSubjects = block.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new {
+                    Count = q.Count(),
+                    SubjectId = q.Key
+                });
 
+                foreach (var registeredSubject in availableSubjects)
+                {
+                    var subject = context.Subjects.Find(registeredSubject.SubjectId);
+
+                    if (subject != null)
+                    {
+                        var registrationCount = registeredSubject.Count;
+                        
+                    }
+                    else
+                    {
+                        //TODO
+                    }
+                }
             }
 
             return null;
         }
-
-        public ActionResult GetSubject4DataTable(JQueryDataTableParamModel param)
-        {
-            try
-            {
-
-                using (var context = new DB_Finance_AcademicEntities())
-                {
-                    ////use for serverside DataTable
-                    //int count = 0;
-                    //count = param.iDisplayStart;
-                    //var search = context.Subjects.Where(q => String.IsNullOrEmpty(param.sSearch) || q.SubjectName.ToUpper().Contains(param.sSearch.ToUpper()));
-                    //var subjectList = search
-                    //  .Skip(param.iDisplayStart)
-                    //  .Take(param.iDisplayLength)
-                    //  .ToList()
-                    //  .Select(q => new IConvertible[]{
-                    //++count,
-                    //q.SubjectCode,
-                    //q.SubjectName,
-                    //q.Id
-                    //  });
-
-                    //var totalRecords = subjectList.Count();
-
-                    //return Json(new
-                    //{
-                    //    success = true,
-                    //    sEcho = param.sEcho,
-                    //    iTotalRecords = totalRecords,
-                    //    iTotalDisplayRecords = search.Count(),
-                    //    aaData = subjectList
-                    //}, JsonRequestBehavior.AllowGet);
-
-                    int count = 1;
-                    var subjectList = context.Subjects.OrderBy(q => q.Id).AsEnumerable().Select(q => new IConvertible[]
-                     {
-                        count++,
-                        q.SubjectCode,
-                        q.SubjectName,
-                        q.Id
-                     }).ToList();
-                    return Json(new
-                    {
-                        success = true,
-                        iTotalRecords = subjectList.Count(),
-                        iTotalDisplayRecords = subjectList.Count(),
-                        aaData = subjectList
-                    }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new { success = true, message = e.Message });
-            }
-        }
-
-        public ActionResult SubjectDetails(int subjectId = -1)
-        {
-            if (subjectId == -1)
-            {
-                return Json(new { success = false, message = "Error! Invalid Subject" });
-            }
-            try
-            {
-                using (var context = new DB_Finance_AcademicEntities())
-                {
-                    var count = 0;
-                    var model = context.SubjectMarks.Where(q => q.SubjectId == subjectId)
-                        .OrderByDescending(q => q.EffectivenessDate).AsEnumerable()
-                        .Select(q => new SubjectMarkViewModel
-                        {
-                            Index = count++,
-                            Id = q.Id,
-                            ComponentName = q.ComponentName,
-                            Percentage = q.Percentage,
-                            EffectivenessDate = q.EffectivenessDate == null? "-": 
-                            DateTime.Parse(q.EffectivenessDate.Value.ToString())
-                            .ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)
-                        })
-                        .ToList();
-
-                    return View(model);
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
     }
 
 }

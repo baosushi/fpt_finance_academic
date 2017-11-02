@@ -12,19 +12,20 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Program
+    public partial class Block
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Program()
+        public Block()
         {
-            this.Curricula = new HashSet<Curriculum>();
+            this.AvailableSubjects = new HashSet<AvailableSubject>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string FullName { get; set; }
+        public int Status { get; set; }
+        public int SemesterId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Curriculum> Curricula { get; set; }
+        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
+        public virtual Semester Semester { get; set; }
     }
 }
