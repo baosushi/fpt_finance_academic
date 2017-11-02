@@ -46,5 +46,8 @@ namespace DataService.Model
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
         public virtual DbSet<AvailableSubject> AvailableSubjects { get; set; }
+        public virtual DbSet<Block> Blocks { get; set; }
+        public virtual DbSet<Registration> Registrations { get; set; }
+        public virtual DbSet<RegistrationDetail> RegistrationDetails { get; set; }
     }
 }

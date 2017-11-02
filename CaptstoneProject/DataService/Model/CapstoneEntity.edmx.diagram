@@ -25,11 +25,9 @@
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.StudentMajor" Width="1.5" PointX="3" PointY="7.5" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject" Width="1.5" PointX="3" PointY="11" />
         <EntityTypeShape EntityType="DB_Finance_AcademicModel.SubjectMark" Width="1.5" PointX="5.25" PointY="25.75" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AvailableSubject" Width="1.5" PointX="5.25" PointY="11" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Curriculum_Program" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Course" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Schedule_Teacher" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Semester" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Course_Semester" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentMajor_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_Subject_Curriculum_Curriculum" />
@@ -46,10 +44,17 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_CourseMark" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentCourseMark_StudentInCourse" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.AvailableSubject" Width="1.5" PointX="10.5" PointY="10.875" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Block" Width="1.5" PointX="5.25" PointY="19.125" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Registration" Width="1.5" PointX="7.375" PointY="1.125" />
+        <EntityTypeShape EntityType="DB_Finance_AcademicModel.RegistrationDetail" Width="1.5" PointX="9.625" PointY="0.875" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Block" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Block_Semester" />
+        <AssociationConnector Association="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

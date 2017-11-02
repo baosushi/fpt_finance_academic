@@ -12,18 +12,12 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class AvailableSubject
+    public partial class RegistrationDetail
     {
         public int Id { get; set; }
-        public Nullable<int> PreferredSlot { get; set; }
-        public Nullable<bool> IsInProgram { get; set; }
-        public Nullable<bool> IsRelearn { get; set; }
-        public int StudentMajorId { get; set; }
-        public int SubjectId { get; set; }
-        public int BlockId { get; set; }
+        public int RegistrationId { get; set; }
+        public int CourseId { get; set; }
     
-        public virtual Block Block { get; set; }
-        public virtual StudentMajor StudentMajor { get; set; }
-        public virtual Subject Subject { get; set; }
+        public virtual Registration Registration { get; set; }
     }
 }

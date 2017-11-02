@@ -12,18 +12,17 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class AvailableSubject
+    public partial class Registration
     {
-        public int Id { get; set; }
-        public Nullable<int> PreferredSlot { get; set; }
-        public Nullable<bool> IsInProgram { get; set; }
-        public Nullable<bool> IsRelearn { get; set; }
-        public int StudentMajorId { get; set; }
-        public int SubjectId { get; set; }
-        public int BlockId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Registration()
+        {
+            this.RegistrationDetails = new HashSet<RegistrationDetail>();
+        }
     
-        public virtual Block Block { get; set; }
-        public virtual StudentMajor StudentMajor { get; set; }
-        public virtual Subject Subject { get; set; }
+        public int Id { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegistrationDetail> RegistrationDetails { get; set; }
     }
 }
