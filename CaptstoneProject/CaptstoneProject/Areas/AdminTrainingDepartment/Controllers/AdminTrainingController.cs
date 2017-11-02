@@ -563,10 +563,10 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 //semesterName = context.Semesters.Where(q => q.Id == semesterId).Select(q => q.Title).SingleOrDefault();
-                result = (from c in context.Courses
-                          join sc in context.StudentInCourses
+                result = (from c in context.Courses.AsEnumerable()
+                          join sc in context.StudentInCourses.AsEnumerable()
                           on c.Id equals sc.CourseId
-                          where c.Id == semesterId
+                          where c.SemesterId == semesterId
                           select new StudentMarkInSemester
                           {
                               RollNumber = sc.StudentMajor.StudentCode,

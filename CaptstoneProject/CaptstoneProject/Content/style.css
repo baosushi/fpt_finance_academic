@@ -377,7 +377,7 @@ b, strong {
 */
 #top {
     height: 60px;
-    background: #f37022;
+    background: #fc7401;
     color: #fff;
     width: 100%;
     position: fixed;
@@ -2468,7 +2468,7 @@ dt, dd {
     background: #e4e4e4;
     color: inherit;
     border-radius: 3px;
-    cursor:pointer;
+    cursor: pointer;
 }
 
     .btn:hover {

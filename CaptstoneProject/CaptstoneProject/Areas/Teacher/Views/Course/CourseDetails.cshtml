@@ -1,6 +1,8 @@
 ﻿@model CaptstoneProject.Models.AreaViewModel.CourseDetailsViewModel
 @{
     ViewBag.Title = ViewBag.ClassName;
+    var finals = Model.FinalCol;
+    var isFinal = false;
 }
 <style>
     .course-detail-info {
@@ -152,6 +154,17 @@
                     </div>
                     <br />
                 }
+                else
+                {
+                    <div class="row">
+                        <div class="offset-8 col-md-4">
+                            <div class="pull-right">
+                                <button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                }
                 <div style="padding-left:15px">
                     <label class="checkbox-inline">
                         <input id="hide-final" type="checkbox" data-size="small" data-on="Show" data-off="Hide" checked data-toggle="toggle" data-onstyle="default" data-offstyle="outline" data-column="1" data-style="ios"> Final
@@ -169,11 +182,27 @@
                             <th style="background-color:#d1601d !important">
                                 Student Code
                             </th>
-                            @foreach (var name in Model.ComponentNames)
+                            @for (var i = 0; i < Model.ComponentNames.Count(); i++)
                             {
-                                <th>
-                                    @name
-                                </th>
+                                foreach (var k in finals)
+                                {
+                                    if (i == k - 3)
+                                    {
+                                        <th style="background-color:#105dac!important">
+                                            @Model.ComponentNames[i]
+                                        </th>
+                                        isFinal = true;
+                                        break;
+                                    }
+                                }
+                                if (isFinal != true)
+                                {
+                                    <th>
+                                        @Model.ComponentNames[i]
+                                    </th>
+                                    isFinal = false;
+                                }
+
                             }
                             <th style="background-color:#d1601d !important">
                                 Average
@@ -193,7 +222,7 @@
                                 <td>
                                     @if (Model.IsEditable)
                                     {
-                                        <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
+                                        <a href="@Url.Action("EditMarks", "Course", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].StudentName</a>
                                     }
                                     else
                                     {
@@ -423,7 +452,8 @@
             ],
             scrollX:true,
             fixedColumns: {
-                leftColumns: 3
+                leftColumns: 3,
+                rightColumns:2,
             },
             lengthMenu: [30, 50]
         });
