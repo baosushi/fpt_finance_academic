@@ -254,6 +254,7 @@
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Areas\TrainingManagement\Controllers\ManagementController.cs" />
+    <Compile Include="Areas\TrainingManagement\Controllers\StudentManagementController.cs" />
     <Compile Include="Areas\TrainingManagement\TrainingManagementAreaRegistration.cs" />
     <Compile Include="Areas\TransactionManagement\Models\TransactionController.cs" />
     <Compile Include="Areas\TransactionManagement\TransactionAreaRegistration.cs" />
@@ -420,7 +421,8 @@
     <Content Include="Areas\TransactionManagement\Views\Transaction\Index.cshtml" />
     <Content Include="Areas\TransactionManagement\Views\web.config" />
     <Content Include="Areas\TransactionManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\TransactionManagement\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\StudentManagement\Index.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\StudentManagement\CustomerDetail.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -555,6 +557,7 @@
     <Folder Include="Areas\Teacher\Views\Shared\" />
     <Folder Include="Areas\TrainingManagement\Models\" />
     <Folder Include="Areas\TrainingManagement\Views\Shared\" />
+    <Folder Include="Areas\TransactionManagement\Views\Shared\" />
     <Folder Include="UploadFile\" />
     <Folder Include="UploadTempFile\" />
     <Folder Include="Views\DataImport\" />

@@ -131,10 +131,6 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-
-
-
-
                     DateTime sTime = startTime.ToDateTime().GetStartOfDate();
                     DateTime eTime = endTime.ToDateTime().GetEndOfDate();
                     var result = context.Transactions.Where(q => q.Date >= sTime && q.Date <= eTime);
@@ -167,15 +163,14 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         .ToList()
                         .Select(q => new IConvertible[] {
                         count++,
-                        //q.AccountId,
                         q.Account.Name,
-                        //customerApi.Get(q.AccountId).Name,
                         context.StudentMajors.Where(a => a.StudentCode.Equals(q.Account.StudentCode)).FirstOrDefault().Student.Name,
                         q.Amount,
                         q.Date.Value.ToString("dd/MM/yyyy HH:mm:ss"),
-                        q.Notes,
-                        (q.UserName==null) ? "-" : q.UserName,
+                        String.IsNullOrEmpty(q.Notes) ? "-" : q.Notes,
+                        (q.UserName==null) ? "-" : q.UserName, //User tạo ra transaction này
                         q.Status,
+                        q.Id, //transaction ID
                         q.IsIncreaseTransaction,
                         q.AccountId,
                         });

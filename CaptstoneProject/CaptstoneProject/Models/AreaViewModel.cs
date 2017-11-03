@@ -95,7 +95,7 @@ namespace CaptstoneProject.Models
         }
 
 
-        
+
 
         public class JQueryDataTableParamModel
         {
@@ -142,15 +142,23 @@ namespace CaptstoneProject.Models
 
         public class TransactionEditViewModel
         {
-            public  int Id { get; set; }
-            public  int AccountId { get; set; }
-            public  decimal Amount { get; set; }
-            public  DateTime Date { get; set; }
-            public  string Notes { get; set; }
-            public  bool IsIncreaseTransaction { get; set; }
-            public  int Status { get; set; }
-            public  string UserId { get; set; }
-            public  int TransactionType { get; set; }
+            public int Id { get; set; }
+            public int AccountId { get; set; }
+            public decimal Amount { get; set; }
+            public DateTime Date { get; set; }
+            public string Notes { get; set; }
+            public bool IsIncreaseTransaction { get; set; }
+            public int Status { get; set; }
+            public string UserId { get; set; }
+            public int TransactionType { get; set; }
+        }
+
+        public class StudentViewModel
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public Account Account { get; set; }
         }
 
     }
