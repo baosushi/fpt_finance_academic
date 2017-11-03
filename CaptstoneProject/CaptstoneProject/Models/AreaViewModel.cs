@@ -137,5 +137,21 @@ namespace CaptstoneProject.Models
             public double Percentage { get; set; }
             public string EffectivenessDate { get; set; }
         }
+
+        /////
+
+        public class TransactionEditViewModel
+        {
+            public  int Id { get; set; }
+            public  int AccountId { get; set; }
+            public  decimal Amount { get; set; }
+            public  DateTime Date { get; set; }
+            public  string Notes { get; set; }
+            public  bool IsIncreaseTransaction { get; set; }
+            public  int Status { get; set; }
+            public  string UserId { get; set; }
+            public  int TransactionType { get; set; }
+        }
+
     }
 }

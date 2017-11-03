@@ -255,6 +255,8 @@
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Areas\TrainingManagement\Controllers\ManagementController.cs" />
     <Compile Include="Areas\TrainingManagement\TrainingManagementAreaRegistration.cs" />
+    <Compile Include="Areas\TransactionManagement\Models\TransactionController.cs" />
+    <Compile Include="Areas\TransactionManagement\TransactionAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DataImportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Areas\Students\Models\StudentInCourse.cs" />
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -412,7 +415,14 @@
     <Content Include="Images\prideKappa.jpg" />
     <Content Include="Areas\AdminTrainingDepartment\Views\AdminTraining\CourseDetails.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\Management\SubjectDetails.cshtml" />
+    <Content Include="Areas\TransactionManagement\Views\Transaction\Create.cshtml" />
+    <Content Include="Areas\TransactionManagement\Views\Transaction\Edit.cshtml" />
+    <Content Include="Areas\TransactionManagement\Views\Transaction\Index.cshtml" />
+    <Content Include="Areas\TransactionManagement\Views\web.config" />
+    <Content Include="Areas\TransactionManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\TransactionManagement\Views\Shared\_Layout.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
+    <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -537,6 +547,8 @@
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\MarkComponent\Models\" />
     <Folder Include="Areas\MarkComponent\Views\Shared\" />
+    <Folder Include="Areas\MembershipCard\Models\" />
+    <Folder Include="Areas\MembershipCard\Views\Shared\" />
     <Folder Include="Areas\Semester\Models\" />
     <Folder Include="Areas\Students\Views\Shared\" />
     <Folder Include="Areas\Teacher\Models\" />

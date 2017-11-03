@@ -1,0 +1,104 @@
+﻿@model CaptstoneProject.Models.AreaViewModel.TransactionEditViewModel
+
+@{
+    ViewBag.Title = "Tạo giao dịch";
+    Layout = null;
+}
+
+@Html.ValidationSummary()
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <a data-dismiss="modal" class="close btn btn-default pull-right"><span aria-hidden="true">&times;</span></a>
+            <h3 class="modal-title">Thêm giao dịch</h3>
+        </div>
+        <form method="post" action="@Url.Action("Create","Transaction")" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row group-info" style="margin-left:-2px; margin-right:-2px; margin-top:12px; padding-top:20px; padding-bottom:22px;">
+                        @Html.HiddenFor(q => q.AccountId)
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="Amount">Số tiền<span style="color:red"></span></label>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(q => q.Amount, new { id = "Amount", @class = "form-control fg-line", placeholder = "Nhập số tiền", required = "required", oninput="correctAmount()"})
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Ngày giao dịch</label>
+                            <div class="col-md-6 dateTime">
+                                <input class="form-control" type="text" name="Date" value="@DateTime.Now.ToShortDateString()" readonly style="background-color:#ffffff; color:#000000;" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="Notes">Ghi chú</label>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(q => q.Notes, new { id = "Notes", @class = "form-control fg-line", placeholder = "Nhập chú thích nếu có" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="IsIncreaseTransaction">Loại giao dịch</label>
+                            <div class="col-md-6">
+                                <select name="IsIncreaseTransaction" id="IsIncreaseTransaction">
+                                    <option value="true">Tăng</option>
+                                    <option value="false">Giảm</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-default">Close</a>
+                <button type="submit" class="btn btn-primary">Thêm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        @if (Model.Date != DateTime.MinValue) {
+            <text>
+        var start = moment('@Model.Date.ToString("MM/dd/yyyy")').format("DD/MM/YYYY");
+        </text>
+        }
+        else
+        {
+            <text>
+        var start = moment().add(0, 'days');
+        //$('#reportrange span').html(moment().add(-30, 'days').format('MMM D, YYYY') + ' - ' + moment().add(0, 'days').format('MMM D, YYYY'));
+        </text>
+        }
+        $('input[name="Date"]').daterangepicker({
+            format: "DD/MM/YYYY",
+            singleDatePicker: true,
+            showDropdowns: true,
+            startDate: start,
+            locale: {
+                format: "DD/MM/YYYY"
+            }
+        },
+        function (start, end, label) {
+            var years = moment().diff(start, 'years');
+        });
+    });
+
+    @if(this.Model.IsIncreaseTransaction == true)
+    {
+        <text>
+    $('#IsIncreaseTransaction').val("true");
+    </text>
+    }
+    else
+    {
+        <text>
+    $('#IsIncreaseTransaction').val("false");
+    </text>
+    }
+
+    function correctAmount() {
+        var amount = $('#Amount').val().replace(/[^\d]/g, '');
+        $('#Amount').val(amount);
+    }
+</script>

@@ -12,20 +12,23 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class ExpectedCourse
+    public partial class Account
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ExpectedCourse()
+        public Account()
         {
-            this.AvailableSubjects = new HashSet<AvailableSubject>();
+            this.Transactions = new HashSet<Transaction>();
         }
     
         public int Id { get; set; }
-        public int SubjectId { get; set; }
-        public Nullable<int> TeacherId { get; set; }
-        public int SemesterId { get; set; }
+        public string Name { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<decimal> Balance { get; set; }
+        public string StudentCode { get; set; }
+        public Nullable<int> Type { get; set; }
+        public Nullable<bool> Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

@@ -25,28 +25,31 @@ namespace DataService.Model
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AvailableSubject> AvailableSubjects { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
+        public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Registration> Registrations { get; set; }
         public virtual DbSet<RegistrationDetail> RegistrationDetails { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<Subject_Curriculum> Subject_Curriculum { get; set; }
         public virtual DbSet<SubjectGroup> SubjectGroups { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseMark> CourseMarks { get; set; }
+        public virtual DbSet<Curriculum> Curricula { get; set; }
         public virtual DbSet<StudentCourseMark> StudentCourseMarks { get; set; }
         public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }
         public virtual DbSet<StudentMajor> StudentMajors { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
-        public virtual DbSet<Receipt> Receipts { get; set; }
-        public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual DbSet<ReceiptType> ReceiptTypes { get; set; }
     }
 }

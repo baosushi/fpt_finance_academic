@@ -75,4 +75,38 @@ namespace CaptstoneProject.Models
         NoEdit = 3,
     }
 
+
+    ////////
+
+    public enum TransactionStatus
+    {
+        [Display(Name = "Mới")]
+        New = 0,
+        [Display(Name = "Đã duyệt")]
+        Approve = 1,
+        [Display(Name = "Đã hủy")]
+        Cancel = 2,
+    }
+
+    public enum TransactionAmount
+    {
+        [Display(Name = "100,000 VNĐ")]
+        VND100 = 100000,
+        [Display(Name = "200,000 VNĐ")]
+        VND200 = 200000,
+        [Display(Name = "300,000 VNĐ")]
+        VND300 = 300000,
+        [Display(Name = "500,000 VNĐ")]
+        VND500 = 500000
+    }
+
+    public enum TransactionTypeEnum
+    {
+        [Display(Name = "Default")]
+        Default = 1,
+        [Display(Name = "Rollback")]
+        RollBack = 2,
+        [Display(Name = "ActiveCard")]
+        ActiveCard = 3,
+    }
 }

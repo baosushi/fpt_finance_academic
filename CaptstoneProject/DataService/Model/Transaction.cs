@@ -12,8 +12,18 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Receipt
+    public partial class Transaction
     {
         public int Id { get; set; }
+        public Nullable<int> AccountId { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<int> TransactionType { get; set; }
+        public Nullable<bool> IsIncreaseTransaction { get; set; }
+        public Nullable<int> Status { get; set; }
+        public string Notes { get; set; }
+        public string UserName { get; set; }
+    
+        public virtual Account Account { get; set; }
     }
 }
