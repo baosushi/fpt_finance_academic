@@ -422,7 +422,7 @@
     <Content Include="Areas\TransactionManagement\Views\web.config" />
     <Content Include="Areas\TransactionManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\StudentManagement\Index.cshtml" />
-    <Content Include="Areas\TrainingManagement\Views\StudentManagement\CustomerDetail.cshtml" />
+    <Content Include="Areas\TrainingManagement\Views\StudentManagement\StudentDetail.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />

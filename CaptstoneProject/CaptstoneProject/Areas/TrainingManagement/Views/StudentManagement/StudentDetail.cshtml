@@ -1,0 +1,886 @@
+﻿@model CaptstoneProject.Models.AreaViewModel.StudentViewModel
+@{
+    ViewBag.Title = "StudentDetailsMaterial";
+}
+<style>
+    .bgm-green {
+        background-color: #4caf50;
+    }
+
+    .bgm-amber {
+        background-color: #ffc107;
+    }
+
+    .bgm-cyan {
+        background-color: #00bcd4;
+    }
+
+    .bgm-teal {
+        background-color: #009688;
+    }
+    .nav-tabs .nav-item{
+        width:100%;
+    }
+</style>
+
+<div class="content">
+    <div class="container-default animate fadeInRight">
+        <div class="panel panel-default">
+            <div class="panel-title"></div>
+            <div class="panel-body">
+
+                <div class="">
+
+
+                    <div class="row">
+                        <div class="col-md-12 p-x-0 p-b-0">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-left: 0px; padding-right:6px; padding-bottom:10px">
+                                    <div class="bgm-teal" style="min-height:135px; border-radius:5px;">
+                                        <div class="clearfix">
+                                            @*<a title='Chỉnh sửa' class='btn btn-lg btn-primary pull-right' href='@Url.Action("Edit")/@Model.CustomerID'><i class='glyphicon glyphicon-pencil'></i></a>*@
+                                            @*<div class="pmo-block card-padding col-md-12 pmo-contact hidden-xs pull-left">
+                                            *@
+                                            <h3 style="color: white; padding-left:10px;">Khách hàng: @Model.Name </h3>
+                                            <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+
+
+                                                @if (!string.IsNullOrWhiteSpace(this.Model.Email))
+                                                {
+                                                    <li class="custom-break" style="color: white" title="Email"><i class="zmdi zmdi-email"></i> @this.Model.Email</li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-left: 3px; padding-right:3px;">
+                                    <div style="border-radius:5px;min-height:135px; background-color:rgb(234, 118, 73);">
+                                        <div id="accountDetailPanel" class="clearfix">
+                                            <h3 id="dAccName" style="color: white; padding-left:10px;">Thông tin tài khoản</h3>
+                                            <div class="col-md-12 row">
+                                                <div>
+                                                    <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+                                                        <li style="color: white" title="Thẻ thanh toán"><i class="zmdi zmdi-card-travel"></i> Tài khoản thanh toán: </li>
+                                                        <li style="color: white" title="Thẻ sản phẩm"><i class="zmdi zmdi-card-giftcard"></i> Tài khoản sản phẩm: </li>
+                                                        <li style="color: white" title="Thẻ tích điểm"><i class="zmdi zmdi-card-membership"></i> Tài khoản tích điểm: </li>
+                                                        <li style="color: white" title="Thẻ không xác định"><i class="zmdi zmdi-card-sim"></i> Tài khoản không xác định: </li>
+
+                                                    </ul>
+                                                </div>
+                                                <div class="pull-right row">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
+                                    <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
+                                        <div id="accountDetailPanel" class="clearfix">
+                                            <h3 id="dAccName" style="color: white; padding-left:10px;">Bạn hiện có:  thẻ</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-x-0">
+
+                            <div class="row">
+                                <div class="col-md-4 text-center" style="padding-left:0px; padding-right:6px; padding-bottom:10px">
+                                    <div class="bgm-green" style="border-radius:5px">
+                                        <div class="clearfix">
+                                            <div class="count">
+                                                <h3 id="1stPanel-title" class="m-b-10 detailPanelTitle">Tổng số đơn hàng</h3>
+                                                <h4 id="1stPanel-info" style="color:white;"><i class="fa fa-shopping-bag detailPanelIcon"></i></h4> <h4 style="color:white;"><span class="detailPanelInfo"></span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center" style="padding-left:3px; padding-right:3px; padding-bottom:10px;">
+                                    <div class="bgm-amber" style="border-radius:5px">
+                                        <div class="clearfix">
+                                            <div class="count">
+                                                <h3 id="2ndPanel-title" class="m-b-10 detailPanelTitle">Tổng tiền đã chi</h3>
+                                                <h4 id="2ndPanel-info" style="color:white"><i class="fa fa-money detailPanelIcon"></i></h4> <h4 style="color:white"><span class="detailPanelInfo"></span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center" style="padding-left:6px; padding-right:0px; padding-bottom:10px;">
+                                    <div class="bgm-cyan" style="border-radius:5px">
+                                        <div class="clearfix">
+                                            <div class="count">
+                                                <h3 id="3rdPanel-title" class="m-b-10 detailPanelTitle">Tổng số lần đến</h3>
+                                                <h4 id="3rdPanel-info" style="color:white"><i class="fa fa-user-plus detailPanelIcon"></i></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="">
+                                    <div class="">
+
+                                        <ul id="TabList" role="tablist" class="nav nav-tabs" style="overflow: hidden; width: 100%">
+                                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" id="boughtHistory" href="#muaHang" >Lịch sử mua hàng</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#taiKhoan">Danh sách tài khoản</a></li>
+                                        </ul>
+
+                                       
+
+                                        <div class="tab-content">
+                                            <div id="muaHang" class="tab-pane fade in active" role="tabpanel">
+                                                <div class="">
+
+                                                    <div class="col-md-4 pull-left m-y-20" style="padding: 0px;">
+                                                        <strong>Cửa hàng:</strong>
+                                                        <select class="selectpicker col-md-8" id="selectedStore" onchange="RefreshCustomerProductTable()">
+                                                            <option value="0" selected>Tất cả</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-8 m-0 p-0">
+                                                        <form id="form-create-session2" class="form-inline col-md-12 m-y-20 p-0">
+                                                            <div class="input-group pull-right">
+                                                                <div class="dateTime width230 pull-right">
+                                                                    <div class="fg-line m-t-5">
+                                                                        <div id="reportrange2">
+                                                                            <input id="date-string2" readonly class="form-control text-center">
+                                                                            <a class="myCelenderA" id=""><i class="fa fa-calendar"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="text" id="sTime2" name="startTime" placeholder="Chọn giờ bắt đầu" hidden="hidden" />
+                                                            <input type="text" id="eTime2" name="endTime" placeholder="Chọn giờ kết thúc" hidden="hidden" />
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                                <table id="customer-product-table" class="table-striped">
+                                                    <thead>
+                                                        <tr style="background-color: #4caf50; color: white;">
+                                                            <th>
+                                                                <label class="">STT</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Mã hóa đơn</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Số lượng</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Thanh toán</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Thời gian</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Loại hóa đơn</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Cửa hàng</label>
+                                                            </th>
+                                                            @*<th>
+                                                                    <label class="">Tình trạng</label>
+                                                                </th>*@
+                                                            <th>
+                                                                <label class="">Cashier</label>
+                                                            </th>
+                                                            <th>
+                                                                <label class="">Chi tiết</label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+
+                                            <div id="taiKhoan" class="tab-pane fade" role="tabpanel">
+                                                <div class="col-md-8" style="height: 50px">
+                                                    <div class="col-md-5 pull-left" style="padding: 0px;">
+                                                        <strong>Mode: </strong>
+                                                        <select class="selectpicker col-md-5" id="selectAccountMode" onchange="ChangeAccountModeSelect()">
+                                                            <option value="0" selected>Mã thẻ</option>
+                                                            <option value="1">Loại thẻ</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-7" style="padding: 0px;">
+                                                        @*<select class="form-control col-md-8" id="selectModeItem" onchange="ChangeModeItemSelect()">
+                                                                <option value="0">Xem tất cả</option>
+                                                            </select>*@
+                                                        <button type="button" id="btn-selectModeItem" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" style="overflow-y : scroll; max-height: 150px; top:32px" id="selectModeList">
+                                                            <li value="0">Xem tất cả</li>
+                                                        </ul>
+                                                        <input value="0" id="selectModeItem" hidden />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4" style="height: 50px;">
+                                                    @*<a id="showCreateAccount" href="@Url.Action("Create", "Account")/@Model.CustomerID" data-toggle='modal' class='btn btn-sm btn-primary pull-right'><i class='glyphicon glyphicon-plus'></i> Thêm tài khoản</a>*@
+                                                </div>
+                                                <div>
+                                                    <table id="customer-account-table" class="table-condensed table-bordered table-striped table-hover">
+                                                        <thead>
+                                                            <tr style="background-color: #4caf50; color: white;">
+                                                                <th>
+                                                                    <label>STT</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Mã tài khoản</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Tên tài khoản</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Loại tài khoản</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Mã thẻ</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Kích hoạt</label>
+                                                                </th>
+                                                                <th>
+                                                                    <label>Tùy chọn</label>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                        <div class="modal-footer" style="padding:initial">
+                                            <a href="@this.Url.Action("Index")">
+                                                <div id="create-advertising" type="button" class="btn btn-primary pull-left waves-effect">
+                                                    <i class="left-icon fa fa-arrow-circle-left"></i> Quay về
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div id="" class="modal fade">
+                    <div id="modalAccount" class="modal-dialog" style="width: 700px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 style="color:green" id="accountDetailModalTitle"></h3>
+                            </div>
+                            <div class="modal-body">
+
+
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="createTransactionPanel" class="modal fade"></div>
+                <div id="editTransactionPanel" class="modal fade"></div>
+                <div id="createAccountPanel" class="modal fade"></div>
+                <div id="editAccountPanel" class="modal fade"></div>
+
+                <!--Modal Membership Card-->
+                <div class="modal fade in" id="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="modalContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal Add Balance-->
+                <div class="modal fade" id="addBalanceModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="addBalanceModalContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<input id="studentId" value="@this.Model.Id" hidden />
+
+
+
+
+
+
+<script>
+    var totalamount = 0;
+    var finalomount = 0;
+    var totaldiscount = 0;
+    var table = null;
+
+    
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker({
+            size: 10,
+            liveSearch: true,
+        });
+        //Init customer-store table
+
+
+        //Init customer-product-table
+
+        //InitStudentProductDatatable();
+        //RefreshCustomerProductTable();
+
+        ChangeAccountModeSelect();
+
+
+
+        //InitTransactionDatatable();
+        //RefresTransactionTable();
+
+        $('createAccountPanel').on('hidden.bs.modal', function() {
+            $(this).html('');
+        });
+
+        $('editAccountPanel').on('hidden.bs.modal', function() {
+            $(this).html('');
+        });
+
+        setupDaterangepicker2
+
+    });
+
+
+   
+
+    //Daterangepicker for second tab
+    function cb2(start, end, label) {
+        var startTime = start.format("DD/MM/YYYY"),
+            endTime = end.format("DD/MM/YYYY"),
+            dateString = "(" + startTime + (startTime == endTime ? "" : " - " + endTime) + ")";
+
+        if (label != "Tùy chọn") {
+            $('#date-string2').val(label);
+        } else {
+            $("#date-string2").val(dateString);
+        }
+
+        $("#sTime2").val(startTime);
+        $("#eTime2").val(endTime);
+        $("#dateRange2").html(dateString);
+
+        InitStudentProductDatatable();
+        RefreshCustomerProductTable();
+    }
+
+    //customer-product-table
+    function RefreshCustomerProductTable() {
+        var oTable = $("#customer-product-table").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+    }
+
+    function InitStudentProductDatatable() {
+        $("#customer-product-table").dataTable({
+            "bFilter": true,
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": false,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "customID", "value": '@Model.Id' });
+                aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
+                aoData.push({ "name": "endTime", "value":$('#eTime2').val() });
+            },
+            //get customer product data
+            "sAjaxSource": "@Url.Action("LoadOrder")",
+            "bProcessing": true,
+            "bFilter": true,
+            "aLengthMenu": [10, 20, 100],
+            "iDisplayLength" : "10",
+            "oLanguage": {
+                "sSearchPlaceholder": "Mã hóa đơn",
+                "sSearch": "Tìm kiếm: ",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Đang xử lý...",
+                "sInfoEmpty": "Không có dữ liệu",
+                "oPaginate": {
+                    "sNext": "<i class='fa fa-chevron-right'></i>",
+                    "sPrevious": "<i class='fa fa-chevron-left'></i>"
+                }
+            },
+            "aoColumnDefs": [
+              {
+                  "aTargets": [0, 2, 3, 4, 5, 8],
+                  "sClass": "text-center",
+                  "bSearchable": false,
+              },
+              {
+                  "aTargets": [1],
+                  "bSearchable": true,
+              },
+              {
+                  "aTargets": [3],
+                  "bSearchable": false,
+                  "mRender": function (data, type, row) {
+                      //var money = o.aData[5];
+                      var data = row[3];
+                      return toMoney(data, ',', '');
+                  }
+              },
+              {
+                  "aTargets": [5],
+                  "bSearchable": false,
+                  "mRender": function (data, type, row) {
+                      var status = "";
+                      var color = "";
+                      var colorS = "";
+                      data = row[5];
+                      status = row[8];
+
+                      @*switch (data) {
+                          case 4:
+                              type = "@Resources.EnumLanguage.View_AtStore";
+                              color = "<div class='label label-primary myCategory'>";
+                              break;
+                          case 5:
+                              type = "@Resources.EnumLanguage.View_TakeAway";
+                              color = "<div class='label label-success myCategory'>";
+                              break;
+                          case 6:
+                              type = "@Resources.EnumLanguage.View_Delivery";
+                              color = "<div class='label label-warning myCategory'>";
+                              break;
+                          case 1:
+                              type = "@Resources.EnumLanguage.View_OnlineProduct";
+                              color = "<div class='label label-warning myCategory'>";
+                              break;
+                          default:
+                              type = "@Resources.EnumLanguage.Unknown";
+                              color = "<div class='label label-default myCategory'>";
+                      }*@
+
+                      //return color + type + '</div></hr>' + colorS + status + '</div>';
+                      return color + type + '</div>';
+                  }
+              },
+              {
+                  "aTargets": [6],
+                  "bSearchable": false,
+                  "mRender": function (data, type, row) {
+                      var status = "";
+                      var colorS = "";
+                      var status = row[8];
+
+                      @*switch (status) {
+                          case 2:
+                              status = "@Resources.EnumLanguage.View_Finish";
+                              colorS = "<div class='label label-success myCategory'>";
+                              break;
+                          case 3:
+                              status = "@Resources.EnumLanguage.View_Cancel";
+                              colorS = "<div class='label label-warning myCategory'>";
+                              break;
+                          case 4:
+                              status = "@Resources.EnumLanguage.View_PreCancel";
+                              colorS = "<div class='label label-warning myCategory'>";
+                              break;
+                          case 8:
+                              status = "@Resources.EnumLanguage.View_New";
+                              colorS = "<div class='label label-primary myCategory'>";
+                              break;
+                          case 10:
+                              status = "@Resources.EnumLanguage.View_Processing";
+                              colorS = "<div class='label label-warning myCategory'>";
+                              break;
+                      }*@
+
+                      return colorS + status + '</div>';
+                  }
+              },
+              {
+                  "aTargets": [7],
+                  "bSearchable": false,
+                  "mRender": function (data, type, row) {
+                      var data = row[6];
+                      return data;
+                  }
+              },
+              {
+                  "aTargets": [8],
+                  "bSearchable": false,
+                  "mRender": function (data, type, row) {
+                      var data = row[7];
+                      tester = row[13];
+                      var btn = $('<a/>', {
+                          'class': 'btn btn-sm btn-primary',
+                          'html': $('<i/>', {
+                              'class': 'glyphicon glyphicon-eye-open'
+                          }),
+                          'data-customer-name': row[9],
+                          //'data-delivery-address': row[10],
+                          //'data-customer-phone': row[11],
+                          'data-invoiceid': row[1],
+                          'data-cashier': row[6],
+                          //'data-store': row[16],
+                          'data-id': row[7],
+                          'data-order-time': row[4],
+                          'data-status': row[5],
+                          'data-store-name': row[8],
+                          //'data-notes': row[12],
+                          //'data-total-amount': toMoney(row[13], ',', ''),
+                          'data-final-amount': toMoney(row[3], ',', ''),
+                          //'data-discount': toMoney(row[15], ',', ''),
+                          'data-role': 'detail'
+                      });
+                      return btn[0].outerHTML;
+                  }
+              }
+
+            ],
+            "bAutoWidth": true
+        });
+    }
+
+    $(document).on('click', '[data-role=detail]', function () {
+        currentId = $(this).data('id');
+        $("#RentID").val(currentId);
+        finalamount = $(this).data('final-amount');
+        $('#order-detail-report-modal [data-role=order-time]').html($(this).data('order-time'));
+        $('#order-detail-report-modal [data-role=invoiceid]').html($(this).data('invoiceid'));
+        $('#order-detail-report-modal [data-role=cashier]').html($(this).data('cashier'));
+        $('#order-detail-report-modal').modal('show');
+
+        @*switch ($(this).data('status')) {
+            case 4:
+                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-primary myCategory'>@Resources.EnumLanguage.View_AtStore</div>")
+                break;
+            case 5:
+                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-success myCategory'>@Resources.EnumLanguage.View_TakeAway</div>")
+                break;
+            case 6:
+                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-warning myCategory'>@Resources.EnumLanguage.View_Delivery</div>")
+                break;
+        }*@
+        $('#order-detail-report-modal [data-role=store-name]').html($(this).data('store-name'));
+        if ($(this).data('status') == 6 || $(this).data('status') == 1) {
+            $('#delivery').show();
+        }
+        else {
+            $('#delivery').hide();
+        }
+        $.ajax({
+            type: "GET",
+            data: {"id": currentId},
+            url: "@Url.Action("LoadOrderDetail")",
+            dataType: "json",
+            success: function(result){
+                getOrderDetailsGeneralData(result.lblData)
+                orderDetailTable(result.dataTable);
+            },
+            error: function(){
+                ShowMessage("Có lỗi xảy ra", 1);
+            }
+        });
+
+        //RefreshTableOrderDetail();
+        //orderDetailTable._fnPageChange(0);
+        //orderDetailTable._fnAjaxUpdate();
+    });
+
+    var getOrderDetailsGeneralData = function(data){
+        totalamount = data.totalAmount;
+        totaldiscount = data.totalDiscount * (-1);
+
+        $('#order-detail-report-modal [data-role=customer-name]').html(data.cusName);
+        $('#order-detail-report-modal [data-role=delivery-address]').html(data.cusAddr);
+        $('#order-detail-report-modal [data-role=customer-phone]').html(data.cusPhone);
+
+        $('#order-detail-report-modal [data-role=store]').html(data.store);
+        $('#order-detail-report-modal [data-role=notes]').html(data.notes);
+        $('#order-detail-report-modal [data-role=total-amount]').html(toMoney(totalamount, ',', ''));
+        $('#order-detail-report-modal [data-role=discount]').html(toMoney(totaldiscount, ',', ''));
+
+        var html = "";
+        for(var i = 0; i < data.payment.length; i++){
+            html += toMoney(data.payment[i].amount, ',', '') + " (" + data.payment[i].type + ")<br/>";
+            $('#order-detail-report-modal [data-role=final-amount]').html(html);
+        }
+
+    }
+
+    var orderDetailTable = function (data) {
+        $('#order-report-detail-table').dataTable({
+            "footerCallback": function (row, data, start, end, display) {
+                var cells = row.getElementsByTagName('th');
+                cells[0].innerHTML = "Tổng cộng: " + toMoney(totalamount, ',', '');
+                cells[1].innerHTML = toMoney(totaldiscount, ',', '');
+                cells[2].innerHTML = toMoney(finalamount, ',', '');
+            },
+
+            "bFilter": false,
+            "bRetrieve": false,
+            "bDestroy": true,
+            "bServerSide": false,
+            "bScrollCollapse": true,
+            @*"sAjaxSource": "@Url.Action("LoadOrderDetail")",*@
+            "bProcessing": true,
+            //"fnServerParams": function (aoData) {
+            //    aoData.push({ "name": "id", "value": currentId });
+            //},
+            "data": data,
+            "oLanguage": {
+                "sSearch": "Tên phòng:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Đang xử lý...",
+                "oPaginate": {
+                    "sNext": "<i class='fa fa-chevron-right'></i>",
+                    "sPrevious": "<i class='fa fa-chevron-left'></i>"
+                }
+
+            },
+            "aoColumnDefs": [
+                { "aTargets": [0, 1, 2, 3, 4, 5, 6], "bSortable": false },
+                { "aTargets": [2, 3, 4, 5], "sClass": "text-center" },
+                {
+                    "aTargets": [2],
+                    "mRender": function (data, type, row) {
+                        //var money = o.aData[5];
+                        var data = row[2];
+                        return toMoney(data, ',', '');
+                    }
+                },
+                {
+                    "aTargets": [5],
+                    "mRender": function (data, type, row) {
+                        //var money = o.aData[5];
+                        var data = row[5];
+                        return toMoney(data, ',', '');
+                    }
+                },
+                {
+                    "aTargets": [6],
+                    "mRender": function (data, type, row) {
+                        //var money = o.aData[5];
+                        var data = row[6];
+                        return toMoney(data, ',', '');
+                    }
+                },
+                {
+                    "aTargets": [7],
+                    "sClass": "hidden",
+                },
+                {
+                    "aTargets": [4],
+                    "mRender": function (data, type, row) {
+                        var type = "";
+                        var color = "";
+                        data = row[4];
+                        @*switch (data) {
+                            case 11:
+                                type = "@Resources.EnumLanguage.View_PosFinished";
+                                color = "<div class='label label-success myCategory'>";
+                                break;
+                            case 12:
+                                type = "@Resources.EnumLanguage.View_PosPreCancel";
+                                color = "<div class='label label-warning myCategory'>";
+                                break;
+                            case 13:
+                                type = "@Resources.EnumLanguage.View_PosCancel";
+                                color = "<div class='label label-warning myCategory'>";
+                                break;
+                            default:
+                                type = "---";
+                                color = "<div>";
+
+                        }*@
+                        return color + type + '</div>';
+                    }
+
+                },
+            ],
+            "bAutoWidth": false
+        }).fnSetFilteringDelay(delaySearch);
+    };
+
+
+
+    //load overview
+
+
+
+
+    function setModalHeaderWidth() {
+        //set width
+        $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
+        $(window).resize(function () {
+            $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
+        });
+    }
+
+
+    $('#showCreateTransaction').click(function(){
+        $.ajax({
+            type: "GET",
+            url : '@Url.Action("Create", "Transaction")',
+            data: {
+                Id: @Model.Id,
+            },
+            success: function (result) {
+                $('#createTransactionPanel').html(result);
+                $('#createTransactionPanel').modal('show');
+                setModalHeaderWidth();
+            },
+            error: function (error) {
+                ShowMessage("Error Occured",1)
+            }
+        });
+    });
+
+    function showEditTransaction(transactionId) {
+        $.ajax({
+            type: "GET",
+            url: '@(Url.Action("Edit", "Transaction"))',
+            data: {
+                Id: transactionId
+            },
+            success: function (result) {
+                $('#editTransactionPanel').html(result);
+                $('#editTransactionPanel').modal('show');
+                setModalHeaderWidth();
+            },
+            error: function (error) {
+                ShowMessage("Error Occured",1);
+            }
+        });
+    }
+
+
+    function RefreshCustomerAccountTable() {
+        var oTable = $("#customer-account-table").dataTable();
+        //RefreshTable("#customer-account-table", "@Url.Action("GetCustomerAccountData", "Account")");
+        //oTable.api().ajax.reload();
+        //oTable.fnClearTable();
+        //oTable.fnDraw();
+        //oTable.api().ajax.reload();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+    }
+
+  
+    function setupDaterangepicker2() {
+        cb2(moment().startOf('month'), moment(), "Tháng này");
+        $('#reportrange2').daterangepicker({
+            "opens": "left",
+            "maxDate": moment(),
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            ranges: {
+                'Tuần này': [moment().startOf('week'), moment().endOf('week')],
+                'Tuần trước': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+
+        }, cb2);
+        loadStoreListFilter();
+    }
+    //$('#date-string2').on('change',function(){
+    //    debugger
+
+    //});
+   
+
+
+    function getProductForAccountDetail(code){
+        $.ajax({
+            type: 'POST',
+            url:'@Url.Action("GetProductForAccountDetail", "Account")',
+            data: {
+                Code: code,
+            },
+            success: function (result) {
+                if(result.success==true){
+                    $('#accountDetailProduct').val(result.ProductName)
+                }
+            },
+            error: function (error) {
+                ShowMessage("Có lỗi xảy ra.",1);
+            }
+        });
+    }
+
+    $(document).on('click', '#exportEx', function () {
+        $('#storeId').val($('#listStoreId').val());
+        $('#formDetailReportExcel').submit();
+    });
+
+    function convertNETDateTime(sNetDate) {
+        if (sNetDate == null) return null;
+        if (sNetDate instanceof Date) return sNetDate;
+        var r = /\/Date\(([0-9]+)\)\//i
+        var matches = sNetDate.match(r);
+        if (matches.length == 2) {
+            return new Date(parseInt(matches[1]));
+        }
+        else {
+            return sNetDate;
+        }
+    }
+    function loadStoreListFilter(){
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("LoadStoreFromCustomerOrder", "Customer")",
+            data: {
+                studentId: '@Model.Id',
+            },
+            success: function (result) {
+                for (var i=0; i< result.list.length;i++)
+                {
+                    $('#selectedStore').append("<option value="+result.list[i].storeID+">"+result.list[i].storeName+"</option>");
+                }
+                $('#selectedStore').selectpicker('refresh');
+                //ShowMessage("Thành công.", 2);
+                InitStudentProductDatatable();
+            },
+            error: function (error) {
+                ShowMessage("Có lỗi xảy ra.",1);
+            }
+        });
+    }
+
+
+
+    function ChangeModeItemSelect(itemValue, itemName) {
+        $('#btn-selectModeItem').html(itemName + " &#9660");
+        $('#selectModeItem').val(itemValue);
+        RefreshCustomerAccountTable();
+    }
+</script>
+

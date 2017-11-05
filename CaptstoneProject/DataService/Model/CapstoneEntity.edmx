@@ -50,6 +50,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="RegisteredBy" Type="datetime" />
+          <Property Name="StudentMajorId" Type="int" />
         </EntityType>
         <EntityType Name="RegistrationDetail">
           <Key>
@@ -58,6 +60,7 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="RegistrationId" Type="int" Nullable="false" />
           <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="PreferredSlot" Type="int" />
         </EntityType>
         <EntityType Name="Schedule">
           <Key>
@@ -441,6 +444,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Registration_StudentMajor">
+          <End Role="StudentMajor" Type="Self.StudentMajor" Multiplicity="0..1" />
+          <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registration">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RegistrationDetail_Registration">
           <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
           <End Role="RegistrationDetail" Type="Self.RegistrationDetail" Multiplicity="*" />
@@ -701,6 +716,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Registration_StudentMajor" Association="Self.FK_Registration_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajor" />
+            <End Role="Registration" EntitySet="Registration" />
+          </AssociationSet>
           <AssociationSet Name="FK_RegistrationDetail_Registration" Association="Self.FK_RegistrationDetail_Registration">
             <End Role="Registration" EntitySet="Registration" />
             <End Role="RegistrationDetail" EntitySet="RegistrationDetail" />
@@ -816,6 +835,10 @@
           <AssociationSet Name="FK_Curriculum_Program" Association="DB_Finance_AcademicModel.FK_Curriculum_Program">
             <End Role="Program" EntitySet="Programs" />
             <End Role="Curriculum" EntitySet="Curricula" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registration_StudentMajor" Association="DB_Finance_AcademicModel.FK_Registration_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajors" />
+            <End Role="Registration" EntitySet="Registrations" />
           </AssociationSet>
           <AssociationSet Name="FK_RegistrationDetail_Registration" Association="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration">
             <End Role="Registration" EntitySet="Registrations" />
@@ -954,6 +977,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="RegisteredBy" Type="DateTime" Precision="3" />
+          <Property Name="StudentMajorId" Type="Int32" />
+          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_Registration_StudentMajor" FromRole="Registration" ToRole="StudentMajor" />
           <NavigationProperty Name="RegistrationDetails" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="Registration" ToRole="RegistrationDetail" />
         </EntityType>
         <EntityType Name="RegistrationDetail">
@@ -963,6 +989,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="RegistrationId" Type="Int32" Nullable="false" />
           <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <Property Name="PreferredSlot" Type="Int32" />
           <NavigationProperty Name="Registration" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="RegistrationDetail" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Schedule">
@@ -1190,6 +1217,7 @@
           <Property Name="StudentId" Type="Int32" />
           <Property Name="OldStudentId" Type="Int32" />
           <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
+          <NavigationProperty Name="Registrations" Relationship="DB_Finance_AcademicModel.FK_Registration_StudentMajor" FromRole="StudentMajor" ToRole="Registration" />
           <NavigationProperty Name="Student" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="StudentMajor" ToRole="Student" />
           <NavigationProperty Name="StudentInCourses" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Student" FromRole="StudentMajor" ToRole="StudentInCourse" />
         </EntityType>
@@ -1289,6 +1317,18 @@
             </Principal>
             <Dependent Role="Curriculum">
               <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registration_StudentMajor">
+          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="0..1" />
+          <End Type="DB_Finance_AcademicModel.Registration" Role="Registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registration">
+              <PropertyRef Name="StudentMajorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1593,6 +1633,8 @@
           <EntitySetMapping Name="Registrations">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Registration">
               <MappingFragment StoreEntitySet="Registration">
+                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
+                <ScalarProperty Name="RegisteredBy" ColumnName="RegisteredBy" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1600,6 +1642,7 @@
           <EntitySetMapping Name="RegistrationDetails">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.RegistrationDetail">
               <MappingFragment StoreEntitySet="RegistrationDetail">
+                <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="RegistrationId" ColumnName="RegistrationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

@@ -25,7 +25,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
 
 
-                    param.sSearch = param.sSearch.Trim();
+                    if (param.sSearch != null)
+                        param.sSearch = param.sSearch.Trim();
 
                     int count = 0;
 
@@ -46,7 +47,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         string.IsNullOrEmpty(a.LoginName) ? "-" : a.LoginName,
                         string.IsNullOrEmpty(a.StudentCode) ? "-" : a.StudentCode,
                         a.Student.Id ,
-                                });
+                                }).ToList();
 
 
                     int totalDisplay = studentMajor.Count();
