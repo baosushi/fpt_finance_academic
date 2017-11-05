@@ -13,7 +13,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="Balance" Type="money" />
-          <Property Name="StudentCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="StudentMajorId" Type="int" />
           <Property Name="Type" Type="int" />
           <Property Name="Active" Type="bit" />
         </EntityType>
@@ -52,6 +52,10 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="RegisteredBy" Type="datetime" />
           <Property Name="StudentMajorId" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="FinalAmount" Type="float" />
+          <Property Name="RegistrationDetailTotalQuantity" Type="int" />
+          <Property Name="CheckInPerson" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="RegistrationDetail">
           <Key>
@@ -280,6 +284,18 @@
           <Property Name="SubjectId" Type="int" Nullable="false" />
           <Property Name="EffectivenessDate" Type="datetime" />
         </EntityType>
+        <Association Name="FK_Account_StudentMajor">
+          <End Role="StudentMajor" Type="Self.StudentMajor" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_AvailableSubject_Block">
           <End Role="Block" Type="Self.Block" Multiplicity="1" />
           <End Role="AvailableSubject" Type="Self.AvailableSubject" Multiplicity="*" />
@@ -664,6 +680,10 @@
           <EntitySet Name="StudentMajor" EntityType="Self.StudentMajor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectMark" EntityType="Self.SubjectMark" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Account_StudentMajor" Association="Self.FK_Account_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajor" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
           <AssociationSet Name="FK_AvailableSubject_Block" Association="Self.FK_AvailableSubject_Block">
             <End Role="Block" EntitySet="Block" />
             <End Role="AvailableSubject" EntitySet="AvailableSubject" />
@@ -812,6 +832,10 @@
           <EntitySet Name="StudentMajors" EntityType="DB_Finance_AcademicModel.StudentMajor" />
           <EntitySet Name="Subjects" EntityType="DB_Finance_AcademicModel.Subject" />
           <EntitySet Name="SubjectMarks" EntityType="DB_Finance_AcademicModel.SubjectMark" />
+          <AssociationSet Name="FK_Account_StudentMajor" Association="DB_Finance_AcademicModel.FK_Account_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajors" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Transaction_Account" Association="DB_Finance_AcademicModel.FK_Transaction_Account">
             <End Role="Account" EntitySet="Accounts" />
             <End Role="Transaction" EntitySet="Transactions" />
@@ -933,9 +957,10 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StudentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StudentMajorId" Type="Int32" />
           <Property Name="Type" Type="Int32" />
           <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="Account" ToRole="StudentMajor" />
           <NavigationProperty Name="Transactions" Relationship="DB_Finance_AcademicModel.FK_Transaction_Account" FromRole="Account" ToRole="Transaction" />
         </EntityType>
         <EntityType Name="AvailableSubject">
@@ -979,6 +1004,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="RegisteredBy" Type="DateTime" Precision="3" />
           <Property Name="StudentMajorId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="FinalAmount" Type="Double" />
+          <Property Name="RegistrationDetailTotalQuantity" Type="Int32" />
+          <Property Name="CheckInPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_Registration_StudentMajor" FromRole="Registration" ToRole="StudentMajor" />
           <NavigationProperty Name="RegistrationDetails" Relationship="DB_Finance_AcademicModel.FK_RegistrationDetail_Registration" FromRole="Registration" ToRole="RegistrationDetail" />
         </EntityType>
@@ -1216,6 +1245,7 @@
           <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StudentId" Type="Int32" />
           <Property Name="OldStudentId" Type="Int32" />
+          <NavigationProperty Name="Accounts" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="StudentMajor" ToRole="Account" />
           <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
           <NavigationProperty Name="Registrations" Relationship="DB_Finance_AcademicModel.FK_Registration_StudentMajor" FromRole="StudentMajor" ToRole="Registration" />
           <NavigationProperty Name="Student" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="StudentMajor" ToRole="Student" />
@@ -1248,6 +1278,18 @@
           <Property Name="EffectivenessDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="SubjectMark" ToRole="Subject" />
         </EntityType>
+        <Association Name="FK_Account_StudentMajor">
+          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="0..1" />
+          <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Transaction_Account">
           <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="0..1" />
           <End Type="DB_Finance_AcademicModel.Transaction" Role="Transaction" Multiplicity="*" />
@@ -1591,7 +1633,7 @@
               <MappingFragment StoreEntitySet="Account">
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="StudentCode" ColumnName="StudentCode" />
+                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1633,6 +1675,10 @@
           <EntitySetMapping Name="Registrations">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Registration">
               <MappingFragment StoreEntitySet="Registration">
+                <ScalarProperty Name="CheckInPerson" ColumnName="CheckInPerson" />
+                <ScalarProperty Name="RegistrationDetailTotalQuantity" ColumnName="RegistrationDetailTotalQuantity" />
+                <ScalarProperty Name="FinalAmount" ColumnName="FinalAmount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
                 <ScalarProperty Name="RegisteredBy" ColumnName="RegisteredBy" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

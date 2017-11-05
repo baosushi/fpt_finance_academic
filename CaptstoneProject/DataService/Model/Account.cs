@@ -24,10 +24,11 @@ namespace DataService.Model
         public string Name { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<decimal> Balance { get; set; }
-        public string StudentCode { get; set; }
+        public Nullable<int> StudentMajorId { get; set; }
         public Nullable<int> Type { get; set; }
         public Nullable<bool> Active { get; set; }
     
+        public virtual StudentMajor StudentMajor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
     }

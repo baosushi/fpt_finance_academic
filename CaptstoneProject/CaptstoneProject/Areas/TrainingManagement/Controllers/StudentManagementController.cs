@@ -1,4 +1,7 @@
-﻿using DataService.Model;
+﻿using CaptstoneProject.Controllers;
+using CaptstoneProject.Models;
+using DataService.Model;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
-    public class StudentManagementController : Controller
+    public class StudentManagementController : MyBaseController
     {
         // GET: TrainingManagement/StudentManagement
         public ActionResult Index()
@@ -84,7 +87,12 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     model.Id = student.Id;
                     model.Name = student.Name;
                     var studentCodes = student.StudentMajors.Select(q => q.StudentCode).ToList();
-                    model.Account = context.Accounts.Where(q => studentCodes.Contains(q.StudentCode)).FirstOrDefault();
+                    var loginName = student.StudentMajors.OrderByDescending(q => q.Id).FirstOrDefault().LoginName;
+                    var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                    var loginAccount = userManager.Users.Where(q => q.Email.Contains(loginName)).FirstOrDefault();
+                    if (loginAccount != null)
+                        model.Email = loginAccount.Email;
+                    model.Account = context.Accounts.Where(q => studentCodes.Contains(q.StudentMajor.StudentCode)).FirstOrDefault();
                     return View(model);
 
                 }
@@ -97,69 +105,91 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
 
-        //public JsonResult LoadOrder(JQueryDataTableParamModel param, int brandId, int customID, int selectedStoreID, string startTime, string endTime)
-        //{
-
-        //    var orderApi = new OrderApi();
-        //    IQueryable<Order> listOrder = null;
-        //    var startDate = startTime.ToDateTime().GetStartOfDate();
-        //    var endDate = endTime.ToDateTime().GetEndOfDate();
-        //    var Orders = orderApi.GetAllFinishedOrdersByDateAndCustomer(startDate, endDate, brandId, customID);
-
-        //    if (selectedStoreID == 0)
-        //    {
-        //        listOrder = Orders;
-        //    }
-        //    else
-        //    {
-        //        listOrder = Orders.Where(a => a.StoreID == selectedStoreID);
-        //    }
-
-        //    if (!string.IsNullOrWhiteSpace(param.sSearch))
-        //    {
-        //        listOrder = listOrder.Where(q => q.InvoiceID.ToLower().Contains(param.sSearch.ToLower()));
-        //    }
-        //    int count = 0;
-        //    count = param.iDisplayStart + 1;
-
-        //    //try
-        //    //{
-        //    var result = listOrder
-        //        .OrderByDescending(q => q.CheckInDate)
-        //        .Skip(param.iDisplayStart)
-        //        .Take(param.iDisplayLength)
-        //        .ToList();
-        //    var list = result.Select(a => new object[]
-        //            {
-        //                ++count, // 0
-        //                string.IsNullOrEmpty(a.InvoiceID) ? "N/A" : a.InvoiceID, // 1
-        //                a.OrderDetailsTotalQuantity, // 2
-        //                a.FinalAmount, // 3
-        //                a.CheckInDate.Value.ToString("dd/MM/yyyy HH:mm:ss"), // 4
-        //                a.OrderType, // 5
-        //                a.CheckInPerson, // 6
-        //                a.RentID, // 7
-        //                a.Store == null ? "N/A" : a.Store.Name, // 8
-        //                a.Customer!=null ? a.Customer.Name : "N/A", // 9
-        //                //string.IsNullOrEmpty(a.DeliveryAddress) ? "N/A" : a.DeliveryAddress, //10
-        //                //a.Customer!=null ? a.Customer.Phone : "N/A", //11
-        //                //a.Notes !=null? a.Notes : "", //12
-        //                //a.TotalAmount,// 12
-        //                //(a.Discount + a.DiscountOrderDetail), // 13
-        //                //a.Store.Name // 14
-        //            });
-        //    var totalRecords = listOrder.Count();
-
-        //    return Json(new
-        //    {
-        //        sEcho = param.sEcho,
-        //        iTotalRecords = totalRecords,
-        //        iTotalDisplayRecords = totalRecords,
-        //        aaData = list
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
+        public ActionResult LoadOrder(JQueryDataTableParamModel param, int studentId, string startTime, string endTime)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var startDate = startTime.ToDateTime().GetStartOfDate();
+                    var endDate = endTime.ToDateTime().GetEndOfDate();
+                    var listOrder = context.Registrations.Where(q => q.RegisteredBy >= startDate
+                    && q.RegisteredBy <= endDate && q.Status == (int)RegistrationStatus.Done && q.StudentMajor.StudentId == studentId);
 
 
 
+                    //if (!string.IsNullOrWhiteSpace(param.sSearch))
+                    //{
+                    //    listOrder = listOrder.Where(q => q.InvoiceID.ToLower().Contains(param.sSearch.ToLower()));
+                    //}
+                    int count = 0;
+                    count = param.iDisplayStart + 1;
+
+                    //try
+                    //{
+                    var result = listOrder
+                        .OrderByDescending(q => q.RegisteredBy)
+                        .Skip(param.iDisplayStart)
+                        .Take(param.iDisplayLength)
+                        .ToList();
+                    var list = result.Select(a => new object[]
+                            {
+                        ++count, // 0
+                        a.RegistrationDetailTotalQuantity, // 1
+                        a.FinalAmount, // 2
+                        a.RegisteredBy.Value.ToString("dd/MM/yyyy"), // 3
+                        a.CheckInPerson, // 4
+                            });
+                    var totalRecords = listOrder.Count();
+
+                    return Json(new
+                    {
+                        sEcho = param.sEcho,
+                        iTotalRecords = totalRecords,
+                        iTotalDisplayRecords = totalRecords,
+                        aaData = list
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+        public ActionResult loadAllStudentAccount(int studentId)
+        {
+            try
+            {
+                var count = 1;
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var accountList = context.Accounts.Where(q => q.StudentMajor.StudentId == studentId)
+                        .OrderByDescending(q => q.StartDate).ToList().Select(q => new IConvertible[]
+                    {
+                        count++, //0
+                        q.StudentMajor.StudentCode, //1
+                        q.StartDate.Value.ToString("dd/MM/yyyy"),
+                        q.Type,
+                        q.Balance, //4
+                        q.Active
+                    }).ToList();
+
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalDisplayRecords = accountList.Count(),
+                        iTotalRecord = accountList.Count(),
+                        aaData = accountList
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Json(new { success = false, message = e.Message });
+            }
+        }
     }
 }

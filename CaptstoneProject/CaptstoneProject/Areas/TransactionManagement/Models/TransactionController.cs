@@ -1,4 +1,5 @@
-﻿using CaptstoneProject.Models;
+﻿using CaptstoneProject.Controllers;
+using CaptstoneProject.Models;
 using DataService.Model;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.TransactionManagement.Models
 {
-    public class TransactionController : Controller
+    public class TransactionController : MyBaseController
     {
         // GET: TransactionManagement/Transaction
         public ActionResult Index()
@@ -58,7 +59,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 using (var context = new DB_Finance_AcademicEntities())
                 {
 
-                    var account = context.Accounts.Where(q => q.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper()))
+                    var account = context.Accounts.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper()))
                         .FirstOrDefault();
                     var formTrasaction = true;
                     if (form != null)
@@ -104,7 +105,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 using (var context = new DB_Finance_AcademicEntities())
                 {
 
-                    var account = context.Accounts.Where(q => q.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper())).FirstOrDefault();
+                    var account = context.Accounts.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper())).FirstOrDefault();
 
                     if (account != null)
                     {
@@ -155,7 +156,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
 
                     filteredResult = result
                     .OrderByDescending(q => q.Date)
-                    .Where(a => string.IsNullOrEmpty(param.sSearch) || a.Account.StudentCode.ToUpper().Contains(param.sSearch.Trim().ToUpper()));
+                    .Where(a => string.IsNullOrEmpty(param.sSearch) || a.Account.StudentMajor.StudentCode.ToUpper().Contains(param.sSearch.Trim().ToUpper()));
 
 
                     var list = filteredResult.Skip(param.iDisplayStart)
@@ -164,7 +165,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         .Select(q => new IConvertible[] {
                         count++,
                         q.Account.Name,
-                        context.StudentMajors.Where(a => a.StudentCode.Equals(q.Account.StudentCode)).FirstOrDefault().Student.Name,
+                        context.StudentMajors.Where(a => a.StudentCode.Equals(q.Account.StudentMajor.StudentCode)).FirstOrDefault().Student.Name,
                         q.Amount,
                         q.Date.Value.ToString("dd/MM/yyyy HH:mm:ss"),
                         String.IsNullOrEmpty(q.Notes) ? "-" : q.Notes,
@@ -175,7 +176,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         q.AccountId,
                         });
                     var list2 = result
-                        .Where(a => string.IsNullOrEmpty(param.sSearch) || a.Account.StudentCode.ToLower().Contains(param.sSearch.Trim().ToLower()))
+                        .Where(a => string.IsNullOrEmpty(param.sSearch) || a.Account.StudentMajor.StudentCode.ToLower().Contains(param.sSearch.Trim().ToLower()))
                         .ToList()
                         .Select(q => new IConvertible[] {
                         q.Amount,

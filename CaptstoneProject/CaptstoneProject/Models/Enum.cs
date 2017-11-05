@@ -109,4 +109,14 @@ namespace CaptstoneProject.Models
         [Display(Name = "ActiveCard")]
         ActiveCard = 3,
     }
+
+    public enum RegistrationStatus
+    {
+        [Display(Name = "Processing")]
+        Processing = 1,
+        [Display(Name = "Cancel")]
+        Cancel = 2,
+        [Display(Name = "Done")]
+        Done = 3,
+    }
 }

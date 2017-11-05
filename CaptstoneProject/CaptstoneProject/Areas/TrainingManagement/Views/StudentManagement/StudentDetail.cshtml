@@ -18,8 +18,25 @@
     .bgm-teal {
         background-color: #009688;
     }
-    .nav-tabs .nav-item{
-        width:100%;
+
+    .nav-tabs .nav-item {
+        width: 100%;
+    }
+
+    .date-input {
+        float: left;
+        width: 90%;
+        border: none;
+        background: none !important;
+        box-shadow: none;
+        color: white;
+    }
+
+    .div-datepicker {
+        background: #11ad79;
+        border-radius: 2px;
+        color: white;
+        overflow: hidden;
     }
 </style>
 
@@ -28,255 +45,200 @@
         <div class="panel panel-default">
             <div class="panel-title"></div>
             <div class="panel-body">
-
-                <div class="">
-
-
+                <div class="col-md-12 p-x-0 p-b-0">
                     <div class="row">
-                        <div class="col-md-12 p-x-0 p-b-0">
-                            <div class="row">
-                                <div class="col-md-4" style="padding-left: 0px; padding-right:6px; padding-bottom:10px">
-                                    <div class="bgm-teal" style="min-height:135px; border-radius:5px;">
-                                        <div class="clearfix">
-                                            @*<a title='Chỉnh sửa' class='btn btn-lg btn-primary pull-right' href='@Url.Action("Edit")/@Model.CustomerID'><i class='glyphicon glyphicon-pencil'></i></a>*@
-                                            @*<div class="pmo-block card-padding col-md-12 pmo-contact hidden-xs pull-left">
-                                            *@
-                                            <h3 style="color: white; padding-left:10px;">Khách hàng: @Model.Name </h3>
+                        <div class="col-md-4" style="padding-left: 0px; padding-right:6px; padding-bottom:10px">
+                            <div class="bgm-teal" style="min-height:135px; border-radius:5px;">
+                                <div class="clearfix">
+                                    @*<a title='Chỉnh sửa' class='btn btn-lg btn-primary pull-right' href='@Url.Action("Edit")/@Model.CustomerID'><i class='glyphicon glyphicon-pencil'></i></a>*@
+                                    @*<div class="pmo-block card-padding col-md-12 pmo-contact hidden-xs pull-left">
+                                    *@
+                                    <h3 style="color: white; padding-left:10px;">Học sinh: @Model.Name </h3>
+                                    <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+
+
+                                        @if (!string.IsNullOrWhiteSpace(this.Model.Email))
+                                        {
+                                            <li class="custom-break" style="color: white" title="Email"><i class="zmdi zmdi-email"></i> @this.Model.</li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 3px; padding-right:3px;">
+                            <div style="border-radius:5px;min-height:135px; background-color:rgb(234, 118, 73);">
+                                <div id="accountDetailPanel" class="clearfix">
+                                    <h3 id="dAccName" style="color: white; padding-left:10px;">Thông tin tài khoản</h3>
+                                    <div class="col-md-12 row">
+                                        <div>
                                             <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-
-
-                                                @if (!string.IsNullOrWhiteSpace(this.Model.Email))
-                                                {
-                                                    <li class="custom-break" style="color: white" title="Email"><i class="zmdi zmdi-email"></i> @this.Model.Email</li>
-                                                }
+                                                <li style="color: white" title="Thẻ thanh toán"><i class="zmdi zmdi-card-travel"></i> Tài khoản thanh toán: </li>
+                                                <li style="color: white" title="Thẻ sản phẩm"><i class="zmdi zmdi-card-giftcard"></i> Tài khoản sản phẩm: </li>
+                                                <li style="color: white" title="Thẻ tích điểm"><i class="zmdi zmdi-card-membership"></i> Tài khoản tích điểm: </li>
+                                                <li style="color: white" title="Thẻ không xác định"><i class="zmdi zmdi-card-sim"></i> Tài khoản không xác định: </li>
 
                                             </ul>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4" style="padding-left: 3px; padding-right:3px;">
-                                    <div style="border-radius:5px;min-height:135px; background-color:rgb(234, 118, 73);">
-                                        <div id="accountDetailPanel" class="clearfix">
-                                            <h3 id="dAccName" style="color: white; padding-left:10px;">Thông tin tài khoản</h3>
-                                            <div class="col-md-12 row">
-                                                <div>
-                                                    <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-                                                        <li style="color: white" title="Thẻ thanh toán"><i class="zmdi zmdi-card-travel"></i> Tài khoản thanh toán: </li>
-                                                        <li style="color: white" title="Thẻ sản phẩm"><i class="zmdi zmdi-card-giftcard"></i> Tài khoản sản phẩm: </li>
-                                                        <li style="color: white" title="Thẻ tích điểm"><i class="zmdi zmdi-card-membership"></i> Tài khoản tích điểm: </li>
-                                                        <li style="color: white" title="Thẻ không xác định"><i class="zmdi zmdi-card-sim"></i> Tài khoản không xác định: </li>
-
-                                                    </ul>
-                                                </div>
-                                                <div class="pull-right row">
-
-                                                </div>
-                                            </div>
+                                        <div class="pull-right row">
 
                                         </div>
                                     </div>
+
                                 </div>
-                                <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
-                                    <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
-                                        <div id="accountDetailPanel" class="clearfix">
-                                            <h3 id="dAccName" style="color: white; padding-left:10px;">Bạn hiện có:  thẻ</h3>
-                                        </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
+                            <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
+                                <div id="accountDetailPanel" class="clearfix">
+                                    <h3 id="dAccName" style="color: white; padding-left:10px;">Bạn hiện có:  </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p-x-0">
+
+                    <div class="row">
+                        <div class="col-md-4 text-center" style="padding-left:0px; padding-right:6px; padding-bottom:10px">
+                            <div class="bgm-green" style="border-radius:5px">
+                                <div class="clearfix">
+                                    <div class="count">
+                                        <h3 id="1stPanel-title" class="m-b-10 detailPanelTitle">Tổng số đơn hàng</h3>
+                                        <h4 id="1stPanel-info" style="color:white;"><i class="fa fa-shopping-bag detailPanelIcon"></i></h4> <h4 style="color:white;"><span class="detailPanelInfo"></span></h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 p-x-0">
-
-                            <div class="row">
-                                <div class="col-md-4 text-center" style="padding-left:0px; padding-right:6px; padding-bottom:10px">
-                                    <div class="bgm-green" style="border-radius:5px">
-                                        <div class="clearfix">
-                                            <div class="count">
-                                                <h3 id="1stPanel-title" class="m-b-10 detailPanelTitle">Tổng số đơn hàng</h3>
-                                                <h4 id="1stPanel-info" style="color:white;"><i class="fa fa-shopping-bag detailPanelIcon"></i></h4> <h4 style="color:white;"><span class="detailPanelInfo"></span></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center" style="padding-left:3px; padding-right:3px; padding-bottom:10px;">
-                                    <div class="bgm-amber" style="border-radius:5px">
-                                        <div class="clearfix">
-                                            <div class="count">
-                                                <h3 id="2ndPanel-title" class="m-b-10 detailPanelTitle">Tổng tiền đã chi</h3>
-                                                <h4 id="2ndPanel-info" style="color:white"><i class="fa fa-money detailPanelIcon"></i></h4> <h4 style="color:white"><span class="detailPanelInfo"></span></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center" style="padding-left:6px; padding-right:0px; padding-bottom:10px;">
-                                    <div class="bgm-cyan" style="border-radius:5px">
-                                        <div class="clearfix">
-                                            <div class="count">
-                                                <h3 id="3rdPanel-title" class="m-b-10 detailPanelTitle">Tổng số lần đến</h3>
-                                                <h4 id="3rdPanel-info" style="color:white"><i class="fa fa-user-plus detailPanelIcon"></i></h4>
-                                            </div>
-                                        </div>
+                        <div class="col-md-4 text-center" style="padding-left:3px; padding-right:3px; padding-bottom:10px;">
+                            <div class="bgm-amber" style="border-radius:5px">
+                                <div class="clearfix">
+                                    <div class="count">
+                                        <h3 id="2ndPanel-title" class="m-b-10 detailPanelTitle">Tổng tiền đã chi</h3>
+                                        <h4 id="2ndPanel-info" style="color:white"><i class="fa fa-money detailPanelIcon"></i></h4> <h4 style="color:white"><span class="detailPanelInfo"></span></h4>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="">
-                                    <div class="">
-
-                                        <ul id="TabList" role="tablist" class="nav nav-tabs" style="overflow: hidden; width: 100%">
-                                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" id="boughtHistory" href="#muaHang" >Lịch sử mua hàng</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#taiKhoan">Danh sách tài khoản</a></li>
-                                        </ul>
-
-                                       
-
-                                        <div class="tab-content">
-                                            <div id="muaHang" class="tab-pane fade in active" role="tabpanel">
-                                                <div class="">
-
-                                                    <div class="col-md-4 pull-left m-y-20" style="padding: 0px;">
-                                                        <strong>Cửa hàng:</strong>
-                                                        <select class="selectpicker col-md-8" id="selectedStore" onchange="RefreshCustomerProductTable()">
-                                                            <option value="0" selected>Tất cả</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-8 m-0 p-0">
-                                                        <form id="form-create-session2" class="form-inline col-md-12 m-y-20 p-0">
-                                                            <div class="input-group pull-right">
-                                                                <div class="dateTime width230 pull-right">
-                                                                    <div class="fg-line m-t-5">
-                                                                        <div id="reportrange2">
-                                                                            <input id="date-string2" readonly class="form-control text-center">
-                                                                            <a class="myCelenderA" id=""><i class="fa fa-calendar"></i></a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <input type="text" id="sTime2" name="startTime" placeholder="Chọn giờ bắt đầu" hidden="hidden" />
-                                                            <input type="text" id="eTime2" name="endTime" placeholder="Chọn giờ kết thúc" hidden="hidden" />
-                                                        </form>
-                                                    </div>
-                                                </div>
-
-                                                <table id="customer-product-table" class="table-striped">
-                                                    <thead>
-                                                        <tr style="background-color: #4caf50; color: white;">
-                                                            <th>
-                                                                <label class="">STT</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Mã hóa đơn</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Số lượng</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Thanh toán</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Thời gian</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Loại hóa đơn</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Cửa hàng</label>
-                                                            </th>
-                                                            @*<th>
-                                                                    <label class="">Tình trạng</label>
-                                                                </th>*@
-                                                            <th>
-                                                                <label class="">Cashier</label>
-                                                            </th>
-                                                            <th>
-                                                                <label class="">Chi tiết</label>
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-
-                                            <div id="taiKhoan" class="tab-pane fade" role="tabpanel">
-                                                <div class="col-md-8" style="height: 50px">
-                                                    <div class="col-md-5 pull-left" style="padding: 0px;">
-                                                        <strong>Mode: </strong>
-                                                        <select class="selectpicker col-md-5" id="selectAccountMode" onchange="ChangeAccountModeSelect()">
-                                                            <option value="0" selected>Mã thẻ</option>
-                                                            <option value="1">Loại thẻ</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-7" style="padding: 0px;">
-                                                        @*<select class="form-control col-md-8" id="selectModeItem" onchange="ChangeModeItemSelect()">
-                                                                <option value="0">Xem tất cả</option>
-                                                            </select>*@
-                                                        <button type="button" id="btn-selectModeItem" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                            <span class="caret"></span>
-                                                        </button>
-                                                        <ul class="dropdown-menu" style="overflow-y : scroll; max-height: 150px; top:32px" id="selectModeList">
-                                                            <li value="0">Xem tất cả</li>
-                                                        </ul>
-                                                        <input value="0" id="selectModeItem" hidden />
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4" style="height: 50px;">
-                                                    @*<a id="showCreateAccount" href="@Url.Action("Create", "Account")/@Model.CustomerID" data-toggle='modal' class='btn btn-sm btn-primary pull-right'><i class='glyphicon glyphicon-plus'></i> Thêm tài khoản</a>*@
-                                                </div>
-                                                <div>
-                                                    <table id="customer-account-table" class="table-condensed table-bordered table-striped table-hover">
-                                                        <thead>
-                                                            <tr style="background-color: #4caf50; color: white;">
-                                                                <th>
-                                                                    <label>STT</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Mã tài khoản</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Tên tài khoản</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Loại tài khoản</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Mã thẻ</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Kích hoạt</label>
-                                                                </th>
-                                                                <th>
-                                                                    <label>Tùy chọn</label>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-
-
-
-                                        </div>
-                                        <div class="modal-footer" style="padding:initial">
-                                            <a href="@this.Url.Action("Index")">
-                                                <div id="create-advertising" type="button" class="btn btn-primary pull-left waves-effect">
-                                                    <i class="left-icon fa fa-arrow-circle-left"></i> Quay về
-                                                </div>
-                                            </a>
-                                        </div>
+                        </div>
+                        <div class="col-md-4 text-center" style="padding-left:6px; padding-right:0px; padding-bottom:10px;">
+                            <div class="bgm-cyan" style="border-radius:5px">
+                                <div class="clearfix">
+                                    <div class="count">
+                                        <h3 id="3rdPanel-title" class="m-b-10 detailPanelTitle">Tổng số lần đến</h3>
+                                        <h4 id="3rdPanel-info" style="color:white"><i class="fa fa-user-plus detailPanelIcon"></i></h4>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="">
+                            <ul id="TabList" role="tablist" class="nav nav-tabs" style="overflow: hidden; width: 100%">
+                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab">Purchased History</a></li>
+                                <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>
+                            </ul>
 
 
+
+                            <div class="tab-content">
+                                <div id="registration-tab" class="tab-pane active" role="tabpanel">
+                                    <div class="row">
+
+
+                                        <div class="col-md-8">
+                                            <div class=" pull-right">
+                                                <div class="dateTime width230 pull-right">
+                                                    <div class="fg-line m-t-5">
+                                                        <div class="div-datepicker" id="reportrange2">
+                                                            <input id="date-string2" readonly class="date-input form-control text-center">
+                                                            <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="text" id="sTime2" name="startTime" placeholder="Chọn giờ bắt đầu" hidden="hidden" />
+                                            <input type="text" id="eTime2" name="endTime" placeholder="Chọn giờ kết thúc" hidden="hidden" />
+
+                                        </div>
+                                    </div><br />
+
+                                    <table id="student-registered-table" class="table-striped">
+                                        <thead>
+                                            <tr style="background-color: #4caf50; color: white;">
+                                                <th>
+                                                    <label class="">No.</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Total Subject Quantity</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Price</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Registered Date</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Approved By</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                                <div id="account-tab" class="tab-pane fade" role="tabpanel">
+                                    
+                                    <div>
+                                        <table id="student-account-table" class=" table-striped">
+                                            <thead>
+                                                <tr style="background-color: #4caf50; color: white;">
+                                                    <th>
+                                                        <label>No.</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Student Code</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Created Date</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Account Type</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Account Balance</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Status</label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                            <div class="modal-footer" style="padding:initial">
+                                <a href="@this.Url.Action("Index")">
+                                    <div id="create-advertising" type="button" class="btn btn-primary pull-left waves-effect">
+                                        <i class="left-icon fa fa-arrow-circle-left"></i> Quay về
+                                    </div>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
+
+
+
+
+
                 <div id="" class="modal fade">
                     <div id="modalAccount" class="modal-dialog" style="width: 700px">
                         <div class="modal-content">
@@ -334,7 +296,13 @@
     var totaldiscount = 0;
     var table = null;
 
-    
+    var toMoney = function (val, splitter, unit) {
+        var s = splitter || '.';
+        var u = unit || '';
+        return accounting.formatMoney(val, "", 0, s) + u;
+    }
+
+
     $(document).ready(function () {
         $('.selectpicker').selectpicker({
             size: 10,
@@ -343,14 +311,8 @@
         //Init customer-store table
 
 
-        //Init customer-product-table
 
-        //InitStudentProductDatatable();
         //RefreshCustomerProductTable();
-
-        ChangeAccountModeSelect();
-
-
 
         //InitTransactionDatatable();
         //RefresTransactionTable();
@@ -363,12 +325,13 @@
             $(this).html('');
         });
 
-        setupDaterangepicker2
+        InitStudentProductDatatable();
+        setupDaterangepicker2();
 
     });
 
 
-   
+
 
     //Daterangepicker for second tab
     function cb2(start, end, label) {
@@ -386,180 +349,82 @@
         $("#eTime2").val(endTime);
         $("#dateRange2").html(dateString);
 
-        InitStudentProductDatatable();
         RefreshCustomerProductTable();
     }
 
-    //customer-product-table
+    //student-registered-table
     function RefreshCustomerProductTable() {
-        var oTable = $("#customer-product-table").dataTable();
-        oTable._fnPageChange(0);
-        oTable._fnAjaxUpdate();
+        var oTable = $("#student-registered-table").DataTable();
+        oTable.ajax.reload();
     }
 
     function InitStudentProductDatatable() {
-        $("#customer-product-table").dataTable({
-            "bFilter": true,
-            "bRetrieve": true,
-            "bServerSide": true,
-            "bScrollCollapse": true,
-            "bSort": false,
+        $("#sTime2").val(moment().startOf('week').format("DD/MM/YYYY"));
+        $("#eTime2").val(moment().endOf('week').format("DD/MM/YYYY"));
+        $("#student-registered-table").DataTable({
+            "filter": true,
+            "retrieve": true,
+            "serverSide": true,
+            "scrollCollapse": true,
+            "sort": false,
             "fnServerParams": function (aoData) {
-                aoData.push({ "name": "customID", "value": '@Model.Id' });
+                aoData.push({ "name": "studentId", "value": '@Model.Id' });
                 aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
                 aoData.push({ "name": "endTime", "value":$('#eTime2').val() });
             },
             //get customer product data
             "sAjaxSource": "@Url.Action("LoadOrder")",
-            "bProcessing": true,
-            "bFilter": true,
-            "aLengthMenu": [10, 20, 100],
-            "iDisplayLength" : "10",
-            "oLanguage": {
-                "sSearchPlaceholder": "Mã hóa đơn",
-                "sSearch": "Tìm kiếm: ",
-                "sZeroRecords": "Không có dữ liệu phù hợp",
-                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
-                "sEmptyTable": "Không có dữ liệu",
-                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
-                "sLengthMenu": "Hiển thị _MENU_ dòng",
-                "sProcessing": "Đang xử lý...",
-                "sInfoEmpty": "Không có dữ liệu",
-                "oPaginate": {
-                    "sNext": "<i class='fa fa-chevron-right'></i>",
-                    "sPrevious": "<i class='fa fa-chevron-left'></i>"
-                }
-            },
-            "aoColumnDefs": [
+            "processing": true,
+            "displayLength" : "10",
+            "columnDefs": [
               {
-                  "aTargets": [0, 2, 3, 4, 5, 8],
-                  "sClass": "text-center",
-                  "bSearchable": false,
+                  "targets": [0, 1, 2, 3, 4],
+                  "className": "dt-center",
+
               },
               {
-                  "aTargets": [1],
-                  "bSearchable": true,
-              },
-              {
-                  "aTargets": [3],
-                  "bSearchable": false,
-                  "mRender": function (data, type, row) {
+                  "targets": [3],
+                  "searchable": false,
+                  "render": function (data, type, row) {
                       //var money = o.aData[5];
-                      var data = row[3];
-                      return toMoney(data, ',', '');
+                      return toMoney(data, ',', '') + " VND";
                   }
               },
-              {
-                  "aTargets": [5],
-                  "bSearchable": false,
-                  "mRender": function (data, type, row) {
-                      var status = "";
-                      var color = "";
-                      var colorS = "";
-                      data = row[5];
-                      status = row[8];
+            ],
+            "autoWidth": true
+        });
+    }
 
-                      @*switch (data) {
-                          case 4:
-                              type = "@Resources.EnumLanguage.View_AtStore";
-                              color = "<div class='label label-primary myCategory'>";
-                              break;
-                          case 5:
-                              type = "@Resources.EnumLanguage.View_TakeAway";
-                              color = "<div class='label label-success myCategory'>";
-                              break;
-                          case 6:
-                              type = "@Resources.EnumLanguage.View_Delivery";
-                              color = "<div class='label label-warning myCategory'>";
-                              break;
-                          case 1:
-                              type = "@Resources.EnumLanguage.View_OnlineProduct";
-                              color = "<div class='label label-warning myCategory'>";
-                              break;
-                          default:
-                              type = "@Resources.EnumLanguage.Unknown";
-                              color = "<div class='label label-default myCategory'>";
-                      }*@
+    function initStudentAccountTable() {
 
-                      //return color + type + '</div></hr>' + colorS + status + '</div>';
-                      return color + type + '</div>';
-                  }
-              },
-              {
-                  "aTargets": [6],
-                  "bSearchable": false,
-                  "mRender": function (data, type, row) {
-                      var status = "";
-                      var colorS = "";
-                      var status = row[8];
-
-                      @*switch (status) {
-                          case 2:
-                              status = "@Resources.EnumLanguage.View_Finish";
-                              colorS = "<div class='label label-success myCategory'>";
-                              break;
-                          case 3:
-                              status = "@Resources.EnumLanguage.View_Cancel";
-                              colorS = "<div class='label label-warning myCategory'>";
-                              break;
-                          case 4:
-                              status = "@Resources.EnumLanguage.View_PreCancel";
-                              colorS = "<div class='label label-warning myCategory'>";
-                              break;
-                          case 8:
-                              status = "@Resources.EnumLanguage.View_New";
-                              colorS = "<div class='label label-primary myCategory'>";
-                              break;
-                          case 10:
-                              status = "@Resources.EnumLanguage.View_Processing";
-                              colorS = "<div class='label label-warning myCategory'>";
-                              break;
-                      }*@
-
-                      return colorS + status + '</div>';
-                  }
-              },
-              {
-                  "aTargets": [7],
-                  "bSearchable": false,
-                  "mRender": function (data, type, row) {
-                      var data = row[6];
-                      return data;
-                  }
-              },
-              {
-                  "aTargets": [8],
-                  "bSearchable": false,
-                  "mRender": function (data, type, row) {
-                      var data = row[7];
-                      tester = row[13];
-                      var btn = $('<a/>', {
-                          'class': 'btn btn-sm btn-primary',
-                          'html': $('<i/>', {
-                              'class': 'glyphicon glyphicon-eye-open'
-                          }),
-                          'data-customer-name': row[9],
-                          //'data-delivery-address': row[10],
-                          //'data-customer-phone': row[11],
-                          'data-invoiceid': row[1],
-                          'data-cashier': row[6],
-                          //'data-store': row[16],
-                          'data-id': row[7],
-                          'data-order-time': row[4],
-                          'data-status': row[5],
-                          'data-store-name': row[8],
-                          //'data-notes': row[12],
-                          //'data-total-amount': toMoney(row[13], ',', ''),
-                          'data-final-amount': toMoney(row[3], ',', ''),
-                          //'data-discount': toMoney(row[15], ',', ''),
-                          'data-role': 'detail'
-                      });
-                      return btn[0].outerHTML;
-                  }
-              }
+        $("#student-account-table").DataTable({
+            "processing": true,
+            "retrieve" : true,
+            "sAjaxSource": "@Url.Action("loadAllStudentAccount")",
+            "columnDefs": [
+                { "className": "dt-center", "targets": "_all" },
+                {
+                    "targets": [4],
+                    "render": function (data, type, row) {
+                        return toMoney(data, ',', '') + " VND";
+                    }
+                },
+                {
+                    "targets": [5],
+                    "render": function (data, type, row) {
+                        if (data) {
+                            return "<label class=''>Active</label>";
+                        }
+                        else {
+                            return "<label class=''>Deactive</label>";
+                        }
+                    }
+                }
 
             ],
-            "bAutoWidth": true
+            "fnServerParams": function (data) {
+                data.push({ "name": "studentId", "value": '@Model.Id' });
+            }
         });
     }
 
@@ -744,55 +609,7 @@
     }
 
 
-    $('#showCreateTransaction').click(function(){
-        $.ajax({
-            type: "GET",
-            url : '@Url.Action("Create", "Transaction")',
-            data: {
-                Id: @Model.Id,
-            },
-            success: function (result) {
-                $('#createTransactionPanel').html(result);
-                $('#createTransactionPanel').modal('show');
-                setModalHeaderWidth();
-            },
-            error: function (error) {
-                ShowMessage("Error Occured",1)
-            }
-        });
-    });
 
-    function showEditTransaction(transactionId) {
-        $.ajax({
-            type: "GET",
-            url: '@(Url.Action("Edit", "Transaction"))',
-            data: {
-                Id: transactionId
-            },
-            success: function (result) {
-                $('#editTransactionPanel').html(result);
-                $('#editTransactionPanel').modal('show');
-                setModalHeaderWidth();
-            },
-            error: function (error) {
-                ShowMessage("Error Occured",1);
-            }
-        });
-    }
-
-
-    function RefreshCustomerAccountTable() {
-        var oTable = $("#customer-account-table").dataTable();
-        //RefreshTable("#customer-account-table", "@Url.Action("GetCustomerAccountData", "Account")");
-        //oTable.api().ajax.reload();
-        //oTable.fnClearTable();
-        //oTable.fnDraw();
-        //oTable.api().ajax.reload();
-        oTable._fnPageChange(0);
-        oTable._fnAjaxUpdate();
-    }
-
-  
     function setupDaterangepicker2() {
         cb2(moment().startOf('month'), moment(), "Tháng này");
         $('#reportrange2').daterangepicker({
@@ -809,31 +626,7 @@
             }
 
         }, cb2);
-        loadStoreListFilter();
-    }
-    //$('#date-string2').on('change',function(){
-    //    debugger
 
-    //});
-   
-
-
-    function getProductForAccountDetail(code){
-        $.ajax({
-            type: 'POST',
-            url:'@Url.Action("GetProductForAccountDetail", "Account")',
-            data: {
-                Code: code,
-            },
-            success: function (result) {
-                if(result.success==true){
-                    $('#accountDetailProduct').val(result.ProductName)
-                }
-            },
-            error: function (error) {
-                ShowMessage("Có lỗi xảy ra.",1);
-            }
-        });
     }
 
     $(document).on('click', '#exportEx', function () {
@@ -841,46 +634,11 @@
         $('#formDetailReportExcel').submit();
     });
 
-    function convertNETDateTime(sNetDate) {
-        if (sNetDate == null) return null;
-        if (sNetDate instanceof Date) return sNetDate;
-        var r = /\/Date\(([0-9]+)\)\//i
-        var matches = sNetDate.match(r);
-        if (matches.length == 2) {
-            return new Date(parseInt(matches[1]));
-        }
-        else {
-            return sNetDate;
-        }
-    }
-    function loadStoreListFilter(){
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("LoadStoreFromCustomerOrder", "Customer")",
-            data: {
-                studentId: '@Model.Id',
-            },
-            success: function (result) {
-                for (var i=0; i< result.list.length;i++)
-                {
-                    $('#selectedStore').append("<option value="+result.list[i].storeID+">"+result.list[i].storeName+"</option>");
-                }
-                $('#selectedStore').selectpicker('refresh');
-                //ShowMessage("Thành công.", 2);
-                InitStudentProductDatatable();
-            },
-            error: function (error) {
-                ShowMessage("Có lỗi xảy ra.",1);
-            }
-        });
-    }
 
 
 
-    function ChangeModeItemSelect(itemValue, itemName) {
-        $('#btn-selectModeItem').html(itemName + " &#9660");
-        $('#selectModeItem').val(itemValue);
-        RefreshCustomerAccountTable();
-    }
+
+
+
 </script>
 

@@ -71,52 +71,65 @@ namespace CaptstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(MyLoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return RedirectToAction("Login", "Home", model);
-            }
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, false, shouldLockout: false);
 
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    //get Roles when log in, User.Identity is store in respone context to add cookie in browser when log in.
-                    var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
-                    var roleList = UserManager.GetRoles(uId);
-                    var email = UserManager.GetEmail(uId);
-                    var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
-                    Session[loginName] = loginName;
-                    Session["uName"] = model.Username;
-                    Session["uImgUrl"] = "/Images/prideKappa.jpg";
-                    var role = roleList.FirstOrDefault();
-                    if (returnUrl == null)
-                    {
-                        switch (role)
+                if (!ModelState.IsValid)
+                {
+                    return RedirectToAction("Login", "Home", model);
+                }
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, change to shouldLockout: true
+                var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, false, shouldLockout: false);
+
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        //get Roles when log in, User.Identity is store in respone context to add cookie in browser when log in.
+                        var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+                        var roleList = UserManager.GetRoles(uId);
+                        var email = UserManager.GetEmail(uId);
+                        var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
+                        Session[loginName] = loginName;
+                        Session["uName"] = model.Username;
+                        Session["uImgUrl"] = "/Images/prideKappa.jpg";
+                        var role = roleList.FirstOrDefault();
+                        if (returnUrl == null)
                         {
-                            case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
-                            case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
-                            case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
-                            case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                            switch (role)
+                            {
+                                case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                                case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
+                                case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
+                                case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                            }
                         }
-                    }
-                    return RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl);
 
-                    //return RedirectToAction("Index", "Home");
-                    return RedirectToLocal(returnUrl);
-                //case SignInStatus.LockedOut:
-                //    return View("Lockout");
-                //case SignInStatus.RequiresVerification:
-                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    model.Username = null;
-                    model.Password = null;
-                    return View("../Home/Login", model);
+                        //return RedirectToAction("Index", "Home");
+                        return RedirectToLocal(returnUrl);
+                    //case SignInStatus.LockedOut:
+                    //    return View("Lockout");
+                    //case SignInStatus.RequiresVerification:
+                    //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        model.Username = null;
+                        model.Password = null;
+                        return View("../Home/Login", model);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                ModelState.AddModelError("", "Invalid login attempt.");
+                model.Username = null;
+                model.Password = null;
+                return View("../Home/Login", model);
             }
         }
 
@@ -507,62 +520,72 @@ namespace CaptstoneProject.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            var claims = loginInfo.ExternalIdentity.Claims;
-
-            var name = claims.Where(q => q.Type == ClaimTypes.Name).Select(q => q.Value).SingleOrDefault();
-            //var fullName = claims.Where(q => q.Type == ClaimTypes.Surname).Select(q => q.Value).SingleOrDefault();
-            var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
-            var imageUrl = claims.Where(q => q.Type == ClaimTypes.Uri).Select(q => q.Value).SingleOrDefault();
-
-            loginInfo.Login.ProviderKey = email;
-
-
-            Session["uImgUrl"] = imageUrl;
-            Session["uName"] = name;
-            if (loginInfo == null)
+            try
             {
-                return RedirectToAction("Login", "Home");
-            }
-            //var userExist = UserManager.FindByEmail(email);
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+                var claims = loginInfo.ExternalIdentity.Claims;
+
+                var name = claims.Where(q => q.Type == ClaimTypes.Name).Select(q => q.Value).SingleOrDefault();
+                //var fullName = claims.Where(q => q.Type == ClaimTypes.Surname).Select(q => q.Value).SingleOrDefault();
+                var email = claims.Where(q => q.Type == ClaimTypes.Email).Select(q => q.Value).SingleOrDefault();
+                var imageUrl = claims.Where(q => q.Type == ClaimTypes.Uri).Select(q => q.Value).SingleOrDefault();
+
+                loginInfo.Login.ProviderKey = email;
 
 
-            // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
-                    var roleList = UserManager.GetRoles(uId);
-                    var role = roleList.FirstOrDefault();
-                    var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
-                    Session[loginName] = loginName;
-                    if (returnUrl == null)
-                    {
-                        switch (role)
+                Session["uImgUrl"] = imageUrl;
+                Session["uName"] = name;
+                if (loginInfo == null)
+                {
+                    return RedirectToAction("Login", "Home");
+                }
+                //var userExist = UserManager.FindByEmail(email);
+
+
+                // Sign in the user with this external login provider if the user already has a login
+                var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+                        var roleList = UserManager.GetRoles(uId);
+                        var role = roleList.FirstOrDefault();
+                        var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
+                        Session[loginName] = loginName;
+                        if (returnUrl == null)
                         {
-                            case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
-                            case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
-                            case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
-                            case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                            switch (role)
+                            {
+                                case "Admin": return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                                case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
+                                case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
+                                case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                            }
                         }
-                    }
-                    return RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl);
 
-                //case SignInStatus.LockedOut:
-                //    return View("Lockout");
-                //case SignInStatus.RequiresVerification:
-                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                //case SignInStatus.Failure:break;
-                default:
-                    // If the user does not have an account, then prompt the user to create an account
-                    //ViewBag.ReturnUrl = returnUrl;
-                    //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-                    MyLoginViewModel model = new MyLoginViewModel();
-                    ModelState.AddModelError("", "Invalid account");
-                    return View("../Home/Login", model);
+                    //case SignInStatus.LockedOut:
+                    //    return View("Lockout");
+                    //case SignInStatus.RequiresVerification:
+                    //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    //case SignInStatus.Failure:break;
+                    default:
+                        // If the user does not have an account, then prompt the user to create an account
+                        //ViewBag.ReturnUrl = returnUrl;
+                        //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                        //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                        MyLoginViewModel model = new MyLoginViewModel();
+                        ModelState.AddModelError("", "Invalid account");
+                        return View("../Home/Login", model);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                MyLoginViewModel model = new MyLoginViewModel();
+                ModelState.AddModelError("", "Invalid account");
+                return View("../Home/Login", model);
             }
         }
 
