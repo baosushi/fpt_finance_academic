@@ -158,7 +158,10 @@ namespace CaptstoneProject.Models
             public int Id { get; set; }
             public string Name { get; set; }
             public string Email { get; set; }
-            public Account Account { get; set; }
+            public Account CurrentAccount { get; set; }
+            public int TotalRegistered { get; set; }
+            public Nullable<double> TotalMoneySpent { get; set; }
+            public string CurrentStudentCode { get; set; }
         }
 
     }

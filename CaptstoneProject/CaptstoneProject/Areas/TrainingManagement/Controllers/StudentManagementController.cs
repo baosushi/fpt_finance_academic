@@ -86,13 +86,31 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     StudentViewModel model = new StudentViewModel();
                     model.Id = student.Id;
                     model.Name = student.Name;
-                    var studentCodes = student.StudentMajors.Select(q => q.StudentCode).ToList();
-                    var loginName = student.StudentMajors.OrderByDescending(q => q.Id).FirstOrDefault().LoginName;
+                    var studentMarjorOfCurrentProgram = student.StudentMajors.OrderByDescending(q => q.Id).FirstOrDefault(); //neu hoc sinh chuyen nganh thi account moi nhat se la account duoc tao sau
+                    var currentloginName = studentMarjorOfCurrentProgram.LoginName;
+                    var currentStudentCode = studentMarjorOfCurrentProgram.StudentCode;
+
+                    model.CurrentStudentCode = currentStudentCode;
+
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                    var loginAccount = userManager.Users.Where(q => q.Email.Contains(loginName)).FirstOrDefault();
-                    if (loginAccount != null)
-                        model.Email = loginAccount.Email;
-                    model.Account = context.Accounts.Where(q => studentCodes.Contains(q.StudentMajor.StudentCode)).FirstOrDefault();
+                    var currentLoginAccount = userManager.Users.Where(q => q.Email.Contains(currentloginName)).FirstOrDefault();
+                    if (currentLoginAccount != null)
+                        model.Email = currentLoginAccount.Email;
+
+                    model.CurrentAccount = context.StudentMajors.Where(q => q.StudentId == student.Id)
+                        .OrderByDescending(q => q.Id).FirstOrDefault().Accounts.FirstOrDefault();
+
+                    model.TotalRegistered = (from reg in context.Registrations
+                                             join studentmajor in context.StudentMajors on reg.StudentMajorId equals studentmajor.Id
+                                             join regDetail in context.RegistrationDetails on reg.Id equals regDetail.RegistrationId
+                                             where studentmajor.StudentId == student.Id
+                                             select regDetail).Count();
+
+                    model.TotalMoneySpent = (from reg in context.Registrations
+                                             join studentmajor in context.StudentMajors
+                                             on reg.StudentMajorId equals studentmajor.Id
+                                             where studentmajor.Id == student.Id
+                                             select reg.FinalAmount).Sum();
                     return View(model);
 
                 }
@@ -136,9 +154,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             {
                         ++count, // 0
                         a.RegistrationDetailTotalQuantity, // 1
-                        a.FinalAmount, // 2
-                        a.RegisteredBy.Value.ToString("dd/MM/yyyy"), // 3
-                        a.CheckInPerson, // 4
+                        a.StudentMajor.StudentCode,//2
+                        a.FinalAmount, // 3
+                        a.RegisteredBy.Value.ToString("dd/MM/yyyy"), // 4
+                        a.CheckInPerson, // 5
                             });
                     var totalRecords = listOrder.Count();
 

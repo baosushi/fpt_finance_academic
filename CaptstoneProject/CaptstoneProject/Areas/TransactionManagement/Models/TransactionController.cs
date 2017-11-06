@@ -105,12 +105,18 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 using (var context = new DB_Finance_AcademicEntities())
                 {
 
-                    var account = context.Accounts.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper())).FirstOrDefault();
+                    var account = context.Accounts.Where(q => q.StudentMajor.StudentCode
+                    .ToUpper().Equals(studentCode.Trim().ToUpper()) && q.Active == true).FirstOrDefault();
 
                     if (account != null)
                     {
-                        var student = context.StudentMajors.Where(q => q.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper())).FirstOrDefault();
-                        return Json(new { success = true, AccountName = account.Name, Customer = new { Name = student.Student.Name, Phone = "none" } }, JsonRequestBehavior.AllowGet);
+                        var student = account.StudentMajor.Student;
+                        return Json(new
+                        {
+                            success = true,
+                            AccountName = account.Name,
+                            Student = new { Name = student.Name, StudentCode = account.StudentMajor.StudentCode }
+                        }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
@@ -125,6 +131,42 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 return Json(new { success = false, message = "Có lỗi xảy ra, xin vui lòng liện hệ admin" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult CheckStudentCode(string studentCode)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+
+                    var accountList = context.Accounts.Where(q => q.StudentMajor.StudentCode
+                    .ToUpper().Contains(studentCode.Trim().ToUpper()) && q.Active == true).Take(10)
+                    .Select(q => new StudentSearchOptions
+                    {
+                        AccountName = q.Name,
+                        StudentCode = q.StudentMajor.StudentCode,
+                        StudentMarjorId = q.StudentMajor.Id,
+                        StudentName = q.StudentMajor.Student.Name
+                    })
+                    .ToList();
+
+
+                    return Json(new
+                    {
+                        success = true,
+                        list = accountList
+                    }, JsonRequestBehavior.AllowGet);
+
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Json(new { success = false, message = "Có lỗi xảy ra, xin vui lòng liện hệ admin" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public ActionResult GetAllTransactionsByDateRange(JQueryDataTableParamModel param, string startTime, string endTime, int transactionStatus, int transactionType, int transactionMode)
         {
@@ -165,7 +207,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         .Select(q => new IConvertible[] {
                         count++,
                         q.Account.Name,
-                        context.StudentMajors.Where(a => a.StudentCode.Equals(q.Account.StudentMajor.StudentCode)).FirstOrDefault().Student.Name,
+                        q.Account.StudentMajor.Student.Name,
                         q.Amount,
                         q.Date.Value.ToString("dd/MM/yyyy HH:mm:ss"),
                         String.IsNullOrEmpty(q.Notes) ? "-" : q.Notes,
@@ -221,14 +263,14 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                     var numberDecrease = 0;
                     var numberIncreaseRollback = 0;
                     var numberDecreaseRollback = 0;
-                    var numberActiveCard = 0;
+                    //var numberActiveCard = 0;
                     var numberDecreaseCancel = 0;
                     var numberIncreaseCancel = 0;
                     decimal revenueIncrease = 0;
                     decimal revenueDecrease = 0;
                     decimal revenueIncreaseRollback = 0;
                     decimal revenueDecreaseRollback = 0;
-                    decimal revenueActiveCard = 0;
+                    //decimal revenueActiveCard = 0;
                     decimal revenueIncreaseOptimize = 0;
                     decimal revenueDecreaseOptimize = 0;
                     decimal revenueDecreaseCancel = 0;
@@ -249,14 +291,14 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                                     numberIncreaseRollback++;
                                     revenueIncreaseRollback += item.Amount == null ? 0 : item.Amount.Value;
                                 }
-                                else
-                                {
-                                    if (item.TransactionType == (int)TransactionTypeEnum.ActiveCard)
-                                    {
-                                        numberActiveCard++;
-                                        revenueActiveCard += item.Amount == null ? 0 : item.Amount.Value;
-                                    }
-                                }
+                                //else
+                                //{
+                                //    if (item.TransactionType == (int)TransactionTypeEnum.ActiveCard)
+                                //    {
+                                //        numberActiveCard++;
+                                //        revenueActiveCard += item.Amount == null ? 0 : item.Amount.Value;
+                                //    }
+                                //}
                             }
                             else
                             {
@@ -317,14 +359,14 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         numberDecrease = numberDecrease,
                         numberIncreaseRollback = numberIncreaseRollback,
                         numberDecreaseRollback = numberDecreaseRollback,
-                        numberActiveCard = numberActiveCard,
+                        //numberActiveCard = numberActiveCard,
                         numberDecreaseCancel = numberDecreaseCancel,
                         numberIncreaseCancel = numberIncreaseCancel,
                         revenueIncrease = revenueIncrease,
                         revenueDecrease = revenueDecrease,
                         revenueIncreaseRollback = revenueIncreaseRollback,
                         revenueDecreaseRollback = revenueDecreaseRollback,
-                        revenueActiveCard = revenueActiveCard,
+                        //revenueActiveCard = revenueActiveCard,
                         revenueIncreaseOptimize = revenueIncreaseOptimize,
                         revenueDecreaseOptimize = revenueDecreaseOptimize,
                         revenueDecreaseCancel = revenueDecreaseCancel,
@@ -400,7 +442,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var account =  context.Accounts.Find(model.AccountId);
+                    var account = context.Accounts.Find(model.AccountId);
                     var transaction = context.Transactions.Find(model.Id);
                     if (model.IsIncreaseTransaction == false && account.Balance < model.Amount)
                     {
@@ -423,7 +465,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             catch (Exception e)
             {
 
-                return Json(new { success = false, message = e.Message});
+                return Json(new { success = false, message = e.Message });
             }
         }
 
@@ -436,7 +478,13 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             public string Name { get; set; }
         }
 
-
+        public class StudentSearchOptions
+        {
+            public string StudentName { get; set; }
+            public string StudentCode { get; set; }
+            public int StudentMarjorId { get; set; }
+            public string AccountName { get; set; }
+        }
 
 
     }

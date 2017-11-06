@@ -205,6 +205,18 @@
                         <span class="nav-title">Training Management</span>
                     </a>
                 </li>
+                <li>
+                    <a href="@Url.Action("Index", "StudentManagement", new { area = "TrainingManagement" })">
+                        <span class="icon color5"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
+                        <span class="nav-title">Student Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Transaction", new { area = "TransactionManagement" })">
+                        <span class="icon color5"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                        <span class="nav-title">Transaction Management</span>
+                    </a>
+                </li>
             }
             @if (User.IsInRole("Admin Training Management"))
             {

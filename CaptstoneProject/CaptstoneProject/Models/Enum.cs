@@ -8,11 +8,11 @@ namespace CaptstoneProject.Models
 {
     public enum SememsterStatus
     {
-        [Display(Name = "Open")] 
+        [Display(Name = "Open")]
         Open = 0,
-        [Display(Name = "Pending")] 
+        [Display(Name = "Pending")]
         Pending = 1,
-        [Display(Name = "Closed")] 
+        [Display(Name = "Closed")]
         Closed = 2,
     }
 
@@ -106,8 +106,6 @@ namespace CaptstoneProject.Models
         Default = 1,
         [Display(Name = "Rollback")]
         RollBack = 2,
-        [Display(Name = "ActiveCard")]
-        ActiveCard = 3,
     }
 
     public enum RegistrationStatus
@@ -118,5 +116,15 @@ namespace CaptstoneProject.Models
         Cancel = 2,
         [Display(Name = "Done")]
         Done = 3,
+    }
+
+    public enum AccountType
+    {
+        [Display(Name = "Normal")]
+        Normal = 1,
+        [Display(Name = "50% schoolarship")]
+        HalflyDiscount = 2,
+        [Display(Name = "100% schoolarship")]
+        FullyDiscount = 3,
     }
 }

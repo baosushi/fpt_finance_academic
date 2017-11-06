@@ -4,7 +4,6 @@
 
 }
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&key=AIzaSyDwJA7jUX5F9KR44NAKvfJsxn-9cjQwzZk"></script>
 
 <style>
     .label {
@@ -63,8 +62,13 @@
                 <div>
                     <input type="hidden" id="sTime" />
                     <input type="hidden" id="eTime" />
+
+                    <select id="my_student_acc_search" data-live-search="true"  class="selectpicker my-select">
+                        <option value="-1">Nothing is Selected</option>
+                    </select>
+                    <button type="button" id="my-btn">gg</button>
                     <div class="">
-                        <div class="card-header p-15">
+                        <div class="">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h3 id="title-id">Thông tin giao dịch tại </h3>
@@ -80,7 +84,7 @@
                             </div>
                             <hr />
                         </div>
-                        <div class="card-body">
+                        <div class="">
 
                             <div class="row">
                                 <div class="col-md-4 col-xs-6">
@@ -131,13 +135,13 @@
                                         </div>
                                     </div>
                                     @*<div class="padding15 margin-in-col widget-rev">
-                                            <div class="clearfix">
-                                                <div>Tổng</div>
-                                                <div class="pull-right">
-                                                    <small>VNĐ</small>
-                                                </div>
-                                                <h2 style="margin-bottom:0; margin-top:0;" id="total_IncreaseRevenue"></h2>
-                                            </div>
+                                        <div class="clearfix">
+                                        <div>Tổng</div>
+                                        <div class="pull-right">
+                                        <small>VNĐ</small>
+                                        </div>
+                                        <h2 style="margin-bottom:0; margin-top:0;" id="total_IncreaseRevenue"></h2>
+                                        </div>
                                         </div>*@
                                     <div class="padding15 margin-in-col widget-rev-odd">
                                         <div class="clearfix">
@@ -179,15 +183,15 @@
                                         </div>
                                     </div>
                                     @*<div class="padding15 margin-in-col widget-del">
-                                            <div class="clearfix">
-                                                <div class="clearfix">
-                                                    <div>Tổng Giá trị</div>
-                                                    <div class="pull-right">
-                                                        <small>VNĐ</small>
-                                                    </div>
-                                                    <h2 style="margin-bottom:0; margin-top:0;" id="total_DecreaseRevenue"></h2>
-                                                </div>
-                                            </div>
+                                        <div class="clearfix">
+                                        <div class="clearfix">
+                                        <div>Tổng Giá trị</div>
+                                        <div class="pull-right">
+                                        <small>VNĐ</small>
+                                        </div>
+                                        <h2 style="margin-bottom:0; margin-top:0;" id="total_DecreaseRevenue"></h2>
+                                        </div>
+                                        </div>
                                         </div>*@
                                     <div class="padding15 margin-in-col widget-del">
                                         <div class="clearfix">
@@ -344,10 +348,6 @@
                                                     <input type="radio" name="mode-filter" value="@((int)TransactionTypeEnum.RollBack)" class="nice-check" id="filter7" />
                                                     <label for="filter7"><span>RollBack</span></label>
                                                 </div>
-                                                <div class="medium-radio-button-width col-md-3 p-l-0">
-                                                    <input type="radio" name="mode-filter" value="@((int)TransactionTypeEnum.ActiveCard)" class="nice-check" id="filter8" />
-                                                    <label for="filter8"><span>Kích hoạt thẻ</span></label>
-                                                </div>
                                             </div>
                                         </div>
 
@@ -378,7 +378,7 @@
                                 <div class="row m-t-25">
                                     <div class="col-md-12">
                                         <div class="tableDiv-responsive">
-                                            <table id="transaction-table" class="table table-bordered table-striped table-fixed-header">
+                                            <table id="transaction-table" class="table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th><label>STT</label></th>
@@ -402,7 +402,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h3>Kiểm tra thẻ thành viên</h3>
+                                                <h3>Check Student Code</h3>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-horizontal">
@@ -494,13 +494,6 @@
                                                                         <input type="radio" name="typeTransaction-filter" value="@((Int32)TransactionTypeEnum.RollBack)">
                                                                         <i class="input-helper"></i>
                                                                         Rollback
-                                                                    </label>
-                                                                </div>
-                                                                <div class="radio m-b-0 col-sm-4 p-l-0">
-                                                                    <label>
-                                                                        <input type="radio" name="typeTransaction-filter" value="@((Int32)TransactionTypeEnum.ActiveCard)">
-                                                                        <i class="input-helper"></i>
-                                                                        ActiveCard
                                                                     </label>
                                                                 </div>
                                                             </div>
@@ -604,7 +597,7 @@
 </div>
 
 
-<form class="hidden" id="ExportTransactionExcel" action="@Url.Action("ExportToExcel", "Transaction", new { Area = "CRM" })">
+<form class="hidden" id="ExportTransactionExcel" action="@Url.Action("ExportToExcel", "Transaction")">
     <input id="startTimeOne" name="startDate" />
     <input id="endTimeOne" name="endDate" />
     <input id="storeId" name="storeIdCode" />
@@ -640,22 +633,41 @@
 
     $(document).ready(function () {
 
-        $('#OpenModal').on('shown.bs.modal', function ()
-        {
-            //google.maps.event.trigger(map, "resize");
-            //locationSearch($("#location").val());
+        $('#my_student_acc_search').selectpicker();
+
+        var studentCode_input = $('#my_student_acc_search').parent().find("input");
+
+        $('#my_student_acc_search').on('change', function (e) {
+            if ($('#my_student_acc_search').val() != -1) {
+                alert("yay");
+            }
         });
 
-        //$(function () {
-        //    google.maps.event.addDomListener(window, 'load', initialize);
+        studentCode_input.on("keyup", function () {
+            if ($(this).val().length > 2) {
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("CheckStudentCode")",
+                    data: { "studentCode": $(this).val()},
+                    success: function (result) {
+                        if (result.success) {
+                            var accountArray = result.list;
+                            var options = "";
+                            for (var i = 0; i < accountArray.length; i++) {
+                                options += "<option value='" + accountArray[i].StudentMarjorId + "'>"
+                                    + accountArray[i].StudentCode + " - " + accountArray[i].StudentName + "</option>";
+                            }
+                            $('#my_student_acc_search').html(options);
+                            $('.my-select').selectpicker('refresh'); //ajax load async
+                        }
+                    }
+                })
+            } else {
+                $('#my_student_acc_search').html('<option value="-1">Nothing is Selected</option>');
+                $('.my-select').selectpicker('refresh');
+            }
 
-        //});
-        //autocomplete = new google.maps.places.Autocomplete((document.getElementById('txt-newstore-address')), { types: ['geocode'] });
-
-        //google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        //    fillInAddress();
-        //});
-
+        });
 
         $("#title-id").text()
         cb(moment(), moment(), "Hôm nay");
@@ -994,115 +1006,6 @@
             }
         });
     };
-
-    @*/*Bản đồ*/
-    var map;
-    var mapOptions;
-    var listStore = new Array();
-    function initialize() {
-        var styles = [{ featureType: "road.highway", stylers: [{ visibility: "off" }] }, { featureType: "landscape", stylers: [{ visibility: "off" }] }, { featureType: "transit", stylers: [{ visibility: "off" }] }, { featureType: "poi", stylers: [{ visibility: "off" }] }, { featureType: "poi.park", stylers: [{ visibility: "on" }] }, { featureType: "poi.park", elementType: "labels", stylers: [{ visibility: "off" }] }, { featureType: "poi.park", elementType: "geometry.fill", stylers: [{ color: "#d3d3d3" }, { visibility: "on" }] }, { featureType: "poi.medical", stylers: [{ visibility: "off" }] }, { featureType: "poi.medical", stylers: [{ visibility: "off" }] }, { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#cccccc" }] }, { featureType: "water", elementType: "geometry.fill", stylers: [{ visibility: "on" }, { color: "#cecece" }] }, { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ visibility: "on" }, { color: "#808080" }] }, { featureType: "administrative", elementType: "labels.text.fill", stylers: [{ visibility: "on" }, { color: "#808080" }] }, { featureType: "road", elementType: "geometry.fill", stylers: [{ visibility: "on" }, { color: "#fdfdfd" }] }, { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] }, { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] }, { featureType: "poi", elementType: "geometry.fill", stylers: [{ color: "#d2d2d2" }] }];
-
-        // Create a new StyledMapType object, passing it the array of styles,
-        // as well as the name to be displayed on the map type control.
-        var styledMap = new google.maps.StyledMapType(styles,
-        { name: "Styled Map" });
-
-        mapOptions = {
-            center: new google.maps.LatLng(10.789886817455374, 106.6787300934875),
-            zoom: 14,
-            mapTypeControlOptions: {
-                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
-            }
-        };
-
-        map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
-        map.mapTypes.set('map_style', styledMap);
-        map.setMapTypeId('map_style');
-        window.map = map;
-        window.geocoder = new google.maps.Geocoder();
-        addStoreLocations();
-    }
-    function fillInAddress() {
-        // Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();
-    }
-
-    var markerList = [];
-    function addStoreLocations() {
-        markerList = [];
-        $.ajax({
-            url: "@Url.Action("GetStoreCondinate")",
-            type: "POST",
-
-            success: function (data) {
-                window.storeInfos = data;
-                if (markerList.length != 0) {
-                    for (var i in markerList) {
-                        markerList[i].setMap(null);
-                    }
-                }
-                var store = data;
-                listStore.push(store);
-                var img = "/Content/images/m_terminal.png";
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(store.Latitude, store.Longitude),
-                    map: window.map,
-                    title: store.Name,
-                    icon: img
-                });
-                markerList.push(marker);
-            },
-            error: function () {
-                window.setTimeout(addStoreLocations, 500);
-            },
-        });
-    }
-
-
-    var resultMarker = null;
-    //$("#btn-search-address").on('click',
-    function locationSearch(data) {
-        $("#txt-newstore-address").val(data);
-        var address = $("#txt-newstore-address").val();
-
-        window.geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                if (resultMarker != null) {
-                    resultMarker.setMap(null);
-                }
-                var latitude = results[0].geometry.location.lat();
-                var longitude = results[0].geometry.location.lng();
-                getDistrictviaGeocoder(latitude, longitude);
-                resultMarker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-
-            } else {
-                initialize();
-            }
-        });
-
-    };
-    function getDistrictviaGeocoder(lati, long) {
-        var geocoder = new google.maps.Geocoder();
-        var latLng = new google.maps.LatLng(lati, long);
-        geocoder.geocode({
-            latLng: latLng
-        },
-        function (responses) {
-            if (responses && responses.length > 0) {
-                var addrComp = responses[0].address_components;
-                $("#OpenModal").modal("show");
-            }
-            else {
-
-            }
-        });
-
-    }*@
 
 </script>
 <style>
