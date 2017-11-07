@@ -98,12 +98,24 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         //});
 
                         var columns = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => q.ComponentName).ToList();
+                        var components = context.CourseMarks.Where(q => q.CourseId == courseId).ToList();
+                        List<int> finalColumns = new List<int>();
+                        int i = 3;
+                        foreach (var com in components)
+                        {
+                            if (com.IsFinal == true)
+                            {
+                                finalColumns.Add(i);
+                            }
+                            i++;
+                        }
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {
                             CourseId = courseId,
                             ComponentNames = columns,
                             StudentInCourse = data,
+                            FinalCol = finalColumns,
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
