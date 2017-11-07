@@ -1,0 +1,16 @@
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\ExcelConverter.exe.config
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\ExcelConverter.exe
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\ExcelConverter.pdb
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\NPOI.dll
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\NPOI.OOXML.dll
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\NPOI.OpenXml4Net.dll
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\NPOI.OpenXmlFormats.dll
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\bin\Debug\NPOI.xml
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.csprojResolveAssemblyReference.cache
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.Form1.resources
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.Properties.Resources.resources
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.csproj.GenerateResource.Cache
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.csproj.CoreCompileInputs.cache
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.exe
+F:\FPT Finance Academic\ExcelConverter\ExcelConverter\obj\Debug\ExcelConverter.pdb
