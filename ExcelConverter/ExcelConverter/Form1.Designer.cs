@@ -33,6 +33,7 @@
             this.btnSource = new System.Windows.Forms.Button();
             this.btnDestination = new System.Windows.Forms.Button();
             this.txtDestination = new System.Windows.Forms.TextBox();
+            this.lbMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnConvert
@@ -87,11 +88,22 @@
             this.txtDestination.Enter += new System.EventHandler(this.txtDestination_Enter);
             this.txtDestination.Leave += new System.EventHandler(this.txtDestination_Leave);
             // 
+            // lbMessage
+            // 
+            this.lbMessage.AutoSize = true;
+            this.lbMessage.Location = new System.Drawing.Point(12, 166);
+            this.lbMessage.Name = "lbMessage";
+            this.lbMessage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lbMessage.Size = new System.Drawing.Size(0, 13);
+            this.lbMessage.TabIndex = 6;
+            this.lbMessage.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(524, 196);
+            this.Controls.Add(this.lbMessage);
             this.Controls.Add(this.btnDestination);
             this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.btnSource);
@@ -110,6 +122,7 @@
         private System.Windows.Forms.Button btnSource;
         private System.Windows.Forms.Button btnDestination;
         private System.Windows.Forms.TextBox txtDestination;
+        private System.Windows.Forms.Label lbMessage;
     }
 }
 
