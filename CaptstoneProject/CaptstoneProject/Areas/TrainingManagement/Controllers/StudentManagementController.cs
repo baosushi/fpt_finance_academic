@@ -123,7 +123,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
 
-        public ActionResult LoadOrder(JQueryDataTableParamModel param, int studentId, string startTime, string endTime)
+        public ActionResult LoadTransaction(JQueryDataTableParamModel param, int studentId, string startTime, string endTime, int transactionStatus, int transactionFilter)
         {
             try
             {
@@ -131,35 +131,73 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     var startDate = startTime.ToDateTime().GetStartOfDate();
                     var endDate = endTime.ToDateTime().GetEndOfDate();
-                    var listOrder = context.Registrations.Where(q => q.RegisteredBy >= startDate
-                    && q.RegisteredBy <= endDate && q.Status == (int)RegistrationStatus.Done && q.StudentMajor.StudentId == studentId);
+                    var listTransaction = context.Transactions.Where(q => q.Date >= startDate
+                    && q.Date <= endDate && q.Account.StudentMajor.StudentId == studentId);
 
+                    int transactionForm = -1;
+                    int transactionType = -1;
 
+                    switch (transactionFilter)
+                    {
+                        case (int)TransactionFilter.AddFunds:
+                            transactionForm = (int)TransactionForm.Increase;
+                            transactionType = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.PayforRegistered:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionType = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.RollbackIncrease:
+                            transactionForm = (int)TransactionForm.Increase;
+                            transactionType = (int)TransactionTypeEnum.RollBack;
+                            break;
+                        case (int)TransactionFilter.RollbackDecrease:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionType = (int)TransactionTypeEnum.RollBack;
+                            break;
+                        default:
+                            break;
 
-                    //if (!string.IsNullOrWhiteSpace(param.sSearch))
-                    //{
-                    //    listOrder = listOrder.Where(q => q.InvoiceID.ToLower().Contains(param.sSearch.ToLower()));
-                    //}
+                    }
+
+                    // -1 : get all
+                    if (transactionStatus != -1)
+                    {
+                        listTransaction = listTransaction.Where(a => a.Status == transactionStatus);
+                    }
+
+                    if (transactionForm != -1)
+                    {
+                        listTransaction = listTransaction.Where(a => a.IsIncreaseTransaction == (transactionForm == (int)TransactionForm.Increase));
+                    }
+
+                    if (transactionType != -1)
+                    {
+                        listTransaction = listTransaction.Where(a => a.TransactionType == transactionType);
+                    }
+
                     int count = 0;
                     count = param.iDisplayStart + 1;
 
-                    //try
-                    //{
-                    var result = listOrder
-                        .OrderByDescending(q => q.RegisteredBy)
+                    listTransaction.Where(q => string.IsNullOrEmpty(param.sSearch)
+                    || q.Account.StudentMajor.StudentCode.ToUpper().Contains(param.sSearch.Trim().ToUpper()));
+
+                    var result = listTransaction
+                        .OrderByDescending(q => q.Date)
                         .Skip(param.iDisplayStart)
                         .Take(param.iDisplayLength)
-                        .ToList();
-                    var list = result.Select(a => new object[]
+                        .AsEnumerable();
+                    var list = result.Select(a => new IConvertible[]
                             {
-                        ++count, // 0
-                        a.RegistrationDetailTotalQuantity, // 1
-                        a.StudentMajor.StudentCode,//2
-                        a.FinalAmount, // 3
-                        a.RegisteredBy.Value.ToString("dd/MM/yyyy"), // 4
-                        a.CheckInPerson, // 5
-                            });
-                    var totalRecords = listOrder.Count();
+                        count++, // 0
+                        a.Account.StudentMajor.StudentCode,//1
+                        a.Amount, // 2
+                        a.Date.Value.ToString("dd/MM/yyyy"), // 3
+                        a.Status, //4
+                        a.UserName == null? "-": a.UserName, // 5 User who created this transaction
+                        a.Id //6 TransactionId
+                            }).ToList();
+                    var totalRecords = listTransaction.Count();
 
                     return Json(new
                     {
