@@ -167,7 +167,7 @@ namespace ExcelConverter
                                 ICell cell = row.CreateCell(0);
                                 cell.SetCellValue(cH.CreateRichTextString("Lop"));
                                 cell = row.CreateCell(1);
-                                cell.SetCellValue(cH.CreateRichTextString("Login Name"));
+                                cell.SetCellValue(cH.CreateRichTextString("MSSV"));
                                 cell = row.CreateCell(2);
                                 cell.SetCellValue(cH.CreateRichTextString("Mark"));
                                 cell = row.CreateCell(3);
