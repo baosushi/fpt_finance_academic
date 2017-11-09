@@ -1,0 +1,663 @@
+﻿@using CaptstoneProject.Models
+@model CaptstoneProject.Models.AreaViewModel.StudentViewModel
+@{
+    ViewBag.Title = "StudentDetailsMaterial";
+}
+<style>
+    .bgm-green {
+        background-color: #4caf50;
+    }
+
+    .bgm-amber {
+        background-color: #ffc107;
+    }
+
+    .bgm-cyan {
+        background-color: #00bcd4;
+    }
+
+    .bgm-teal {
+        background-color: #009688;
+    }
+
+    .nav-tabs .nav-item {
+        width: 100%;
+    }
+
+    .date-input {
+        float: left;
+        width: 90%;
+        border: none;
+        background: none !important;
+        box-shadow: none;
+        color: white;
+    }
+
+    .div-datepicker {
+        background: #3F51B5;
+        border-radius: 2px;
+        color: white;
+        overflow: hidden;
+    }
+</style>
+
+<div class="content">
+    <div class="container-default animate fadeInRight">
+        <div class="panel panel-default">
+            <div class="panel-title"></div>
+            <div class="panel-body">
+                <div class="col-md-12 p-x-0 p-b-0">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left: 0px; padding-right:6px; padding-bottom:10px">
+                            <div class="bgm-teal" style="min-height:135px; border-radius:5px;">
+                                <div class="clearfix">
+                                    @*<a title='Chỉnh sửa' class='btn btn-lg btn-primary pull-right' href='@Url.Action("Edit")/@Model.CustomerID'><i class='glyphicon glyphicon-pencil'></i></a>*@
+                                    @*<div class="pmo-block card-padding col-md-12 pmo-contact hidden-xs pull-left">
+                                    *@
+                                    <h3 style="color: white; padding-left:10px;">Student: @Model.Name </h3>
+                                    <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+
+
+                                        @if (!string.IsNullOrWhiteSpace(this.Model.Email))
+                                        {
+                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-envelope">Current email: </i> @this.Model.Email</li>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
+                                        {
+                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-id-card"> </i>Student code: @this.Model.CurrentStudentCode</li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 3px; padding-right:3px;">
+                            <div style="border-radius:5px;min-height:135px; background-color:rgb(234, 118, 73);">
+                                <div id="accountDetailPanel" class="clearfix">
+                                    <h3 id="dAccName" style="color: white; padding-left:10px;">Current Account Information</h3>
+                                    <div class="col-md-12 row">
+                                        <div>
+                                            <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+                                                <li style="color: white" title="Account Type"><i class="zmdi zmdi-card-giftcard"></i> Type:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
+                                                <li style="color: white" title="Created Date"><i class="zmdi zmdi-card-membership"></i> Created Date: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
+                                            </ul>
+                                        </div>
+                                        <div class="pull-right row">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
+                            <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
+                                <div id="accountDetailPanel" class="clearfix">
+                                    <h3 id="" style="color: white; padding-left:10px;">Current Balance: </h3>
+                                    <div>
+                                        <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+                                            <li style="color: white" title="Thẻ tích điểm"><i class="fa fa-credit"></i> <span id="acc_current_balance"></span> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p-x-0">
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul id="TabList" role="tablist" class="nav nav-tabs" style="overflow: hidden; width: 100%">
+                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab">Purchased History</a></li>
+                                <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="registration-tab" class="tab-pane active" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Advance Filter</button>
+                                                </div>
+                                                <div class="offset-md-6 col-md-3 pull-right">
+                                                    <div class="fg-line m-t-5">
+                                                        <div class="div-datepicker" id="reportrange2">
+                                                            <input id="date-string2" readonly class="date-input form-control text-center">
+                                                            <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="collapse" id="filter-container">
+                                                <div class="form-group">
+                                                    <div class="col-md-2 col-sm-offset-1 control-label">
+                                                        <label class="control-label f-bold">Status:</label>
+                                                    </div>
+                                                    <div class="group-radio-buttons col-md-10 p-l-0">
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="-1" checked />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>All</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.New)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>New</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Approve)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Approved</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Cancel)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Canceled</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                @*<div class="form-group">
+                                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                            Transaction Type:
+                                                        </label>
+                                                        <div class="col-sm-8" id="typeTransaction-filter">
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="-1" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>All</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.AddFunds)" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Add Funds</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Pay for Registered</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Increase</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Decrease</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                <div class="form-group col-md-10">
+                                                    <div>
+                                                        <label class="control-label f-bold">
+                                                            Transaction Type:
+                                                        </label>
+                                                    </div>
+                                                    <select id="select-transaction-filter">
+                                                        <option value="-1">All</option>
+                                                        <option value="@((int)TransactionFilter.AddFunds)">Add Funds</option>
+                                                        <option value="@((int)TransactionFilter.PayforRegistered)">Pay for Registered</option>
+                                                        <option value="@((int)TransactionFilter.RollbackIncrease)">Rollback Increase</option>
+                                                        <option value="@((int)TransactionFilter.RollbackDecrease)">Rollback Decrease</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <input type="text" id="sTime2" name="startTime" placeholder="Chọn giờ bắt đầu" hidden="hidden" />
+                                            <input type="text" id="eTime2" name="endTime" placeholder="Chọn giờ kết thúc" hidden="hidden" />
+
+                                        </div>
+                                    </div><br />
+
+
+                                    <table id="student-transaction-table" class="table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <label class="">No.</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Account Student Code</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Money</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Registered Date</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Status</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Creator</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Action</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <div class="container">
+                                        <div class="modal fade" id="approveTransactionModal" role="dialog">
+                                            <div class="modal-dialog modal-sm">
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h2 class="modal-title">Approve or Cancel?</h2>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="lead text-muted">This Action can't be redone</p>
+                                                        <input type="text" class="hidden" id="modal-transactionId" />
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" onclick="approveTrans(false)" class="btn btn-warning">Cancel Transacion</button>
+                                                        <button type="button" onclick="approveTrans(true)" class="btn btn-success">Approve</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="account-tab" class="tab-pane fade" role="tabpanel">
+
+                                    <div>
+                                        <table id="student-account-table" class=" table-striped">
+                                            <thead>
+                                                <tr style="background-color: #4caf50; color: white;">
+                                                    <th>
+                                                        <label>No.</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Student Code</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Created Date</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Account Type</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Account Balance</label>
+                                                    </th>
+                                                    <th>
+                                                        <label>Status</label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                <div id="" class="modal fade">
+                    <div id="modalAccount" class="modal-dialog" style="width: 700px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 style="color:green" id="accountDetailModalTitle"></h3>
+                            </div>
+                            <div class="modal-body">
+
+
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="createTransactionPanel" class="modal fade"></div>
+                <div id="editTransactionPanel" class="modal fade"></div>
+                <div id="createAccountPanel" class="modal fade"></div>
+                <div id="editAccountPanel" class="modal fade"></div>
+
+                <!--Modal Membership Card-->
+                <div class="modal fade in" id="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="modalContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal Add Balance-->
+                <div class="modal fade" id="addBalanceModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="addBalanceModalContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<input id="studentId" value="@this.Model.Id" hidden />
+
+
+
+
+
+
+<script>
+    var totalamount = 0;
+    var finalomount = 0;
+    var totaldiscount = 0;
+    var table = null;
+
+    var toMoney = function (val, splitter, unit) {
+        var s = splitter || '.';
+        var u = unit || '';
+        return accounting.formatMoney(val, "", 0, s) + u;
+    }
+
+
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker({
+            size: 10,
+            liveSearch: true,
+        });
+        //Init customer-store table
+
+        $("#acc_current_balance").html(toMoney(@Model.CurrentAccount.Balance, ',', '') + " VND");
+
+        //RefreshStudentTransactionTable();
+
+        //InitTransactionDatatable();
+        //RefresTransactionTable();
+
+        $('createAccountPanel').on('hidden.bs.modal', function() {
+            $(this).html('');
+        });
+
+        $("#select-transaction-filter").selectpicker();
+
+        $('editAccountPanel').on('hidden.bs.modal', function() {
+            $(this).html('');
+        });
+
+        InitStudentTransactionTable();
+        initStudentAccountTable();
+        setupDaterangepicker2();
+
+
+    });
+
+    function toggleIcon() {
+        $('#icon').toggleClass("fa-plus");
+        $('#icon').toggleClass("fa-minus");
+    }
+
+
+
+    //Daterangepicker for second tab
+    function cb2(start, end, label) {
+        var startTime = start.format("DD/MM/YYYY"),
+            endTime = end.format("DD/MM/YYYY"),
+            dateString = "(" + startTime + (startTime == endTime ? "" : " - " + endTime) + ")";
+
+        if (label != "Tùy chọn") {
+            $('#date-string2').val(label);
+        } else {
+            $("#date-string2").val(dateString);
+        }
+
+        $("#sTime2").val(startTime);
+        $("#eTime2").val(endTime);
+        $("#dateRange2").html(dateString);
+
+
+        if ($.fn.DataTable.isDataTable('#student-transaction-table')) {
+            RefreshStudentTransactionTable();
+        }
+
+    }
+
+    //student-transaction-table
+    function RefreshStudentTransactionTable() {
+        $("#student-transaction-table").DataTable().ajax.reload();
+    }
+
+
+    //$("input[name='transaction-filter']").on('change', function() {
+    //    RefreshStudentTransactionTable();
+    //});
+    $("input[name='transaction-status-filter']").on('change', function () {
+        RefreshStudentTransactionTable();
+    })
+    $("#select-transaction-filter").on('change', function () {
+        RefreshStudentTransactionTable();
+    });
+
+
+    function InitStudentTransactionTable() {
+        $("#sTime2").val(moment().startOf('week').format("DD/MM/YYYY"));
+        $("#eTime2").val(moment().endOf('week').format("DD/MM/YYYY"));
+        $("#student-transaction-table").DataTable({
+            "filter": true,
+            "retrieve": true,
+            "serverSide": true,
+            "scrollCollapse": true,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "studentId", "value": '@Model.Id' });
+                aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
+                aoData.push({ "name": "endTime", "value": $('#eTime2').val() });
+                //aoData.push({ "name": "transactionFilter", "value": $("input[name='transaction-filter']:checked").val() });
+                aoData.push({ "name": "transactionFilter", "value": $("#select-transaction-filter").val() });
+                aoData.push({ "name": "transactionStatus", "value": $("input[name='transaction-status-filter']:checked").val() });
+
+            },
+            //get customer product data
+            "sAjaxSource": "@Url.Action("LoadTransaction")",
+            "processing": true,
+            "columnDefs": [
+              {
+                  "targets": [0, 1, 2, 3, 4, 5, 6],
+                  "className": "dt-center",
+                  "orderable": false
+
+
+              },
+              {
+                  "targets": [2],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                      //var money = o.aData[5];
+                      return toMoney(data, ',', '') + " VND";
+                  }
+              },
+              {
+                  "targets": [4],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                    var html = "";
+                        if (data == '@((int)TransactionStatus.New)') {
+                            html = "<div class='label label-warning'>Not Approved</div>"
+                        }
+                        else if (data == '@((int)TransactionStatus.Approve)') {
+                            html = "<div class='label label-success'>Approved</div>"
+                        }
+                        else {
+                            html = "<div class='label label-danger'>Cancel</div>"
+                        }
+                        return html;
+                  }
+              },
+              {
+                  "targets": [6],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                      var html = "";
+                      var isNew = row[4];
+                      if (isNew == '@((int)TransactionStatus.New)') {
+                            html = "<button type='button' onclick='openApproveTransModal("+data+")' class='btn btn-warning'><i class='fa fa-pencil-square'></i></button>"
+                        } else {
+                            html = "-";
+                        }
+                        return html;
+                  }
+              },
+            ],
+            "autoWidth": true
+        });
+    }
+
+    ///// approve modal
+     function openApproveTransModal(transactionId) {
+        $("#modal-transactionId").val(transactionId);
+        $("#approveTransactionModal").modal('show');
+    }
+    function approveTrans(bool) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Approve", "Transaction", new { area = "TransactionManagement"})',
+            data: { 'transactionId': $("#modal-transactionId").val(), 'isApproved': bool},
+            success: function (result) {
+                if (result.success) {
+                    $("#approveTransactionModal").modal('hide');
+                    swal("Success!", "Transaction has been updated", "success");
+                    toastr.options.fadeOut = 3500;
+                    toastr.success(result.message);
+                    RefreshStudentTransactionTable();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+     }
+    $('#approveTransactionModal').on('hidden.bs.modal', function () {
+        $("#modal-transactionId").val('');
+    })
+//////end of approve modal
+
+
+    function initStudentAccountTable() {
+
+        $("#student-account-table").DataTable({
+            "processing": true,
+            "retrieve" : true,
+            "sAjaxSource": "@Url.Action("loadAllStudentAccount")",
+            "columnDefs": [
+                { "className": "dt-center", "targets": "_all" },
+                {
+                    "targets": [4],
+                    "render": function (data, type, row) {
+                        return toMoney(data, ',', '') + " VND";
+                    }
+                },
+                {
+                    "targets": [5],
+                    "render": function (data, type, row) {
+                        if (data) {
+                            return "<label class=''>Active</label>";
+                        }
+                        else {
+                            return "<label class=''>Deactive</label>";
+                        }
+                    }
+                }
+
+            ],
+            "fnServerParams": function (data) {
+                data.push({ "name": "studentId", "value": '@Model.Id' });
+            }
+        });
+    }
+
+
+
+
+
+
+
+    //load overview
+
+
+
+
+    function setModalHeaderWidth() {
+        //set width
+        $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
+        $(window).resize(function () {
+            $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
+        });
+    }
+
+
+
+    function setupDaterangepicker2() {
+        cb2(moment().startOf('month'), moment(), "Tháng này");
+        $('#reportrange2').daterangepicker({
+            "opens": "left",
+            "maxDate": moment(),
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            ranges: {
+                'Tuần này': [moment().startOf('week'), moment().endOf('week')],
+                'Tuần trước': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+
+        }, cb2);
+
+    }
+
+    $(document).on('click', '#exportEx', function () {
+        $('#storeId').val($('#listStoreId').val());
+        $('#formDetailReportExcel').submit();
+    });
+
+
+
+
+
+
+
+</script>
+

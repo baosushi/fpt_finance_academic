@@ -26,8 +26,11 @@
     <script type="text/javascript" src="~/Content/js/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="~/Content/js/highchart/highcharts.src.js"></script>
 
+    <script type="text/javascript" src="~/Scripts/accounting.min.js"></script>
+
     <script type="text/javascript" src="~/Content/js/datatables/FixedColumns-3.2.3/js/dataTables.fixedColumns.min.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Content/js/datatables/FixedColumns-3.2.3/css/fixedColumns.dataTables.min.css" />
+
     @*<script type="text/javascript" src="~/fonts/"></script>*@
 
 
@@ -39,6 +42,9 @@
     <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-select/bootstrap-select.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/plugin/bootstrap-toggle/bootstrap-toggle.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/plugin/pretty-checkbox/pretty-checkbox.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/plugin/materialdesign-icon/css/materialdesignicons.min.css" />
+
 
 
 
@@ -49,9 +55,9 @@
         }
 
         .FMMLogo-menu {
-            width: 80%;
-            margin-left: 26px;
-            margin-top: 10px;
+            width: 105%;
+            margin-left: 120%;
+            margin-top: -11px;
             border-radius: 6px;
         }
     </style>
@@ -68,6 +74,9 @@
         <a href="#" class="sidebar-open-button"><i class="fa fa-bars"></i></a> <a href="#" class="sidebar-open-button-mobile"><i class="fa fa-bars"></i></a>
         <!-- End Sidebar Show Hide Button -->
         <!-- Start Searchbox -->
+        <div class="searchform">
+            <img src="~/Content/img/FPTMM.PNG" class="FMMLogo-menu" />
+        </div>
         @*<form class="searchform">
                 <input type="text" class="searchbox" id="searchbox" placeholder="Search for course...">
                 <span class="searchbutton"><i class="fa fa-search"></i></span>
@@ -163,7 +172,7 @@
     <!-- End Top -->
     <!-- Start Sidabar -->
     <div class="sidebar clearfix">
-        <img src="~/Content/img/FPTMM.PNG" class="FMMLogo-menu" />
+
         <ul class="sidebar-panel nav metismenu" id="side-menu" data-plugin="metismenu">
             @*<li>
                     <a href="#">
@@ -198,6 +207,18 @@
                     <a href="@Url.Action("Index", "Management", new { area = "TrainingManagement" })">
                         <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
                         <span class="nav-title">Training Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "StudentManagement", new { area = "TrainingManagement" })">
+                        <span class="icon color5"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
+                        <span class="nav-title">Student Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Transaction", new { area = "TransactionManagement" })">
+                        <span class="icon color5"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                        <span class="nav-title">Transaction Management</span>
                     </a>
                 </li>
             }

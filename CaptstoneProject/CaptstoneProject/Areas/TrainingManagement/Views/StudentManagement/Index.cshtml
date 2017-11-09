@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="content">
+    <div class="container-default animate fadeInRight">
+        <div class="panel panel-default">
+            <div class="panel-title"></div>
+            <div class="panel-body">
+
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>Quản lý tài chính học sinh</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" id="exportCSV" class="btn btn-primary btn-sm pull-right">
+                            <i class="fa fa-download"></i>
+                            Tải về danh sách
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="@Url.Action("Create")" class="btn btn-primary pull-right">
+                            <i class="left-icon fa fa-plus"></i> Thêm khách hàng
+                        </a>
+                    </div>
+                </div>
+                <hr />
+
+                <form id="formCustList" action="@Url.Action("ExportCustomerList","Customer")">
+                    <div class="row">
+                        <!--Social Type Picker -->
+
+                    </div>
+                    <input type="hidden" name="searchVal" id="searchVal" value="" />
+                </form>
+                <div class="">
+                    <!-- Datatable -->
+                    <table id="UserDatatable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="">No.</label>
+                                </th>
+                                <th>
+                                    <label class="">Student Name</label>
+                                </th>
+                                <th>
+                                    <label class="">Email</label>
+                                </th>
+                                <th>
+                                    <label>Student Code</label>
+                                </th>
+                                <th class="">
+                                    <label class="">Action</label>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+        $(document).ready(function () {
+            //setupDaterangepicker();
+            InitUserDatatable();
+            $('[name=searchBy]').change(function () {
+                RefreshTableFilter('#UserDatatable', true);
+            });
+        });
+
+
+        //init dateRange picker
+        function setupDaterangepicker() {
+            $('#reportrange span').html(moment().add(-30, 'days').format('MMM D, YYYY') + ' - ' + moment().add(0, 'days').format('MMM D, YYYY'));
+            $('#reportrange').daterangepicker({
+                format: 'DD/MM/YYYY',
+                startDate: moment().add(-30, 'days'),
+                endDate: moment().add(0, 'days'),
+                minDate: '01/01/2012',
+                maxDate: '31/12/2100',
+                dateLimit: { days: 3650 },
+                showDropdowns: true,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                parentEl: '.modal-body',
+                ranges: {
+                    'Hôm nay': [moment.utc().startOf('day'), moment.utc().endOf('day')],
+                    'Hôm qua': [moment.utc().startOf('day').add(-1, 'days'), moment.utc().endOf('day').add(-1, 'days')],
+                    'Tuần này': [moment().add(0, 'week').startOf('isoweek'), moment().add(0, 'week').endOf('isoweek')],
+                    'Tuần trước': [moment().add(-1, 'week').startOf('isoweek'), moment().add(-1, 'week').endOf('isoweek')],
+                    'Tháng này': [moment().add(0, 'month').startOf('month'), moment().add(0, 'month').endOf('month')],
+                    'Tháng trước': [moment().add(-1, 'month').startOf('month'), moment().add(-1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                drops: 'down',
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-default',
+                separator: ' to ',
+                locale: {
+                    applyLabel: 'Chọn',
+                    cancelLabel: 'Hủy',
+                    fromLabel: 'Từ',
+                    toLabel: 'Đến',
+                    customRangeLabel: 'Tùy chọn',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                }
+            }, function (start, end, label) {
+                //console.log(start.toISOString(), end.toISOString(), label);
+
+                $('#reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+            });
+
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                RefreshTable();
+            });
+        }
+
+        function InitUserDatatable() {
+            $("#UserDatatable").DataTable({
+                //"bFilter": true,
+                "retrieve": true,
+                "serverSide": true,
+                "sAjaxSource": "@Url.Action("GetListStudentAccount")",
+                "deferRender": true,
+                "processing": true,
+                "autoWidth": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+
+                    );
+                },
+                "searchDelay": 400,
+                //"oLanguage": {
+                //    "sSearch": "Tìm kiếm:",
+                //    "sSearchPlaceholder": "Tên khách hàng",
+                //    "sZeroRecords": "Không có dữ liệu phù hợp",
+                //    "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                //    "sEmptyTable": "Không có dữ liệu",
+                //    "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                //    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                //    "sProcessing": "Đang xử lý...",
+                //    "sInfoEmpty": "Không có dữ liệu",
+                //    "oPaginate": {
+                //        "sNext": "<i class='fa fa-chevron-right'></i>",
+                //        "sPrevious": "<i class='fa fa-chevron-left'></i>"
+                //    }
+                //},
+                "columnDefs": [
+                    {
+                        "targets": [0, 1, 2, 3, 4],
+                        "className": "dt-center",
+                        "sortable": false
+                    },
+                    {
+                        "targets": [0],
+                        "searchable": false
+                    },
+                    {
+                        "targets": [1],
+                        //"order": ["asc"],
+                        "render": function (name, type, row) {
+                            var data = row[4];
+                            var detail = "<a href='@Url.Action("StudentDetail")\/" + data + "\'  target = '_Blank' >" + name + "</a>";
+                            return detail;
+                        }
+                    },
+                    {
+                        "targets": [4],
+                        "render": function (data, type, row) {
+                            var data = row[4];
+                            var detail = "<a title='Chi tiết'class='btn btn-sm btn-success' href='@Url.Action("StudentDetail")\/" + data + "\'target = '_Blank' ><i class='fa fa-eye'></i></a>";
+                            @*var edit = "<a title='Chỉnh sửa' class='btn btn-sm btn-primary' href='@Url.Action("Edit")\/" + data + "\'><i class='glyphicon glyphicon-pencil'></i></a>";*@
+                            return detail; /*+ " " + edit;*/
+                        },
+                    }
+                ],
+            });
+
+        }
+
+
+
+        // export csv
+        $(document).on('click', '#exportCSV', function () {
+            $('#searchVal').val($('.dataTables_filter input').val());
+            $('#formCustList').submit();
+        });
+</script>
+

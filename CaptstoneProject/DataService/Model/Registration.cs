@@ -21,7 +21,14 @@ namespace DataService.Model
         }
     
         public int Id { get; set; }
+        public Nullable<System.DateTime> RegisteredBy { get; set; }
+        public Nullable<int> StudentMajorId { get; set; }
+        public Nullable<int> Status { get; set; }
+        public Nullable<double> FinalAmount { get; set; }
+        public Nullable<int> RegistrationDetailTotalQuantity { get; set; }
+        public string CheckInPerson { get; set; }
     
+        public virtual StudentMajor StudentMajor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegistrationDetail> RegistrationDetails { get; set; }
     }

@@ -14,7 +14,8 @@
     {
         textBtn = "Import Marks";
     }
-
+    var finals = Model.FinalCol;
+    var isFinal = false;
 }
 <style>
     .course-detail-info {
@@ -47,8 +48,6 @@
         .toggle.ios .toggle-handle {
             border-radius: 20px;
         }
-
-
 </style>
 
 <div class="content">
@@ -202,11 +201,27 @@
                             <th style="background-color:#d1601d !important">
                                 Student Code
                             </th>
-                            @foreach (var name in Model.ComponentNames)
+                            @for (var i = 0; i < Model.ComponentNames.Count(); i++)
                             {
-                                <th>
-                                    @name
-                                </th>
+                                foreach (var k in finals)
+                                {
+                                    if (i == k - 3)
+                                    {
+                                        <th style="background-color:#105dac!important">
+                                            @Model.ComponentNames[i]
+                                        </th>
+                                        isFinal = true;
+                                        break;
+                                    }
+                                }
+                                if (isFinal != true)
+                                {
+                                    <th>
+                                        @Model.ComponentNames[i]
+                                    </th>
+                                    isFinal = false;
+                                }
+
                             }
                             <th style="background-color:#d1601d !important">
                                 Average
@@ -228,7 +243,7 @@
                                     {
                                         @*@if (Model.IsEditable || (Model.StudentInCourse[i - 1].Status.HasValue && Model.StudentInCourse[i - 1].Status.Value == (int)CaptstoneProject.Models.StudentInCourseStatus.Issued))
                                             {*@
-                                        <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].UserName</a>
+                                        <a href="@Url.Action("EditMarks", "Management", new { studentCode = Model.StudentInCourse[i - 1].StudentCode, courseId = Model.CourseId })">@Model.StudentInCourse[i - 1].StudentName</a>
                                         @*}
                                             else
                                             {
@@ -239,7 +254,7 @@
                                     }
                                     else
                                     {
-                                        @Model.StudentInCourse[i - 1].UserName
+                                        @Model.StudentInCourse[i - 1].StudentName
                                     }
                                 </td>
                                 <td>
@@ -622,7 +637,8 @@
             ],
             lengthMenu: [30, 50],
             fixedColumns: {
-                leftColumns: 3
+                leftColumns: 3,
+                rightColumns:2,
             }
         });
         $("#hide-final").on( 'change', function (e) {

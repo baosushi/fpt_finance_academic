@@ -73,9 +73,10 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     Text = q.Title + " " + q.Year,
                     Value = q.Id.ToString(),
                 }).ToList();
-                var subjects = context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).Select(q => new SelectListItem{
-                    Value=q.Subject.Id.ToString(),
-                    Text=q.Subject.SubjectName,
+                var subjects = context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).Select(q => new SelectListItem
+                {
+                    Value = q.Subject.Id.ToString(),
+                    Text = q.Subject.SubjectName,
                 }).ToList();
                 ViewBag.semList = semesterList;
                 ViewBag.selectedSem = semester.Id;
@@ -254,11 +255,14 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         ws.Cells["" + (StartHeaderChar++) + (++StartHeaderNumber)].Value = count++;
                         ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.StudentCode;
                         ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
-                        ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
-                        //foreach(var mark in student.StudentCourseMarks)
-                        //{
-                        //    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue ? mark.Mark.Value : -1;
-                        //}
+                        ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.Student.Name;
+                        foreach (var mark in StudentMajor.StudentCourseMarks)
+                        {
+                            if (!mark.CourseMark.IsFinal.HasValue && mark.CourseMark.IsFinal != true)
+                            {
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString() : "";
+                            }
+                        }
                         StartHeaderChar = 'A';
                     }
                     fileName += ".xlsx";
@@ -564,7 +568,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     Id = q.Id,
                     Class = course.ClassName,
                     CourseId = courseId,
-                    Name = q.StudentMajor.LoginName,
+                    Name = q.StudentMajor.Student.Name,
                     Code = q.StudentMajor.StudentCode,
                     Average = q.Average != null ? q.Average.ToString() : "-",
                     MarksComponent = q.StudentCourseMarks.ToList(),
