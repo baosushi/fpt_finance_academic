@@ -327,7 +327,7 @@ namespace CaptstoneProject.Controllers
 
                                 var teacher = context.Teachers.Where(q => q.EduEmail.ToUpper() == eduEmail.ToUpper() || q.FeEmail.ToUpper() == feEmail.ToUpper()).FirstOrDefault();
 
-                                if(teacher == null)
+                                if (teacher == null)
                                 {
                                     teacher = context.Teachers.Create();
                                 }
@@ -359,6 +359,87 @@ namespace CaptstoneProject.Controllers
             }
 
             return Json(new { message = "success" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult SubjectImport()
+        {
+            string searchPattern = "*";
+            var path = Server.MapPath("~");
+
+            DirectoryInfo di = new DirectoryInfo(path + "SubjectList/");
+
+            FileInfo[] files =
+                di.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
+
+            try
+            {
+                //Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    foreach (var excel in files)
+                    {
+                        XSSFWorkbook hssfwb;
+                        using (FileStream file = excel.OpenRead())
+                        {
+                            hssfwb = new XSSFWorkbook(file);
+                        }
+
+                        ISheet component = hssfwb.GetSheetAt(0);
+
+                        var titleRow = 0;
+                        var tempTitleRow = component.GetRow(titleRow);
+
+                        for (int i = 1; i <= component.LastRowNum; i++)
+                        {
+                            var row = component.GetRow(i);
+                            if (row != null) //null is when the row only contains empty cells
+                            {
+                                var subjectName = row.Cells[1].ToString().Trim();
+                                var creditValue = row.Cells[2].ToString().Trim();
+                                var subjectCode = row.Cells[3].ToString().Trim();
+                                var subjectGroupName = row.Cells[4].ToString().Trim();
+
+                                var subjectGroup = context.SubjectGroups.Where(q => q.Name.Equals(subjectGroupName)).FirstOrDefault();
+
+                                if (subjectGroup == null)
+                                {
+                                    subjectGroup = context.SubjectGroups.Create();
+                                    subjectGroup.Name = subjectGroupName;
+                                    context.SubjectGroups.Add(subjectGroup);
+                                    context.SaveChanges();
+                                }
+
+                                var subject = context.Subjects.Where(q => q.SubjectCode.Equals(subjectCode)).FirstOrDefault();
+
+                                if (subject == null)
+                                {
+                                    subject = context.Subjects.Create();
+                                    subject.SubjectCode = subjectCode;
+                                    subject.SubjectName = subjectName;
+                                    int creditVal = 0;
+                                    if (int.TryParse(creditValue, out creditVal))
+                                    {
+                                        subject.CreditValue = creditVal;
+                                    }
+                                    subject.SubjectGroupId = subjectGroup.Id;
+
+                                    context.Subjects.Add(subject);
+                                }
+
+                                context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            return null;
         }
     }
 }

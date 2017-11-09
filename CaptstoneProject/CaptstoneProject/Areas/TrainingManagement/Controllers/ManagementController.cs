@@ -98,12 +98,24 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         //});
 
                         var columns = context.CourseMarks.Where(q => q.CourseId == courseId).Select(q => q.ComponentName).ToList();
+                        var components = context.CourseMarks.Where(q => q.CourseId == courseId).ToList();
+                        List<int> finalColumns = new List<int>();
+                        int i = 3;
+                        foreach (var com in components)
+                        {
+                            if (com.IsFinal == true)
+                            {
+                                finalColumns.Add(i);
+                            }
+                            i++;
+                        }
                         var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
                         var model = new CourseDetailsViewModel
                         {
                             CourseId = courseId,
                             ComponentNames = columns,
                             StudentInCourse = data,
+                            FinalCol = finalColumns,
                             Semester = semester.Title + " " + semester.Year,
                             SubCode = course.Subject.SubjectCode,
                             SubName = course.Subject.SubjectName,
@@ -925,6 +937,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return Json(new { success = true, message = "Successully submitted!" });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult UploadSubject()
         {
@@ -937,7 +950,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 }
                 foreach (string file in Request.Files)
                 {
-                    HttpPostedFileBase fileContent = Request.Files[file];
+                    var fileContent = Request.Files[file];
                     if (fileContent != null && fileContent.ContentLength > 0)
                     {
                         string[] segments = fileContent.FileName.Split('.');
@@ -987,15 +1000,17 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                         {
                                             var subCode = ws.Cells[i, 2].Text.Trim();
                                             var subName = ws.Cells[i, 4].Text.Trim();
+                                            var subjectCredit = -1;
+                                            int.TryParse(ws.Cells[i, 5].Text.Trim(), out subjectCredit);
                                             var existList = context.Subjects.Where(q => q.SubjectCode.Equals(subCode)).ToList();
                                             if (existList.Count == 0)
-                                                context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName });
+                                                context.Subjects.Add(new Subject { SubjectCode = subCode, SubjectName = subName, CreditValue = subjectCredit });
 
+                                            context.SaveChanges();
                                         }
                                     }
 
                                 }
-                                context.SaveChanges();
                             }
                         }
                         stream.Close();
@@ -1029,7 +1044,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return Json(new { success = true, message = "Upload Students successed" });
         }
 
-        public ActionResult ImportSubject()
+        [AllowAnonymous]
+        public ActionResult SubjectManagement()
         {
             return View();
         }
@@ -1212,7 +1228,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var block = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault().Blocks.Where(q => q.Status == (int)BlockStatus.Registering).FirstOrDefault();
 
-                var availableSubjects = block.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new {
+                var availableSubjects = block.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new
+                {
                     Count = q.Count(),
                     SubjectId = q.Key
                 });
@@ -1224,7 +1241,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     if (subject != null)
                     {
                         var registrationCount = registeredSubject.Count;
-                        
+
                     }
                     else
                     {
