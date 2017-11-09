@@ -44,57 +44,96 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 ViewBag.TransactionAmountList = transactionAmountList;
                 return View();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
                 throw;
             }
         }
 
         [HttpPost]
-        public ActionResult CreateTransaction(string studentCode, decimal amount, int? form, int type, string description)
+        public ActionResult CreateTransaction(int studentMajorId, decimal amount,int transactionFilter, string description)
         {
+            int form = -1;
+            int type = -1;
+            
             try
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
 
-                    var account = context.Accounts.Where(q => q.StudentMajor.StudentCode.ToUpper().Equals(studentCode.Trim().ToUpper()))
+                    var account = context.Accounts.Where(q => q.StudentMajorId == studentMajorId)
                         .FirstOrDefault();
-                    var formTrasaction = true;
-                    if (form != null)
+                    if (account == null)
                     {
-                        if (form == 1)
-                        {
-                            formTrasaction = true;
-                        }
-                        else
-                        {
-                            formTrasaction = false;
-                        }
+                        return Json(new { success = false, message = "Create transaction failed!" });
                     }
-                    else
+                    switch (transactionFilter)
                     {
-                        return Json(new { success = false, message = "Giao dịch thất bại!" });
-                    }
+                        case (int)TransactionFilter.AddFunds:
+                            form = (int)TransactionForm.Increase;
+                            type = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.PayforRegistered:
+                            form = (int)TransactionForm.Decrease;
+                            type = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.RollbackIncrease:
+                            form = (int)TransactionForm.Increase;
+                            type = (int)TransactionTypeEnum.RollBack;
+                            break;
+                        case (int)TransactionFilter.RollbackDecrease:
+                            form = (int)TransactionForm.Decrease;
+                            type = (int)TransactionTypeEnum.RollBack;
+                            break;
 
+                    }
+                    if(form == -1 || type == -1)
+                    {
+                        return Json(new { success = false, message = "Create transaction Failed!" });
+                    }
+                    var formTransaction = (form == (int)TransactionForm.Increase ? true : false);
                     context.Transactions.Add(new Transaction
                     {
                         AccountId = account.Id,
                         Amount = amount,
                         Date = DateTime.Now,
-                        IsIncreaseTransaction = formTrasaction,
+                        IsIncreaseTransaction = formTransaction,
                         TransactionType = type,
                         Notes = description,
                         Status = (int)TransactionStatus.New
                     });
 
-                    return Json(new { success = true, message = "Giao dịch thành công!" });
+                    context.SaveChanges();
+                    return Json(new { success = true, message = "Create transaction successed!" });
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Json(new { success = false, message = "Có lỗi xảy ra, xin vui lòng liện hệ admin" });
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+
+        public ActionResult GetAccountInformation(int studentMajorId = -1)
+        {
+            try
+            {
+                if (studentMajorId != -1)
+                    using (var context = new DB_Finance_AcademicEntities())
+                    {
+                        var account = context.Accounts.Where(q => q.StudentMajorId == studentMajorId).FirstOrDefault();
+                        var accountName = account.Name;
+                        var studentName = account.StudentMajor.Student.Name;
+                        return Json(new { success = true, accountName = accountName, studentName = studentName });
+                    }
+                else
+                    return Json(new { success = false, message = "Error! Account not found" });
+
+            }
+            catch (Exception e)
+            {
+
+                return Json(new { success = false, message = e.Message });
             }
         }
 
@@ -150,7 +189,6 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                     })
                     .ToList();
 
-
                     return Json(new
                     {
                         success = true,
@@ -168,7 +206,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
         }
 
 
-        public ActionResult GetAllTransactionsByDateRange(JQueryDataTableParamModel param, string startTime, string endTime, int transactionStatus, int transactionType, int transactionMode)
+        public ActionResult GetAllTransactionsByDateRange(JQueryDataTableParamModel param, string startTime, string endTime, int transactionStatus, int transactionFilter)
         {
             try
             {
@@ -179,19 +217,46 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                     var result = context.Transactions.Where(q => q.Date >= sTime && q.Date <= eTime);
                     var count = param.iDisplayStart + 1;
 
+                    int transactionForm = -1;
+                    int transactionType = -1;
+
+                    switch (transactionFilter)
+                    {
+                        case (int)TransactionFilter.AddFunds:
+                            transactionForm = (int)TransactionForm.Increase;
+                            transactionType = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.PayforRegistered:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionType = (int)TransactionTypeEnum.Normal;
+                            break;
+                        case (int)TransactionFilter.RollbackIncrease:
+                            transactionForm = (int)TransactionForm.Increase;
+                            transactionType = (int)TransactionTypeEnum.RollBack;
+                            break;
+                        case (int)TransactionFilter.RollbackDecrease:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionType = (int)TransactionTypeEnum.RollBack;
+                            break;
+                        default:
+                            break;
+
+                    }
+
+
                     if (transactionStatus != -1)
                     {
-                        result = result.Where(a => a.Status == transactionStatus).OrderBy(q => q.Date);
+                        result = result.Where(a => a.Status == transactionStatus);
+                    }
+
+                    if (transactionForm != -1)
+                    {
+                        result = result.Where(a => a.IsIncreaseTransaction == (transactionForm == (int)TransactionForm.Increase));
                     }
 
                     if (transactionType != -1)
                     {
-                        result = result.Where(a => a.IsIncreaseTransaction == (transactionType == 0)).OrderBy(q => q.Date);
-                    }
-
-                    if (transactionMode != -1)
-                    {
-                        result = result.Where(a => a.TransactionType == transactionMode).OrderBy(q => q.Date);
+                        result = result.Where(a => a.TransactionType == transactionType);
                     }
 
                     IQueryable<Transaction> filteredResult;
@@ -203,28 +268,21 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
 
                     var list = filteredResult.Skip(param.iDisplayStart)
                         .Take(param.iDisplayLength)
-                        .ToList()
+                        .AsEnumerable()
                         .Select(q => new IConvertible[] {
-                        count++,
-                        q.Account.Name,
+                        count++, //0
+                        q.Account.StudentMajor.StudentCode,
                         q.Account.StudentMajor.Student.Name,
-                        q.Amount,
+                        q.Amount, // 3
                         q.Date.Value.ToString("dd/MM/yyyy HH:mm:ss"),
                         String.IsNullOrEmpty(q.Notes) ? "-" : q.Notes,
-                        (q.UserName==null) ? "-" : q.UserName, //User tạo ra transaction này
-                        q.Status,
-                        q.Id, //transaction ID
-                        q.IsIncreaseTransaction,
-                        q.AccountId,
-                        });
-                    var list2 = result
-                        .Where(a => string.IsNullOrEmpty(param.sSearch) || a.Account.StudentMajor.StudentCode.ToLower().Contains(param.sSearch.Trim().ToLower()))
-                        .ToList()
-                        .Select(q => new IConvertible[] {
-                        q.Amount,
-                        q.Status,
-                        q.IsIncreaseTransaction
-                        });
+                        (q.UserName==null) ? "-" : q.UserName, //User tạo ra transaction này //6
+                        q.Status, //7
+                        q.IsIncreaseTransaction,//8
+                        q.Id, //transaction ID //9
+                        q.AccountId, //10
+                        q.Account.StudentMajor.StudentId //11
+                        }).ToList();
 
                     var totalRecords = result.Count();
                     var displayRecords = filteredResult.Count();
@@ -235,7 +293,6 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         iTotalRecords = totalRecords,
                         iTotalDisplayRecords = displayRecords,
                         aaData = list,
-                        totalData = list2,
                     }, JsonRequestBehavior.AllowGet);
                 }
             }

@@ -387,6 +387,10 @@
     <Content Include="Content\plugin\fullcalendar\fullcalendar.css" />
     <Content Include="Content\plugin\jqgrid\ui.jqgrid.css" />
     <Content Include="Content\plugin\ladda\ladda-themeless.min.css" />
+    <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.css" />
+    <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.min.css" />
+    <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.svg" />
+    <Content Include="Content\plugin\pretty-checkbox\pretty-checkbox.min.css" />
     <Content Include="Content\plugin\rickshaw\detail.css" />
     <Content Include="Content\plugin\rickshaw\graph.css" />
     <Content Include="Content\plugin\rickshaw\legend.css" />
@@ -423,6 +427,12 @@
     <Content Include="Areas\TransactionManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\StudentManagement\Index.cshtml" />
     <Content Include="Areas\TrainingManagement\Views\StudentManagement\StudentDetail.cshtml" />
+    <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.eot" />
+    <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.ttf" />
+    <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.woff" />
+    <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.woff2" />
+    <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.css.map" />
+    <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.min.css.map" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />

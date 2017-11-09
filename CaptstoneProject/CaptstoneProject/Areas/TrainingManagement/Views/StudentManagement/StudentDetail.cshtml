@@ -34,7 +34,7 @@
     }
 
     .div-datepicker {
-        background: #11ad79;
+        background: #3F51B5;
         border-radius: 2px;
         color: white;
         overflow: hidden;
@@ -60,11 +60,11 @@
 
                                         @if (!string.IsNullOrWhiteSpace(this.Model.Email))
                                         {
-                                            <li class="custom-break" style="color: white" title="Email">Current email: <i class="fa fa-envelope"></i> @this.Model.Email</li>
+                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-envelope">Current email: </i> @this.Model.Email</li>
                                         }
                                         @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
                                         {
-                                            <li class="custom-break" style="color: white" title="Email">Current student code: <i class="fa fa-id-card"></i> @this.Model.CurrentStudentCode</li>
+                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-id-card"> </i>Student code: @this.Model.CurrentStudentCode</li>
                                         }
 
                                     </ul>
@@ -78,9 +78,8 @@
                                     <div class="col-md-12 row">
                                         <div>
                                             <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-                                                <li style="color: white" title="Thẻ thanh toán"><i class="fa fa-id-card"></i> Student Code: @Model.CurrentStudentCode</li>
-                                                <li style="color: white" title="Thẻ sản phẩm"><i class="zmdi zmdi-card-giftcard"></i> Type:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
-                                                <li style="color: white" title="Thẻ tích điểm"><i class="zmdi zmdi-card-membership"></i> Created Date: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
+                                                <li style="color: white" title="Account Type"><i class="zmdi zmdi-card-giftcard"></i> Type:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
+                                                <li style="color: white" title="Created Date"><i class="zmdi zmdi-card-membership"></i> Created Date: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
                                             </ul>
                                         </div>
                                         <div class="pull-right row">
@@ -94,7 +93,12 @@
                         <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
                             <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
                                 <div id="accountDetailPanel" class="clearfix">
-                                    <h3 id="" style="color: white; padding-left:10px;">Current Balance: <span id="acc_current_balance"></span></h3>
+                                    <h3 id="" style="color: white; padding-left:10px;">Current Balance: </h3>
+                                    <div>
+                                        <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
+                                            <li style="color: white" title="Thẻ tích điểm"><i class="fa fa-credit"></i> <span id="acc_current_balance"></span> </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -102,48 +106,7 @@
                 </div>
                 <div class="col-md-12 p-x-0">
 
-                    <div class="row">
-                        <div class="col-md-4 text-center" style="padding-left:0px; padding-right:6px; padding-bottom:10px">
-                            <div class="bgm-green" style="border-radius:5px">
-                                <div class="clearfix">
-                                    <div class="count">
-                                        <h3 id="1stPanel-title" class="m-b-10 detailPanelTitle">Tổng số môn đã đăng ký</h3>
-                                        <h4 id="1stPanel-info" style="color:white;"><i class="fa fa-shopping-bag detailPanelIcon"></i></h4>
-                                        <h4 style="color:white;"><span class="detailPanelInfo"> @Model.TotalRegistered</span></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-center" style="padding-left:3px; padding-right:3px; padding-bottom:10px;">
-                            <div class="bgm-amber" style="border-radius:5px">
-                                <div class="clearfix">
-                                    <div class="count">
-                                        <h3 id="2ndPanel-title" class="m-b-10 detailPanelTitle">Tổng tiền đã chi</h3>
-                                        <h4 id="2ndPanel-info" style="color:white"><i class="fa fa-money detailPanelIcon"></i></h4>
-                                        <h4 style="color:white"><span class="detailPanelInfo">
-                                            @if (Model.TotalMoneySpent != null)
-                                            {
-                                                @Model.TotalMoneySpent
-                                            }
-                                            else {
-                                                @Html.Raw(0)
-                                            }
-                                             </span></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-center" style="padding-left:6px; padding-right:0px; padding-bottom:10px;">
-                            <div class="bgm-cyan" style="border-radius:5px">
-                                <div class="clearfix">
-                                    <div class="count">
-                                        <h3 id="3rdPanel-title" class="m-b-10 detailPanelTitle">Tổng số lần đến</h3>
-                                        <h4 id="3rdPanel-info" style="color:white"><i class="fa fa-user-plus detailPanelIcon"></i></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="row">
                         <div class="col-md-12">
@@ -151,17 +114,15 @@
                                 <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab">Purchased History</a></li>
                                 <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>
                             </ul>
-
-
-
                             <div class="tab-content">
                                 <div id="registration-tab" class="tab-pane active" role="tabpanel">
                                     <div class="row">
-
-
-                                        <div class="col-md-8">
-                                            <div class=" pull-right">
-                                                <div class="dateTime width230 pull-right">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Advance Filter</button>
+                                                </div>
+                                                <div class="offset-md-6 col-md-3 pull-right">
                                                     <div class="fg-line m-t-5">
                                                         <div class="div-datepicker" id="reportrange2">
                                                             <input id="date-string2" readonly class="date-input form-control text-center">
@@ -170,41 +131,166 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="collapse" id="filter-container">
+                                                <div class="form-group">
+                                                    <div class="col-md-2 col-sm-offset-1 control-label">
+                                                        <label class="control-label f-bold">Status:</label>
+                                                    </div>
+                                                    <div class="group-radio-buttons col-md-10 p-l-0">
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="-1" checked />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>All</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.New)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>New</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Approve)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Approved</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Cancel)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Canceled</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                @*<div class="form-group">
+                                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                            Transaction Type:
+                                                        </label>
+                                                        <div class="col-sm-8" id="typeTransaction-filter">
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="-1" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>All</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.AddFunds)" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Add Funds</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Pay for Registered</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Increase</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Decrease</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                <div class="form-group col-md-10">
+                                                    <div>
+                                                        <label class="control-label f-bold">
+                                                            Transaction Type:
+                                                        </label>
+                                                    </div>
+                                                    <select id="select-transaction-filter">
+                                                        <option value="-1">All</option>
+                                                        <option value="@((int)TransactionFilter.AddFunds)">Add Funds</option>
+                                                        <option value="@((int)TransactionFilter.PayforRegistered)">Pay for Registered</option>
+                                                        <option value="@((int)TransactionFilter.RollbackIncrease)">Rollback Increase</option>
+                                                        <option value="@((int)TransactionFilter.RollbackDecrease)">Rollback Decrease</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
                                             <input type="text" id="sTime2" name="startTime" placeholder="Chọn giờ bắt đầu" hidden="hidden" />
                                             <input type="text" id="eTime2" name="endTime" placeholder="Chọn giờ kết thúc" hidden="hidden" />
 
                                         </div>
                                     </div><br />
 
-                                    <table id="student-registered-table" class="table-striped">
+
+                                    <table id="student-transaction-table" class="table-striped">
                                         <thead>
-                                            <tr style="background-color: #4caf50; color: white;">
+                                            <tr>
                                                 <th>
                                                     <label class="">No.</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Total Subject Quantity</label>
                                                 </th>
                                                 <th>
                                                     <label class="">Account Student Code</label>
                                                 </th>
                                                 <th>
-                                                    <label class="">Price</label>
+                                                    <label class="">Money</label>
                                                 </th>
                                                 <th>
                                                     <label class="">Registered Date</label>
                                                 </th>
                                                 <th>
-                                                    <label class="">Approved By</label>
+                                                    <label class="">Status</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Creator</label>
+                                                </th>
+                                                <th>
+                                                    <label class="">Action</label>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                    <div class="container">
+                                        <div class="modal fade" id="approveTransactionModal" role="dialog">
+                                            <div class="modal-dialog modal-sm">
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h2 class="modal-title">Approve or Cancel?</h2>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="lead text-muted">This Action can't be redone</p>
+                                                        <input type="text" class="hidden" id="modal-transactionId" />
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" onclick="approveTrans(false)" class="btn btn-warning">Cancel Transacion</button>
+                                                        <button type="button" onclick="approveTrans(true)" class="btn btn-success">Approve</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id="account-tab" class="tab-pane fade" role="tabpanel">
-                                    
+
                                     <div>
                                         <table id="student-account-table" class=" table-striped">
                                             <thead>
@@ -233,20 +319,7 @@
                                         </table>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
-                            <div class="modal-footer" style="padding:initial">
-                                <a href="@this.Url.Action("Index")">
-                                    <div id="create-advertising" type="button" class="btn btn-primary pull-left waves-effect">
-                                        <i class="left-icon fa fa-arrow-circle-left"></i> Quay về
-                                    </div>
-                                </a>
-                            </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -328,7 +401,7 @@
 
         $("#acc_current_balance").html(toMoney(@Model.CurrentAccount.Balance, ',', '') + " VND");
 
-        //RefreshCustomerProductTable();
+        //RefreshStudentTransactionTable();
 
         //InitTransactionDatatable();
         //RefresTransactionTable();
@@ -337,16 +410,23 @@
             $(this).html('');
         });
 
+        $("#select-transaction-filter").selectpicker();
+
         $('editAccountPanel').on('hidden.bs.modal', function() {
             $(this).html('');
         });
 
-        InitStudentProductDatatable();
+        InitStudentTransactionTable();
         initStudentAccountTable();
         setupDaterangepicker2();
 
+
     });
 
+    function toggleIcon() {
+        $('#icon').toggleClass("fa-plus");
+        $('#icon').toggleClass("fa-minus");
+    }
 
 
 
@@ -366,51 +446,134 @@
         $("#eTime2").val(endTime);
         $("#dateRange2").html(dateString);
 
-        RefreshCustomerProductTable();
+
+        if ($.fn.DataTable.isDataTable('#student-transaction-table')) {
+            RefreshStudentTransactionTable();
+        }
+
     }
 
-    //student-registered-table
-    function RefreshCustomerProductTable() {
-        var oTable = $("#student-registered-table").DataTable();
-        oTable.ajax.reload();
+    //student-transaction-table
+    function RefreshStudentTransactionTable() {
+        $("#student-transaction-table").DataTable().ajax.reload();
     }
 
-    function InitStudentProductDatatable() {
+
+    //$("input[name='transaction-filter']").on('change', function() {
+    //    RefreshStudentTransactionTable();
+    //});
+    $("input[name='transaction-status-filter']").on('change', function () {
+        RefreshStudentTransactionTable();
+    })
+    $("#select-transaction-filter").on('change', function () {
+        RefreshStudentTransactionTable();
+    });
+
+
+    function InitStudentTransactionTable() {
         $("#sTime2").val(moment().startOf('week').format("DD/MM/YYYY"));
         $("#eTime2").val(moment().endOf('week').format("DD/MM/YYYY"));
-        $("#student-registered-table").DataTable({
+        $("#student-transaction-table").DataTable({
             "filter": true,
             "retrieve": true,
             "serverSide": true,
             "scrollCollapse": true,
-            "sort": false,
             "fnServerParams": function (aoData) {
                 aoData.push({ "name": "studentId", "value": '@Model.Id' });
                 aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
-                aoData.push({ "name": "endTime", "value":$('#eTime2').val() });
+                aoData.push({ "name": "endTime", "value": $('#eTime2').val() });
+                //aoData.push({ "name": "transactionFilter", "value": $("input[name='transaction-filter']:checked").val() });
+                aoData.push({ "name": "transactionFilter", "value": $("#select-transaction-filter").val() });
+                aoData.push({ "name": "transactionStatus", "value": $("input[name='transaction-status-filter']:checked").val() });
+
             },
             //get customer product data
-            "sAjaxSource": "@Url.Action("LoadOrder")",
+            "sAjaxSource": "@Url.Action("LoadTransaction")",
             "processing": true,
-            "displayLength" : "10",
             "columnDefs": [
               {
-                  "targets": [0, 1, 2, 3, 4, 5],
+                  "targets": [0, 1, 2, 3, 4, 5, 6],
                   "className": "dt-center",
+                  "orderable": false
+
 
               },
               {
-                  "targets": [3],
+                  "targets": [2],
                   "searchable": false,
                   "render": function (data, type, row) {
                       //var money = o.aData[5];
                       return toMoney(data, ',', '') + " VND";
                   }
               },
+              {
+                  "targets": [4],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                    var html = "";
+                        if (data == '@((int)TransactionStatus.New)') {
+                            html = "<div class='label label-warning'>Not Approved</div>"
+                        }
+                        else if (data == '@((int)TransactionStatus.Approve)') {
+                            html = "<div class='label label-success'>Approved</div>"
+                        }
+                        else {
+                            html = "<div class='label label-danger'>Cancel</div>"
+                        }
+                        return html;
+                  }
+              },
+              {
+                  "targets": [6],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                      var html = "";
+                      var isNew = row[4];
+                      if (isNew == '@((int)TransactionStatus.New)') {
+                            html = "<button type='button' onclick='openApproveTransModal("+data+")' class='btn btn-warning'><i class='fa fa-pencil-square'></i></button>"
+                        } else {
+                            html = "-";
+                        }
+                        return html;
+                  }
+              },
             ],
             "autoWidth": true
         });
     }
+
+    ///// approve modal
+     function openApproveTransModal(transactionId) {
+        $("#modal-transactionId").val(transactionId);
+        $("#approveTransactionModal").modal('show');
+    }
+    function approveTrans(bool) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Approve", "Transaction", new { area = "TransactionManagement"})',
+            data: { 'transactionId': $("#modal-transactionId").val(), 'isApproved': bool},
+            success: function (result) {
+                if (result.success) {
+                    $("#approveTransactionModal").modal('hide');
+                    swal("Success!", "Transaction has been updated", "success");
+                    toastr.options.fadeOut = 3500;
+                    toastr.success(result.message);
+                    RefreshStudentTransactionTable();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+     }
+    $('#approveTransactionModal').on('hidden.bs.modal', function () {
+        $("#modal-transactionId").val('');
+    })
+//////end of approve modal
+
 
     function initStudentAccountTable() {
 
@@ -445,170 +608,9 @@
         });
     }
 
-    $(document).on('click', '[data-role=detail]', function () {
-        currentId = $(this).data('id');
-        $("#RentID").val(currentId);
-        finalamount = $(this).data('final-amount');
-        $('#order-detail-report-modal [data-role=order-time]').html($(this).data('order-time'));
-        $('#order-detail-report-modal [data-role=invoiceid]').html($(this).data('invoiceid'));
-        $('#order-detail-report-modal [data-role=cashier]').html($(this).data('cashier'));
-        $('#order-detail-report-modal').modal('show');
 
-        @*switch ($(this).data('status')) {
-            case 4:
-                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-primary myCategory'>@Resources.EnumLanguage.View_AtStore</div>")
-                break;
-            case 5:
-                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-success myCategory'>@Resources.EnumLanguage.View_TakeAway</div>")
-                break;
-            case 6:
-                $('#order-detail-report-modal [data-role=status]').html("<div class='label label-warning myCategory'>@Resources.EnumLanguage.View_Delivery</div>")
-                break;
-        }*@
-        $('#order-detail-report-modal [data-role=store-name]').html($(this).data('store-name'));
-        if ($(this).data('status') == 6 || $(this).data('status') == 1) {
-            $('#delivery').show();
-        }
-        else {
-            $('#delivery').hide();
-        }
-        $.ajax({
-            type: "GET",
-            data: {"id": currentId},
-            url: "@Url.Action("LoadOrderDetail")",
-            dataType: "json",
-            success: function(result){
-                getOrderDetailsGeneralData(result.lblData)
-                orderDetailTable(result.dataTable);
-            },
-            error: function(){
-                ShowMessage("Có lỗi xảy ra", 1);
-            }
-        });
 
-        //RefreshTableOrderDetail();
-        //orderDetailTable._fnPageChange(0);
-        //orderDetailTable._fnAjaxUpdate();
-    });
 
-    var getOrderDetailsGeneralData = function(data){
-        totalamount = data.totalAmount;
-        totaldiscount = data.totalDiscount * (-1);
-
-        $('#order-detail-report-modal [data-role=customer-name]').html(data.cusName);
-        $('#order-detail-report-modal [data-role=delivery-address]').html(data.cusAddr);
-        $('#order-detail-report-modal [data-role=customer-phone]').html(data.cusPhone);
-
-        $('#order-detail-report-modal [data-role=store]').html(data.store);
-        $('#order-detail-report-modal [data-role=notes]').html(data.notes);
-        $('#order-detail-report-modal [data-role=total-amount]').html(toMoney(totalamount, ',', ''));
-        $('#order-detail-report-modal [data-role=discount]').html(toMoney(totaldiscount, ',', ''));
-
-        var html = "";
-        for(var i = 0; i < data.payment.length; i++){
-            html += toMoney(data.payment[i].amount, ',', '') + " (" + data.payment[i].type + ")<br/>";
-            $('#order-detail-report-modal [data-role=final-amount]').html(html);
-        }
-
-    }
-
-    var orderDetailTable = function (data) {
-        $('#order-report-detail-table').dataTable({
-            "footerCallback": function (row, data, start, end, display) {
-                var cells = row.getElementsByTagName('th');
-                cells[0].innerHTML = "Tổng cộng: " + toMoney(totalamount, ',', '');
-                cells[1].innerHTML = toMoney(totaldiscount, ',', '');
-                cells[2].innerHTML = toMoney(finalamount, ',', '');
-            },
-
-            "bFilter": false,
-            "bRetrieve": false,
-            "bDestroy": true,
-            "bServerSide": false,
-            "bScrollCollapse": true,
-            @*"sAjaxSource": "@Url.Action("LoadOrderDetail")",*@
-            "bProcessing": true,
-            //"fnServerParams": function (aoData) {
-            //    aoData.push({ "name": "id", "value": currentId });
-            //},
-            "data": data,
-            "oLanguage": {
-                "sSearch": "Tên phòng:",
-                "sZeroRecords": "Không có dữ liệu phù hợp",
-                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
-                "sEmptyTable": "Không có dữ liệu",
-                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
-                "sLengthMenu": "Hiển thị _MENU_ dòng",
-                "sProcessing": "Đang xử lý...",
-                "oPaginate": {
-                    "sNext": "<i class='fa fa-chevron-right'></i>",
-                    "sPrevious": "<i class='fa fa-chevron-left'></i>"
-                }
-
-            },
-            "aoColumnDefs": [
-                { "aTargets": [0, 1, 2, 3, 4, 5, 6], "bSortable": false },
-                { "aTargets": [2, 3, 4, 5], "sClass": "text-center" },
-                {
-                    "aTargets": [2],
-                    "mRender": function (data, type, row) {
-                        //var money = o.aData[5];
-                        var data = row[2];
-                        return toMoney(data, ',', '');
-                    }
-                },
-                {
-                    "aTargets": [5],
-                    "mRender": function (data, type, row) {
-                        //var money = o.aData[5];
-                        var data = row[5];
-                        return toMoney(data, ',', '');
-                    }
-                },
-                {
-                    "aTargets": [6],
-                    "mRender": function (data, type, row) {
-                        //var money = o.aData[5];
-                        var data = row[6];
-                        return toMoney(data, ',', '');
-                    }
-                },
-                {
-                    "aTargets": [7],
-                    "sClass": "hidden",
-                },
-                {
-                    "aTargets": [4],
-                    "mRender": function (data, type, row) {
-                        var type = "";
-                        var color = "";
-                        data = row[4];
-                        @*switch (data) {
-                            case 11:
-                                type = "@Resources.EnumLanguage.View_PosFinished";
-                                color = "<div class='label label-success myCategory'>";
-                                break;
-                            case 12:
-                                type = "@Resources.EnumLanguage.View_PosPreCancel";
-                                color = "<div class='label label-warning myCategory'>";
-                                break;
-                            case 13:
-                                type = "@Resources.EnumLanguage.View_PosCancel";
-                                color = "<div class='label label-warning myCategory'>";
-                                break;
-                            default:
-                                type = "---";
-                                color = "<div>";
-
-                        }*@
-                        return color + type + '</div>';
-                    }
-
-                },
-            ],
-            "bAutoWidth": false
-        }).fnSetFilteringDelay(delaySearch);
-    };
 
 
 

@@ -195,19 +195,6 @@
 
 
 
-
-        //redraw datatable without reload
-        function reDrawDatatable(id) {
-            $(id).dataTable()._fnPageChange(0);
-            $(id).dataTable()._fnAjaxUpdate();
-        }
-
-        //user datatable
-        function RefreshTable() {
-            reDrawDatatable("#UserDatatable");
-
-        }
-
         // export csv
         $(document).on('click', '#exportCSV', function () {
             $('#searchVal').val($('.dataTables_filter input').val());

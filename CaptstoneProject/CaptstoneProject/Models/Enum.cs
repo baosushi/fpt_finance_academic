@@ -80,11 +80,11 @@ namespace CaptstoneProject.Models
 
     public enum TransactionStatus
     {
-        [Display(Name = "Mới")]
+        [Display(Name = "New")]
         New = 0,
-        [Display(Name = "Đã duyệt")]
+        [Display(Name = "Approve")]
         Approve = 1,
-        [Display(Name = "Đã hủy")]
+        [Display(Name = "Cancel")]
         Cancel = 2,
     }
 
@@ -102,8 +102,8 @@ namespace CaptstoneProject.Models
 
     public enum TransactionTypeEnum
     {
-        [Display(Name = "Default")]
-        Default = 1,
+        [Display(Name = "Normal")]
+        Normal = 1,
         [Display(Name = "Rollback")]
         RollBack = 2,
     }
@@ -126,5 +126,25 @@ namespace CaptstoneProject.Models
         HalflyDiscount = 2,
         [Display(Name = "100% schoolarship")]
         FullyDiscount = 3,
+    }
+
+    public enum TransactionForm
+    {
+        [Display(Name = "Increase")]
+        Increase = 1,
+        [Display(Name = "Decrease")]
+        Decrease = 2,
+    }
+
+    public enum TransactionFilter
+    {
+        [Display(Name = "Add Funds")]
+        AddFunds = 1,
+        [Display(Name = "Pay for registered")]
+        PayforRegistered = 2,
+        [Display(Name = "Rollback Increase")]
+        RollbackIncrease = 3,
+        [Display(Name = "Rollback Decrease")]
+        RollbackDecrease = 4,
     }
 }
