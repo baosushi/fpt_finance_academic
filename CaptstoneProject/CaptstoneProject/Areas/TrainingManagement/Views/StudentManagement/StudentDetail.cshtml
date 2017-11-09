@@ -24,6 +24,17 @@
         width: 100%;
     }
 
+    .nav-tabs {
+        background: none;
+    }
+
+        .nav-tabs .nav-link {
+            background: #c7c3c3;
+            border: 1px solid transparent;
+            border-top-right-radius: .25rem;
+            border-top-left-radius: .25rem;
+        }
+
     .date-input {
         float: left;
         width: 90%;
@@ -39,80 +50,47 @@
         color: white;
         overflow: hidden;
     }
+    .header-padding {
+        padding: 10px 15px;
+    }
 </style>
 
 <div class="content">
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
             <div class="panel-title"></div>
-            <div class="panel-body">
-                <div class="col-md-12 p-x-0 p-b-0">
-                    <div class="row">
-                        <div class="col-md-4" style="padding-left: 0px; padding-right:6px; padding-bottom:10px">
-                            <div class="bgm-teal" style="min-height:135px; border-radius:5px;">
-                                <div class="clearfix">
-                                    @*<a title='Chỉnh sửa' class='btn btn-lg btn-primary pull-right' href='@Url.Action("Edit")/@Model.CustomerID'><i class='glyphicon glyphicon-pencil'></i></a>*@
-                                    @*<div class="pmo-block card-padding col-md-12 pmo-contact hidden-xs pull-left">
-                                    *@
-                                    <h3 style="color: white; padding-left:10px;">Student: @Model.Name </h3>
-                                    <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-
-
-                                        @if (!string.IsNullOrWhiteSpace(this.Model.Email))
-                                        {
-                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-envelope">Current email: </i> @this.Model.Email</li>
-                                        }
-                                        @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
-                                        {
-                                            <li class="custom-break" style="color: white" title="Email"><i class="fa fa-id-card"> </i>Student code: @this.Model.CurrentStudentCode</li>
-                                        }
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4" style="padding-left: 3px; padding-right:3px;">
-                            <div style="border-radius:5px;min-height:135px; background-color:rgb(234, 118, 73);">
-                                <div id="accountDetailPanel" class="clearfix">
-                                    <h3 id="dAccName" style="color: white; padding-left:10px;">Current Account Information</h3>
-                                    <div class="col-md-12 row">
-                                        <div>
-                                            <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-                                                <li style="color: white" title="Account Type"><i class="zmdi zmdi-card-giftcard"></i> Type:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
-                                                <li style="color: white" title="Created Date"><i class="zmdi zmdi-card-membership"></i> Created Date: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
-                                            </ul>
-                                        </div>
-                                        <div class="pull-right row">
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4" style="padding-left: 6px; padding-right:0px;">
-                            <div style="border-radius:5px;min-height:135px; background-color:rgb(197, 84, 131);">
-                                <div id="accountDetailPanel" class="clearfix">
-                                    <h3 id="" style="color: white; padding-left:10px;">Current Balance: </h3>
-                                    <div>
-                                        <ul style="columns: 2; list-style-type:none; -moz-column-count: 2;">
-                                            <li style="color: white" title="Thẻ tích điểm"><i class="fa fa-credit"></i> <span id="acc_current_balance"></span> </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="panel-body" style="overflow:hidden">
+                
+                    <div>
+                        <h3 style="color: #1143b7; padding-left:10px;">Student: @Model.Name </h3>
                     </div>
-                </div>
+                    <div class="row" style="padding-left:10px;">
+                        <ul class="nav nav-pills" style="color:#1143b7">
+
+                            @if (!string.IsNullOrWhiteSpace(this.Model.Email))
+                            {
+                                <li class="header-padding" title="Email"><i class="fa fa-envelope">Email: </i> @this.Model.Email</li>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
+                            {
+                                <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i>MSSV: @this.Model.CurrentStudentCode</li>
+                            }
+                            <li class="header-padding" title=""><i class="fa fa-user-circle-o"></i> Loại:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
+                            <li class="header-padding" title="ha"><i class="fa fa-calendar"></i> Ngày tạo: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
+                            <li class="header-padding" title=""><i class="fa fa-credit-card"></i>Số dư tài khoản: <span id="acc_current_balance" style="color:forestgreen"></span> </li>
+
+                        </ul>
+                    </div>
+                <br />
                 <div class="col-md-12 p-x-0">
 
 
 
                     <div class="row">
                         <div class="col-md-12">
-                            <ul id="TabList" role="tablist" class="nav nav-tabs" style="overflow: hidden; width: 100%">
-                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab">Purchased History</a></li>
-                                <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>
+                            <ul id="TabList" role="tablist" class="nav nav-tabs">
+                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab"><h4>Lịch sử giao dịch</h4></a></li>
+                                @*<li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>*@
                             </ul>
                             <div class="tab-content">
                                 <div id="registration-tab" class="tab-pane active" role="tabpanel">
@@ -120,7 +98,7 @@
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Advance Filter</button>
+                                                    <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Bộ lọc</button>
                                                 </div>
                                                 <div class="offset-md-6 col-md-3 pull-right">
                                                     <div class="fg-line m-t-5">
@@ -135,35 +113,35 @@
                                             <div class="collapse" id="filter-container">
                                                 <div class="form-group">
                                                     <div class="col-md-2 col-sm-offset-1 control-label">
-                                                        <label class="control-label f-bold">Status:</label>
+                                                        <label class="control-label f-bold">Trạng thái:</label>
                                                     </div>
                                                     <div class="group-radio-buttons col-md-10 p-l-0">
                                                         <div class="pretty p-icon p-round p-jelly p-bigger">
                                                             <input type="radio" name="transaction-status-filter" value="-1" checked />
                                                             <div class="state p-primary">
                                                                 <i class="icon mdi mdi-check"></i>
-                                                                <label>All</label>
+                                                                <label>Tất cả</label>
                                                             </div>
                                                         </div>
                                                         <div class="pretty p-icon p-round p-jelly p-bigger">
                                                             <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.New)" />
                                                             <div class="state p-primary">
                                                                 <i class="icon mdi mdi-check"></i>
-                                                                <label>New</label>
+                                                                <label>@TransactionStatus.New.GetEnumDisplayName()</label>
                                                             </div>
                                                         </div>
                                                         <div class="pretty p-icon p-round p-jelly p-bigger">
                                                             <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Approve)" />
                                                             <div class="state p-primary">
                                                                 <i class="icon mdi mdi-check"></i>
-                                                                <label>Approved</label>
+                                                                <label>@TransactionStatus.Approve.GetEnumDisplayName()</label>
                                                             </div>
                                                         </div>
                                                         <div class="pretty p-icon p-round p-jelly p-bigger">
                                                             <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Cancel)" />
                                                             <div class="state p-primary">
                                                                 <i class="icon mdi mdi-check"></i>
-                                                                <label>Canceled</label>
+                                                                <label>@TransactionStatus.Cancel.GetEnumDisplayName()</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -220,11 +198,12 @@
                                                         </label>
                                                     </div>
                                                     <select id="select-transaction-filter">
-                                                        <option value="-1">All</option>
-                                                        <option value="@((int)TransactionFilter.AddFunds)">Add Funds</option>
-                                                        <option value="@((int)TransactionFilter.PayforRegistered)">Pay for Registered</option>
-                                                        <option value="@((int)TransactionFilter.RollbackIncrease)">Rollback Increase</option>
-                                                        <option value="@((int)TransactionFilter.RollbackDecrease)">Rollback Decrease</option>
+                                                        <option value="-1">Tất cả</option>
+                                                        <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -236,35 +215,39 @@
                                         </div>
                                     </div><br />
 
-
-                                    <table id="student-transaction-table" class="table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <label class="">No.</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Account Student Code</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Money</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Registered Date</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Status</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Creator</label>
-                                                </th>
-                                                <th>
-                                                    <label class="">Action</label>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                                    <div class="">
+                                        <table id="student-transaction-table" class="table-striped ">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label class="">No.</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">MSSV</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Tiền</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Ngày tạo</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Trạng thái</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Loại</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Người tạo</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="">Hành động</label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                     <div class="container">
                                         <div class="modal fade" id="approveTransactionModal" role="dialog">
                                             <div class="modal-dialog modal-sm">
@@ -289,41 +272,40 @@
                                     </div>
                                 </div>
 
-                                <div id="account-tab" class="tab-pane fade" role="tabpanel">
+                                @*<div id="account-tab" class="tab-pane fade" role="tabpanel">
 
-                                    <div>
-                                        <table id="student-account-table" class=" table-striped">
-                                            <thead>
-                                                <tr style="background-color: #4caf50; color: white;">
-                                                    <th>
-                                                        <label>No.</label>
-                                                    </th>
-                                                    <th>
-                                                        <label>Student Code</label>
-                                                    </th>
-                                                    <th>
-                                                        <label>Created Date</label>
-                                                    </th>
-                                                    <th>
-                                                        <label>Account Type</label>
-                                                    </th>
-                                                    <th>
-                                                        <label>Account Balance</label>
-                                                    </th>
-                                                    <th>
-                                                        <label>Status</label>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                        <div>
+                                            <table id="student-account-table" class=" table-striped">
+                                                <thead>
+                                                    <tr style="background-color: #4caf50; color: white;">
+                                                        <th>
+                                                            <label>No.</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Student Code</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Created Date</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Account Type</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Account Balance</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Status</label>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
                     </div>
                 </div>
-
 
 
 
@@ -417,7 +399,7 @@
         });
 
         InitStudentTransactionTable();
-        initStudentAccountTable();
+        //initStudentAccountTable();
         setupDaterangepicker2();
 
 
@@ -436,7 +418,7 @@
             endTime = end.format("DD/MM/YYYY"),
             dateString = "(" + startTime + (startTime == endTime ? "" : " - " + endTime) + ")";
 
-        if (label != "Tùy chọn") {
+        if (label != "Custom Range") {
             $('#date-string2').val(label);
         } else {
             $("#date-string2").val(dateString);
@@ -478,12 +460,14 @@
             "retrieve": true,
             "serverSide": true,
             "scrollCollapse": true,
+            "ordering": false,
+            responsive: true,
             "fnServerParams": function (aoData) {
                 aoData.push({ "name": "studentId", "value": '@Model.Id' });
                 aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
                 aoData.push({ "name": "endTime", "value": $('#eTime2').val() });
                 //aoData.push({ "name": "transactionFilter", "value": $("input[name='transaction-filter']:checked").val() });
-                aoData.push({ "name": "transactionFilter", "value": $("#select-transaction-filter").val() });
+                aoData.push({ "name": "transactionType", "value": $("#select-transaction-filter").val() });
                 aoData.push({ "name": "transactionStatus", "value": $("input[name='transaction-status-filter']:checked").val() });
 
             },
@@ -494,16 +478,23 @@
               {
                   "targets": [0, 1, 2, 3, 4, 5, 6],
                   "className": "dt-center",
-                  "orderable": false
-
-
               },
               {
                   "targets": [2],
                   "searchable": false,
                   "render": function (data, type, row) {
-                      //var money = o.aData[5];
-                      return toMoney(data, ',', '') + " VND";
+                      var color = '';
+                      var icon = '';
+                      var decrease = '';
+                      if (row[8]) { // is Increase status
+                          color = 'green';
+                          icon = 'fa fa-level-up';
+                      } else {
+                          color = 'orange';
+                          icon = 'fa fa-level-down';
+                          decrease = '-'
+                      }
+                      return "<strong style='color:" + color + "'><i class='" + icon + "'></i> " + decrease + toMoney(data, ',', '') + "</strong>";
                   }
               },
               {
@@ -512,19 +503,45 @@
                   "render": function (data, type, row) {
                     var html = "";
                         if (data == '@((int)TransactionStatus.New)') {
-                            html = "<div class='label label-warning'>Not Approved</div>"
+                            html = "<div class='label label-warning'>@TransactionStatus.New.GetEnumDisplayName()</div>"
                         }
                         else if (data == '@((int)TransactionStatus.Approve)') {
-                            html = "<div class='label label-success'>Approved</div>"
+                            html = "<div class='label label-success'>@TransactionStatus.Approve.GetEnumDisplayName()</div>"
                         }
                         else {
-                            html = "<div class='label label-danger'>Cancel</div>"
+                            html = "<div class='label label-danger'>@TransactionStatus.Cancel.GetEnumDisplayName()</div>"
                         }
                         return html;
                   }
               },
               {
-                  "targets": [6],
+                  "targets": [5],
+                  "searchable": false,
+                  "render": function (data, type, row) {
+                      var html = "";
+                      switch (data) {
+                          case @((int)TransactionTypeEnum.AddFunds):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.AddFunds.GetEnumDisplayName()' src='/Content/img/add-money.png'/>";
+                              break;
+                          case @((int)TransactionTypeEnum.TuitionPayment):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()' src='/Content/img/pay.png />";
+                              break;
+                          case @((int)TransactionTypeEnum.RefundTuitionFee):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()' src='/Content/img/refund.png />";
+                              break;k
+                          case @((int)TransactionTypeEnum.RollbackIncrease):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              break;
+                          case @((int)TransactionTypeEnum.RollbackDecrease):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              break;
+
+                      }
+                      return html;
+                  }
+              },
+              {
+                  "targets": [7],
                   "searchable": false,
                   "render": function (data, type, row) {
                       var html = "";
@@ -575,7 +592,8 @@
 //////end of approve modal
 
 
-    function initStudentAccountTable() {
+    ///////student account table
+    @*function initStudentAccountTable() {
 
         $("#student-account-table").DataTable({
             "processing": true,
@@ -606,7 +624,7 @@
                 data.push({ "name": "studentId", "value": '@Model.Id' });
             }
         });
-    }
+    }*@
 
 
 
@@ -615,19 +633,6 @@
 
 
     //load overview
-
-
-
-
-    function setModalHeaderWidth() {
-        //set width
-        $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
-        $(window).resize(function () {
-            $('#fixedHeader').css('width', $('#modal-dialog').width() + "px");
-        });
-    }
-
-
 
     function setupDaterangepicker2() {
         cb2(moment().startOf('month'), moment(), "Tháng này");

@@ -68,6 +68,11 @@
         color: white;
         overflow: hidden;
     }
+
+    img .label-img {
+        width: 30rem;
+        height: 30rem;
+    }
 </style>
 
 @*<link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">*@
@@ -75,420 +80,417 @@
     <div class="container-default animate fadeInRight">
 
         <div class="panel panel-default">
-            <div class="panel-title">
-                <div class="col-md-5"><i class="fa fa-user" style="color:blue"></i> Transaction Management</div>
+            <div class="panel-title row">
+                <div class="col-md-5"><i class="fa fa-user" style="color:blue"></i>Quản lý giao dịch</div>
                 <div class="offset-md-5 col-md-2">
-                    <button type="submit" id="importExcel" class="m-l-15 create-button  btn btn-primary btn-sm pull-right">
+                    <button type="submit" id="importExcel" class="btn btn-primary btn-sm pull-right">
                         <i class="fa fa-upload"></i>
                         Import Excel
                     </button>
                 </div>
             </div>
-            <div class="panel-body">
+            <br />
+            <div class="panel-body" style="overflow:hidden">
                 <div>
                     <input type="hidden" id="sTime" />
                     <input type="hidden" id="eTime" />
-                    <div class="">
-                        <div class="">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4 id="title-id">Transaction Information </h4>
-                                    <h4 class="smallDate" data-role="small-date"></h4>
-                                </div>
-                                <div class="col-md-6" style="padding:20px;">
+                    <div class="row col-md-12">
 
-                                    <button type="button" class="btn btn-success create-button pull-right" id="btn-open-transaction-modal">Create Transaction</button>
-                                    <div id="create-transaction-modal" class="modal fade" role="dialog" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 700px">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3>Check Student Code</h3>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 id="title-id">Thông tin giao dịch <span data-role="small-date"></span> </h4>
+                        @*Create Transastion modal*@
+                        <div id="create-transaction-modal" class="modal fade" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" style="width: 700px">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3>Check Student Code</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    MSSV:
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <select id="my_student_acc_search" title="Nhập MSSV" data-live-search="true" class="selectpicker my-select">
+                                                        <option value="-1">Nothing is Selected</option>
+                                                    </select>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <div class="form-horizontal">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                Student Code:
-                                                            </label>
-                                                            <div class="col-sm-6">
-                                                                <select id="my_student_acc_search" title="Enter student code" data-live-search="true" class="selectpicker my-select">
-                                                                    <option value="-1">Nothing is Selected</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div id="transaction-info" class="hidden">
-                                                            <div class="form-group">
-                                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                    Account Name:
-                                                                </label>
-                                                                <div class="col-sm-8">
-                                                                    <input id="account-name" class="form-control" type="text" readonly />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                    Student Name:
-                                                                </label>
-                                                                <div class="col-sm-8">
-                                                                    <input id="student-name" class="form-control" type="text" readonly />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                    Value:
-                                                                </label>
-                                                                <div class="col-sm-8">
-                                                                    <input id="transaction-amount" class="form-control number currency" type="text" required />
-                                                                </div>
-                                                            </div>
-                                                            @*<div class="form-group">
-                                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                        Form:
-                                                                    </label>
-
-                                                                    <div class="col-sm-8" id="formTransaction-filter ">
-                                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                                            <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Increase)" checked />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Increase</label>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                                            <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Decrease)" />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Decrease</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>*@
-
-                                                            @*<div class="form-group">
-                                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                        Transaction Type:
-                                                                    </label>
-                                                                    <div class="col-sm-8" id="typeTransaction-filter">
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.Normal)" checked />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Normal</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.RollBack)" />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Roll back</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>*@
-
-                                                            @*<div class="form-group">
-                                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                        Transaction Type:
-                                                                    </label>
-                                                                    <div class="col-sm-8" id="typeTransaction-filter">
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.AddFunds)" checked />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Add Funds</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Pay for Registered</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Rollback Increase</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="pretty p-icon p-round p-jelly">
-                                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
-                                                                            <div class="state p-primary">
-                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                <label>Rollback Decrease</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>*@
-                                                            <div class="form-group col-md-10">
-                                                                <div>
-                                                                    <label class="control-label f-bold">
-                                                                        Transaction Type:
-                                                                    </label>
-                                                                </div>
-                                                                <select id="modal-select-transaction-filter">
-                                                                    <option value="-1">All</option>
-                                                                    <option value="@((int)TransactionFilter.AddFunds)">Add Funds</option>
-                                                                    <option value="@((int)TransactionFilter.PayforRegistered)">Pay for Registered</option>
-                                                                    <option value="@((int)TransactionFilter.RollbackIncrease)">Rollback Increase</option>
-                                                                    <option value="@((int)TransactionFilter.RollbackDecrease)">Rollback Decrease</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                                    Notes:
-                                                                </label>
-                                                                <div class="col-sm-8">
-                                                                    <input id="description" class="form-control" type="text" maxlength="50" placeholder="Nội dung" required />
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                            </div>
+                                            <div id="transaction-info" class="hidden">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Tên tài khoản:
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input id="account-name" class="form-control" type="text" readonly />
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" id="create-transaction-button">Tạo</button>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Tên học sinh:
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input id="student-name" class="form-control" type="text" readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Số tiền:
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input id="transaction-amount" class="form-control number currency" type="text" required />
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                            Form:
+                                                        </label>
+
+                                                        <div class="col-sm-8" id="formTransaction-filter ">
+                                                            <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                                <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Increase)" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Increase</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                                <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Decrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Decrease</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                @*<div class="form-group">
+                                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                            Transaction Type:
+                                                        </label>
+                                                        <div class="col-sm-8" id="typeTransaction-filter">
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.Normal)" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Normal</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.RollBack)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Roll back</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                @*<div class="form-group">
+                                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                            Transaction Type:
+                                                        </label>
+                                                        <div class="col-sm-8" id="typeTransaction-filter">
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.AddFunds)" checked />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Add Funds</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Pay for Registered</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Increase</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pretty p-icon p-round p-jelly">
+                                                                <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
+                                                                <div class="state p-primary">
+                                                                    <i class="icon mdi mdi-check"></i>
+                                                                    <label>Rollback Decrease</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                <div class="form-group col-md-10">
+                                                    <div>
+                                                        <label class="control-label f-bold">
+                                                            Loại giao dịch:
+                                                        </label>
+                                                    </div>
+                                                    <select id="modal-select-transaction-filter">
+                                                        <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Notes:
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input id="description" class="form-control" type="text" maxlength="50" placeholder="Nội dung" required />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" id="create-transaction-button">Tạo</button>
+                                    </div>
                                 </div>
-                                <hr />
                             </div>
-                            <div class="">
-                                <div class="card-padding p-0">
-                                    <div class="row">
-                                        <div class="col-md-2 pull-left">
-                                            <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Advance Filter</button>
+                        </div>
+                        @*End of Create Transaction modal*@
+                        <hr />
+                    </div>
+                    <div class="">
+                        <div class="card-padding p-0">
+                            <div class="row">
+                                <div class="col-md-5 pull-left">
+                                    <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Bộ lọc</button>
+                                    <button style="" type="button" class="btn btn-success" id="btn-open-transaction-modal">
+                                        <i class="fa fa-plus"></i>Tạo giao dịch
+                                    </button>
+                                </div>
+                                <div class="offset-md-4 col-md-3">
+                                    <div class="pull-right">
+                                        <div class="fg-line m-t-5">
+                                            <div id="reportrange" class="div-datepicker">
+                                                <input id="date-string" readonly class="date-input form-control text-center">
+                                                <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="offset-md-7 col-md-3">
-                                            <div class="pull-right">
-                                                <div class="fg-line m-t-5">
-                                                    <div id="reportrange" class="div-datepicker">
-                                                        <input id="date-string" readonly class="date-input form-control text-center">
-                                                        <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" id="sTime" />
-                                                <input type="hidden" id="eTime" />
+                                        <input type="hidden" id="sTime" />
+                                        <input type="hidden" id="eTime" />
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+
+                            <div class="collapse" id="filter-container">
+                                <div class="form-group">
+                                    <div class="col-md-2 ">
+                                        <label class="control-label p-t-5 f-bold">Trạng thái:</label>
+                                    </div>
+                                    <div class="group-radio-buttons col-md-10 p-l-0">
+                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                            <input type="radio" name="transaction-status-filter" value="-1" checked />
+                                            <div class="state p-primary">
+                                                <i class="icon mdi mdi-check"></i>
+                                                <label>Tất cả</label>
+                                            </div>
+                                        </div>
+                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.New)" />
+                                            <div class="state p-primary">
+                                                <i class="icon mdi mdi-check"></i>
+                                                <label>@TransactionStatus.New.GetEnumDisplayName()</label>
+                                            </div>
+                                        </div>
+                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Approve)" />
+                                            <div class="state p-primary">
+                                                <i class="icon mdi mdi-check"></i>
+                                                <label>@TransactionStatus.Approve.GetEnumDisplayName()</label>
+                                            </div>
+                                        </div>
+                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                            <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Cancel)" />
+                                            <div class="state p-primary">
+                                                <i class="icon mdi mdi-check"></i>
+                                                <label>@TransactionStatus.Cancel.GetEnumDisplayName()</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <br />
 
-
-                                    <div class="collapse" id="filter-container">
-                                        <div class="form-group">
-                                            <div class="col-md-2 ">
-                                                <label class="control-label p-t-5 f-bold">Status:</label>
+                                </div>
+                                @*<div class="row m-t-10">
+                                        <div class="col-md-9">
+                                            <div class="col-md-2 p-l-0 p-r-0">
+                                                <label class="control-label p-t-5">Type:</label>
                                             </div>
                                             <div class="group-radio-buttons col-md-10 p-l-0">
                                                 <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                    <input type="radio" name="transaction-status-filter" value="-1" checked />
+                                                    <input type="radio" name="transaction-type-filter" value="-1" checked />
                                                     <div class="state p-primary">
                                                         <i class="icon mdi mdi-check"></i>
                                                         <label>All</label>
                                                     </div>
                                                 </div>
                                                 <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                    <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.New)" />
+                                                    <input type="radio" name="transaction-type-filter" value="@((int)TransactionTypeEnum.Normal)" />
                                                     <div class="state p-primary">
                                                         <i class="icon mdi mdi-check"></i>
-                                                        <label>New</label>
+                                                        <label>Normal</label>
                                                     </div>
                                                 </div>
                                                 <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                    <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Approve)" />
+                                                    <input type="radio" name="transaction-type-filter" value="@((int)TransactionTypeEnum.RollBack)" />
                                                     <div class="state p-primary">
                                                         <i class="icon mdi mdi-check"></i>
-                                                        <label>Approved</label>
+                                                        <label>Roll Back</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-t-10">
+                                        <div class="col-md-9">
+                                            <div class="col-md-2 p-l-0 p-r-0">
+                                                <label class="control-label p-t-5">Form: </label>
+                                            </div>
+                                            <div class="group-radio-buttons col-md-10 p-l-0">
+
+                                                <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                    <input type="radio" name="transaction-form-filter" value="-1" checked />
+                                                    <div class="state p-primary">
+                                                        <i class="icon mdi mdi-check"></i>
+                                                        <label>All</label>
                                                     </div>
                                                 </div>
                                                 <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                    <input type="radio" name="transaction-status-filter" value="@((int)TransactionStatus.Cancel)" />
+                                                    <input type="radio" name="transaction-form-filter" value="@((int)TransactionForm.AddFunds)" />
                                                     <div class="state p-primary">
                                                         <i class="icon mdi mdi-check"></i>
-                                                        <label>Canceled</label>
+                                                        <label>Add Funds</label>
+                                                    </div>
+                                                </div>
+                                                <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                    <input type="radio" name="transaction-form-filter" value="@((int)TransactionForm.Withdraw)" />
+                                                    <div class="state p-primary">
+                                                        <i class="icon mdi mdi-check"></i>
+                                                        <label>Withdraw</label>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
-                                        @*<div class="row m-t-10">
-                                                <div class="col-md-9">
-                                                    <div class="col-md-2 p-l-0 p-r-0">
-                                                        <label class="control-label p-t-5">Type:</label>
-                                                    </div>
-                                                    <div class="group-radio-buttons col-md-10 p-l-0">
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-type-filter" value="-1" checked />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>All</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-type-filter" value="@((int)TransactionTypeEnum.Normal)" />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>Normal</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-type-filter" value="@((int)TransactionTypeEnum.RollBack)" />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>Roll Back</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    </div>*@
+
+                                @*<div class="form-group">
+                                        <label class="col-sm-2 col-sm-offset-1 control-label">
+                                            Transaction Type:
+                                        </label>
+                                        <div class="col-sm-8" id="typeTransaction-filter">
+                                            <div class="pretty p-icon p-round p-jelly">
+                                                <input type="radio" name="transaction-filter" value="-1" checked />
+                                                <div class="state p-primary">
+                                                    <i class="icon mdi mdi-check"></i>
+                                                    <label>All</label>
                                                 </div>
                                             </div>
-                                            <div class="row m-t-10">
-                                                <div class="col-md-9">
-                                                    <div class="col-md-2 p-l-0 p-r-0">
-                                                        <label class="control-label p-t-5">Form: </label>
-                                                    </div>
-                                                    <div class="group-radio-buttons col-md-10 p-l-0">
-
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-form-filter" value="-1" checked />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>All</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-form-filter" value="@((int)TransactionForm.AddFunds)" />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>Add Funds</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
-                                                            <input type="radio" name="transaction-form-filter" value="@((int)TransactionForm.Withdraw)" />
-                                                            <div class="state p-primary">
-                                                                <i class="icon mdi mdi-check"></i>
-                                                                <label>Withdraw</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <div class="pretty p-icon p-round p-jelly">
+                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.AddFunds)" />
+                                                <div class="state p-primary">
+                                                    <i class="icon mdi mdi-check"></i>
+                                                    <label>Add Funds</label>
                                                 </div>
-                                            </div>*@
-
-                                        @*<div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                    Transaction Type:
-                                                </label>
-                                                <div class="col-sm-8" id="typeTransaction-filter">
-                                                    <div class="pretty p-icon p-round p-jelly">
-                                                        <input type="radio" name="transaction-filter" value="-1" checked />
-                                                        <div class="state p-primary">
-                                                            <i class="icon mdi mdi-check"></i>
-                                                            <label>All</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pretty p-icon p-round p-jelly">
-                                                        <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.AddFunds)" />
-                                                        <div class="state p-primary">
-                                                            <i class="icon mdi mdi-check"></i>
-                                                            <label>Add Funds</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pretty p-icon p-round p-jelly">
-                                                        <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
-                                                        <div class="state p-primary">
-                                                            <i class="icon mdi mdi-check"></i>
-                                                            <label>Pay for Registered</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pretty p-icon p-round p-jelly">
-                                                        <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
-                                                        <div class="state p-primary">
-                                                            <i class="icon mdi mdi-check"></i>
-                                                            <label>Rollback Increase</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pretty p-icon p-round p-jelly">
-                                                        <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
-                                                        <div class="state p-primary">
-                                                            <i class="icon mdi mdi-check"></i>
-                                                            <label>Rollback Decrease</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>*@
-                                        <div class="form-group col-md-10">
-                                            <div>
-                                                <label class="control-label f-bold">
-                                                    Transaction Type:
-                                                </label>
                                             </div>
-                                            <select id="select-transaction-filter">
-                                                <option value="-1">All</option>
-                                                <option value="@((int)TransactionFilter.AddFunds)">Add Funds</option>
-                                                <option value="@((int)TransactionFilter.PayforRegistered)">Pay for Registered</option>
-                                                <option value="@((int)TransactionFilter.RollbackIncrease)">Rollback Increase</option>
-                                                <option value="@((int)TransactionFilter.RollbackDecrease)">Rollback Decrease</option>
-                                            </select>
+                                            <div class="pretty p-icon p-round p-jelly">
+                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
+                                                <div class="state p-primary">
+                                                    <i class="icon mdi mdi-check"></i>
+                                                    <label>Pay for Registered</label>
+                                                </div>
+                                            </div>
+                                            <div class="pretty p-icon p-round p-jelly">
+                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
+                                                <div class="state p-primary">
+                                                    <i class="icon mdi mdi-check"></i>
+                                                    <label>Rollback Increase</label>
+                                                </div>
+                                            </div>
+                                            <div class="pretty p-icon p-round p-jelly">
+                                                <input type="radio" name="transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
+                                                <div class="state p-primary">
+                                                    <i class="icon mdi mdi-check"></i>
+                                                    <label>Rollback Decrease</label>
+                                                </div>
+                                            </div>
                                         </div>
-
+                                    </div>*@
+                                <div class="form-group col-md-10">
+                                    <div>
+                                        <label class="control-label f-bold">
+                                            Loại giao dịch:
+                                        </label>
                                     </div>
-                                    <div class="row m-t-25">
-                                        <div class="col-md-12">
-                                            <div class="tableDiv-responsive">
-                                                <table id="transaction-table" class="table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th><label>No.</label></th>
-                                                            <th><label>Student Code</label></th>
-                                                            <th><label>Student Name</label></th>
-                                                            <th><label>Money Amount (VND)</label></th>
-                                                            <th><label>Transact date</label></th>
-                                                            <th><label>Notes</label></th>
-                                                            <th><label>Creator</label></th>
-                                                            <th><label>Status</label></th>
-                                                            <th><label>Action</label></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
+                                    <select id="select-transaction-filter">
+                                        <option value="-1">Tất cả</option>
+                                        <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
+                                        <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
+                                        <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
+                                        <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
+                                        <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="row m-t-25">
+                                <div class="col-md-12">
+                                    <div class="">
+                                        <table id="transaction-table" class="table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th><label>No.</label></th>
+                                                    <th><label>MSSV</label></th>
+                                                    <th><label>Tên học sinh</label></th>
+                                                    <th><label>Tiền (VND)</label></th>
+                                                    <th><label>Ngày giao dịch</label></th>
+                                                    <th><label>Loại giao dịch</label></th>
+                                                    <th><label>Người tạo</label></th>
+                                                    <th><label>Trạng thái</label></th>
+                                                    <th><label>Hành động</label></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="modal fade" id="approveTransactionModal" role="dialog">
+                                    <div class="modal-dialog modal-sm">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h2 class="modal-title">Duyệt hay Hủy bỏ?</h2>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="lead text-muted">Hành động này không thể làm lại!</p>
+                                                <input type="text" class="hidden" id="modal-transactionId" />
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="approveTrans(false)" class="btn btn-warning">Hủy bỏ giao dịch</button>
+                                                <button type="button" onclick="approveTrans(true)" class="btn btn-success">Duyệt</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container">
-                                        <div class="modal fade" id="approveTransactionModal" role="dialog">
-                                            <div class="modal-dialog modal-sm">
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h2 class="modal-title">Approve or Cancel?</h2>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p class="lead text-muted">This Action can't be redone</p>
-                                                        <input type="text" class="hidden" id="modal-transactionId" />
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" onclick="approveTrans(false)" class="btn btn-warning">Cancel Transacion</button>
-                                                        <button type="button" onclick="approveTrans(true)" class="btn btn-success">Approve</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                             </div>
 
+
                         </div>
-
-
                     </div>
+
+
+
 
                 </div>
             </div>
@@ -624,7 +626,7 @@
                         //'form': $('input[name=formTransaction-filter]:checked').val(),
                         //'type': $('input[name=typeTransaction-filter]:checked').val(),
                         'description': $('#description').val(),
-                        'transactionFilter': $("#modal-select-transaction-filter").val()
+                        'transactionType': $("#modal-select-transaction-filter").val()
                         //$('input[name=modal-transaction-filter]:checked').val(),
                     },
                     success: function (result) {
@@ -712,7 +714,7 @@
 
         $("#sTime").val(startTime);
         $("#eTime").val(endTime);
-        $('[data-role=small-date]').html("Date " + startTime + (startTime == endTime ? "" : " - " + endTime));
+        $('[data-role=small-date]').html("ngày " + startTime + (startTime == endTime ? "" : " - " + endTime));
         //getTotalTransaction();
         if ($.fn.DataTable.isDataTable('#transaction-table')) {
             RefreshDatatable();
@@ -747,37 +749,6 @@
             $("#transaction-table").DataTable().ajax.reload();
     }
 
-    function getTotalTransaction() {
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("LoadTotalTransaction", "Transaction", new { Area = "CRM" })',
-            data: {
-                'startDate': $('#sTime').val(),
-                'endDate': $('#eTime').val()
-            },
-            success: function (result) {
-                $('#total_RolbackIncreaseRevenue').text(toMoney(result.revenueIncreaseRollback, ',', ''));
-                $('#final_TotalRevenueIncrease').text(toMoney(result.revenueIncrease, ',', ''));
-                $('#final_TotalRollbackedIncreaseRevenue').text(toMoney(result.revenueIncrease - result.revenueIncreaseRollback - result.revenueDecreaseRollback, ',', ''));
-                $('#total_NewIncreaseRevenue').text(toMoney(result.revenueIncreaseOptimize - result.revenueIncrease, ',', ''));
-                $('#total_CancelIncrease').text(toMoney(result.revenueIncreaseCancel, ',', '') + "/" + result.numberIncreaseCancel);
-                $('#total_RolbackDecreaseRevenue').text(toMoney(result.revenueDecreaseRollback, ',', ''));
-                $('#final_TotalRevenueDecrease').text(toMoney(result.revenueDecrease, ',', ''));
-                $('#final_TotalRollbackedDecreaseRevenue').text(toMoney(result.revenueDecrease - result.revenueIncreaseRollback - result.revenueDecreaseRollback, ',', ''));
-                $('#total_NewDecreaseRevenue').text(toMoney(result.revenueDecreaseOptimize - result.revenueDecrease, ',', ''));
-                $('#total_CancelDecrease').text(toMoney(result.revenueDecreaseCancel, ',', '') + "/" + result.numberDecreaseCancel);
-                $('#finalNumber_Transaction').text(result.numberIncrease + result.numberDecrease);
-                $('#totalNumberIn_De_Transaction').text(result.numberIncrease + "/" + result.numberDecrease);
-                $('#totalNumberIn_De_Rollback').text(result.numberIncreaseRollback + "/" + result.numberDecreaseRollback);
-                var numberIncreaseRollbacked = result.numberIncrease - result.numberDecreaseRollback;
-                var numberDecreaseRollbacked = result.numberDecrease - result.numberIncreaseRollback;
-                $('#totalNumberIn_De_Rollbacked').text(numberIncreaseRollbacked + "/" + numberDecreaseRollbacked);
-                $('#totalNumber_FirstTrans').text(toMoney(result.revenueActiveCard, ',', '') + "/" + result.numberActiveCard);
-            }
-        });
-    }
-
-
 
     function InitDatatable() {
         $("#transaction-table").DataTable({
@@ -788,13 +759,15 @@
             "sAjaxSource": '@Url.Action("GetAllTransactionsByDateRange")',
             "processing": true,
             "displayLength": 10,
+            "ordering": false,
+            responsive: true,
             "fnServerParams": function (aoData) {
                 aoData.push(
                     //{ "name": "transactionForm", "value": $('input[name=transaction-form-filter]:checked').val() },
                     { "name": "transactionStatus", "value": $('input[name=transaction-status-filter]:checked').val() },
                     //{ "name": "transactionType", "value": $('input[name=transaction-type-filter]:checked').val() },
                     //{ "name": "transactionFilter", "value": $('input[name=transaction-filter]:checked').val()},
-                    { "name": "transactionFilter", "value": $('#select-transaction-filter').val()},
+                    { "name": "transactionType", "value": $('#select-transaction-filter').val()},
                     { "name": "startTime", "value": $('#sTime').val() },
                     { "name": "endTime", "value": $('#eTime').val() }
                 );
@@ -803,7 +776,6 @@
             "columnDefs": [
                 {
                     "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                    "orderable": false,
                     "className": "dt-center",
 
                 },
@@ -813,6 +785,30 @@
                     "render": function (data, type, row) {
                         var detail = "<a href='@Url.Action("StudentDetail", "StudentManagement", new {area = "TrainingManagement"})/"+row[11]+"' style ='cursor:pointer;' title='Student Account Information' >" + data + "</a>";
                         return detail;
+                    }
+                },
+                 {
+                    "targets": [5],
+                    "render": function (data, type, row) {
+                        var html = "";
+                        switch (data) {
+                            case @((int)TransactionTypeEnum.AddFunds):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.AddFunds.GetEnumDisplayName()' src='/Content/img/add-money.png'/>";
+                              break;
+                          case @((int)TransactionTypeEnum.TuitionPayment):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()' src='/Content/img/pay.png />";
+                              break;
+                          case @((int)TransactionTypeEnum.RefundTuitionFee):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()' src='/Content/img/refund.png />";
+                              break;k
+                          case @((int)TransactionTypeEnum.RollbackIncrease):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              break;
+                          case @((int)TransactionTypeEnum.RollbackDecrease):
+                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              break;
+                        }
+                        return html;
                     }
                 },
                 {
@@ -837,13 +833,13 @@
                     "render": function (data, type, row) {
                         var html = "";
                         if (data == '@((int)TransactionStatus.New)') {
-                            html = "<div class='label label-warning'>Not Approved</div>"
+                            html = "<div class='label label-warning'>@TransactionStatus.New.GetEnumDisplayName()</div>"
                         }
                         else if (data == '@((int)TransactionStatus.Approve)') {
-                            html = "<div class='label label-success'>Approved</div>"
+                            html = "<div class='label label-success'>@TransactionStatus.Approve.GetEnumDisplayName()</div>"
                         }
                         else {
-                            html = "<div class='label label-danger'>Cancel</div>"
+                            html = "<div class='label label-danger'>@TransactionStatus.Cancel.GetEnumDisplayName()</div>"
                         }
                         return html;
                     }

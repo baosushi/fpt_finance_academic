@@ -80,11 +80,11 @@ namespace CaptstoneProject.Models
 
     public enum TransactionStatus
     {
-        [Display(Name = "New")]
+        [Display(Name = "Mới")]
         New = 0,
-        [Display(Name = "Approve")]
+        [Display(Name = "Đã Duyệt")]
         Approve = 1,
-        [Display(Name = "Cancel")]
+        [Display(Name = "Hủy bỏ")]
         Cancel = 2,
     }
 
@@ -102,10 +102,21 @@ namespace CaptstoneProject.Models
 
     public enum TransactionTypeEnum
     {
-        [Display(Name = "Normal")]
-        Normal = 1,
-        [Display(Name = "Rollback")]
-        RollBack = 2,
+        //[Display(Name = "Normal")]
+        //Normal = 1,
+        //[Display(Name = "Rollback")]
+        //RollBack = 2,
+
+        [Display(Name = "Đóng tiền")]
+        AddFunds = 1,
+        [Display(Name = "Thanh toán học phí")]
+        TuitionPayment = 2,
+        [Display(Name = "Hoàn học phí")]
+        RefundTuitionFee = 3,
+        [Display(Name = "Rollback tăng tiền")]
+        RollbackIncrease = 4,
+        [Display(Name = "Rollback giảm tiền")]
+        RollbackDecrease = 5,
     }
 
     public enum RegistrationStatus
@@ -120,11 +131,11 @@ namespace CaptstoneProject.Models
 
     public enum AccountType
     {
-        [Display(Name = "Normal")]
+        [Display(Name = "Bình thường")]
         Normal = 1,
-        [Display(Name = "50% schoolarship")]
+        [Display(Name = "Học bổng 50%")]
         HalflyDiscount = 2,
-        [Display(Name = "100% schoolarship")]
+        [Display(Name = "Học bổng 100%")]
         FullyDiscount = 3,
     }
 
@@ -136,15 +147,15 @@ namespace CaptstoneProject.Models
         Decrease = 2,
     }
 
-    public enum TransactionFilter
-    {
-        [Display(Name = "Add Funds")]
-        AddFunds = 1,
-        [Display(Name = "Pay for registered")]
-        PayforRegistered = 2,
-        [Display(Name = "Rollback Increase")]
-        RollbackIncrease = 3,
-        [Display(Name = "Rollback Decrease")]
-        RollbackDecrease = 4,
-    }
+    //public enum TransactionFilter
+    //{
+    //    [Display(Name = "Add Funds")]
+    //    AddFunds = 1,
+    //    [Display(Name = "Pay for registered")]
+    //    PayforRegistered = 2,
+    //    [Display(Name = "Rollback Increase")]
+    //    RollbackIncrease = 3,
+    //    [Display(Name = "Rollback Decrease")]
+    //    RollbackDecrease = 4,
+    //}
 }

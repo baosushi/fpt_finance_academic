@@ -51,10 +51,9 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
         }
 
         [HttpPost]
-        public ActionResult CreateTransaction(int studentMajorId, decimal amount,int transactionFilter, string description)
+        public ActionResult CreateTransaction(int studentMajorId, decimal amount,int transactionType, string description)
         {
             int form = -1;
-            int type = -1;
             
             try
             {
@@ -67,27 +66,26 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                     {
                         return Json(new { success = false, message = "Create transaction failed!" });
                     }
-                    switch (transactionFilter)
+                    switch (transactionType)
                     {
-                        case (int)TransactionFilter.AddFunds:
+                        case (int)TransactionTypeEnum.AddFunds:
                             form = (int)TransactionForm.Increase;
-                            type = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.PayforRegistered:
+                        case (int)TransactionTypeEnum.TuitionPayment:
                             form = (int)TransactionForm.Decrease;
-                            type = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.RollbackIncrease:
+                        case (int)TransactionTypeEnum.RefundTuitionFee:
+                            form = (int)TransactionForm.Decrease;
+                            break;
+                        case (int)TransactionTypeEnum.RollbackIncrease:
                             form = (int)TransactionForm.Increase;
-                            type = (int)TransactionTypeEnum.RollBack;
                             break;
-                        case (int)TransactionFilter.RollbackDecrease:
+                        case (int)TransactionTypeEnum.RollbackDecrease:
                             form = (int)TransactionForm.Decrease;
-                            type = (int)TransactionTypeEnum.RollBack;
                             break;
 
                     }
-                    if(form == -1 || type == -1)
+                    if(form == -1 || transactionType == -1)
                     {
                         return Json(new { success = false, message = "Create transaction Failed!" });
                     }
@@ -98,7 +96,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         Amount = amount,
                         Date = DateTime.Now,
                         IsIncreaseTransaction = formTransaction,
-                        TransactionType = type,
+                        TransactionType = transactionType,
                         Notes = description,
                         Status = (int)TransactionStatus.New
                     });
@@ -206,7 +204,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
         }
 
 
-        public ActionResult GetAllTransactionsByDateRange(JQueryDataTableParamModel param, string startTime, string endTime, int transactionStatus, int transactionFilter)
+        public ActionResult GetAllTransactionsByDateRange(JQueryDataTableParamModel param, string startTime, string endTime, int transactionStatus, int transactionType)
         {
             try
             {
@@ -218,25 +216,23 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                     var count = param.iDisplayStart + 1;
 
                     int transactionForm = -1;
-                    int transactionType = -1;
 
-                    switch (transactionFilter)
+                    switch (transactionType)
                     {
-                        case (int)TransactionFilter.AddFunds:
+                        case (int)TransactionTypeEnum.AddFunds:
                             transactionForm = (int)TransactionForm.Increase;
-                            transactionType = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.PayforRegistered:
+                        case (int)TransactionTypeEnum.TuitionPayment:
                             transactionForm = (int)TransactionForm.Decrease;
-                            transactionType = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.RollbackIncrease:
+                        case (int)TransactionTypeEnum.RefundTuitionFee:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            break;
+                        case (int)TransactionTypeEnum.RollbackIncrease:
                             transactionForm = (int)TransactionForm.Increase;
-                            transactionType = (int)TransactionTypeEnum.RollBack;
                             break;
-                        case (int)TransactionFilter.RollbackDecrease:
+                        case (int)TransactionTypeEnum.RollbackDecrease:
                             transactionForm = (int)TransactionForm.Decrease;
-                            transactionType = (int)TransactionTypeEnum.RollBack;
                             break;
                         default:
                             break;
@@ -275,7 +271,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         q.Account.StudentMajor.Student.Name,
                         q.Amount, // 3
                         q.Date.Value.ToString("dd/MM/yyyy HH:mm:ss"),
-                        String.IsNullOrEmpty(q.Notes) ? "-" : q.Notes,
+                        q.TransactionType, //5
                         (q.UserName==null) ? "-" : q.UserName, //User tạo ra transaction này //6
                         q.Status, //7
                         q.IsIncreaseTransaction,//8
@@ -303,140 +299,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             }
         }
 
-        public JsonResult LoadTotalTransaction(string startDate, string endDate)
-        {
-            try
-            {
-                using (var context = new DB_Finance_AcademicEntities())
-                {
-
-                    var startTime = startDate.ToDateTime().GetStartOfDate();
-                    var endTime = endDate.ToDateTime().GetEndOfDate();
-                    var transaction = context.Transactions.Where(q => q.Date >= startTime && q.Date <= endTime);
-
-                    var numberIncrease = 0;
-                    var numberIncreaseOptimize = 0;
-                    var numberDecreaseOptimize = 0;
-                    var numberDecrease = 0;
-                    var numberIncreaseRollback = 0;
-                    var numberDecreaseRollback = 0;
-                    //var numberActiveCard = 0;
-                    var numberDecreaseCancel = 0;
-                    var numberIncreaseCancel = 0;
-                    decimal revenueIncrease = 0;
-                    decimal revenueDecrease = 0;
-                    decimal revenueIncreaseRollback = 0;
-                    decimal revenueDecreaseRollback = 0;
-                    //decimal revenueActiveCard = 0;
-                    decimal revenueIncreaseOptimize = 0;
-                    decimal revenueDecreaseOptimize = 0;
-                    decimal revenueDecreaseCancel = 0;
-                    decimal revenueIncreaseCancel = 0;
-
-                    foreach (var item in transaction)
-                    {
-                        if (item.IsIncreaseTransaction != null && item.IsIncreaseTransaction == true)
-                        {
-                            if (item.Status == (int)TransactionStatus.Approve)
-                            {
-                                numberIncrease++;
-                                revenueIncrease += item.Amount == null ? 0 : item.Amount.Value;
-                                numberIncreaseOptimize++;
-                                revenueIncreaseOptimize += item.Amount == null ? 0 : item.Amount.Value;
-                                if (item.TransactionType == (int)TransactionTypeEnum.RollBack)
-                                {
-                                    numberIncreaseRollback++;
-                                    revenueIncreaseRollback += item.Amount == null ? 0 : item.Amount.Value;
-                                }
-                                //else
-                                //{
-                                //    if (item.TransactionType == (int)TransactionTypeEnum.ActiveCard)
-                                //    {
-                                //        numberActiveCard++;
-                                //        revenueActiveCard += item.Amount == null ? 0 : item.Amount.Value;
-                                //    }
-                                //}
-                            }
-                            else
-                            {
-                                if (item.Status == (int)TransactionStatus.New)
-                                {
-                                    numberIncreaseOptimize++;
-                                    revenueIncreaseOptimize += item.Amount == null ? 0 : item.Amount.Value;
-                                }
-                                else
-                                {
-                                    if (item.Status == (int)TransactionStatus.Cancel)
-                                    {
-                                        numberIncreaseCancel++;
-                                        revenueIncreaseCancel += item.Amount == null ? 0 : item.Amount.Value;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (item.Status == (int)TransactionStatus.Approve)
-                            {
-                                numberDecrease++;
-                                revenueDecrease += item.Amount == null ? 0 : item.Amount.Value;
-                                numberDecreaseOptimize++;
-                                revenueDecreaseOptimize += item.Amount == null ? 0 : item.Amount.Value;
-                                if (item.TransactionType == (int)TransactionTypeEnum.RollBack)
-                                {
-                                    numberDecreaseRollback++;
-                                    revenueDecreaseRollback += item.Amount == null ? 0 : item.Amount.Value;
-                                }
-                            }
-                            else
-                            {
-                                if (item.Status == (int)TransactionStatus.New)
-                                {
-                                    numberDecreaseOptimize++;
-                                    revenueDecreaseOptimize += item.Amount == null ? 0 : item.Amount.Value;
-                                }
-                                else
-                                {
-                                    if (item.Status == (int)TransactionStatus.Cancel)
-                                    {
-                                        numberDecreaseCancel++;
-                                        revenueDecreaseCancel += item.Amount == null ? 0 : item.Amount.Value;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
-                    return Json(new
-                    {
-                        numberIncrease = numberIncrease,
-                        numberIncreaseOptimize = numberIncreaseOptimize,
-                        numberDecreaseOptimize = numberDecreaseOptimize,
-                        numberDecrease = numberDecrease,
-                        numberIncreaseRollback = numberIncreaseRollback,
-                        numberDecreaseRollback = numberDecreaseRollback,
-                        //numberActiveCard = numberActiveCard,
-                        numberDecreaseCancel = numberDecreaseCancel,
-                        numberIncreaseCancel = numberIncreaseCancel,
-                        revenueIncrease = revenueIncrease,
-                        revenueDecrease = revenueDecrease,
-                        revenueIncreaseRollback = revenueIncreaseRollback,
-                        revenueDecreaseRollback = revenueDecreaseRollback,
-                        //revenueActiveCard = revenueActiveCard,
-                        revenueIncreaseOptimize = revenueIncreaseOptimize,
-                        revenueDecreaseOptimize = revenueDecreaseOptimize,
-                        revenueDecreaseCancel = revenueDecreaseCancel,
-                        revenueIncreaseCancel = revenueIncreaseCancel,
-                    }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return Json(new { success = false, message = e.Message });
-            }
-        }
+       
 
 
         public ActionResult Edit(int Id)

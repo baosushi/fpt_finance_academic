@@ -123,7 +123,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
 
-        public ActionResult LoadTransaction(JQueryDataTableParamModel param, int studentId, string startTime, string endTime, int transactionStatus, int transactionFilter)
+        public ActionResult LoadTransaction(JQueryDataTableParamModel param, int studentId, string startTime, string endTime, int transactionStatus, int transactionType)
         {
             try
             {
@@ -135,29 +135,26 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     && q.Date <= endDate && q.Account.StudentMajor.StudentId == studentId);
 
                     int transactionForm = -1;
-                    int transactionType = -1;
 
-                    switch (transactionFilter)
+                    switch (transactionType)
                     {
-                        case (int)TransactionFilter.AddFunds:
+                        case (int)TransactionTypeEnum.AddFunds:
                             transactionForm = (int)TransactionForm.Increase;
-                            transactionType = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.PayforRegistered:
+                        case (int)TransactionTypeEnum.TuitionPayment:
                             transactionForm = (int)TransactionForm.Decrease;
-                            transactionType = (int)TransactionTypeEnum.Normal;
                             break;
-                        case (int)TransactionFilter.RollbackIncrease:
+                        case (int)TransactionTypeEnum.RefundTuitionFee:
+                            transactionForm = (int)TransactionForm.Decrease;
+                            break;
+                        case (int)TransactionTypeEnum.RollbackIncrease:
                             transactionForm = (int)TransactionForm.Increase;
-                            transactionType = (int)TransactionTypeEnum.RollBack;
                             break;
-                        case (int)TransactionFilter.RollbackDecrease:
+                        case (int)TransactionTypeEnum.RollbackDecrease:
                             transactionForm = (int)TransactionForm.Decrease;
-                            transactionType = (int)TransactionTypeEnum.RollBack;
                             break;
                         default:
                             break;
-
                     }
 
                     // -1 : get all
@@ -194,8 +191,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         a.Amount, // 2
                         a.Date.Value.ToString("dd/MM/yyyy"), // 3
                         a.Status, //4
-                        a.UserName == null? "-": a.UserName, // 5 User who created this transaction
-                        a.Id //6 TransactionId
+                        a.TransactionType, //5
+                        a.UserName == null? "-": a.UserName, // 6 User who created this transaction
+                        a.Id, //7 TransactionId
+                        a.IsIncreaseTransaction //8
                             }).ToList();
                     var totalRecords = listTransaction.Count();
 
