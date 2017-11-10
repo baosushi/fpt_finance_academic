@@ -50,6 +50,7 @@
         color: white;
         overflow: hidden;
     }
+
     .header-padding {
         padding: 10px 15px;
     }
@@ -60,31 +61,189 @@
         <div class="panel panel-default">
             <div class="panel-title"></div>
             <div class="panel-body" style="overflow:hidden">
-                
-                    <div>
-                        <h3 style="color: #1143b7; padding-left:10px;">Student: @Model.Name </h3>
-                    </div>
-                    <div class="row" style="padding-left:10px;">
-                        <ul class="nav nav-pills" style="color:#1143b7">
 
-                            @if (!string.IsNullOrWhiteSpace(this.Model.Email))
-                            {
-                                <li class="header-padding" title="Email"><i class="fa fa-envelope">Email: </i> @this.Model.Email</li>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
-                            {
-                                <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i>MSSV: @this.Model.CurrentStudentCode</li>
-                            }
+                <div>
+                    <h3 style="color: #1143b7; padding-left:10px;">Student: @Model.Name </h3>
+                </div>
+                <div class="row" style="padding-left:10px;">
+                    <ul class="nav nav-pills" style="color:#1143b7">
+
+                        @if (!string.IsNullOrWhiteSpace(this.Model.Email))
+                        {
+                            <li class="header-padding" title="Email"><i class="fa fa-envelope">Email: </i> @this.Model.Email</li>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
+                        {
+                            <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i>MSSV: @this.Model.CurrentStudentCode</li>
+                        }
+                        @if (Model.CurrentAccount != null)
+                        {
                             <li class="header-padding" title=""><i class="fa fa-user-circle-o"></i> Loại:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
                             <li class="header-padding" title="ha"><i class="fa fa-calendar"></i> Ngày tạo: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
                             <li class="header-padding" title=""><i class="fa fa-credit-card"></i>Số dư tài khoản: <span id="acc_current_balance" style="color:forestgreen"></span> </li>
+                        }
 
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
                 <br />
                 <div class="col-md-12 p-x-0">
 
+                    @*Create Transation Modal*@
+                    <div id="create-transaction-modal" class="modal fade" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" style="width: 700px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3>Check Student Code</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    MSSV: @Model.Id
+                                                    @Model.CurrentAccount.Name
+                                                    @Model.Name
+                                                </label>
+                                            </div>
+                                        <div id="transaction-info" class="">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    Tên tài khoản:
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input id="account-name" class="form-control" type="text" value="@Model.CurrentAccount.Name" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    Tên học sinh:
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input id="student-name" class="form-control" type="text" value="@Model.Name" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    Số tiền:
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input id="transaction-amount" class="form-control number currency" type="text" required />
+                                                </div>
+                                            </div>
+                                            @*<div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Form:
+                                                    </label>
 
+                                                    <div class="col-sm-8" id="formTransaction-filter ">
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Increase)" checked />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Increase</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="pretty p-icon p-round p-jelly p-bigger">
+                                                            <input type="radio" name="formTransaction-filter" value="@((int)TransactionForm.Decrease)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Decrease</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+
+                                            @*<div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Transaction Type:
+                                                    </label>
+                                                    <div class="col-sm-8" id="typeTransaction-filter">
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.Normal)" checked />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Normal</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="typeTransaction-filter" value="@((int)TransactionTypeEnum.RollBack)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Roll back</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+
+                                            @*<div class="form-group">
+                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                        Transaction Type:
+                                                    </label>
+                                                    <div class="col-sm-8" id="typeTransaction-filter">
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.AddFunds)" checked />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Add Funds</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.PayforRegistered)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Pay for Registered</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackIncrease)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Rollback Increase</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pretty p-icon p-round p-jelly">
+                                                            <input type="radio" name="modal-transaction-filter" value="@((int)TransactionFilter.RollbackDecrease)" />
+                                                            <div class="state p-primary">
+                                                                <i class="icon mdi mdi-check"></i>
+                                                                <label>Rollback Decrease</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                            <div class="form-group col-md-10">
+                                                <div>
+                                                    <label class="control-label f-bold">
+                                                        Loại giao dịch:
+                                                    </label>
+                                                </div>
+                                                <select id="modal-select-transaction-filter">
+                                                    <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    Notes:
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input id="description" class="form-control" type="text" maxlength="50" placeholder="Nội dung" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="create-transaction-button">Tạo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*End of transaction Modal*@
 
                     <div class="row">
                         <div class="col-md-12">
@@ -97,10 +256,13 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-5">
                                                     <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Bộ lọc</button>
+                                                    <button style="" type="button" class="btn btn-success" id="btn-open-transaction-modal">
+                                                        <i class="fa fa-plus"></i>Tạo giao dịch
+                                                    </button>
                                                 </div>
-                                                <div class="offset-md-6 col-md-3 pull-right">
+                                                <div class="offset-md-4 col-md-3 pull-right">
                                                     <div class="fg-line m-t-5">
                                                         <div class="div-datepicker" id="reportrange2">
                                                             <input id="date-string2" readonly class="date-input form-control text-center">
@@ -367,6 +529,7 @@
     var totaldiscount = 0;
     var table = null;
 
+
     var toMoney = function (val, splitter, unit) {
         var s = splitter || '.';
         var u = unit || '';
@@ -380,8 +543,12 @@
             liveSearch: true,
         });
         //Init customer-store table
+    $("#modal-select-transaction-filter").selectpicker();
 
         $("#acc_current_balance").html(toMoney(@Model.CurrentAccount.Balance, ',', '') + " VND");
+
+
+
 
         //RefreshStudentTransactionTable();
 
@@ -625,6 +792,75 @@
             }
         });
     }*@
+
+
+    ////////////// create transaction modal
+
+
+       $('#btn-open-transaction-modal').on('click', function () {
+
+            $('#create-transaction-modal').modal('show');
+        });
+
+        $('#create-transaction-button').on('click', function () {
+            var str = $('#transaction-amount').val();
+            var amount = str.replace(/[,.VNĐ]/g, '');
+            if ($("#transaction-amount").val() != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateTransaction", "Transaction", new { area = "TransactionManagement"})',
+                    data: {
+                        'studentMajorId': @Model.CurrentAccount.StudentMajorId,
+                        'amount': amount,
+                        //'form': $('input[name=formTransaction-filter]:checked').val(),
+                        //'type': $('input[name=typeTransaction-filter]:checked').val(),
+                        'description': $('#description').val(),
+                        'transactionType': $("#modal-select-transaction-filter").val()
+                        //$('input[name=modal-transaction-filter]:checked').val(),
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            $('#create-transaction-modal').modal('hide');
+                            toastr.success(result.message);
+                            RefreshDatatable();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function (result) {
+                        toastr.error("Error! Something wrong has happened")
+                    }
+                });
+            } else {
+                ShowMessage("Vui lòng chọn mệnh giá giao dịch", 1);
+            }
+        });
+    /////////////end of create transaction modal
+
+        //////validate input money
+        $(".number").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A, Command+A
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $('.currency').blur(function () {
+            var data = $(this).val();
+
+            $(this).val(toMoney(data, ',', 'VNĐ'));
+        });
+
+ /////end validate input money
 
 
 

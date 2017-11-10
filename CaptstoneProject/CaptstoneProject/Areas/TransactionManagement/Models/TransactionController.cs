@@ -75,7 +75,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                             form = (int)TransactionForm.Decrease;
                             break;
                         case (int)TransactionTypeEnum.RefundTuitionFee:
-                            form = (int)TransactionForm.Decrease;
+                            form = (int)TransactionForm.Increase;
                             break;
                         case (int)TransactionTypeEnum.RollbackIncrease:
                             form = (int)TransactionForm.Increase;
@@ -226,7 +226,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                             transactionForm = (int)TransactionForm.Decrease;
                             break;
                         case (int)TransactionTypeEnum.RefundTuitionFee:
-                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionForm = (int)TransactionForm.Increase;
                             break;
                         case (int)TransactionTypeEnum.RollbackIncrease:
                             transactionForm = (int)TransactionForm.Increase;

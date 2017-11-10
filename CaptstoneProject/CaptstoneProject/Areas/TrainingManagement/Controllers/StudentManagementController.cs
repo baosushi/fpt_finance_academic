@@ -145,7 +145,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             transactionForm = (int)TransactionForm.Decrease;
                             break;
                         case (int)TransactionTypeEnum.RefundTuitionFee:
-                            transactionForm = (int)TransactionForm.Decrease;
+                            transactionForm = (int)TransactionForm.Increase;
                             break;
                         case (int)TransactionTypeEnum.RollbackIncrease:
                             transactionForm = (int)TransactionForm.Increase;
