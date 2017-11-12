@@ -129,16 +129,16 @@
                             <div class="modal-dialog" style="width: 700px">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h3>Check Student Code</h3>
+                                        <h3 id="modal-title">Tìm sinh viên</h3>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-horizontal">
                                             <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                    MSSV:
+                                                <label class="col-md-5 f-bold control-label">
+                                                    <b>MSSV:</b>
                                                 </label>
-                                                <div class="col-sm-6">
+                                                <div class="col-md-5">
                                                     <select id="my_student_acc_search" title="Nhập MSSV" data-live-search="true" class="selectpicker my-select">
                                                         <option value="-1">Nothing is Selected</option>
                                                     </select>
@@ -146,7 +146,7 @@
                                             </div>
                                             <div id="transaction-info" class="hidden">
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    <label class="col-md-5 f-bold control-label">
                                                         Tên tài khoản:
                                                     </label>
                                                     <div class="col-sm-8">
@@ -154,7 +154,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    <label class="col-md-5 f-bold control-label">
                                                         Tên học sinh:
                                                     </label>
                                                     <div class="col-sm-8">
@@ -162,7 +162,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    <label class="col-md-5 f-bold control-label">
                                                         Số tiền:
                                                     </label>
                                                     <div class="col-sm-8">
@@ -252,7 +252,7 @@
                                                     </div>*@
                                                 <div class="form-group col-md-10">
                                                     <div>
-                                                        <label class="control-label f-bold">
+                                                        <label class="col-md-5 f-bold control-label">
                                                             Loại giao dịch:
                                                         </label>
                                                     </div>
@@ -266,7 +266,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                    <label class="col-md-5 f-bold control-label">
                                                         Notes:
                                                     </label>
                                                     <div class="col-sm-8">
@@ -569,6 +569,7 @@
         $('#my_student_acc_search').change(function () {
             var value = $('#my_student_acc_search').val();
             if (value != -1) {
+                $("#modal-title").html("Tạo giao dịch");
                 $.ajax({
                     type: "post",
                     url: "@Url.Action("GetAccountInformation")",
@@ -594,6 +595,7 @@
 
                 });
             } else {
+                $("#modal-title").html("Tìm sinh viên");
                 $("#account-name").val('');
                 $("#student-name").val('');
                 $('#create-transaction-button').attr('disabled', 'disabled');
