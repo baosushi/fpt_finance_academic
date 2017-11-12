@@ -12,23 +12,18 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CourseMark
+    public partial class StudentType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CourseMark()
+        public StudentType()
         {
-            this.StudentCourseMarks = new HashSet<StudentCourseMark>();
+            this.Students = new HashSet<Student>();
         }
     
         public int Id { get; set; }
-        public string ComponentName { get; set; }
-        public double Percentage { get; set; }
-        public Nullable<bool> IsFinal { get; set; }
-        public Nullable<int> Order { get; set; }
-        public int CourseId { get; set; }
+        public string TypeName { get; set; }
     
-        public virtual Course Course { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudentCourseMark> StudentCourseMarks { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }
