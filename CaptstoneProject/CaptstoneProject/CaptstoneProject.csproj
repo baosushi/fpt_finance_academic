@@ -582,6 +582,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FGReader\FuGradeLib\FuGradeLib.csproj">
+      <Project>{ad2d0d67-0f6b-4d8e-9052-121d5c115162}</Project>
+      <Name>FuGradeLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataService\DataService.csproj">
       <Project>{1119fac8-6fd3-483d-9271-756b06e17eb3}</Project>
       <Name>DataService</Name>
