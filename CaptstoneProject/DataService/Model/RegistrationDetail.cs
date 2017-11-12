@@ -15,10 +15,11 @@ namespace DataService.Model
     public partial class RegistrationDetail
     {
         public int Id { get; set; }
+        public Nullable<int> PreferredSlot { get; set; }
         public int RegistrationId { get; set; }
         public int CourseId { get; set; }
-        public Nullable<int> PreferredSlot { get; set; }
     
         public virtual Registration Registration { get; set; }
+        public virtual Course Course { get; set; }
     }
 }

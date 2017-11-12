@@ -21,8 +21,8 @@ namespace DataService.Model
         }
     
         public int Id { get; set; }
-        public Nullable<System.DateTime> RegisteredBy { get; set; }
-        public Nullable<int> StudentMajorId { get; set; }
+        public System.DateTime RegisteredBy { get; set; }
+        public int StudentMajorId { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<double> FinalAmount { get; set; }
         public Nullable<int> RegistrationDetailTotalQuantity { get; set; }

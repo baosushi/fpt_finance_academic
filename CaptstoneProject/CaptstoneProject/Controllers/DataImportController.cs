@@ -554,9 +554,13 @@ namespace CaptstoneProject.Controllers
                                     newSubjectMark.ComponentName = subjectMark;
                                     //SubjectMark.Percentage = subjectMark.Percentage;
                                     newSubjectMark.SubjectId = subject.Id;
+                                    newSubjectMark.CurrentSyllabus = "2";
 
                                     context.SubjectMarks.Add(newSubjectMark);
                                 }
+
+                                subject.CurrentSyllabus = "2";
+                                course.CurrentSyllabus = "2";
 
                                 context.SaveChanges();
                             }
@@ -637,10 +641,10 @@ namespace CaptstoneProject.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { message = "exception", exception = e.Message });
+                return Json(new { message = "exception", exception = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { message = "complete" }); ;
+            return Json(new { message = "complete" }, JsonRequestBehavior.AllowGet);
         }
 
         private string GetLoginName(string name, string roll)
@@ -652,9 +656,9 @@ namespace CaptstoneProject.Controllers
             result += parts.Last();
             parts.RemoveAt(parts.Count - 1);
             result += String.Join("", parts.Select(q => q[0]).ToArray());
-            result += roll.ToLower();
+            result += roll;
 
-            return result;
+            return result.ToLower();
         }
 
         public static string RemoveDiacritics(string text)
@@ -668,7 +672,7 @@ namespace CaptstoneProject.Controllers
 
             var cleanStr = new string(chars.ToArray()).Normalize(System.Text.NormalizationForm.FormC);
 
-            return cleanStr;
+            return cleanStr.Replace("Đ", "D").Replace("đ", "d");
         }
     }
 }

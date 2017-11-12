@@ -34,7 +34,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                 var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
                 //var subjects = context.TeacherSubjects.Where(q => q.Id == teacher.Id && q.SubjectId == subjectId).ToList();
-                subjectId = subjectId == -1 ? context.TeacherSubjects.Where(q => q.Id == teacher.Id).FirstOrDefault().SubjectId : subjectId;
+                subjectId = subjectId == -1 ? context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).FirstOrDefault().SubjectId : subjectId;
                 //startDate = semester.StartDate.Value;
                 //endDate = semester.EndDate.Value;
                 if (all)
@@ -62,8 +62,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                           Name = q.Subject.SubjectName,
                           Code = q.Subject.SubjectCode,
                           Class = q.ClassName,
-                          StartDate = q.StartDate.Value,
-                          EndDate = q.EndDate.Value,
+                          StartDate = q.StartDate.HasValue ? q.StartDate.Value : new DateTime(),
+                          EndDate = q.EndDate.HasValue ? q.EndDate.Value : new DateTime(),
                           Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                       }).ToList();
                 }
@@ -100,7 +100,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                     if (course != null && course.Teacher.LoginName == loginName)
                     {
-                        var componentsEdit = course.CourseMarks.Where(q => q.IsFinal != true || q.IsFinal == null).Select(q => new MarkComp
+                        var componentsEdit = course.CourseMarks.Where(q => q.IsFinal != true || !q.IsFinal.HasValue).Select(q => new MarkComp
                         {
                             Name = q.ComponentName,
                             Id = q.Id,
@@ -128,7 +128,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //});
                         DateTime currentDate = DateTime.Now;
                         bool readySub = false;
-                        if ((course.EndDate.Value == null ? currentDate : course.EndDate.Value).Subtract(currentDate).Days <= 14)
+                        if ((course.EndDate == null ? currentDate : course.EndDate.Value).Subtract(currentDate).Days <= 14)
                         {
                             readySub = true;
                         }

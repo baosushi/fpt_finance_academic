@@ -12,15 +12,8 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SubjectMark
+    public partial class Receipt
     {
         public int Id { get; set; }
-        public string ComponentName { get; set; }
-        public double Percentage { get; set; }
-        public int SubjectId { get; set; }
-        public string CurrentSyllabus { get; set; }
-        public Nullable<System.DateTime> EffectivenessDate { get; set; }
-    
-        public virtual Subject Subject { get; set; }
     }
 }
