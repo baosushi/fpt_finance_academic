@@ -286,8 +286,12 @@
   <ItemGroup>
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\img\add-money.png" />
     <Content Include="Content\img\FPTMM.PNG" />
     <Content Include="Content\img\orange-and-white-bg.png" />
+    <Content Include="Content\img\pay.png" />
+    <Content Include="Content\img\refund.png" />
+    <Content Include="Content\img\rollback-money.png" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.css" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap.min.css" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.bootstrap4.css" />
@@ -302,6 +306,7 @@
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\css\fixedColumns.semanticui.min.css" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\js\dataTables.fixedColumns.js" />
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\js\dataTables.fixedColumns.min.js" />
+    <Content Include="Content\js\datatables\responsive-dataTable\dataTables.responsive.min.js" />
     <Content Include="Content\js\highchart\highcharts.src.js" />
     <Content Include="Content\plugin\bootstrap-daterangepicker\daterangepicker.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -377,6 +382,7 @@
     <Content Include="Content\plugin\c3\c3.min.css" />
     <Content Include="Content\plugin\chartist\chartist.min.css" />
     <Content Include="Content\plugin\datatables\datatables.css" />
+    <Content Include="Content\plugin\datatables\responsive-dataTable\responsive.dataTables.min.css" />
     <Content Include="Content\plugin\date-range-picker\daterangepicker-bs3.css" />
     <Content Include="Content\plugin\fonts\glyphicons-halflings-regular.eot\index.html" />
     <Content Include="Content\plugin\fonts\glyphicons-halflings-regular.svg\index.html" />

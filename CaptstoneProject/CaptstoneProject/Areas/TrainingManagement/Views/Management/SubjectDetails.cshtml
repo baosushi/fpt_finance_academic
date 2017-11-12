@@ -22,14 +22,17 @@
         cursor: default;
         background: #ffbf0a;
     }
+
     .btn_remove_subjectComp {
         float: right;
         background: rgba(239, 65, 12, 0.77);
-        color:white;
+        color: white;
     }
-    .input-create-subComponent{
+
+    .input-create-subComponent {
         margin-bottom: 19px;
     }
+
     .my-panel-footer {
         border-top: 1px solid rgba(128, 128, 128, 0.42);
         padding: 20px;
@@ -102,37 +105,38 @@
                                     <div class="col-md-6">
 
                                         <div>
-                                            <input type="text" class="input-create-subComponent" value="" placeholder="Name" />
-                                            <input type="text" class="input-create-subComponent" value="" placeholder="Quantity" />
-                                            <input type="number" class="input-create-subComponent" style="width:45%" step="1" max="100" min="0" value="" placeholder="Percentage" />
+                                            <input type="text" class="input-create-subComponent" name="name" value="" placeholder="Name" />
+                                            <input type="text" class="input-create-subComponent" name="quantity" value="" placeholder="Quantity" />
+                                            <input type="number" class="input-create-subComponent" name="percentage" style="width:45%" step="1" max="100" min="0" value="" placeholder="Percentage" />
                                         </div>
                                         <div class="pretty p-default p-curve p-thick p-smooth">
-                                            <input type="checkbox" />
+                                            <input type="checkbox" name="isFinal" />
                                             <div class="state p-warning">
                                                 <label>IsFinal</label>
                                             </div>
                                         </div>
                                         <div class="pretty p-default p-curve p-thick p-smooth">
-                                            <input type="checkbox" />
+                                            <input type="checkbox" name="hasRetake" />
                                             <div class="state p-warning">
                                                 <label>Has Retake</label>
                                             </div>
                                         </div>
-                                        <button class="btn btn-success">Create Component</button>
+                                        <button class="btn btn-success" id="btn-create-component">Create Component</button>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="container table-responsive" style="overflow-x:hidden;">
-                                            <ul class="list-group">
-                                                <li class="list-group-item"><div>Quiz 1</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
-                                                <li class="list-group-item"><div>Quiz 2</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
-                                                <li class="list-group-item"><div>Final Exam</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                            <ul class="list-group" id="component-container">
+                                                @*<li class="list-group-item"><div>Quiz 1</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                                    <li class="list-group-item"><div>Quiz 2</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
+                                                    <li class="list-group-item"><div>Final Exam</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>*@
+
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-footer my-panel-footer">
-                                <button style="float:right;" class="btn btn-default">Apply this Component</button>
+                                <button style="float:right;" id="apply-subject-component" class="btn btn-default">Apply this Component</button>
                             </div>
                         </div>
 
@@ -147,6 +151,9 @@
 </div>
 
 <script>
+
+    var subjectComponentArray = new Array();
+
     $(document).ready(function () {
         $('#subjectComponent_table').DataTable({
             //rowGroup: {
@@ -176,6 +183,180 @@
             "columnDefs": [{ "visible": false, "targets": [0, 3] }, { "className": "dt-center", "targets": "_all" },],
             "order": [[0, "asc"]]
         });
+
+        $("#btn-create-component").on('click', function () {
+            var isFinal = $("input[name='isFinal']:checked").val();
+            var hasRetake = $("input[name='hasRetake']:checked").val();
+
+            var name = $("input[name='name']").val();
+            var quantity = $("input[name='quantity']").val();
+            var percentage = $("input[name='percentage']").val();
+            if (!name || name.length == 0) {
+                return toastr.error("Name must not empty");
+            }
+            if (isNaN(quantity)) {
+               return toastr.error("Quantity must be a number");
+            }
+            if (quantity < 0) {
+                return toastr.error("Quantity must be positive");
+            }
+            if (percentage < 0) {
+                return toastr.error("Percentage must be positive");
+            }
+            if (typeof name != undefined && typeof quantity != undefined && typeof percentage != undefined) {
+                if (quantity > 1) {
+                    var group = new Date().getTime();
+                    for (var i = 0; i < quantity; i++) {
+                        var itemName = name + (i+1);
+                        var itemPercentage = percentage / quantity;
+                        var index = subjectComponentArray.length;
+                        $("#component-container").append(''
+                            + '<li class="list-group-item" data-index="' + index + '" data-group="' + group +'">'
+                            + '<div>' + itemName + '</div>'
+                            + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                            + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + index + ', '+group+')">'
+                            + '<i class="fa fa-trash"></i>'
+                            + '</button>'
+                            + '</li>');
+
+                        subjectComponentArray.push({ SubjectComponentName: itemName, Percentage: itemPercentage, IsFinal: false});
+
+                        if (isFinal != undefined && hasRetake != undefined) {
+                            subjectComponentArray.push({ SubjectComponentName: itemName + " (2nd)", Percentage: itemPercentage });
+                            $("#component-container").append(''
+                                + '<li class="list-group-item" data-index="' + (index + 1) + '" data-group="' + group +'">'
+                                + '<div>' + itemName + ' (2nd)' + '</div>'
+                                + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                                + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + (index + 1) + ', ' + group +')">'
+                                + '<i class="fa fa-trash"></i>'
+                                + '</button>'
+                                + '</li>');
+                            subjectComponentArray[subjectComponentArray.length - 1].IsFinal = true;
+                            subjectComponentArray[subjectComponentArray.length - 2].IsFinal = true;
+                        }
+                        else if (isFinal != undefined) {
+                            subjectComponentArray[subjectComponentArray.length - 1].IsFinal = true;
+                        }
+                        else if (hasRetake != undefined) {
+                            subjectComponentArray.push({ SubjectComponentName: itemName + " (2nd)", Percentage: itemPercentage, IsFinal: false });
+                            $("#component-container").append(''
+                                + '<li class="list-group-item" data-index="' + (index + 1) + '" data-group="' + group +'">'
+                                + '<div>' + itemName + ' (2nd)' + '</div>'
+                                + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                                + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + (index + 1) + ', ' + group +')">'
+                                + '<i class="fa fa-trash"></i>'
+                                + '</button>'
+                                + '</li>');
+                        }
+                    }
+                } else {
+                    var itemName = name;
+                    var itemPercentage = percentage / quantity;
+                    var index = subjectComponentArray.length;
+                    var group = -1;
+                    $("#component-container").append(''
+                        + '<li class="list-group-item" data-index="' + index + '">'
+                        + '<div>' + itemName + '</div>'
+                        + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                        + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + index + ', ' + group +')">'
+                        + '<i class="fa fa-trash"></i>'
+                        + '</button>'
+                        + '</li>');
+                    subjectComponentArray.push({ SubjectComponentName: itemName, Percentage: itemPercentage, IsFinal: false });
+
+                    if (isFinal != undefined && hasRetake != undefined) {
+                        group = new Date().getTime();
+                        $("li[data-index='" + index + "']").setAttribute("data-group",group);
+                        subjectComponentArray.push({ SubjectComponentName: itemName + " (2nd)", Percentage: itemPercentage });
+                        $("#component-container").append(''
+                            + '<li class="list-group-item" data-index="' + (index + 1) + '">'
+                            + '<div>' + itemName + ' (2nd)' + '</div>'
+                            + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                            + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + (index + 1) + ', ' + group +')">'
+                            + '<i class="fa fa-trash"></i>'
+                            + '</button>'
+                            + '</li>');
+                        subjectComponentArray[subjectComponentArray.length - 1].IsFinal = true;
+                        subjectComponentArray[subjectComponentArray.length - 2].IsFinal = true;
+                    }
+                    else if (isFinal != undefined) {
+                        subjectComponentArray[subjectComponentArray.length - 1].IsFinal = true;
+                    }
+                    else if (hasRetake != undefined) {
+                        subjectComponentArray.push({ SubjectComponentName: itemName + " (2nd)", Percentage: itemPercentage, IsFinal: false });
+                        group = new Date().getTime();
+                        $("li[data-index='" + index + "']").setAttribute("data-group", group);
+                        $("#component-container").append(''
+                            + '<li class="list-group-item" data-index="' + (index + 1) + '">'
+                            + '<div>' + itemName + ' (2nd)' + '</div>'
+                            + '<span class="badge">' + itemPercentage + '%' + '</span>'
+                            + '<button class="btn btn_remove_subjectComp" onclick="deleteSubjectComponent(' + (index + 1) + ', ' + group +')">'
+                            + '<i class="fa fa-trash"></i>'
+                            + '</button>'
+                            + '</li>');
+                    }
+
+                }
+            }
+
+        });
+
+    });
+    function deleteSubjectComponent(index, group) {
+
+        if (group != -1) {
+            var deleteArray = $("li[data-group='" + group + "']");
+            for (var i = 0; i < deleteArray.length; i++) {
+                var removeItem = deleteArray[i];
+                 var index = removeItem.getAttribute("data-index");
+                 removeItem.remove();
+                //replace remove item with null so the index won't change
+                 subjectComponentArray.splice(index, 1, undefined);
+            }
+        } else {
+
+            $("li[data-index='" + index + "']").remove();
+            //replace remove item with null so the index won't change
+            subjectComponentArray.splice(index, 1, undefined);
+        }
+    }
+
+    $("#apply-subject-component").on('click', function () {
+        swal({
+            title: "Are you sure",
+            text: "Submit to apply this Subject Component",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            //var subjectMarkList = JSON.stringify({ subjectMarkList: subjectComponentArray });
+
+            //exclude null from array before send
+            for (var i = 0; i < subjectComponentArray.length; i++) {
+                if (subjectComponentArray[i] == undefined) {
+                    subjectComponentArray.splice(i, 1);
+                    i--;
+                }
+            }
+            $.ajax({
+            type: "post",
+            url: "@Url.Action("AddSubjectComponent")",
+            data: { subjectMarkList: subjectComponentArray, subjectId: @ViewBag.SubjectId },
+            success: function (result) {
+                if (result.success) {
+                    swal("Successed", result.message, "success");
+                    //$('#subjectComponent_table').DataTable().ajax.reload();
+                } else {
+                    swal("Error", result.message, "error");
+                }
+                subjectComponentArray.splice(0, subjectComponentArray.length);
+                $("#component-container").html("");
+            }
+
+             });
+        });
+
 
     });
 </script>
