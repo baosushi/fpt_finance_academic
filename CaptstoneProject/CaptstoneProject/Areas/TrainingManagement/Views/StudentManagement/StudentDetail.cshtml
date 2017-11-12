@@ -54,6 +54,14 @@
     .header-padding {
         padding: 10px 15px;
     }
+
+    .btn-fix {
+        padding: 4px 12px !important;
+        line-height: unset !important;
+    }
+    .label{
+        margin-bottom: 0;
+    }
 </style>
 
 <div class="content">
@@ -63,24 +71,24 @@
             <div class="panel-body" style="overflow:hidden">
 
                 <div>
-                    <h3 style="color: #1143b7; padding-left:10px;">Student: @Model.Name </h3>
+                    <h3 style="padding-left:10px;"><i class="fa fa-user" style="color:#58c93b"></i> @Model.Name </h3>
                 </div>
                 <div class="row" style="padding-left:10px;">
-                    <ul class="nav nav-pills" style="color:#1143b7">
+                    <ul class="nav nav-pills">
 
                         @if (!string.IsNullOrWhiteSpace(this.Model.Email))
                         {
-                            <li class="header-padding" title="Email"><i class="fa fa-envelope">Email: </i> @this.Model.Email</li>
+                            <li class="header-padding" title="Email"><i class="fa fa-envelope"> Email: </i> @this.Model.Email</li>
                         }
                         @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
                         {
-                            <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i>MSSV: @this.Model.CurrentStudentCode</li>
+                            <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i> MSSV: @this.Model.CurrentStudentCode</li>
                         }
                         @if (Model.CurrentAccount != null)
                         {
                             <li class="header-padding" title=""><i class="fa fa-user-circle-o"></i> Loại:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
                             <li class="header-padding" title="ha"><i class="fa fa-calendar"></i> Ngày tạo: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
-                            <li class="header-padding" title=""><i class="fa fa-credit-card"></i>Số dư tài khoản: <span id="acc_current_balance" style="color:forestgreen"></span> </li>
+                            <li class="header-padding" title=""><i class="fa fa-credit-card"></i> Số dư tài khoản: <span id="acc_current_balance" style="color:forestgreen"></span> </li>
                         }
 
                     </ul>
@@ -93,40 +101,42 @@
                         <div class="modal-dialog" style="width: 700px">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3>Check Student Code</h3>
+                                    <h3>Tạo giao dịch</h3>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-horizontal">
                                         <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                    MSSV: @Model.Id
-                                                    @Model.CurrentAccount.Name
-                                                    @Model.Name
-                                                </label>
-                                            </div>
+                                            <label class="col-md-5 control-label">
+                                                <b>MSSV: </b>@Model.CurrentStudentCode
+                                                @*@Model.CurrentAccount.Name*@
+                                            </label>
+                                            <label class="col-md-5 control-label">
+                                                <b>Tên: </b>@Model.Name
+                                            </label>
+                                        </div>
                                         <div id="transaction-info" class="">
                                             <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                <label class="col-md-5 control-label f-bold">
                                                     Tên tài khoản:
                                                 </label>
                                                 <div class="col-sm-8">
                                                     <input id="account-name" class="form-control" type="text" value="@Model.CurrentAccount.Name" readonly />
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                            @*<div class="form-group">
+                                                <label class="col-md-5 control-label">
                                                     Tên học sinh:
                                                 </label>
-                                                <div class="col-sm-8">
+                                                <div class="col-md-5">
                                                     <input id="student-name" class="form-control" type="text" value="@Model.Name" readonly />
                                                 </div>
-                                            </div>
+                                            </div>*@
                                             <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
+                                                <label class="col-md-5 f-bold control-label">
                                                     Số tiền:
                                                 </label>
-                                                <div class="col-sm-8">
+                                                <div class="col-md-5">
                                                     <input id="transaction-amount" class="form-control number currency" type="text" required />
                                                 </div>
                                             </div>
@@ -227,10 +237,10 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-sm-2 col-sm-offset-1 control-label">
-                                                    Notes:
+                                                <label class="col-md-5 f-bold control-label">
+                                                    Chú thích:
                                                 </label>
-                                                <div class="col-sm-8">
+                                                <div class="col-md-8">
                                                     <input id="description" class="form-control" type="text" maxlength="50" placeholder="Nội dung" required />
                                                 </div>
                                             </div>
@@ -266,7 +276,7 @@
                                                     <div class="fg-line m-t-5">
                                                         <div class="div-datepicker" id="reportrange2">
                                                             <input id="date-string2" readonly class="date-input form-control text-center">
-                                                            <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
+                                                            <a class="myCelenderA" id=""><i class="fa fa-calendar" style="padding-top:10px"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -356,7 +366,7 @@
                                                 <div class="form-group col-md-10">
                                                     <div>
                                                         <label class="control-label f-bold">
-                                                            Transaction Type:
+                                                            Loại giao dịch:
                                                         </label>
                                                     </div>
                                                     <select id="select-transaction-filter">
@@ -543,7 +553,7 @@
             liveSearch: true,
         });
         //Init customer-store table
-    $("#modal-select-transaction-filter").selectpicker();
+        $("#modal-select-transaction-filter").selectpicker();
 
         $("#acc_current_balance").html(toMoney(@Model.CurrentAccount.Balance, ',', '') + " VND");
 
@@ -643,7 +653,7 @@
             "processing": true,
             "columnDefs": [
               {
-                  "targets": [0, 1, 2, 3, 4, 5, 6],
+                  "targets": [0, 1, 2, 3, 4, 5, 6, 7],
                   "className": "dt-center",
               },
               {
@@ -668,17 +678,17 @@
                   "targets": [4],
                   "searchable": false,
                   "render": function (data, type, row) {
-                    var html = "";
-                        if (data == '@((int)TransactionStatus.New)') {
-                            html = "<div class='label label-warning'>@TransactionStatus.New.GetEnumDisplayName()</div>"
-                        }
-                        else if (data == '@((int)TransactionStatus.Approve)') {
-                            html = "<div class='label label-success'>@TransactionStatus.Approve.GetEnumDisplayName()</div>"
-                        }
-                        else {
-                            html = "<div class='label label-danger'>@TransactionStatus.Cancel.GetEnumDisplayName()</div>"
-                        }
-                        return html;
+                      var html = "";
+                      if (data == '@((int)TransactionStatus.New)') {
+                          html = "<div class='label label-warning'>@TransactionStatus.New.GetEnumDisplayName()</div>"
+                      }
+                      else if (data == '@((int)TransactionStatus.Approve)') {
+                          html = "<div class='label label-success'>@TransactionStatus.Approve.GetEnumDisplayName()</div>"
+                      }
+                      else {
+                          html = "<div class='label label-danger'>@TransactionStatus.Cancel.GetEnumDisplayName()</div>"
+                      }
+                      return html;
                   }
               },
               {
@@ -687,7 +697,7 @@
                   "render": function (data, type, row) {
                       var html = "";
                       switch (data) {
-                            case @((int)TransactionTypeEnum.AddFunds):
+                          case @((int)TransactionTypeEnum.AddFunds):
                               html = "<label class='label label-success' >@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</label>";
                               break;
                           case @((int)TransactionTypeEnum.TuitionPayment):
@@ -714,11 +724,11 @@
                       var html = "";
                       var isNew = row[4];
                       if (isNew == '@((int)TransactionStatus.New)') {
-                            html = "<button type='button' onclick='openApproveTransModal("+data+")' class='btn btn-warning'><i class='fa fa-pencil-square'></i></button>"
-                        } else {
-                            html = "-";
-                        }
-                        return html;
+                          html = "<button type='button' onclick='openApproveTransModal("+data+")' class='btn-fix btn btn-warning'><i class='fa fa-pencil-square'></i></button>"
+                      } else {
+                          html = "-";
+                      }
+                      return html;
                   }
               },
             ],
@@ -727,7 +737,7 @@
     }
 
     ///// approve modal
-     function openApproveTransModal(transactionId) {
+    function openApproveTransModal(transactionId) {
         $("#modal-transactionId").val(transactionId);
         $("#approveTransactionModal").modal('show');
     }
@@ -752,11 +762,11 @@
                 toastr.error(err);
             }
         });
-     }
+    }
     $('#approveTransactionModal').on('hidden.bs.modal', function () {
         $("#modal-transactionId").val('');
     })
-//////end of approve modal
+    //////end of approve modal
 
 
     ///////student account table
@@ -797,70 +807,70 @@
     ////////////// create transaction modal
 
 
-       $('#btn-open-transaction-modal').on('click', function () {
+    $('#btn-open-transaction-modal').on('click', function () {
 
-            $('#create-transaction-modal').modal('show');
-        });
+        $('#create-transaction-modal').modal('show');
+    });
 
-        $('#create-transaction-button').on('click', function () {
-            var str = $('#transaction-amount').val();
-            var amount = str.replace(/[,.VNĐ]/g, '');
-            if ($("#transaction-amount").val() != '') {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("CreateTransaction", "Transaction", new { area = "TransactionManagement"})',
-                    data: {
-                        'studentMajorId': @Model.CurrentAccount.StudentMajorId,
-                        'amount': amount,
-                        //'form': $('input[name=formTransaction-filter]:checked').val(),
-                        //'type': $('input[name=typeTransaction-filter]:checked').val(),
-                        'description': $('#description').val(),
-                        'transactionType': $("#modal-select-transaction-filter").val()
-                        //$('input[name=modal-transaction-filter]:checked').val(),
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            $('#create-transaction-modal').modal('hide');
-                            toastr.success(result.message);
-                            RefreshDatatable();
-                        } else {
-                            toastr.error(result.message);
-                        }
-                    },
-                    error: function (result) {
-                        toastr.error("Error! Something wrong has happened")
+    $('#create-transaction-button').on('click', function () {
+        var str = $('#transaction-amount').val();
+        var amount = str.replace(/[,.VNĐ]/g, '');
+        if ($("#transaction-amount").val() != '') {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateTransaction", "Transaction", new { area = "TransactionManagement"})',
+                data: {
+                    'studentMajorId': @Model.CurrentAccount.StudentMajorId,
+                    'amount': amount,
+                    //'form': $('input[name=formTransaction-filter]:checked').val(),
+                    //'type': $('input[name=typeTransaction-filter]:checked').val(),
+                    'description': $('#description').val(),
+                    'transactionType': $("#modal-select-transaction-filter").val()
+                    //$('input[name=modal-transaction-filter]:checked').val(),
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $('#create-transaction-modal').modal('hide');
+                        toastr.success(result.message);
+                        RefreshStudentTransactionTable();
+                    } else {
+                        toastr.error(result.message);
                     }
-                });
-            } else {
-                ShowMessage("Vui lòng chọn mệnh giá giao dịch", 1);
-            }
-        });
+                },
+                error: function (result) {
+                    toastr.error("Error! Something wrong has happened")
+                }
+            });
+        } else {
+            ShowMessage("Vui lòng chọn mệnh giá giao dịch", 1);
+        }
+    });
     /////////////end of create transaction modal
 
-        //////validate input money
-        $(".number").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A, Command+A
-                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-                // Allow: home, end, left, right, down, up
-                (e.keyCode >= 35 && e.keyCode <= 40)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
+    //////validate input money
+    $(".number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+            // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
 
-        $('.currency').blur(function () {
-            var data = $(this).val();
+    $('.currency').blur(function () {
+        var data = $(this).val();
 
-            $(this).val(toMoney(data, ',', 'VNĐ'));
-        });
+        $(this).val(toMoney(data, ',', 'VNĐ'));
+    });
 
- /////end validate input money
+    /////end validate input money
 
 
 

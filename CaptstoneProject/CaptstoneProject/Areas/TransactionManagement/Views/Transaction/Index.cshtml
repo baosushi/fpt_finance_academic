@@ -69,6 +69,10 @@
         overflow: hidden;
     }
 
+    .label{
+             margin-bottom: 0; 
+    }
+
     /*img .label-img {
         width: 30rem;
         height: 30rem;
@@ -80,17 +84,40 @@
     <div class="container-default animate fadeInRight">
 
         <div class="panel panel-default">
-            <div class="panel-title row">
-                <div class="col-md-5"><i class="fa fa-user" style="color:blue"></i>Quản lý giao dịch</div>
-                <div class="offset-md-5 col-md-2">
+            <div class="panel-title" style="margin-bottom: -20px;">
+                <i class="fa fa-user" style="color:#3e83e1"></i> Quản lý giao dịch
+                <hr />
+            </div>
+            <div class="panel-body" style="overflow:hidden">
+                @*<div class="offset-md-5 col-md-2">
                     <button type="submit" id="importExcel" class="btn btn-primary btn-sm pull-right">
                         <i class="fa fa-upload"></i>
                         Import Excel
                     </button>
+                </div>*@
+                @*<div class="row">
+                    <div class="offset-8 col-md-4">
+                        <div class="pull-right">
+                            <button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Template</button>
+                            <button class="btn-primary btn" id="upload-btn">Import Excel</button>
+                            <button class="btn btn-primary hidden" id="submit-btn">Submit file</button>
+                            <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                            <div class="progress" style="display:none">
+                                <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br />
-            <div class="panel-body" style="overflow:hidden">
+                <br />
+                <div class="col-md-8">
+                    <p id="file-info" class="pull-right hidden" style="color: red;"><span style="text-decoration: underline;"></span> file has been selected</p>
+                </div>
+                <div class="col-md-1">
+                    <a id="cancel-file" href="#" class="pull-right hidden">Cancel</a>
+                </div>*@
                 <div>
                     <input type="hidden" id="sTime" />
                     <input type="hidden" id="eTime" />
@@ -272,7 +299,7 @@
                                         <div class="fg-line m-t-5">
                                             <div id="reportrange" class="div-datepicker">
                                                 <input id="date-string" readonly class="date-input form-control text-center">
-                                                <a class="myCelenderA" id="" style="padding-top: 11px;"><i class="fa fa-calendar"></i></a>
+                                                <a class="myCelenderA" id=""><i style="padding-top: 10px;" class="fa fa-calendar"></i></a>
                                             </div>
                                         </div>
                                         <input type="hidden" id="sTime" />

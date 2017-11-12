@@ -1039,10 +1039,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     empFileName += item + " ,";
                 }
-                return Json(new { success = false, message = "Upload Students successed! But " + empFileName + " file are empty" });
+                return Json(new { success = false, message = "Upload subjects successed! But " + empFileName + " file are empty" });
             }
 
-            return Json(new { success = true, message = "Upload Students successed" });
+            return Json(new { success = true, message = "Upload Subjects successed" });
         }
 
         [AllowAnonymous]

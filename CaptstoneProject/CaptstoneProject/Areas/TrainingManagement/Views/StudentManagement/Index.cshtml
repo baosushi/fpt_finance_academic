@@ -5,15 +5,15 @@
 <div class="content">
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
-            <div class="panel-title"></div>
+            <div class="panel-title"> <i class="fa fa-user-circle-o" style="color:#fc7401"></i> Student Financial Management</div>
             <div class="panel-body">
 
 
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-8">
                         <h3>Student Financial Management</h3>
                     </div>
-                    @*<div class="col-md-2">
+                    <div class="col-md-2">
                         <button type="submit" id="exportCSV" class="btn btn-primary btn-sm pull-right">
                             <i class="fa fa-download"></i>
                             Export
@@ -23,8 +23,8 @@
                         <a href="@Url.Action("Create")" style="font-family: sans-serif;padding: 5px 14px;font-size:12px;" class="btn btn-primary pull-right">
                             <i class="left-icon fa fa-plus"></i> Add student
                         </a>
-                    </div>*@
-                </div>
+                    </div>
+                </div>*@
                 <hr />
 
                 <form id="formCustList" action="@Url.Action("ExportCustomerList","Customer")">
