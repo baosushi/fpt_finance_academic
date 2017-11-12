@@ -164,5 +164,12 @@ namespace CaptstoneProject.Models
             public string CurrentStudentCode { get; set; }
         }
 
+        public class SubjectMarkModel
+        {
+            public string SubjectComponentName { get; set; }
+            public float Percentage { get; set; }
+            public bool IsFinal { get; set; }
+        }
+
     }
 }

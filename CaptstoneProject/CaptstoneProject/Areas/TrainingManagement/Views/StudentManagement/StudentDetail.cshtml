@@ -687,20 +687,20 @@
                   "render": function (data, type, row) {
                       var html = "";
                       switch (data) {
-                          case @((int)TransactionTypeEnum.AddFunds):
-                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.AddFunds.GetEnumDisplayName()' src='/Content/img/add-money.png'/>";
+                            case @((int)TransactionTypeEnum.AddFunds):
+                              html = "<label class='label label-success' >@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</label>";
                               break;
                           case @((int)TransactionTypeEnum.TuitionPayment):
-                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()' src='/Content/img/pay.png />";
+                              html = "<label class='label label-info' >@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</label>";
                               break;
                           case @((int)TransactionTypeEnum.RefundTuitionFee):
-                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()' src='/Content/img/refund.png />";
+                              html = "<label class='label label-warning'>@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</label>";
                               break;k
                           case @((int)TransactionTypeEnum.RollbackIncrease):
-                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              html = "<label class='label label-danger'>@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</label>";
                               break;
                           case @((int)TransactionTypeEnum.RollbackDecrease):
-                              html = "<img class='label-img img-rounded' width='30rem' height='30rem' title='@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()' src='/Content/img/rollback-money.png />";
+                              html = "<label class='label label-danger' >@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</label>";
                               break;
 
                       }

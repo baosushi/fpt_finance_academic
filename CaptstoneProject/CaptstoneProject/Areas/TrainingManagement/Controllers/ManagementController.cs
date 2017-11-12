@@ -18,6 +18,7 @@ using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Ajax.Utilities;
+using System.Globalization;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -1170,7 +1171,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                     var loginName = row.GetCell(dataCol + 0).ToString().Trim();
                                     var studentCode = row.GetCell(dataCol + 1).ToString().Trim();
                                     var name = row.GetCell(dataCol + 2).ToString().Trim();
-
                                     Student student;
 
                                     var stuMajorExist = context.StudentMajors.Where(q => q.StudentCode == studentCode).FirstOrDefault();
@@ -1252,6 +1252,136 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
             return null;
         }
+
+        public ActionResult GetSubject4DataTable(JQueryDataTableParamModel param)
+        {
+            try
+            {
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    ////use for serverside DataTable
+                    //int count = 0;
+                    //count = param.iDisplayStart;
+                    //var search = context.Subjects.Where(q => String.IsNullOrEmpty(param.sSearch) || q.SubjectName.ToUpper().Contains(param.sSearch.ToUpper()));
+                    //var subjectList = search
+                    //  .Skip(param.iDisplayStart)
+                    //  .Take(param.iDisplayLength)
+                    //  .ToList()
+                    //  .Select(q => new IConvertible[]{
+                    //++count,
+                    //q.SubjectCode,
+                    //q.SubjectName,
+                    //q.Id
+                    //  });
+
+                    //var totalRecords = subjectList.Count();
+
+                    //return Json(new
+                    //{
+                    //    success = true,
+                    //    sEcho = param.sEcho,
+                    //    iTotalRecords = totalRecords,
+                    //    iTotalDisplayRecords = search.Count(),
+                    //    aaData = subjectList
+                    //}, JsonRequestBehavior.AllowGet);
+
+                    int count = 1;
+                    var subjectList = context.Subjects.OrderBy(q => q.Id).AsEnumerable().Select(q => new IConvertible[]
+                     {
+                        count++,
+                        q.SubjectCode,
+                        q.SubjectName,
+                        q.Id
+                     }).ToList();
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = subjectList.Count(),
+                        iTotalDisplayRecords = subjectList.Count(),
+                        aaData = subjectList
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = true, message = e.Message });
+            }
+        }
+
+        public ActionResult SubjectDetails(int subjectId = -1)
+        {
+            if (subjectId == -1)
+            {
+                return Json(new { success = false, message = "Error! Invalid Subject" });
+            }
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var count = 0;
+                    var model = context.SubjectMarks.Where(q => q.SubjectId == subjectId)
+                        .OrderByDescending(q => q.EffectivenessDate).AsEnumerable()
+                        .Select(q => new SubjectMarkViewModel
+                        {
+                            Index = count++,
+                            Id = q.Id,
+                            ComponentName = q.ComponentName,
+                            Percentage = q.Percentage,
+                            EffectivenessDate = q.EffectivenessDate == null ? "-" :
+                            DateTime.Parse(q.EffectivenessDate.Value.ToString())
+                            .ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)
+                        })
+                        .ToList();
+                    ViewBag.SubjectId = subjectId;
+                    return View(model);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddSubjectComponent(List<SubjectMarkModel> subjectMarkList, int subjectId)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    foreach (var item in subjectMarkList)
+                    {
+                        if (item != null && item.SubjectComponentName != null)
+                        {
+                            context.SubjectMarks.Add(new SubjectMark
+                            {
+                                ComponentName = item.SubjectComponentName,
+                                Percentage = item.Percentage,
+                                EffectivenessDate = DateTime.Now,
+                                SubjectId = subjectId
+
+                                ///còn thiếu CurrentSyllabus
+                            });
+                        }
+                    }
+                    context.SaveChanges();
+                }
+
+                return Json(new { success = true, message = "Add Subject Component Successed!" });
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+
+        }
+
+
     }
 
 }
