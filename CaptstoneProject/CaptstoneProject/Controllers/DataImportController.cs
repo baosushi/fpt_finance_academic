@@ -502,7 +502,7 @@ namespace CaptstoneProject.Controllers
                 {
                     foreach (var fg in files)
                     {
-                        FileStream fileStream = new FileStream(@"C:\Users\Temporary\Desktop\phuonglhk.fg", FileMode.Open);
+                        FileStream fileStream = fg.OpenRead();
                         var gradeFile = (TeacherGrade)new BinaryFormatter
                         {
                             AssemblyFormat = FormatterAssemblyStyle.Simple
@@ -590,7 +590,7 @@ namespace CaptstoneProject.Controllers
                                     context.SaveChanges();
                                 }
 
-                                var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == studentMajor.Id).FirstOrDefault();
+                                var studentInCourse = context.StudentInCourses.Where(q => q.StudentId == studentMajor.Id && q.CourseId == course.Id).FirstOrDefault();
 
                                 if (studentInCourse == null)
                                 {
@@ -609,7 +609,7 @@ namespace CaptstoneProject.Controllers
                                     var componentName = studentGrade.Component;
                                     var grade = studentGrade.Grade;
 
-                                    var courseMark = context.CourseMarks.Where(q => q.ComponentName == componentName).FirstOrDefault();
+                                    var courseMark = context.CourseMarks.Where(q => q.ComponentName == componentName && q.CourseId == course.Id).FirstOrDefault();
                                     var studentCourseMark = studentInCourse.StudentCourseMarks.Where(q => q.CourseMarkId == courseMark.Id).FirstOrDefault();
 
                                     if(studentCourseMark == null)
