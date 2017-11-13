@@ -50,8 +50,5 @@ namespace DataService.Model
         public virtual DbSet<StudentMajor> StudentMajors { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
-        public virtual DbSet<Receipt> Receipts { get; set; }
-        public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual DbSet<ReceiptType> ReceiptTypes { get; set; }
     }
 }

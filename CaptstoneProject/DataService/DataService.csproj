@@ -99,15 +99,6 @@
     <Compile Include="Model\Program.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Receipt.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ReceiptDetail.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ReceiptType.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Registration.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
