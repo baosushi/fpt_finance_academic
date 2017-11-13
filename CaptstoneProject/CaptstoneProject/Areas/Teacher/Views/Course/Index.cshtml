@@ -61,10 +61,10 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@Model[i - 1].Name</td>
+                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">@Model[i - 1].Name</a></td>
                                 <td>@Model[i - 1].Code</td>
                                 <td>@Model[i - 1].Class</td>
-                                <td>From @Model[i - 1].StartDate.ToString("dd/MM/yyyy") to @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
+                                <td>@Model[i - 1].StartDate.ToString("dd/MM/yyyy") - @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     @switch (Model[i - 1].Status)
                                     {
@@ -105,7 +105,7 @@
                                             }
                                     }
                                 </td>
-                                <td><a href="@Url.Action("CourseDetails", "Course", new { courseId = Model[i - 1].CourseId })">View course</a></td>
+                                <td><a href="@Url.Action("DownloadTemplate", "Course", new { courseId = Model[i - 1].CourseId })">Download Template</a></td>
                             </tr>
                         }
                     </tbody>

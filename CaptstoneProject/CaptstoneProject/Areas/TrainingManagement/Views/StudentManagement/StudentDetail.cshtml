@@ -1,5 +1,5 @@
 ﻿@using CaptstoneProject.Models
-@model CaptstoneProject.Models.AreaViewModel.StudentViewModel
+@model CaptstoneProject.Models.AreaViewModel.StudentMajorViewModel
 @{
     ViewBag.Title = "StudentDetailsMaterial";
 }
@@ -33,6 +33,7 @@
             border: 1px solid transparent;
             border-top-right-radius: .25rem;
             border-top-left-radius: .25rem;
+            margin-left: 2px;
         }
 
     .date-input {
@@ -59,7 +60,8 @@
         padding: 4px 12px !important;
         line-height: unset !important;
     }
-    .label{
+
+    .label {
         margin-bottom: 0;
     }
 </style>
@@ -71,7 +73,7 @@
             <div class="panel-body" style="overflow:hidden">
 
                 <div>
-                    <h3 style="padding-left:10px;"><i class="fa fa-user" style="color:#58c93b"></i> @Model.Name </h3>
+                    <h3 style="padding-left:10px;"><i class="fa fa-user" style="color:#58c93b"></i> @Model.StudentName </h3>
                 </div>
                 <div class="row" style="padding-left:10px;">
                     <ul class="nav nav-pills">
@@ -80,14 +82,14 @@
                         {
                             <li class="header-padding" title="Email"><i class="fa fa-envelope"> Email: </i> @this.Model.Email</li>
                         }
-                        @if (!string.IsNullOrWhiteSpace(this.Model.CurrentStudentCode))
+                        @if (!string.IsNullOrWhiteSpace(this.Model.StudentCode))
                         {
-                            <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i> MSSV: @this.Model.CurrentStudentCode</li>
+                            <li class="header-padding" title="Email"><i class="fa fa-id-card"> </i> MSSV: @this.Model.StudentCode</li>
                         }
-                        @if (Model.CurrentAccount != null)
+                        @if (Model.Account != null)
                         {
-                            <li class="header-padding" title=""><i class="fa fa-user-circle-o"></i> Loại:  @Enum.GetName(typeof(AccountType), Model.CurrentAccount.Type == null ? 1 : Model.CurrentAccount.Type.Value) </li>
-                            <li class="header-padding" title="ha"><i class="fa fa-calendar"></i> Ngày tạo: @Model.CurrentAccount.StartDate.Value.ToString("dd/MM/yyyy") </li>
+                            <li class="header-padding" title=""><i class="fa fa-user-circle-o"></i> Loại:  @Enum.GetName(typeof(AccountType), Model.Account.Type == null ? 1 : Model.Account.Type.Value) </li>
+                            <li class="header-padding" title="ha"><i class="fa fa-calendar"></i> Ngày tạo: @Model.Account.StartDate.Value.ToString("dd/MM/yyyy") </li>
                             <li class="header-padding" title=""><i class="fa fa-credit-card"></i> Số dư tài khoản: <span id="acc_current_balance" style="color:forestgreen"></span> </li>
                         }
 
@@ -108,11 +110,11 @@
                                     <div class="form-horizontal">
                                         <div class="form-group">
                                             <label class="col-md-5 control-label">
-                                                <b>MSSV: </b>@Model.CurrentStudentCode
+                                                <b>MSSV: </b>@Model.StudentCode
                                                 @*@Model.CurrentAccount.Name*@
                                             </label>
                                             <label class="col-md-5 control-label">
-                                                <b>Tên: </b>@Model.Name
+                                                <b>Tên: </b>@Model.StudentName
                                             </label>
                                         </div>
                                         <div id="transaction-info" class="">
@@ -121,17 +123,17 @@
                                                     Tên tài khoản:
                                                 </label>
                                                 <div class="col-sm-8">
-                                                    <input id="account-name" class="form-control" type="text" value="@Model.CurrentAccount.Name" readonly />
+                                                    <input id="account-name" class="form-control" type="text" value="@Model.Account.Name" readonly />
                                                 </div>
                                             </div>
                                             @*<div class="form-group">
-                                                <label class="col-md-5 control-label">
-                                                    Tên học sinh:
-                                                </label>
-                                                <div class="col-md-5">
-                                                    <input id="student-name" class="form-control" type="text" value="@Model.Name" readonly />
-                                                </div>
-                                            </div>*@
+                                                    <label class="col-md-5 control-label">
+                                                        Tên học sinh:
+                                                    </label>
+                                                    <div class="col-md-5">
+                                                        <input id="student-name" class="form-control" type="text" value="@Model.Name" readonly />
+                                                    </div>
+                                                </div>*@
                                             <div class="form-group">
                                                 <label class="col-md-5 f-bold control-label">
                                                     Số tiền:
@@ -258,18 +260,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <ul id="TabList" role="tablist" class="nav nav-tabs">
-                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" id="boughtHistory" href="#registration-tab"><h4>Lịch sử giao dịch</h4></a></li>
+                                <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" href="#history-course-tab"><h5>Khóa học</h5></a></li>
+                                <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#registration-tab"><h5>Giao dịch tài chính</h5></a></li>
+                                <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#available-subject-tab"><h5>Môn học có thể đăng ký</h5></a></li>
+
                                 @*<li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#account-tab">List of Account</a></li>*@
                             </ul>
                             <div class="tab-content">
-                                <div id="registration-tab" class="tab-pane active" role="tabpanel">
+                                <div id="registration-tab" class="tab-pane " role="tabpanel">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <button class="btn btn-primary" id="filter-toggle" data-target="#filter-container" data-toggle="collapse" onclick="toggleIcon()"><i id="icon" class="fa fa-plus"></i>Bộ lọc</button>
                                                     <button style="" type="button" class="btn btn-success" id="btn-open-transaction-modal">
-                                                        <i class="fa fa-plus"></i>Tạo giao dịch
+                                                        <i class="fa fa-plus"></i> Tạo giao dịch
                                                     </button>
                                                 </div>
                                                 <div class="offset-md-4 col-md-3 pull-right">
@@ -420,7 +425,10 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
+
+
                                     <div class="container">
+                                        @*Modal approve transaction*@
                                         <div class="modal fade" id="approveTransactionModal" role="dialog">
                                             <div class="modal-dialog modal-sm">
                                                 <!-- Modal content-->
@@ -441,7 +449,8 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> @*End of modal approve transaction*@
+
                                 </div>
 
                                 @*<div id="account-tab" class="tab-pane fade" role="tabpanel">
@@ -474,7 +483,46 @@
                                             </table>
                                         </div>
                                     </div>*@
-                            </div>
+                                <div id="history-course-tab" class="tab-pane active" role="tabpanel">
+                                    <select id="semester-select-picker" data-live-search="true">
+                                        @foreach (var item in ViewBag.semesterList)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                    <div>
+                                        <table id="history-course-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Mã khóa học</th>
+                                                    <th>Mã môn</th>
+                                                    <th>Môn</th>
+                                                    <th>Học kì</th>
+                                                    <th>Trạng thái</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="available-subject-tab" class="tab-pane" role="tabpanel">
+                                    <div>
+                                        <table id="available-subject-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Mã môn</th>
+                                                    <th>Môn</th>
+                                                    <th>Trạng thái</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div> @*End of tab Content*@
+
                         </div>
                     </div>
                 </div>
@@ -482,22 +530,7 @@
 
 
 
-                <div id="" class="modal fade">
-                    <div id="modalAccount" class="modal-dialog" style="width: 700px">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 style="color:green" id="accountDetailModalTitle"></h3>
-                            </div>
-                            <div class="modal-body">
-
-
-                            </div>
-                            <div class="modal-footer">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div id="createTransactionPanel" class="modal fade"></div>
                 <div id="editTransactionPanel" class="modal fade"></div>
@@ -526,7 +559,6 @@
         </div>
     </div>
 </div>
-<input id="studentId" value="@this.Model.Id" hidden />
 
 
 
@@ -552,10 +584,18 @@
             size: 10,
             liveSearch: true,
         });
+
+        $("#semester-select-picker").selectpicker();
+
+
+
+
         //Init customer-store table
         $("#modal-select-transaction-filter").selectpicker();
 
-        $("#acc_current_balance").html(toMoney(@Model.CurrentAccount.Balance, ',', '') + " VND");
+        $("#acc_current_balance").html(toMoney(@Model.Account.Balance, ',', '') + " VND");
+
+
 
 
 
@@ -578,14 +618,65 @@
         InitStudentTransactionTable();
         //initStudentAccountTable();
         setupDaterangepicker2();
+        InitStudentHistoryCourseTable();
+        InitStudentAvailableSubjectTable();
+    }); //End of Dom Ready
 
 
-    });
-
+    //make button toogle
     function toggleIcon() {
-        $('#icon').toggleClass("fa-plus");
-        $('#icon').toggleClass("fa-minus");
+        if($('#icon').hasClass("fa-plus")){
+            $('#icon').toggleClass("fa-plus");
+
+            $('#icon').toggleClass("fa-minus");
+        }else{
+            $('#icon').toggleClass("fa-minus");
+            $('#icon').toggleClass("fa-plus");
+
+        }
     }
+
+
+    function InitStudentAvailableSubjectTable() {
+        $("#available-subject-table").DataTable({
+            "filter": true,
+            "processing": true,
+            "autoWidth": false,
+            ordering: false,
+            responsive: true,
+            sAjaxSource: "@Url.Action("GetAvailableSubjectforStudent")/?studentMajorId="+@Model.Id,
+        });
+    }
+
+
+    function InitStudentHistoryCourseTable() {
+        $("#history-course-table").DataTable({
+            "serverSide": true,
+            "filter": true,
+            "processing": true,
+            "autoWidth": false,
+            ordering: false,
+            responsive: true,
+             sAjaxSource: "@Url.Action("GetHistoryCourseforStudent")",
+            fnServerParams: function (aoData) {
+                aoData.push({ "name": "semesterId", "value": $("#semester-select-picker").val() });
+                aoData.push({ "name": "studentMajorId", "value": @Model.Id });
+
+             },
+            language: {
+                searchPlaceholder: "Mã khóa học hoặc môn"
+            }
+            //columnDefs: [
+            //    {
+            //        targets:[0,1, 2, 3, 4, 5],
+            //        className: "dt-center"
+            //    },
+
+            //]
+
+        });
+    }
+
 
 
 
@@ -611,6 +702,13 @@
         }
 
     }
+
+
+    $("#semester-select-picker").on("change", function () {
+        if ($.fn.DataTable.isDataTable('#history-course-table')) {
+            $("#history-course-table").DataTable().ajax.reload();
+        }
+    });
 
     //student-transaction-table
     function RefreshStudentTransactionTable() {
@@ -639,8 +737,9 @@
             "scrollCollapse": true,
             "ordering": false,
             responsive: true,
+            "autoWidth": false,
             "fnServerParams": function (aoData) {
-                aoData.push({ "name": "studentId", "value": '@Model.Id' });
+                aoData.push({ "name": "studentMajorId", "value": '@Model.Id' });
                 aoData.push({ "name": "startTime", "value":$('#sTime2').val() });
                 aoData.push({ "name": "endTime", "value": $('#eTime2').val() });
                 //aoData.push({ "name": "transactionFilter", "value": $("input[name='transaction-filter']:checked").val() });
@@ -732,7 +831,7 @@
                   }
               },
             ],
-            "autoWidth": true
+           
         });
     }
 
@@ -820,7 +919,7 @@
                 type: 'POST',
                 url: '@Url.Action("CreateTransaction", "Transaction", new { area = "TransactionManagement"})',
                 data: {
-                    'studentMajorId': @Model.CurrentAccount.StudentMajorId,
+                    'studentMajorId': @Model.Id,
                     'amount': amount,
                     //'form': $('input[name=formTransaction-filter]:checked').val(),
                     //'type': $('input[name=typeTransaction-filter]:checked').val(),

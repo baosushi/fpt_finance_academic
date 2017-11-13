@@ -1,4 +1,4 @@
-﻿using DataService.Model;
+using DataService.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -153,15 +153,24 @@ namespace CaptstoneProject.Models
             public int TransactionType { get; set; }
         }
 
-        public class StudentViewModel
+        public class StudentMajorViewModel
         {
             public int Id { get; set; }
-            public string Name { get; set; }
+            public string StudentName { get; set; }
             public string Email { get; set; }
-            public Account CurrentAccount { get; set; }
-            public int TotalRegistered { get; set; }
+            public string LoginName { get; set; }
+            public Account Account { get; set; }
+            public Nullable<int> TotalRegistered { get; set; }
             public Nullable<double> TotalMoneySpent { get; set; }
-            public string CurrentStudentCode { get; set; }
+            public string StudentCode { get; set; }
+        }
+
+        public class StudentMajorModel
+        {
+            public int Id { get; set; }
+            public String LoginName { get; set; }
+            public Account Account { get; set; }
+            public string StudentCode { get; set; }
         }
 
         public class SubjectMarkModel
