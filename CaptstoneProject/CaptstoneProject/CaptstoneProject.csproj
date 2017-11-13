@@ -439,6 +439,9 @@
     <Content Include="Content\plugin\materialdesign-icon\fonts\materialdesignicons-webfont.woff2" />
     <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.css.map" />
     <Content Include="Content\plugin\materialdesign-icon\css\materialdesignicons.min.css.map" />
+    <Content Include="Areas\Students\Views\Student\_RegisterPartial.cshtml" />
+    <Content Include="Areas\Students\Views\Student\_Index.cshtml" />
+    <Content Include="Areas\Students\Views\Student\Payment.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />

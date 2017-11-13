@@ -171,5 +171,21 @@ namespace CaptstoneProject.Models
             public bool IsFinal { get; set; }
         }
 
+        public class RegistrationViewModel
+        {
+            public Account StudentAccount { get; set; }
+            public List<RegistrationDetailViewModel> RegistrationDetails { get; set; }
+            public double TotalPrice { get; set; }
+        }
+
+        public class RegistrationDetailViewModel
+        {
+            public string SubjectCode { get; set; }
+            public string SubjectName { get; set; }
+            public int CreditValue { get; set; }
+            public int RegisteredType { get; set; }
+            public double UnitPrice { get; set; }
+            public double TotalPrice { get; set; }
+        }
     }
 }

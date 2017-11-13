@@ -147,6 +147,14 @@ namespace CaptstoneProject.Models
         Decrease = 2,
     }
 
+    public enum RegistrationType
+    {
+        [Display(Name = "Curriculum Subject")]
+        CurriculumSubject = 1,
+        [Display(Name = "Relearn Subject")]
+        RelearnSubject = 2,
+    }
+
     //public enum TransactionFilter
     //{
     //    [Display(Name = "Add Funds")]

@@ -1,0 +1,63 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <form id="registrationForm" method="post" action="@Url.Action("SubmitRegistration")" class="form-horizontal">
+            <div>
+                <input type="checkbox" id="curriculumSubject" name="curriculumSubject" class="" value="false" />
+                <label for="#curriculumSubject">Môn học đi</label>
+                <ul id="curriculumSubjectList"></ul>
+            </div>
+            <br />
+            <div>
+                <input type="checkbox" id="relearnSubject" name="relearnSubject" class="" value="false" />
+                <label for="#relearnSubject">Môn học lại</label>
+                <ul id="relearnSubjectList" style="list-style: none"></ul>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("GetRegistrationSubjects")',
+            data: {},
+            success: function (result) {
+                var text = "";
+                $.each(result.curriculumSubjects, function (k, v) {
+                    text += "<li>" + "(" + v.SubjectCode + ") " + v.SubjectName + "</li>";
+                });
+
+                $('#curriculumSubjectList').html(text);
+
+                text = "";
+                $.each(result.relearnSubjects, function (k, v) {
+                    text += "<li><input type='checkbox' name='relearnList' value='" + v.SubjectCode + "' /> " + "(" + v.SubjectCode + ") " + v.SubjectName + "</li>";
+                });
+
+                $('#relearnSubjectList').html(text);
+            },
+            error: function (result) {
+                console.log("error");
+            }
+        });
+    });
+
+    $('#registrationForm').submit(function () {
+        $('#curriculumSubject').val($('#curriculumSubject').prop('checked'));
+        $('#relearnSubject').val($('#relearnSubject').prop('checked'));
+    });
+
+    $('#curriculumSubject').change(function () {
+        cb = $(this);
+        cb.val(cb.prop('checked'));
+    });
+
+    $('#relearnSubject').change(function () {
+        cb = $(this);
+        cb.val(cb.prop('checked'));
+    });
+</script>
