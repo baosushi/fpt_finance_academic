@@ -189,10 +189,10 @@
                         <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
                     </ul>
                 </li>*@
-            @if (User.IsInRole("Student"))
+			@if (User.IsInRole("Student"))
             {
                 <li>
-                    <a href="@Url.Action("Index", "Student", new { area = "Students", all = false })">
+                    <a href="@Url.Action("Index", "Student", new { area = "Students" })">
                         <span class="icon color5"><i class="fa fa-user" aria-hidden="true"></i></span>
                         <span class="nav-title">Đăng ký môn</span>
                     </a>
@@ -219,6 +219,12 @@
                     <a href="@Url.Action("Index", "Management", new { area = "TrainingManagement" })">
                         <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
                         <span class="nav-title">Training Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("SubjectManagement", "Management", new { area = "TrainingManagement" })">
+                        <span class="icon color5"><i class="fa fa-book" aria-hidden="true"></i></span>
+                        <span class="nav-title">Subject Management</span>
                     </a>
                 </li>
                 <li>

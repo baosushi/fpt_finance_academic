@@ -12,21 +12,48 @@
 <div class="content">
     <div class="container-default animated fadeInRight">
         <div class="panel panel-default">
-            <div class="panel-title"> <i class="fa fa-book" style="color:blue"></i>Subject</div>
+            <div class="panel-title"> <i class="fa fa-book" style="color:blue"></i> Subject Management</div>
+            <hr />
             <div class="panel-body">
-                <div class="row col-md-2">
-                    <button type="button" id="upload-btn" class="btn btn-primary"><i class="fa fa-upload"></i>Import Subject</button>
-                    <span id="file-name">Nothing has been selected...</span>
-                    <input type="file" value="Import Book" class="hidden" id="upload-file" />
+                @*<div class="row col-md-5">
+                    <button type="button" id="upload-btn" class="btn btn-primary" style="margin:10px"><i class="fa fa-upload"></i> Import Subject</button>
+                    <span id="file-name" style="margin:10px;">Nothing has been selected...</span>
+                    <input type="file" style="margin:10px" value="Import Book" class="hidden" id="upload-file" />
                 </div>
-                <div class="row col-md-2">
-                    <button class="btn btn-success" disabled="disabled" id="submit-btn">
+                <div class="row col-md-5">
+                    <button class="btn btn-success" style="margin:10px" disabled="disabled" id="submit-btn">
                         Submit file
                     </button>
+                </div>*@
+                <div class="row">
+                    <div class="offset-8 col-md-4">
+                        <div class="pull-right">
+                            @*<button class="btn-success btn" id="download-template-btn"><i class="fa fa-download"></i> Template</button>*@
+                            <button class="btn-primary btn" id="upload-btn">Import Excel</button>
+                            <button class="btn btn-primary hidden" id="submit-btn">Submit file</button>
+                            <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                            <div class="progress" style="display:none">
+                                <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table id="subject_table" class="responsive">
+                <br />
+
+                <div class="col-md-8">
+                    <p id="file-info" class="pull-right hidden" style="color: red;"><span style="text-decoration: underline;"></span> file has been selected</p>
+                </div>
+                <div class="col-md-1">
+                    <a id="cancel-file" href="#" class="pull-right hidden">Cancel</a>
+                </div>
+                <br />
+
+                @*<div class="table-responsive">*@
+                    <table id="subject_table" class="table display dataTable cell-border">
                         <thead>
                             <tr>
                                 <td>No.</td>
@@ -36,7 +63,7 @@
                             </tr>
                         </thead>
                     </table>
-                </div>
+                @*</div>*@
                 <div class="modal fade" id="subject_component_modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -60,18 +87,57 @@
 </div>
 <script>
     $(document).ready(function () {
-        $("#upload-btn").click(function () {
-            $("#upload-file").trigger("click");
+        //$("#upload-btn").click(function () {
+        //    $("#upload-file").trigger("click");
+        //});
+
+        //$("#upload-file").on("change", function () {
+        //    var filename = this.files[0].name;
+        //    $("#file-name").html(filename);
+        //    if (filename != null) {
+        //        $("#submit-btn").removeAttr("disabled");
+        //    } else {
+        //        $("#submit-btn").attr("disabled", "disabled");
+        //    }
+        //});
+
+        @*$('#download-template-btn').click(function () {
+            if(@Model.IsPublish==2){
+                $('#template-request-form').submit();
+            }
+            else{
+                $('#template-final-request-form').submit();
+            }
+        });*@
+
+        $('#upload-btn').click(function () {
+            $('#upload-file').trigger("click");
         });
 
-        $("#upload-file").on("change", function () {
-            var filename = this.files[0].name;
-            $("#file-name").html(filename);
-            if (filename != null) {
-                $("#submit-btn").removeAttr("disabled");
+        $('#upload-file').on("change", function () {
+            debugger
+            var fileName = this.files[0].name;
+            $("#filename").html(fileName);
+
+            if (fileName != null) {
+                $('#upload-btn').addClass("hidden");
+                $('#submit-btn').removeClass("hidden");
+                $('#cancel-file').removeClass("hidden");
+                $('#file-info').removeClass("hidden");
+                $('#file-info span').html(fileName);
             } else {
-                $("#submit-btn").attr("disabled", "disabled");
+                $('#upload-btn').removeClass("hidden");
+                $('#submit-btn').addClass("hidden");
+                $('#cancel-file').addClass("hidden");
+                $('#file-info').addClass("hidden");
             }
+        });
+
+        $('#cancel-file').click(function () {
+            $('#upload-btn').removeClass("hidden");
+            $('#submit-btn').addClass("hidden");
+            $('#cancel-file').addClass("hidden");
+            $('#file-info').addClass("hidden");
         });
 
         $("#submit-btn").on("click", function () {
@@ -79,24 +145,48 @@
             for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
                 form.append("file" + i, $("#upload-file")[0].files[i]);
             }
-
+            $(".progress").show();
             $.ajax({
                 type: "post",
                 url: "@Url.Action("UploadSubject", "Management")",
                 contentType: false,
                 processData: false,
                 data: form,
+                xhr: function () {
+                    var settingXhr = $.ajaxSettings.xhr();
+                    if (settingXhr.upload) {
+                        // For handling the progress of the upload
+                        settingXhr.upload.addEventListener('progress', function (e) {
+                            if (e.lengthComputable) {
+                                $('#upload-progress-bar').removeClass('progress-bar-danger');
+                                var percent = Math.ceil(e.loaded / e.total * 100);
+                                $('#upload-progress-bar').attr('aria-valuenow', percent).css('width', percent + '%');
+                                $('#upload-progress-bar').attr('aria-valuemax', 100);
+                                $('#upload-progress-bar').html(percent + "%");
+                                if (percent == 100) {
+                                    $('#upload-progress-bar').html("Processing...");
+                                }
+                            }
+                        }, false);
+                    }
+                    return settingXhr;
+                },
                 success: function (result) {
                     if (result.success) {
+                        $('#upload-progress-bar').html("Completed!");
                         toastr.success(result.message);
                         subject_table.ajax.reload();
                     } else {
+                        $('#upload-progress-bar').html("Fail to upload!");
+                        $('#upload-progress-bar').addClass('progress-bar-danger');
                         toastr.error(result.message);
                     }
                 },
                 error: function (xhr, status, p3, p4) {
                     var err = "Error " + " " + status + " " + p3 + " " + p4;
                     toastr.error(err);
+                    ('#upload-progress-bar').html("Fail to upload!");
+                    $('#upload-progress-bar').addClass('progress-bar-danger');
                 }
 
             })
@@ -105,7 +195,7 @@
         var subject_table = $("#subject_table").DataTable({
             "processing": true,
             "retrieve": true,
-            responsive:true,
+            //responsive:true,
             "sAjaxSource": '@Url.Action("GetSubject4DataTable")',
             "columnDefs": [
                 { "className": "dt-center", "targets": "_all" },
