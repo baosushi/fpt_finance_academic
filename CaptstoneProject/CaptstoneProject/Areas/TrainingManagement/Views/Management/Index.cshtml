@@ -14,17 +14,19 @@
     <div class="container-default animate fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-user" style="color:green"></i> Your courses </div>
-            <form action="@Url.Action("Index","Management")" id="semesterForm">
-                <label>Term: </label>
-                <select id="semesterSelector" style="width:100px" name="semesterId">
-                    @foreach (var item in ViewBag.semList)
-                    {
-                        <option value="@item.Value">
-                            @item.Text
-                        </option>
-                    }
-                </select>
-            </form>
+            <div class="margin-b-15">
+                <form action="@Url.Action("Index","Management")" id="semesterForm">
+                    <label>Term: </label>
+                    <select id="semesterSelector" style="width:100px" name="semesterId">
+                        @foreach (var item in ViewBag.semList)
+                        {
+                            <option value="@item.Value">
+                                @item.Text
+                            </option>
+                        }
+                    </select>
+                </form>
+            </div>
             @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
                 {
                     <form method="post" action="@Url.Action("LockAllCourseForTeacher","Management")">
@@ -62,10 +64,10 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@Model[i - 1].Name</td>
+                                <td><a href="@Url.Action("CourseDetails", "Management", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">@Model[i - 1].Name</a></td>
                                 <td>@Model[i - 1].Code</td>
                                 <td>@Model[i - 1].Class</td>
-                                <td>From @Model[i - 1].StartDate.ToString("dd/MM/yyyy") to @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
+                                <td>@Model[i - 1].StartDate.ToString("dd/MM/yyyy") - @Model[i - 1].EndDate.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     @switch (Model[i - 1].Status)
                                     {
@@ -106,7 +108,7 @@
                                             }
                                     }
                                 </td>
-                                <td><a href="@Url.Action("CourseDetails", "Management", new { courseId = Model[i - 1].CourseId , semesterId = ViewBag.selectedSem })">View course</a></td>
+                                <td><a href="@Url.Action("DownloadTemplate", "Management", new { courseId = Model[i - 1].CourseId})">Download Template</a></td>
                             </tr>
                         }
                     </tbody>
