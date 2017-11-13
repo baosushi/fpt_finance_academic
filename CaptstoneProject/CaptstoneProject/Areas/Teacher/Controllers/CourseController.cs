@@ -24,7 +24,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         // GET: Teacher/Course
         public ActionResult Index(bool all = false, int subjectId = -1, int semesterId = -1)
         {
-            this.Session["loginName"] = "phuonglhk";
             var loginName = (string)Session["loginName"];
             List<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
             using (var context = new DB_Finance_AcademicEntities())
