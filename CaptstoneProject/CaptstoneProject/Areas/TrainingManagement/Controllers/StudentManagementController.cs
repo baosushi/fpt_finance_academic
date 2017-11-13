@@ -9,6 +9,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
+using System.Transactions;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -49,7 +50,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         string.IsNullOrEmpty(a.Student.Name) ? "-": a.Student.Name,
                         string.IsNullOrEmpty(a.LoginName) ? "-" : a.LoginName,
                         string.IsNullOrEmpty(a.StudentCode) ? "-" : a.StudentCode,
-                        a.Student.Id ,
+                        a.Id ,
                                 }).ToList();
 
 
@@ -78,41 +79,51 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var student = context.Students.Find(id);
-                    if (student == null)
+                    var studentMajor = context.StudentMajors.Find(id);
+                    if (studentMajor == null)
                     {
                         return HttpNotFound();
                     }
-                    StudentViewModel model = new StudentViewModel();
-                    model.Id = student.Id;
-                    model.Name = student.Name;
-                    var studentMarjorOfCurrentProgram = student.StudentMajors.OrderByDescending(q => q.Id).FirstOrDefault(); //neu hoc sinh chuyen nganh thi account moi nhat se la account duoc tao sau
-                    var currentloginName = studentMarjorOfCurrentProgram.LoginName;
-                    var currentStudentCode = studentMarjorOfCurrentProgram.StudentCode;
+                    StudentMajorViewModel model = new StudentMajorViewModel();
+                    model.Id = studentMajor.Id;
+                    model.StudentName = studentMajor.Student.Name;
 
-                    model.CurrentStudentCode = currentStudentCode;
+
+                    model.StudentCode = studentMajor.StudentCode;
 
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                    var currentLoginAccount = userManager.Users.Where(q => q.Email.Contains(currentloginName)).FirstOrDefault();
+                    var currentLoginAccount = userManager.Users.Where(q => q.Email.Contains(studentMajor.LoginName)).FirstOrDefault();
                     if (currentLoginAccount != null)
                         model.Email = currentLoginAccount.Email;
 
-                    model.CurrentAccount = context.StudentMajors.Where(q => q.StudentId == student.Id)
-                        .OrderByDescending(q => q.Id).FirstOrDefault().Accounts.FirstOrDefault();
+                    model.Account = context.Accounts.Where(q => q.StudentMajorId == studentMajor.Id).FirstOrDefault();
 
-                    model.TotalRegistered = (from reg in context.Registrations
-                                             join studentmajor in context.StudentMajors on reg.StudentMajorId equals studentmajor.Id
-                                             join regDetail in context.RegistrationDetails on reg.Id equals regDetail.RegistrationId
-                                             where studentmajor.StudentId == student.Id
-                                             select regDetail).Count();
+                    //model.TotalRegistered = (from reg in context.Registrations
+                    //                         join studentmajor in context.StudentMajors on reg.StudentMajorId equals studentmajor.Id
+                    //                         join regDetail in context.RegistrationDetails on reg.Id equals regDetail.RegistrationId
+                    //                         where studentmajor.StudentId == student.Id
+                    //                         select regDetail).Count();
 
-                    model.TotalMoneySpent = (from reg in context.Registrations
-                                             join studentmajor in context.StudentMajors
-                                             on reg.StudentMajorId equals studentmajor.Id
-                                             where studentmajor.Id == student.Id
-                                             select reg.FinalAmount).Sum();
+                    //model.TotalMoneySpent = (from reg in context.Registrations
+                    //                         join studentmajor in context.StudentMajors
+                    //                         on reg.StudentMajorId equals studentmajor.Id
+                    //                         where studentmajor.Id == student.Id
+                    //                         select reg.FinalAmount).Sum();
+
+                    var semesters = from course in context.Courses
+                                    join studentInCourse in context.StudentInCourses on course.Id equals studentInCourse.CourseId
+                                    join semester in context.Semesters on course.SemesterId equals semester.Id
+                                    where studentInCourse.StudentId == studentMajor.Id // studentId of StudentInCourse is actually StudentMajorId
+                                    select semester;
+                    var semesterList = semesters.Select(q => new SelectListItem
+                    {
+                        Text = q.Title + q.Year,
+                        Value = q.Id.ToString()
+                    }).ToList();
+
+
+                    ViewBag.semesterList = semesterList;
                     return View(model);
-
                 }
             }
             catch (Exception e)
@@ -123,7 +134,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
 
-        public ActionResult LoadTransaction(JQueryDataTableParamModel param, int studentId, string startTime, string endTime, int transactionStatus, int transactionType)
+        public ActionResult LoadTransaction(JQueryDataTableParamModel param, int studentMajorId, string startTime, string endTime, int transactionStatus, int transactionType)
         {
             try
             {
@@ -132,7 +143,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var startDate = startTime.ToDateTime().GetStartOfDate();
                     var endDate = endTime.ToDateTime().GetEndOfDate();
                     var listTransaction = context.Transactions.Where(q => q.Date >= startDate
-                    && q.Date <= endDate && q.Account.StudentMajor.StudentId == studentId);
+                    && q.Date <= endDate && q.Account.StudentMajorId == studentMajorId);
 
                     int transactionForm = -1;
 
@@ -247,5 +258,162 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 return Json(new { success = false, message = e.Message });
             }
         }
+
+
+        public ActionResult CreateAllStudentAccount()
+        {
+            try
+            {
+                using (var transactionScope = new TransactionScope())
+                {
+
+                    DB_Finance_AcademicEntities context;
+                    using (context = new DB_Finance_AcademicEntities())
+                    {
+                        var studentMajorList = context.StudentMajors
+                            .Select(q => new StudentMajorModel
+                            {
+                                Id = q.Id,
+                                Account = q.Accounts.FirstOrDefault(),
+                                LoginName= q.LoginName,
+                                StudentCode = q.StudentCode
+                            }).ToList();
+
+                        //only create account for student dont have account yet
+                        var count = 0;
+                        foreach (var studentMajor in studentMajorList)
+                        {
+                            if (studentMajor.Account == null)
+                            {
+                                ++count;
+                                var account = new Account
+                                {
+                                    Name = "account_" + studentMajor.LoginName,
+                                    StartDate = DateTime.Now,
+                                    Type = (int)AccountType.Normal,
+                                    Balance = 0,
+                                    StudentMajorId = studentMajor.Id,
+                                    Active = true
+                                };
+                                context = context.BulkInsert(account, count, 100);
+                            }
+                        }
+                         context.SaveChanges();
+
+                    }
+                    transactionScope.Complete();
+                    return Json(new { success = true, message = "Create accounts successed!" });
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+
+        public ActionResult GetHistoryCourseforStudent(JQueryDataTableParamModel param, int studentMajorId, int? semesterId = -1)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+
+                    var joinResult = from course in context.Courses
+                                     join studentInCourse in context.StudentInCourses on course.Id equals studentInCourse.CourseId
+                                     join semester in context.Semesters on course.SemesterId equals semester.Id
+                                     where semester.Id == semesterId
+                                     && studentInCourse.StudentId == studentMajorId //studentId of studentInCourse is actually StudentMajorId
+                                     && (course.Status != null ? course.Status.Value : 0) == (int)CourseStatus.Closed
+                                     select new { Semester = semester, Course = course, StudentInCourse = studentInCourse };
+
+                    var courseHistoryList = joinResult.Where(q => string.IsNullOrEmpty(param.sSearch)
+                    || q.Course.Subject.SubjectCode.ToUpper().Contains(param.sSearch.Trim().ToUpper())
+                    || q.Course.Subject.SubjectName.ToUpper().Contains(param.sSearch.Trim().ToUpper())
+                    || q.Course.CourseName.ToUpper().Contains(param.sSearch.Trim().ToUpper()));
+
+                    var count = 0;
+                    count = param.iDisplayStart + 1;
+                    var result = courseHistoryList
+                        //.OrderByDescending(q => q.Course.StartDate) //Date still null , uncomment this code when Date available
+                        .OrderByDescending(q => q.Course.Id) //temporary fix cause Date still null
+                        .Skip(param.iDisplayStart).Take(param.iDisplayLength).AsEnumerable()
+                        .Select(q => new IConvertible[]
+                        {
+                            count++,
+                            q.Course.CourseName,
+                            q.Course.Subject.SubjectCode,
+                            q.Course.Subject.SubjectName,
+                            //(q.Course.StartDate != null? q.Course.StartDate.Value.ToString("dd/MM/yyyy"): "-")
+                            //    + " - " +
+                            //    (q.Course.EndDate != null? q.Course.EndDate.Value.ToString("dd/MM/yyyy"): "-"),
+
+                            q.Semester.Title + q.Semester.Year,
+                            Enum.GetName(typeof(StudentInCourseStatus), (q.StudentInCourse.Status.Value))
+                        }).ToList();
+
+                    var totalRecords = courseHistoryList.Count();
+                    var totalDisplay = result.Count();
+                    return Json(new
+                    {
+                        success = true,
+                        sEcho = param.sEcho,
+                        iTotalRecords = totalRecords,
+                        iTotalDisplayRecords = totalDisplay,
+                        aaData = result
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+        public ActionResult GetAvailableSubjectforStudent(JQueryDataTableParamModel param, int studentMajorId = -1)
+        {
+            try
+            {
+                if (studentMajorId == -1)
+                {
+                    return Json(new { success = false, message = "Error! Student not found" });
+                }
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var count = 0;
+                    count = param.iDisplayStart + 1;
+
+                    var result = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajorId).AsEnumerable()
+                        .Select(q => new IConvertible[]{
+                            count++,
+                            q.Subject.SubjectCode,
+                            q.Subject.SubjectName,
+                            "-" // get IsInProgram or IsRelearn to declare status
+
+                        }).ToList();
+
+                    return Json(new
+                    {
+                        success = true,
+                        sEcho = param.sEcho,
+                        iTotalRecords = result.Count(),
+                        iTotalDisplayRecords = result.Count(),
+                        aaData = result
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+
+
+
+
     }
 }
