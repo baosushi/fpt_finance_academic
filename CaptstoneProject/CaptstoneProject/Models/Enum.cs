@@ -149,9 +149,9 @@ namespace CaptstoneProject.Models
 
     public enum RegistrationType
     {
-        [Display(Name = "Curriculum Subject")]
+        [Display(Name = "Môn học đi")]
         CurriculumSubject = 1,
-        [Display(Name = "Relearn Subject")]
+        [Display(Name = "Môn học lại")]
         RelearnSubject = 2,
     }
 

@@ -9,48 +9,80 @@
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-users"></i>Thanh toán</div>
             <div class="panel-body">
-                @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
-                {
-                    <p style="color: red">Số dư tài khoản không đủ để thực hiện giao dịch</p>
-                }
-                else
-                {
-                    <h2>Xác nhận thanh toán đăng ký</h2>
-                    <br />
-                    <div class="row">
-                        <div class="offset-10 col-md-2">
+                <h2>Xác nhận thanh toán đăng ký</h2>
+                <br />
+                <div class="row">
+                    <div class="offset-9 col-md-3">
+                        <button id="btnPayment" class="btn btn-primary margin-l-10" onclick="parent.history.back();">Trở lại</button>
+                        @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
+                        {
+                            <button id="btnPayment" class="btn btn-success pull-right" disabled>Thanh toán</button>
+                        }
+                        else
+                        {
                             <button id="btnPayment" class="btn btn-success pull-right">Thanh toán</button>
-                        </div>
+                        }
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table display dataTable" id="registrationTable">
+                    <div class="col-md-12">
+                        @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
+                        {
+                            <p style="color: red" class="pull-right">Số dư tài khoản không đủ để thực hiện giao dịch</p>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table display dataTable table-bordered" id="registrationTable">
+                            <tr>
+                                <th>Mã môn</th>
+                                <th>Tên đăng ký</th>
+                                <th>Tên môn</th>
+                                <th>Loại đăng ký</th>
+                                <th>Tín chỉ</th>
+                                <th>Giá</th>
+                            </tr>
+
+                            @if (Model.CurriculumRegistrationDetails.Count > 0)
+                            {
                                 <tr>
-                                    <th>Mã môn</th>
-                                    <th>Tên môn</th>
-                                    <th>Loại đăng ký</th>
-                                    <th>Tín chỉ</th>
-                                    <th>Giá</th>
+                                    <td>@Model.CurriculumRegistrationDetails.First().SubjectCode</td>
+                                    <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">Môn học đi</td>
+                                    <td>@Model.CurriculumRegistrationDetails.First().SubjectName</td>
+                                    <td>@(((RegistrationType)@Model.CurriculumRegistrationDetails.First().RegisteredType).GetEnumDisplayName())</td>
+                                    <td>@Model.CurriculumRegistrationDetails.First().CreditValue</td>
+                                    <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">@Model.CurriculumTotalPrice.ToString("#,###") VNĐ</td>
                                 </tr>
-                                @foreach (var registrationDetail in Model.RegistrationDetails)
+
+                                foreach (var registrationDetail in Model.CurriculumRegistrationDetails.Skip(1))
                                 {
                                     <tr>
                                         <td>@registrationDetail.SubjectCode</td>
                                         <td>@registrationDetail.SubjectName</td>
                                         <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
                                         <td>@registrationDetail.CreditValue</td>
-                                        <td>@registrationDetail.TotalPrice</td>
                                     </tr>
                                 }
-                            </table>
-                        </div>
+                            }
+
+                            @foreach (var registrationDetail in Model.OtherRegistrationDetails)
+                            {
+                                <tr>
+                                    <td>@registrationDetail.SubjectCode</td>
+                                    <td>@registrationDetail.SubjectCode</td>
+                                    <td>@registrationDetail.SubjectName</td>
+                                    <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
+                                    <td>@registrationDetail.CreditValue</td>
+                                    <td>@registrationDetail.TotalPrice.ToString("#,###") VNĐ</td>
+                                </tr>
+                            }
+                        </table>
                     </div>
-                    <div class="row">
-                        <div class="offset-9 col-md-3">
-                            <h3>Tổng cộng: @Model.TotalPrice.ToString("#,###") VNĐ</h3>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="pull-right">Tổng cộng: @Model.TotalPrice.ToString("#,###") VNĐ</h4>
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>

@@ -183,7 +183,10 @@ namespace CaptstoneProject.Models
         public class RegistrationViewModel
         {
             public Account StudentAccount { get; set; }
-            public List<RegistrationDetailViewModel> RegistrationDetails { get; set; }
+            public List<RegistrationDetailViewModel> CurriculumRegistrationDetails { get; set; }
+            public List<RegistrationDetailViewModel> OtherRegistrationDetails { get; set; }
+            public double CurriculumTotalPrice { get; set; }
+            public double OtherTotalPrice { get; set; }
             public double TotalPrice { get; set; }
         }
 
