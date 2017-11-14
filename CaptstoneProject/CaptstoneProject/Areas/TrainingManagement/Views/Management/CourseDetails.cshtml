@@ -203,7 +203,7 @@
                             </th>
                             @for (var i = 0; i < Model.ComponentNames.Count(); i++)
                             {
-                                foreach (var k in finals)
+                                @*foreach (var k in finals)
                                 {
                                     if (i == k - 3)
                                     {
@@ -215,12 +215,12 @@
                                     }
                                 }
                                 if (isFinal != true)
-                                {
+                                {*@
                                     <th>
                                         @Model.ComponentNames[i]
                                     </th>
-                                    isFinal = false;
-                                }
+                                    @*isFinal = false;
+                                }*@
 
                             }
                             <th style="background-color:#d1601d !important">
@@ -273,7 +273,7 @@
                                             else
                                             {
                                                 <td>
-                                                    @mark.Mark
+                                                    @mark.Mark.Value.ToString("0.00")
                                                 </td>
                                             }
                                         }
@@ -301,7 +301,7 @@
                                 @if (Model.StudentInCourse[i - 1].Average != "-1")
                                 {
                                     <td>
-                                        @Model.StudentInCourse[i - 1].Average
+                                        @Int32.Parse(Model.StudentInCourse[i - 1].Average).ToString("0.00")
                                     </td>
                                 }
                                 else
