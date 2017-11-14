@@ -64,12 +64,14 @@ namespace CaptstoneProject.Areas.Students.Controllers
                     var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id);
 
                     var model = new RegistrationViewModel();
-                    model.RegistrationDetails = new List<RegistrationDetailViewModel>();
+                    model.CurriculumRegistrationDetails = new List<RegistrationDetailViewModel>();
+                    model.OtherRegistrationDetails = new List<RegistrationDetailViewModel>();
 
                     if (curriculumSubject)
                     {
                         var curriculumSubjects = availableSubjects.Where(q => q.IsInProgram.HasValue && q.IsInProgram.Value).Select(q => new RegistrationDetailViewModel
                         {
+                            SubjectName = q.Subject.SubjectName,
                             SubjectCode = q.Subject.SubjectCode,
                             CreditValue = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value : 0,
                             RegisteredType = (int)RegistrationType.CurriculumSubject,
@@ -77,7 +79,11 @@ namespace CaptstoneProject.Areas.Students.Controllers
                             TotalPrice = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value * 3000000 : 0
                         }).ToList();
 
-                        model.RegistrationDetails.InsertRange(model.RegistrationDetails.Count, curriculumSubjects);
+                        model.CurriculumRegistrationDetails.InsertRange(model.CurriculumRegistrationDetails.Count, curriculumSubjects);
+                        model.CurriculumTotalPrice = 25300000;
+                    } else
+                    {
+                        model.CurriculumTotalPrice = 0;
                     }
 
                     if (relearnSubject && relearnList != null && relearnList.Count > 0)
@@ -92,14 +98,18 @@ namespace CaptstoneProject.Areas.Students.Controllers
                             TotalPrice = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value * 1500000 : 0
                         }).ToList();
 
-                        model.RegistrationDetails.InsertRange(model.RegistrationDetails.Count, relearnSubjects);
+                        model.OtherRegistrationDetails.InsertRange(model.OtherRegistrationDetails.Count, relearnSubjects);
+                        model.OtherTotalPrice = model.OtherRegistrationDetails.Sum(q => q.TotalPrice);
+                    } else
+                    {
+                        model.OtherTotalPrice = 0;
                     }
 
                     //OTHER Subject todo
 
 
                     model.StudentAccount = studentMajor.Accounts.FirstOrDefault();
-                    model.TotalPrice = model.RegistrationDetails.Sum(q => q.TotalPrice);
+                    model.TotalPrice = model.CurriculumTotalPrice + model.OtherTotalPrice;
 
                     return View("Payment", model);
                 }

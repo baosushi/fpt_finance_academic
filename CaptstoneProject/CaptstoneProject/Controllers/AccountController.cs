@@ -60,8 +60,7 @@ namespace CaptstoneProject.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return RedirectToAction("Login", "Home", new { model = new MyLoginViewModel(), returnUrl = returnUrl });
         }
 
         //edited
@@ -73,8 +72,6 @@ namespace CaptstoneProject.Controllers
         {
             try
             {
-
-
                 if (!ModelState.IsValid)
                 {
                     return RedirectToAction("Login", "Home", model);
@@ -92,7 +89,7 @@ namespace CaptstoneProject.Controllers
                         var uId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
                         var roleList = UserManager.GetRoles(uId);
                         var email = UserManager.GetEmail(uId);
-                        var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
+                        var loginName = email == null ? model.Username : Regex.Match(email, @"^.*?(?=@)").Value.Trim();
                         Session["loginName"] = loginName;
                         Session["uName"] = model.Username;
                         Session["uImgUrl"] = "/Images/prideKappa.jpg";
@@ -111,7 +108,6 @@ namespace CaptstoneProject.Controllers
                         return RedirectToLocal(returnUrl);
 
                         //return RedirectToAction("Index", "Home");
-                        return RedirectToLocal(returnUrl);
                     //case SignInStatus.LockedOut:
                     //    return View("Lockout");
                     //case SignInStatus.RequiresVerification:
@@ -422,8 +418,8 @@ namespace CaptstoneProject.Controllers
 
 
 
-                //var user = new ApplicationUser { UserName = "sensei", Email = "sensei@mail.com" };
-                //var result = await UserManager.CreateAsync(user, "@Qawsed321");
+                var user = new ApplicationUser { UserName = "sensei", Email = "sensei@mail.com" };
+                var result = await UserManager.CreateAsync(user, "@Qawsed123");
 
                 //var user2 = new ApplicationUser { UserName = "gakusei", Email = "gakusei@mail.com" };
                 //var result2 = await UserManager.CreateAsync(user2, "@Qawsed123");
@@ -436,7 +432,7 @@ namespace CaptstoneProject.Controllers
                 //var user3 =  UserManager.FindByEmail("bosshere@mail.com");
 
 
-                //UserManager.AddToRole(user.Id, "Teacher");
+                UserManager.AddToRole(user.Id, "Teacher");
                 //UserManager.AddToRole(user2.Id, "Student");
                 //UserManager.AddToRole(user3.Id, "Training Management");
 

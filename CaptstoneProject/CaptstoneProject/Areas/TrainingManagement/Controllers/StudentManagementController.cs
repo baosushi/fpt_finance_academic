@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using static CaptstoneProject.Models.AreaViewModel;
 using System.Transactions;
+using OfficeOpenXml;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -275,7 +276,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                             {
                                 Id = q.Id,
                                 Account = q.Accounts.FirstOrDefault(),
-                                LoginName= q.LoginName,
+                                LoginName = q.LoginName,
                                 StudentCode = q.StudentCode
                             }).ToList();
 
@@ -298,7 +299,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                 context = context.BulkInsert(account, count, 100);
                             }
                         }
-                         context.SaveChanges();
+                        context.SaveChanges();
 
                     }
                     transactionScope.Complete();
@@ -411,7 +412,157 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult ImportAvailableSubjectForRegister(int blockId)
+        {
+            try
+            {
+                DB_Finance_AcademicEntities context;
+                using (var excelPackage = new ExcelPackage())
+                {
+                    var ws = excelPackage.Workbook.Worksheets.FirstOrDefault();
+                    var totalCol = ws.Dimension.Columns;
+                    var totalRow = ws.Dimension.Rows;
 
+                    var studentCodeCell = (from cell in ws.Cells
+                                           where cell.Value.ToString().Trim().ToUpper()
+                                           .Equals("MSSV")
+                                           select cell).FirstOrDefault();
+
+                    var failedSubjectCell = (from cell in ws.Cells
+                                             where cell.Value.ToString().Trim().ToUpper()
+                                             .Equals("MÔN ĐANG NỢ")
+                                             select cell).FirstOrDefault();
+                    var nextSubjectCell = (from cell in ws.Cells
+                                           where cell.Value.ToString().Trim().ToUpper()
+                                           .Equals("MÔN TIẾP THEO")
+                                           select cell).FirstOrDefault();
+
+                    var slowProgressSubjectCell = (from cell in ws.Cells
+                                                   where cell.Value.ToString().Trim().ToUpper()
+                                                   .Equals("DANH SÁCH MÔN CHẬM TIẾN ĐỘ")
+                                                   select cell).FirstOrDefault();
+
+
+
+                    var headerRow = studentCodeCell.Start.Row; //Headers are all in the same row
+
+                    var studentCodeCol = studentCodeCell.Start.Column;
+
+                    var failedSubjectCol = failedSubjectCell.Start.Column;
+
+                    var nextSubjectCol = nextSubjectCell.Start.Column;
+
+                    var slowProgressSubjectCol = slowProgressSubjectCell.Start.Column;
+
+                    using (context = new DB_Finance_AcademicEntities())
+                    {
+                        var count = 0;
+                        //row from EPPLUS start from 1
+                        for (int i = headerRow + 1; i <= totalRow; i++)
+                        {
+                            var studentCode = ws.Cells[i, studentCodeCol].Value.ToString().Trim().ToUpper();
+                            var failedSubjects = ws.Cells[i, failedSubjectCol].Value.ToString().Trim();
+                            var nextSubjects = ws.Cells[i, nextSubjectCol].Value.ToString().Trim();
+                            var slowProgressSubjects = ws.Cells[i, slowProgressSubjectCol].Value.ToString().Trim();
+
+                            if (failedSubjects[failedSubjects.Length - 1].Equals(','))
+                            {
+                                failedSubjects = failedSubjects.Substring(0, failedSubjects.Length - 1);
+                            }
+                            if (nextSubjects[nextSubjects.Length - 1].Equals(','))
+                            {
+                                nextSubjects = nextSubjects.Substring(0, nextSubjects.Length - 1);
+                            }
+                            if (slowProgressSubjects[slowProgressSubjects.Length - 1].Equals(','))
+                            {
+                                slowProgressSubjects = slowProgressSubjects.Substring(0, slowProgressSubjects.Length - 1);
+                            }
+
+                            var failedSubjectList = failedSubjects.Split(',');
+                            var nextSubjectList = nextSubjects.Split(',');
+                            var slowProgressSubjectList = slowProgressSubjects.Split(',');
+
+                            var student = context.StudentMajors
+                                .Where(q => q.StudentCode.ToUpper().Equals(studentCode)).FirstOrDefault();
+
+
+                            if (student != null)
+                            {
+                                //môn nợ
+                                foreach (var failedSubject in failedSubjectList)
+                                {
+                                    var subject = context.Subjects
+                                        .Where(q => q.SubjectCode.ToUpper().Equals(failedSubject.Trim().ToUpper())).FirstOrDefault();
+                                    if (subject != null)
+                                    {
+                                        ++count;
+                                        AvailableSubject availableSubject = new AvailableSubject()
+                                        {
+
+                                            IsRelearn = true,
+                                            StudentMajorId = student.Id,
+                                            SubjectId = subject.Id,
+                                            BlockId = blockId
+                                        };
+                                        context.BulkInsert(availableSubject, count, 100);
+                                    }
+                                }
+
+                                //môn tiếp theo trong học kì tới
+                                foreach (var nextSubject in nextSubjectList)
+                                {
+                                    var subject = context.Subjects
+                                        .Where(q => q.SubjectCode.ToUpper().Equals(nextSubject.Trim().ToUpper())).FirstOrDefault();
+                                    if (subject != null)
+                                    {
+                                        AvailableSubject availableSubject = new AvailableSubject()
+                                        {
+
+                                            IsInProgram = true,
+                                            StudentMajorId = student.Id,
+                                            SubjectId = subject.Id,
+                                            BlockId = blockId
+                                        };
+                                        context.BulkInsert(availableSubject, count, 100);
+                                    }
+                                }
+
+                                //môn chậm tiến độ
+                                foreach (var slowProgressSubject in slowProgressSubjectList)
+                                {
+                                    var subject = context.Subjects
+                                        .Where(q => q.SubjectCode.ToUpper().Equals(slowProgressSubject.Trim().ToUpper())).FirstOrDefault();
+                                    if (subject != null)
+                                    {
+                                        AvailableSubject availableSubject = new AvailableSubject()
+                                        {
+
+                                            IsSlowProgress = true,
+                                            StudentMajorId = student.Id,
+                                            SubjectId = subject.Id,
+                                            BlockId = blockId
+                                        };
+                                        context.BulkInsert(availableSubject, count, 100);
+                                    }
+                                }
+                            }
+
+                        } //end of for()
+                        context.SaveChanges();
+                    }// end of using context
+
+                }
+
+                return Json(new { success = true, message = "" });
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+
+        }
 
 
 

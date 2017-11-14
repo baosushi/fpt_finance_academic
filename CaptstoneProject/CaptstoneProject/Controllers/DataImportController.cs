@@ -6,6 +6,8 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -513,8 +515,30 @@ namespace CaptstoneProject.Controllers
                         var semesterYear = int.Parse((new Regex("\\d+$")).Match(semesterName).Value);
                         var semesterTitle = semesterName.Replace("" + semesterYear, "");
 
-                        var teacher = context.Teachers.Where(q => q.LoginName == gradeFile.Login.ToLower()).FirstOrDefault();
                         var semester = context.Semesters.Where(q => q.Year == semesterYear && q.Title == semesterTitle).FirstOrDefault();
+                        var teacher = context.Teachers.Where(q => q.LoginName == gradeFile.Login.ToLower()).FirstOrDefault();
+
+                        var teacherAccount = context.AspNetUsers.Where(q => q.UserName == gradeFile.Login.ToLower()).FirstOrDefault();
+
+                        if(teacherAccount == null)
+                        {
+                            using (var subContext = new ApplicationDbContext())
+                            {
+                                //var accountController = new AccountController();
+                                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+                                var user = new ApplicationUser { UserName = gradeFile.Login.ToLower() };
+
+                                //var result = accountController.UserManager.CreateAsync(user, "@Qawsed123");
+                                var result = userManager.Create(user, "123456");
+
+                                //accountController.UserManager.AddToRole(user.Id, "Teacher");
+                                if(result.Succeeded)
+                                {
+                                    userManager.AddToRole(user.Id, "Teacher");
+                                }
+                            }
+                        }
 
                         foreach (var subjectClass in gradeFile.SubjectClassGrades)
                         {
@@ -524,7 +548,29 @@ namespace CaptstoneProject.Controllers
                             var grades = subjectClass.Students;
 
                             var subject = context.Subjects.Where(q => q.SubjectCode == subjectCode).FirstOrDefault();
+
+                            if(subject == null)
+                            {
+                                subject = context.Subjects.Create();
+                                subject.SubjectName = "";
+                                subject.SubjectCode = subjectCode;
+
+                                context.Subjects.Add(subject);
+                                context.SaveChanges();
+                            }
+
+                            var teacherSubject = context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id && q.SubjectId == subject.Id).FirstOrDefault();
                             var course = context.Courses.Where(q => q.SubjectId == subject.Id && q.ClassName == className && q.SemesterId == semester.Id).FirstOrDefault();
+
+                            if (teacherSubject == null)
+                            {
+                                teacherSubject = context.TeacherSubjects.Create();
+                                teacherSubject.SubjectId = subject.Id;
+                                teacherSubject.TeacherId = teacher.Id;
+
+                                context.TeacherSubjects.Add(teacherSubject);
+                                context.SaveChanges();
+                            }
 
                             if (course == null)
                             {
@@ -612,7 +658,7 @@ namespace CaptstoneProject.Controllers
                                     var courseMark = context.CourseMarks.Where(q => q.ComponentName == componentName && q.CourseId == course.Id).FirstOrDefault();
                                     var studentCourseMark = studentInCourse.StudentCourseMarks.Where(q => q.CourseMarkId == courseMark.Id).FirstOrDefault();
 
-                                    if(studentCourseMark == null)
+                                    if (studentCourseMark == null)
                                     {
 
                                         studentCourseMark = context.StudentCourseMarks.Create();
