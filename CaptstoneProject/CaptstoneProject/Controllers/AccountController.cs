@@ -93,7 +93,7 @@ namespace CaptstoneProject.Controllers
                         var roleList = UserManager.GetRoles(uId);
                         var email = UserManager.GetEmail(uId);
                         var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
-                        Session[loginName] = loginName;
+                        Session["loginName"] = loginName;
                         Session["uName"] = model.Username;
                         Session["uImgUrl"] = "/Images/prideKappa.jpg";
                         var role = roleList.FirstOrDefault();
@@ -105,6 +105,7 @@ namespace CaptstoneProject.Controllers
                                 case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
                                 case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
                                 case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                                case "Student": return RedirectToAction("Index", "Student", new { area = "Students" });
                             }
                         }
                         return RedirectToLocal(returnUrl);
@@ -552,7 +553,7 @@ namespace CaptstoneProject.Controllers
                         var roleList = UserManager.GetRoles(uId);
                         var role = roleList.FirstOrDefault();
                         var loginName = Regex.Match(email, @"^.*?(?=@)").Value.Trim();
-                        Session[loginName] = loginName;
+                        Session["loginName"] = loginName;
                         if (returnUrl == null)
                         {
                             switch (role)
@@ -561,6 +562,7 @@ namespace CaptstoneProject.Controllers
                                 case "Admin Training Management": return RedirectToAction("Index", "AdminTraining", new { area = "AdminTrainingDepartment" });
                                 case "Teacher": return RedirectToAction("Index", "Course", new { area = "Teacher" });
                                 case "Training Management": return RedirectToAction("Index", "Management", new { area = "TrainingManagement" });
+                                case "Student": return RedirectToAction("Index", "Student", new { area = "Students" });
                             }
                         }
                         return RedirectToLocal(returnUrl);

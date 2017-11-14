@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using DataService.Model;
 using CaptstoneProject.Controllers;
+using static CaptstoneProject.Models.AreaViewModel;
+using CaptstoneProject.Models;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
@@ -18,8 +20,99 @@ namespace CaptstoneProject.Areas.Students.Controllers
         // GET: Student
         public ActionResult Index()
         {
-            var studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.StudentMajor);
-            return View(studentInCourses.ToList());
+            return View("_Index");
+        }
+
+        public ActionResult GetRegistrationSubjects()
+        {
+            var loginName = (string)this.Session["loginName"];
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
+                var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id);
+
+                var curriculumSubjects = availableSubjects.Where(q => q.IsInProgram.HasValue && q.IsInProgram.Value).Select(q => new
+                {
+                    SubjectCode = q.Subject.SubjectCode,
+                    SubjectName = q.Subject.SubjectName
+                }).ToList();
+                var relearnSubjects = availableSubjects.Where(q => q.IsRelearn.HasValue && q.IsRelearn.Value).Select(q => new
+                {
+                    SubjectCode = q.Subject.SubjectCode,
+                    SubjectName = q.Subject.SubjectName
+                }).ToList();
+                var otherSubjects = availableSubjects.Where(q => (!q.IsInProgram.HasValue || (q.IsInProgram.HasValue && !q.IsInProgram.Value)) && (!q.IsRelearn.HasValue || (q.IsRelearn.HasValue && !q.IsRelearn.Value))).Select(q => new
+                {
+                    SubjectCode = q.Subject.SubjectCode,
+                    SubjectName = q.Subject.SubjectName
+                }).ToList();
+
+                return Json(new { curriculumSubjects = curriculumSubjects, relearnSubjects = relearnSubjects, otherSubjects = otherSubjects });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SubmitRegistration(List<string> relearnList, bool curriculumSubject = false, bool relearnSubject = false)
+        {
+            var loginName = (string)this.Session["loginName"];
+
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
+                    var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id);
+
+                    var model = new RegistrationViewModel();
+                    model.RegistrationDetails = new List<RegistrationDetailViewModel>();
+
+                    if (curriculumSubject)
+                    {
+                        var curriculumSubjects = availableSubjects.Where(q => q.IsInProgram.HasValue && q.IsInProgram.Value).Select(q => new RegistrationDetailViewModel
+                        {
+                            SubjectCode = q.Subject.SubjectCode,
+                            CreditValue = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value : 0,
+                            RegisteredType = (int)RegistrationType.CurriculumSubject,
+                            UnitPrice = 3000000,
+                            TotalPrice = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value * 3000000 : 0
+                        }).ToList();
+
+                        model.RegistrationDetails.InsertRange(model.RegistrationDetails.Count, curriculumSubjects);
+                    }
+
+                    if (relearnSubject && relearnList != null && relearnList.Count > 0)
+                    {
+                        var relearnSubjects = availableSubjects.Where(q => q.IsRelearn.HasValue && q.IsRelearn.Value).Select(q => new RegistrationDetailViewModel
+                        {
+                            SubjectCode = q.Subject.SubjectCode,
+                            SubjectName = q.Subject.SubjectName,
+                            CreditValue = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value : 0,
+                            RegisteredType = (int)RegistrationType.RelearnSubject,
+                            UnitPrice = 1500000,
+                            TotalPrice = q.Subject.CreditValue.HasValue ? q.Subject.CreditValue.Value * 1500000 : 0
+                        }).ToList();
+
+                        model.RegistrationDetails.InsertRange(model.RegistrationDetails.Count, relearnSubjects);
+                    }
+
+                    //OTHER Subject todo
+
+
+                    model.StudentAccount = studentMajor.Accounts.FirstOrDefault();
+                    model.TotalPrice = model.RegistrationDetails.Sum(q => q.TotalPrice);
+
+                    return View("Payment", model);
+                }
+            }
+            catch (Exception e)
+            {
+                return View("_Index");
+            }
+        }
+
+        public ActionResult SubmitPayment()
+        {
+            return Json(new { success = true });
         }
 
         // GET: Student/Details/5
@@ -138,7 +231,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
             int count = 0;
 
-            List<StudentInCourse> studentInCourses=null;
+            List<StudentInCourse> studentInCourses = null;
 
             if (!string.IsNullOrEmpty(param.sSearch))
             {
@@ -148,7 +241,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
             {
                 studentInCourses = db.StudentInCourses.Include(s => s.Course).Include(s => s.StudentMajor).ToList();
             }
-            
+
             int totalRecords = studentInCourses.Count();
 
             count = param.iDisplayStart + 1;

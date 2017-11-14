@@ -1,0 +1,75 @@
+﻿@using CaptstoneProject.Models
+@model CaptstoneProject.Models.AreaViewModel.RegistrationViewModel
+@{
+    ViewBag.Title = "Thanh toán đăng ký";
+}
+
+<div class="content">
+    <div class="container-default fadeInRight animate">
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-users"></i>Thanh toán</div>
+            <div class="panel-body">
+                @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
+                {
+                    <p style="color: red">Số dư tài khoản không đủ để thực hiện giao dịch</p>
+                }
+                else
+                {
+                    <h2>Xác nhận thanh toán đăng ký</h2>
+                    <br />
+                    <div class="row">
+                        <div class="offset-10 col-md-2">
+                            <button id="btnPayment" class="btn btn-success pull-right">Thanh toán</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table display dataTable" id="registrationTable">
+                                <tr>
+                                    <th>Mã môn</th>
+                                    <th>Tên môn</th>
+                                    <th>Loại đăng ký</th>
+                                    <th>Tín chỉ</th>
+                                    <th>Giá</th>
+                                </tr>
+                                @foreach (var registrationDetail in Model.RegistrationDetails)
+                                {
+                                    <tr>
+                                        <td>@registrationDetail.SubjectCode</td>
+                                        <td>@registrationDetail.SubjectName</td>
+                                        <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
+                                        <td>@registrationDetail.CreditValue</td>
+                                        <td>@registrationDetail.TotalPrice</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="offset-9 col-md-3">
+                            <h3>Tổng cộng: @Model.TotalPrice.ToString("#,###") VNĐ</h3>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#registrationTable').DataTable({
+        searching: true
+    });
+
+    $('#btnPayment').click(function () {
+        $.ajax({
+            method: 'post',
+            url: '@Url.Action("SubmitPayment")',
+            success: function (result) {
+                if(result.success) {
+                    swal("Hoàn tất!", "Thanh toán thành công.", "success");
+                }
+            }
+        });
+    });
+</script>
