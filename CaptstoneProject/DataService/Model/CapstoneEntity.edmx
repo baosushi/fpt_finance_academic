@@ -21,13 +21,14 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="PreferredSlot" Type="int" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IsInProgram" Type="bit" />
+          <Property Name="IsSlowProgress" Type="bit" />
           <Property Name="IsRelearn" Type="bit" />
           <Property Name="StudentMajorId" Type="int" Nullable="false" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
           <Property Name="BlockId" Type="int" Nullable="false" />
+          <Property Name="IsViolatingRegulation" Type="bit" />
         </EntityType>
         <EntityType Name="Block">
           <Key>
@@ -940,13 +941,14 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="PreferredSlot" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IsInProgram" Type="Boolean" />
+          <Property Name="IsSlowProgress" Type="Boolean" />
           <Property Name="IsRelearn" Type="Boolean" />
           <Property Name="StudentMajorId" Type="Int32" Nullable="false" />
           <Property Name="SubjectId" Type="Int32" Nullable="false" />
           <Property Name="BlockId" Type="Int32" Nullable="false" />
+          <Property Name="IsViolatingRegulation" Type="Boolean" />
           <NavigationProperty Name="Block" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Block" FromRole="AvailableSubject" ToRole="Block" />
           <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="AvailableSubject" ToRole="StudentMajor" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_Subject" FromRole="AvailableSubject" ToRole="Subject" />
@@ -1598,12 +1600,13 @@
           <EntitySetMapping Name="AvailableSubjects">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
               <MappingFragment StoreEntitySet="AvailableSubject">
+                <ScalarProperty Name="IsViolatingRegulation" ColumnName="IsViolatingRegulation" />
                 <ScalarProperty Name="BlockId" ColumnName="BlockId" />
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
                 <ScalarProperty Name="IsRelearn" ColumnName="IsRelearn" />
+                <ScalarProperty Name="IsSlowProgress" ColumnName="IsSlowProgress" />
                 <ScalarProperty Name="IsInProgram" ColumnName="IsInProgram" />
-                <ScalarProperty Name="PreferredSlot" ColumnName="PreferredSlot" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

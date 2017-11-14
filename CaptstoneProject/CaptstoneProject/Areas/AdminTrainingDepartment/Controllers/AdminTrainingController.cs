@@ -27,69 +27,79 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                     Value = q.Id.ToString()
                 }).ToList();
                 var semesterList = context.Semesters.OrderByDescending(q => q.Year)
-                    .ThenByDescending(q =>q.SemesterInYear).Select(q => new SelectListItem
-                {
-                    Text = q.Title + " " + q.Year,
-                    Value = q.Id.ToString()
-                }).ToList();
+                    .ThenByDescending(q => q.SemesterInYear).Select(q => new SelectListItem
+                    {
+                        Text = q.Title + " " + q.Year,
+                        Value = q.Id.ToString()
+                    }).ToList();
                 ViewBag.SubjectGroups = subjectGroupList;
                 ViewBag.SemesterList = semesterList;
             }
             return View();
         }
 
-        public ActionResult SemesterManagement(int semesterId = -1)
+        public ActionResult SemesterManagement(int? semesterId)
         {
-            IEnumerable<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
-            using (var context = new DB_Finance_AcademicEntities())
+            try
             {
-                int? status = null;
-                //DateTime startDate, endDate;
-                var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                //startDate = semester.StartDate.Value;
-                //endDate = semester.EndDate.Value;
+                semesterId = -1;
+                List<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    int? status = null;
+                    //DateTime startDate, endDate;
+                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
-                courses = context.Courses.Where(q => q.SemesterId == semester.Id).AsEnumerable()
-                    .Select(q => new CourseRecordViewModel
+                    //startDate = semester.StartDate.Value;
+                    //endDate = semester.EndDate.Value;
+
+                    courses = context.Courses.Where(q => q.SemesterId == semester.Id).AsEnumerable()
+                        .Select(q => new CourseRecordViewModel
+                        {
+                            CourseId = q.Id,
+                            Name = q.Subject.SubjectName,
+                            Code = q.Subject.SubjectCode,
+                            Class = q.ClassName,
+                            StartDate = (q.StartDate == null ? new DateTime(): q.StartDate.Value),
+                            EndDate = (q.EndDate == null? new DateTime(): q.EndDate.Value),
+                            Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                        }).ToList();
+
+                    var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
+                    var semesterList = semesters.Select(q => new SelectListItem
                     {
-                        CourseId = q.Id,
-                        Name = q.Subject.SubjectName,
-                        Code = q.Subject.SubjectCode,
-                        Class = q.ClassName,
-                        StartDate = q.StartDate.Value,
-                        EndDate = q.EndDate.Value,
-                        Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                        Text = q.Title + " " + q.Year,
+                        Value = q.Id.ToString(),
                     }).ToList();
 
-                var semesters = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear);
-                var semesterList = semesters.Select(q => new SelectListItem
-                {
-                    Text = q.Title + " " + q.Year,
-                    Value = q.Id.ToString(),
-                }).ToList();
+                    var subjectList = context.Subjects.Select(q => new SelectListItem
+                    {
+                        Text = q.SubjectName + " - " + q.SubjectCode,
+                        Value = q.Id.ToString()
+                    }).ToList();
 
-                var subjectList = context.Subjects.Select(q => new SelectListItem
-                {
-                    Text = q.SubjectName + " - " + q.SubjectCode,
-                    Value = q.Id.ToString()
-                }).ToList();
+                    var teacherList = context.Teachers.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Id.ToString()
+                    }).ToList();
 
-                var teacherList = context.Teachers.Select(q => new SelectListItem
-                {
-                    Text = q.Name,
-                    Value = q.Id.ToString()
-                }).ToList();
+                    ViewBag.semList = semesterList;
+                    ViewBag.selectedSem = semesterId;
+                    ViewBag.selectedSemName = semester.Title + "" + semester.Year;
+                    ViewBag.semesterStatus = semester.Status;
+                    ViewBag.subjectList = subjectList;
+                    ViewBag.teacherList = teacherList;
+                }
 
-                ViewBag.semList = semesterList;
-                ViewBag.selectedSem = semesterId;
-                ViewBag.selectedSemName = semester.Title + "" + semester.Year;
-                ViewBag.semesterStatus = semester.Status;
-                ViewBag.subjectList = subjectList;
-                ViewBag.teacherList = teacherList;
+                return View(courses);
             }
-
-            return View(courses);
+            catch (Exception e) 
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
         }
 
         public ActionResult CourseDetails(int courseId)
