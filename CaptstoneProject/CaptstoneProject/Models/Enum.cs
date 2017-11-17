@@ -113,10 +113,10 @@ namespace CaptstoneProject.Models
         TuitionPayment = 2,
         [Display(Name = "Hoàn học phí")]
         RefundTuitionFee = 3,
-        [Display(Name = "Rollback tăng tiền")]
-        RollbackIncrease = 4,
-        [Display(Name = "Rollback giảm tiền")]
-        RollbackDecrease = 5,
+        [Display(Name = "Điều chỉnh tăng tiền")]
+        AdjustIncrease = 4,
+        [Display(Name = "Điều chỉnh giảm tiền")]
+        AdjustDecrease = 5,
     }
 
     public enum RegistrationStatus

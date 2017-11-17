@@ -2,6 +2,36 @@
     ViewBag.Title = "Index";
 }
 
+<style type="text/css">
+    /*.loader {
+        border: 10px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 10px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loader-percentage {
+        margin-top: 46px;
+        margin-right: -93px;
+        font-size: 30px;
+        color: #004cff;
+        float: right;
+    }*/
+</style>
+
 <div class="content">
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
@@ -14,7 +44,19 @@
                 </div>
             </div>
             <div class="panel-body">
-                <button id="my-btn">GG</button>
+                @*<button id="my-btn" class="">GG</button>*@
+
+
+                <div class="">
+                    <select id="block-select-picker">
+                        <option value="-1">TEst</option>
+                    </select>
+                    <input type="file" class="hidden" id="upload-file" />
+                    <button type="button" class="btn btn-success" id="btn-choose-file">Choose File</button>
+                    <span id="file-name">Nothing selected</span>
+                    <button type="button" class="btn btn-success" disabled id="btn-import-avail-subject"><i class="fa fa-upload"></i> Import Available Subject</button>
+                </div>
+
 
                 @*<div class="row">
                         <div class="col-md-8">
@@ -99,6 +141,111 @@
             }, 2000);
         });
     });
+
+    $("#btn-choose-file").on("click", function () {
+        $("#upload-file").trigger('click');
+    });
+    $("#upload-file").on('change', function () {
+        var fileName = $(this)[0].files[0].name;
+        $("#file-name").html(fileName);
+
+        if (fileName != undefined) {
+            var attrDisable = $("#btn-import-avail-subject").attr('disabled');
+            if (typeof attrDisable !== typeof undefined && attr !== false) {
+                $("#btn-import-avail-subject").removeAttr('disabled');
+            }
+        } else {
+            $("#btn-import-avail-subject").attr('disabled', 'disabled');
+        }
+    });
+
+    $("#btn-import-avail-subject").on('click', function () {
+            swal({
+            title: 'Importing Available Subject',
+            type: 'info',
+            html:
+            '<div>' +
+             '<div class="loader">'+
+                 '<canvas id="percentageLoader" width="150" height="150"></canvas>' +
+             '</div>'+
+            '</div>',
+            showConfirmButton: false,
+            showCancelButton: true,
+            focusConfirm: false,
+            allowOutsideClick: false,
+            onOpen: function () {
+                var data = new FormData();
+                data.append("blockId", 1);
+                for (var i = 0; i < $("#upload-file")[0].files.length; i++) {
+                    data.append("file" + i, $("#upload-file")[0].files[i]);
+                }
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("TestPercent")",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            swal({
+                                type: 'success',
+                                title: 'Import successed',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        } else {
+                            swal(
+                                'Oops...',
+                                result.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+                checkPercentage();
+
+            }
+        });
+
+    });
+    function drawPercentage(percent) {
+        var ctx = $("#percentageLoader")[0].getContext('2d');
+        var start = Math.PI * 1.5;
+        var cw = ctx.canvas.width;
+        var ch = ctx.canvas.height;
+        var diff;
+        diff = ((percent / 100) * Math.PI * 2);
+            ctx.clearRect(0, 0, cw, ch);
+            ctx.lineWidth = 10;
+            ctx.fillStyle = '#4285f4';
+            ctx.strokeStyle = "#4285f4";
+            ctx.textAlign = "center";
+            ctx.font = "24px monospace";
+            ctx.fillText(percent + '%', cw * .52, ch * .5 + 5);
+            ctx.beginPath();
+            ctx.arc(cw/2, ch/2, 40, start, start + diff, false);
+            ctx.stroke();
+    }
+
+
+    function checkPercentage() {
+        $.ajax({
+            url: "@Url.Action("GetPercentageOfImportingAvailableSubject")",
+            type: "post",
+            success: function (result) {
+                if (result.sucess) {
+                    drawPercentage(result.percent);
+                    if (result.percent < 100) {
+                        setTimeout(checkPercentage, 1000);
+                    }
+                } else {
+
+                }
+            },
+        });
+    }
+
+
 
 
         //init dateRange picker
