@@ -8,12 +8,14 @@ namespace CaptstoneProject.Models
 {
     public enum SememsterStatus
     {
+        [Display(Name = "Registration")]
+        Registration = 0,
         [Display(Name = "Open")]
-        Open = 0,
+        Open = 1,
         [Display(Name = "Pending")]
-        Pending = 1,
+        Pending = 2,
         [Display(Name = "Closed")]
-        Closed = 2,
+        Closed = 3,
     }
 
     public enum BlockStatus
@@ -149,10 +151,20 @@ namespace CaptstoneProject.Models
 
     public enum RegistrationType
     {
-        [Display(Name = "Môn học đi")]
+        [Display(Name = "Curriculum Subject")]
         CurriculumSubject = 1,
-        [Display(Name = "Môn học lại")]
+        [Display(Name = "Relearn Subject")]
         RelearnSubject = 2,
+    }
+
+    public enum JsonResultErrorType
+    {
+        [Display(Name = "Unauthorized access")]
+        Unauthorized = 1,
+        [Display(Name = "Exception occured")]
+        Exception = 2,
+        [Display(Name = "Failed to process request")]
+        Failed = 3,
     }
 
     //public enum TransactionFilter

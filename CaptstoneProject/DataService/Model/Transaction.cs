@@ -16,7 +16,7 @@ namespace DataService.Model
     {
         public int Id { get; set; }
         public Nullable<int> AccountId { get; set; }
-        public Nullable<decimal> Amount { get; set; }
+        public Nullable<double> Amount { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> TransactionType { get; set; }
         public Nullable<bool> IsIncreaseTransaction { get; set; }

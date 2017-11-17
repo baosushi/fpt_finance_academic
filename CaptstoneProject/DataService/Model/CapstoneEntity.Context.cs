@@ -25,7 +25,6 @@ namespace DataService.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AvailableSubject> AvailableSubjects { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
@@ -38,7 +37,6 @@ namespace DataService.Model
         public virtual DbSet<SubjectGroup> SubjectGroups { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
-        public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
@@ -50,5 +48,7 @@ namespace DataService.Model
         public virtual DbSet<StudentMajor> StudentMajors { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
     }
 }
