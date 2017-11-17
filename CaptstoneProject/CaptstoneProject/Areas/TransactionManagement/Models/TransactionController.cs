@@ -51,10 +51,10 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
         }
 
         [HttpPost]
-        public ActionResult CreateTransaction(int studentMajorId, decimal amount,int transactionType, string description)
+        public ActionResult CreateTransaction(int studentMajorId, float amount, int transactionType, string description)
         {
             int form = -1;
-            
+
             try
             {
                 using (var context = new DB_Finance_AcademicEntities())
@@ -85,7 +85,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                             break;
 
                     }
-                    if(form == -1 || transactionType == -1)
+                    if (form == -1 || transactionType == -1)
                     {
                         return Json(new { success = false, message = "Create transaction Failed!" });
                     }
@@ -110,7 +110,6 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 return Json(new { success = false, message = e.Message });
             }
         }
-
 
         public ActionResult GetAccountInformation(int studentMajorId = -1)
         {
@@ -299,7 +298,7 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
             }
         }
 
-       
+
 
 
         public ActionResult Edit(int Id)

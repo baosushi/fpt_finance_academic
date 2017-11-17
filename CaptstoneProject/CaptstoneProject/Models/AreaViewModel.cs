@@ -144,7 +144,7 @@ namespace CaptstoneProject.Models
         {
             public int Id { get; set; }
             public int AccountId { get; set; }
-            public decimal Amount { get; set; }
+            public float Amount { get; set; }
             public DateTime Date { get; set; }
             public string Notes { get; set; }
             public bool IsIncreaseTransaction { get; set; }

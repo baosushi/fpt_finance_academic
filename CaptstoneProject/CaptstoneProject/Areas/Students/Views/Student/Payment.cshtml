@@ -1,86 +1,101 @@
 ﻿@using CaptstoneProject.Models
 @model CaptstoneProject.Models.AreaViewModel.RegistrationViewModel
 @{
-    ViewBag.Title = "Thanh toán đăng ký";
+    ViewBag.Title = "Registration Checkout";
+    var count = 1;
 }
-
+<style>
+    table.table > thead > tr:first-child > td, table.table > thead > tr:first-child > th {
+        text-align: center;
+    }
+</style>
 <div class="content">
     <div class="container-default fadeInRight animate">
         <div class="panel panel-default">
-            <div class="panel-title"><i class="fa fa-users"></i>Thanh toán</div>
+            <div class="panel-title"><i class="fa fa-users"></i>Checkout</div>
             <div class="panel-body">
-                <h2>Xác nhận thanh toán đăng ký</h2>
+                <h2>Confirm payment</h2>
                 <br />
                 <div class="row">
-                    <div class="offset-9 col-md-3">
-                        <button id="btnPayment" class="btn btn-primary margin-l-10" onclick="parent.history.back();">Trở lại</button>
-                        @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
+                    <div class="col-md-9">
+                        <h3>
+                            Balance: @Model.StudentAccount.Balance.Value.ToString("#,###") VNĐ
+                        </h3>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="btnBack" class="btn btn-primary margin-l-10" onclick="parent.history.back();">Back</button>
+                        @if (Model.StudentAccount.Balance.Value < Model.TotalPrice)
                         {
-                            <button id="btnPayment" class="btn btn-success pull-right" disabled>Thanh toán</button>
+                            <button id="btnPayment" class="btn btn-success pull-right" disabled>Checkout</button>
                         }
                         else
                         {
-                            <button id="btnPayment" class="btn btn-success pull-right">Thanh toán</button>
+                            <button id="btnPayment" class="btn btn-success pull-right">Checkout</button>
                         }
                     </div>
                     <div class="col-md-12">
-                        @if (Model.StudentAccount.Balance.Value < (decimal)Model.TotalPrice)
+                        @if (Model.StudentAccount.Balance.Value < Model.TotalPrice)
                         {
-                            <p style="color: red" class="pull-right">Số dư tài khoản không đủ để thực hiện giao dịch</p>
+                            <p style="color: red" class="pull-right">Your balance is not enough to perform this transaction</p>
                         }
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table display dataTable table-bordered" id="registrationTable">
-                            <tr>
-                                <th>Mã môn</th>
-                                <th>Tên đăng ký</th>
-                                <th>Tên môn</th>
-                                <th>Loại đăng ký</th>
-                                <th>Tín chỉ</th>
-                                <th>Giá</th>
-                            </tr>
-
-                            @if (Model.CurriculumRegistrationDetails.Count > 0)
-                            {
+                        <table class="table dataTable table-bordered" id="registrationTable">
+                            <thead>
                                 <tr>
-                                    <td>@Model.CurriculumRegistrationDetails.First().SubjectCode</td>
-                                    <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">Môn học đi</td>
-                                    <td>@Model.CurriculumRegistrationDetails.First().SubjectName</td>
-                                    <td>@(((RegistrationType)@Model.CurriculumRegistrationDetails.First().RegisteredType).GetEnumDisplayName())</td>
-                                    <td>@Model.CurriculumRegistrationDetails.First().CreditValue</td>
-                                    <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">@Model.CurriculumTotalPrice.ToString("#,###") VNĐ</td>
+                                    <th>No.</th>
+                                    <th>Registered Item</th>
+                                    <th>Subject Name</th>
+                                    <th>Registration Type</th>
+                                    <th>Credit Value</th>
+                                    <th>Price</th>
                                 </tr>
-
-                                foreach (var registrationDetail in Model.CurriculumRegistrationDetails.Skip(1))
+                            </thead>
+                            <tbody>
+                                @if (Model.CurriculumRegistrationDetails.Count > 0)
                                 {
                                     <tr>
+                                        <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">@(count++)</td>
+                                        <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">Curriculum Subject</td>
+                                        <td>@Model.CurriculumRegistrationDetails.First().SubjectName</td>
+                                        <td>@(((RegistrationType)@Model.CurriculumRegistrationDetails.First().RegisteredType).GetEnumDisplayName())</td>
+                                        <td>@Model.CurriculumRegistrationDetails.First().CreditValue</td>
+                                        <td rowspan="@Model.CurriculumRegistrationDetails.Count" style="vertical-align: middle!important">@Model.CurriculumTotalPrice.ToString("#,###") VNĐ</td>
+                                    </tr>
+
+                                    foreach (var registrationDetail in Model.CurriculumRegistrationDetails.Skip(1))
+                                    {
+                                        <tr>
+                                            <td style="display: none"></td>
+                                            <td style="display: none"></td>
+                                            <td>@registrationDetail.SubjectName (@registrationDetail.SubjectCode)</td>
+                                            <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
+                                            <td>@registrationDetail.CreditValue</td>
+                                            <td style="display: none"></td>
+                                        </tr>
+                                    }
+                                }
+
+                                @foreach (var registrationDetail in Model.OtherRegistrationDetails)
+                                {
+                                    <tr>
+                                        <td>@(count++)</td>
                                         <td>@registrationDetail.SubjectCode</td>
                                         <td>@registrationDetail.SubjectName</td>
                                         <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
                                         <td>@registrationDetail.CreditValue</td>
+                                        <td>@registrationDetail.TotalPrice.ToString("#,###") VNĐ</td>
                                     </tr>
                                 }
-                            }
-
-                            @foreach (var registrationDetail in Model.OtherRegistrationDetails)
-                            {
-                                <tr>
-                                    <td>@registrationDetail.SubjectCode</td>
-                                    <td>@registrationDetail.SubjectCode</td>
-                                    <td>@registrationDetail.SubjectName</td>
-                                    <td>@(((RegistrationType)registrationDetail.RegisteredType).GetEnumDisplayName())</td>
-                                    <td>@registrationDetail.CreditValue</td>
-                                    <td>@registrationDetail.TotalPrice.ToString("#,###") VNĐ</td>
-                                </tr>
-                            }
+                            </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="pull-right">Tổng cộng: @Model.TotalPrice.ToString("#,###") VNĐ</h4>
+                        <h4 class="pull-right">Total: @Model.TotalPrice.ToString("#,###") VNĐ</h4>
                     </div>
                 </div>
             </div>
@@ -90,18 +105,93 @@
 
 <script>
     $('#registrationTable').DataTable({
-        searching: true
+        searching: true,
+        sorting: false
     });
 
     $('#btnPayment').click(function () {
         $.ajax({
-            method: 'post',
+            method: 'POST',
             url: '@Url.Action("SubmitPayment")',
             success: function (result) {
-                if(result.success) {
-                    swal("Hoàn tất!", "Thanh toán thành công.", "success");
+                if (result.success) {
+                    verifyCode();
                 }
             }
         });
     });
+
+    function verifyCode(message) {
+        var regex = new RegExp(/(0[/]\d+)/i);
+        var noAttempt = message != null && regex.test(message);
+
+        var contentString = noAttempt ? '' : '<div class="row"><div class="col-md-12"><input id="confirmationCode" class="form-control" value="" /></div></div>';
+        contentString = message ? '<div><div class="row"><div class="col-md-12"><p style="color: red; font-size: small">' + message + '</p></div></div>' + contentString + '</div>' : contentString;
+        var content = $(contentString);
+
+        var buttons = null;
+
+        if (!noAttempt) {
+            buttons = {
+                cancel: "Cancel transaction",
+                confirm: {
+                    text: "Verify code",
+                    closeModal: false,
+                    value: "verify"
+                },
+            }
+        } else {
+            buttons = {
+                cancel: "Cancel transaction"
+            }
+        }
+
+        swal({
+            title: "Verification",
+            text: "We've sent a confirmation code to your email.\nPlease enter it here to verify this transaction.",
+            icon: "info",
+            closeOnClickOutside: false,
+            content: content[0],
+            buttons: buttons,
+        }).then(value => {
+            switch (value) {
+                case "verify":
+                    return fetch("@Url.Action("ConfirmPayment")", {
+                        method: "POST",
+                        credentials: 'include',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            code: $('#confirmationCode').val()
+                        })
+                    });
+                    break;
+                default:
+                    return Promise.reject('canceled');
+            }
+        }).then(result => {
+            return result.json();
+        }).then(json => {
+            if (json.success) {
+                swal({
+                    title: "Success",
+                    text: "Your transaction has ben verified and is being processed",
+                    icon: "success",
+                });
+            } else {
+                verifyCode(json.message);
+            }
+        }).catch(err => {
+            if (err == "canceled") {
+                swal.stopLoading();
+                swal.close();
+            } else if (err) {
+                swal("Please try again later!", "Something went wrong. Please try again later.", "warning");
+            } else {
+                swal.stopLoading();
+                swal.close();
+            }
+        });
+    }
 </script>

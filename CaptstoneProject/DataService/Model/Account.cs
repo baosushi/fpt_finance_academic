@@ -23,7 +23,7 @@ namespace DataService.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<decimal> Balance { get; set; }
+        public Nullable<double> Balance { get; set; }
         public Nullable<int> StudentMajorId { get; set; }
         public Nullable<int> Type { get; set; }
         public Nullable<bool> Active { get; set; }

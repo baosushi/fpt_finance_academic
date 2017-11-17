@@ -10,12 +10,14 @@ using DataService.Model;
 using CaptstoneProject.Controllers;
 using static CaptstoneProject.Models.AreaViewModel;
 using CaptstoneProject.Models;
+using System.Threading.Tasks;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
     public class StudentController : MyBaseController
     {
         private DB_Finance_AcademicEntities db = new DB_Finance_AcademicEntities();
+        private static object mutex = new object();
 
         // GET: Student
         public ActionResult Index()
@@ -28,26 +30,34 @@ namespace CaptstoneProject.Areas.Students.Controllers
             var loginName = (string)this.Session["loginName"];
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
-                var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id);
+                var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
+                if (semester != null)
+                {
+                    var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
+                    var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id && q.Block.SemesterId == semester.Id);
 
-                var curriculumSubjects = availableSubjects.Where(q => q.IsInProgram.HasValue && q.IsInProgram.Value).Select(q => new
-                {
-                    SubjectCode = q.Subject.SubjectCode,
-                    SubjectName = q.Subject.SubjectName
-                }).ToList();
-                var relearnSubjects = availableSubjects.Where(q => q.IsRelearn.HasValue && q.IsRelearn.Value).Select(q => new
-                {
-                    SubjectCode = q.Subject.SubjectCode,
-                    SubjectName = q.Subject.SubjectName
-                }).ToList();
-                var otherSubjects = availableSubjects.Where(q => (!q.IsInProgram.HasValue || (q.IsInProgram.HasValue && !q.IsInProgram.Value)) && (!q.IsRelearn.HasValue || (q.IsRelearn.HasValue && !q.IsRelearn.Value))).Select(q => new
-                {
-                    SubjectCode = q.Subject.SubjectCode,
-                    SubjectName = q.Subject.SubjectName
-                }).ToList();
+                    var curriculumSubjects = availableSubjects.Where(q => q.IsInProgram.HasValue && q.IsInProgram.Value).Select(q => new
+                    {
+                        SubjectCode = q.Subject.SubjectCode,
+                        SubjectName = q.Subject.SubjectName
+                    }).ToList();
+                    var relearnSubjects = availableSubjects.Where(q => q.IsRelearn.HasValue && q.IsRelearn.Value).Select(q => new
+                    {
+                        SubjectCode = q.Subject.SubjectCode,
+                        SubjectName = q.Subject.SubjectName
+                    }).ToList();
+                    var otherSubjects = availableSubjects.Where(q => (!q.IsInProgram.HasValue || (q.IsInProgram.HasValue && !q.IsInProgram.Value)) && (!q.IsRelearn.HasValue || (q.IsRelearn.HasValue && !q.IsRelearn.Value))).Select(q => new
+                    {
+                        SubjectCode = q.Subject.SubjectCode,
+                        SubjectName = q.Subject.SubjectName
+                    }).ToList();
 
-                return Json(new { curriculumSubjects = curriculumSubjects, relearnSubjects = relearnSubjects, otherSubjects = otherSubjects });
+                    return Json(new { curriculumSubjects = curriculumSubjects, relearnSubjects = relearnSubjects, otherSubjects = otherSubjects });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Registration is not available at the moment." });
+                }
             }
         }
 
@@ -60,8 +70,9 @@ namespace CaptstoneProject.Areas.Students.Controllers
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
+                    var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
                     var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
-                    var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id);
+                    var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id && q.Block.SemesterId == semester.Id);
 
                     var model = new RegistrationViewModel();
                     model.CurriculumRegistrationDetails = new List<RegistrationDetailViewModel>();
@@ -81,14 +92,15 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
                         model.CurriculumRegistrationDetails.InsertRange(model.CurriculumRegistrationDetails.Count, curriculumSubjects);
                         model.CurriculumTotalPrice = 25300000;
-                    } else
+                    }
+                    else
                     {
                         model.CurriculumTotalPrice = 0;
                     }
 
                     if (relearnSubject && relearnList != null && relearnList.Count > 0)
                     {
-                        var relearnSubjects = availableSubjects.Where(q => q.IsRelearn.HasValue && q.IsRelearn.Value).Select(q => new RegistrationDetailViewModel
+                        var relearnSubjects = availableSubjects.Where(q => relearnList.Contains(q.Subject.SubjectCode)).Select(q => new RegistrationDetailViewModel
                         {
                             SubjectCode = q.Subject.SubjectCode,
                             SubjectName = q.Subject.SubjectName,
@@ -100,7 +112,8 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
                         model.OtherRegistrationDetails.InsertRange(model.OtherRegistrationDetails.Count, relearnSubjects);
                         model.OtherTotalPrice = model.OtherRegistrationDetails.Sum(q => q.TotalPrice);
-                    } else
+                    }
+                    else
                     {
                         model.OtherTotalPrice = 0;
                     }
@@ -111,6 +124,8 @@ namespace CaptstoneProject.Areas.Students.Controllers
                     model.StudentAccount = studentMajor.Accounts.FirstOrDefault();
                     model.TotalPrice = model.CurriculumTotalPrice + model.OtherTotalPrice;
 
+                    this.Session["cart"] = model;
+
                     return View("Payment", model);
                 }
             }
@@ -120,9 +135,162 @@ namespace CaptstoneProject.Areas.Students.Controllers
             }
         }
 
-        public ActionResult SubmitPayment()
+        [HttpPost]
+        public async Task<ActionResult> SubmitPayment()
         {
-            return Json(new { success = true });
+            var loginName = (string)this.Session["loginName"];
+
+            try
+            {
+                var cart = (RegistrationViewModel)this.Session["cart"];
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var studentAccount = context.Accounts.Find(cart.StudentAccount.Id);
+                    if (studentAccount == null || studentAccount.StudentMajor.LoginName != loginName)
+                    {
+                        return Json(new { success = false, errorType = (int)JsonResultErrorType.Unauthorized, message = JsonResultErrorType.Unauthorized.GetEnumDisplayName() });
+                    }
+                    else if (cart.TotalPrice > studentAccount.Balance)
+                    {
+                        return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Your balance is not enough for this transaction." });
+                    }
+                    else
+                    {
+                        var user = context.AspNetUsers.Where(q => q.UserName == loginName || (q.Email != null && q.Email.Contains(loginName))).FirstOrDefault();
+
+                        if (user != null && user.Email != null)
+                        {
+                            var recipient = user.Email;
+
+                            var senderEmail = System.Web.Configuration.WebConfigurationManager.AppSettings["DefaultEmail"];
+                            var senderPassword = System.Web.Configuration.WebConfigurationManager.AppSettings["DefaultPassword"];
+
+                            var pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                            var random = new Random();
+                            var code = new string(Enumerable.Range(0, 6).Select(x => pool[random.Next(0, pool.Length)]).ToArray());
+
+                            this.Session["code"] = code;
+                            this.Session["attempt"] = 0;
+                            this.Session["startTime"] = DateTime.Now;
+
+                            var message = $"Dear {user.FullName},<br><br>We've received your course registration payment request. Please use this confirmation code to complete your transaction (case-sensitive).<br><h2 style=\"color: blue;\">Confirmation code: {code}</h2><br><b>Please complete this verification steps in 5 minutes.</b><br><br>Thank you,<br>FPT University Dummy";
+
+                            await Utils.SendEmail(senderEmail, recipient, senderPassword, message);
+
+                            return Json(new { success = true });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Invalid account." });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, errorType = (int)JsonResultErrorType.Exception, message = e.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmPayment(string code)
+        {
+            lock (mutex)
+            {
+                var correctCode = (string)this.Session["code"];
+                int attempt = (int)this.Session["attempt"];
+                var loginName = (string)this.Session["loginName"];
+                var startTime = (DateTime)this.Session["startTime"];
+
+                if (correctCode == code && attempt < 5 && (DateTime.Now - startTime) <= (new TimeSpan(0, 5, 0)))
+                {
+                    try
+                    {
+                        var cart = (RegistrationViewModel)this.Session["cart"];
+                        using (var context = new DB_Finance_AcademicEntities())
+                        {
+                            var studentAccount = context.Accounts.Find(cart.StudentAccount.Id);
+                            if (studentAccount == null || studentAccount.StudentMajor.LoginName != loginName)
+                            {
+                                return Json(new { success = false, errorType = (int)JsonResultErrorType.Unauthorized, message = JsonResultErrorType.Unauthorized.GetEnumDisplayName() });
+                            }
+                            else if (cart.TotalPrice > studentAccount.Balance)
+                            {
+                                return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Your balance is not enough for this transaction." });
+                            }
+                            else
+                            {
+                                var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
+                                studentAccount.Balance -= cart.TotalPrice;
+
+                                context.Transactions.Add(new Transaction
+                                {
+                                    AccountId = studentAccount.Id,
+                                    Amount = cart.TotalPrice,
+                                    Date = DateTime.Now,
+                                    IsIncreaseTransaction = false,
+                                    TransactionType = (int)TransactionTypeEnum.TuitionPayment,
+                                    Status = (int)TransactionStatus.Approve
+                                });
+
+                                var registration = new Registration()
+                                {
+                                    RegisteredBy = DateTime.Now,
+                                    StudentMajorId = studentAccount.StudentMajorId.Value,
+                                    FinalAmount = cart.TotalPrice,
+                                    RegistrationDetailTotalQuantity = cart.CurriculumRegistrationDetails.Count + cart.OtherRegistrationDetails.Count
+                                };
+
+                                context.Registrations.Add(registration);
+
+                                context.SaveChanges();
+
+                                foreach (var detail in cart.CurriculumRegistrationDetails.Concat(cart.OtherRegistrationDetails))
+                                {
+                                    var subject = context.Subjects.Where(q => q.SubjectCode == detail.SubjectCode).FirstOrDefault();
+                                    var abstractCourse = context.Courses.Where(q => q.ClassName == null && q.SemesterId == semester.Id && q.SubjectId == subject.Id).FirstOrDefault();
+
+                                    if (abstractCourse == null)
+                                    {
+                                        abstractCourse = new Course() {
+                                            SubjectId = subject.Id,
+                                            SemesterId = semester.Id
+                                        };
+
+                                        context.Courses.Add(abstractCourse);
+                                        context.SaveChanges();
+                                    }
+
+                                    context.RegistrationDetails.Add(new RegistrationDetail()
+                                    {
+                                        RegistrationId = registration.Id,
+                                        CourseId = abstractCourse.Id,
+                                    });
+                                }
+
+                                context.SaveChanges();
+
+                                return Json(new { success = true, message = "Transaction is being processed." });
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return Json(new { success = false, errorType = (int)JsonResultErrorType.Exception, message = e.Message });
+                    }
+                }
+                else if ((DateTime.Now - startTime) > (new TimeSpan(0, 5, 0)))
+                {
+                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Invalid attempt. Verification code has expired." });
+                }
+                else
+                {
+                    this.Session["attempt"] = ++attempt;
+
+                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Invalid attempt. " + (5 - attempt) + "/5 attempt(s) left." });
+                }
+            }
         }
 
         // GET: Student/Details/5

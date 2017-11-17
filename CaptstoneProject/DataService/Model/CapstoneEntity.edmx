@@ -12,7 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="StartDate" Type="datetime" />
-          <Property Name="Balance" Type="money" />
+          <Property Name="Balance" Type="float" />
           <Property Name="StudentMajorId" Type="int" />
           <Property Name="Type" Type="int" />
           <Property Name="Active" Type="bit" />
@@ -137,7 +137,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AccountId" Type="int" />
-          <Property Name="Amount" Type="money" />
+          <Property Name="Amount" Type="float" />
           <Property Name="Date" Type="datetime" />
           <Property Name="TransactionType" Type="int" />
           <Property Name="IsIncreaseTransaction" Type="bit" />
@@ -785,7 +785,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="DB_Finance_AcademicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="DB_Finance_AcademicEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Accounts" EntityType="DB_Finance_AcademicModel.Account" />
           <EntitySet Name="AvailableSubjects" EntityType="DB_Finance_AcademicModel.AvailableSubject" />
           <EntitySet Name="Blocks" EntityType="DB_Finance_AcademicModel.Block" />
           <EntitySet Name="Programs" EntityType="DB_Finance_AcademicModel.Program" />
@@ -798,7 +797,6 @@
           <EntitySet Name="SubjectGroups" EntityType="DB_Finance_AcademicModel.SubjectGroup" />
           <EntitySet Name="Teachers" EntityType="DB_Finance_AcademicModel.Teacher" />
           <EntitySet Name="TeacherSubjects" EntityType="DB_Finance_AcademicModel.TeacherSubject" />
-          <EntitySet Name="Transactions" EntityType="DB_Finance_AcademicModel.Transaction" />
           <EntitySet Name="AspNetRoles" EntityType="DB_Finance_AcademicModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="DB_Finance_AcademicModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="DB_Finance_AcademicModel.AspNetUserLogin" />
@@ -810,14 +808,6 @@
           <EntitySet Name="StudentMajors" EntityType="DB_Finance_AcademicModel.StudentMajor" />
           <EntitySet Name="Subjects" EntityType="DB_Finance_AcademicModel.Subject" />
           <EntitySet Name="SubjectMarks" EntityType="DB_Finance_AcademicModel.SubjectMark" />
-          <AssociationSet Name="FK_Account_StudentMajor" Association="DB_Finance_AcademicModel.FK_Account_StudentMajor">
-            <End Role="StudentMajor" EntitySet="StudentMajors" />
-            <End Role="Account" EntitySet="Accounts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transaction_Account" Association="DB_Finance_AcademicModel.FK_Transaction_Account">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="Transaction" EntitySet="Transactions" />
-          </AssociationSet>
           <AssociationSet Name="FK_AvailableSubject_Block" Association="DB_Finance_AcademicModel.FK_AvailableSubject_Block">
             <End Role="Block" EntitySet="Blocks" />
             <End Role="AvailableSubject" EntitySet="AvailableSubjects" />
@@ -922,21 +912,17 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Accounts" EntityType="DB_Finance_AcademicModel.Account" />
+          <AssociationSet Name="FK_Account_StudentMajor" Association="DB_Finance_AcademicModel.FK_Account_StudentMajor">
+            <End Role="StudentMajor" EntitySet="StudentMajors" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <EntitySet Name="Transactions" EntityType="DB_Finance_AcademicModel.Transaction" />
+          <AssociationSet Name="FK_Transaction_Account" Association="DB_Finance_AcademicModel.FK_Transaction_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Account">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StudentMajorId" Type="Int32" />
-          <Property Name="Type" Type="Int32" />
-          <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="Account" ToRole="StudentMajor" />
-          <NavigationProperty Name="Transactions" Relationship="DB_Finance_AcademicModel.FK_Transaction_Account" FromRole="Account" ToRole="Transaction" />
-        </EntityType>
         <EntityType Name="AvailableSubject">
           <Key>
             <PropertyRef Name="Id" />
@@ -1073,21 +1059,6 @@
           <NavigationProperty Name="Teacher" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Teacher" FromRole="TeacherSubject" ToRole="Teacher" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" FromRole="TeacherSubject" ToRole="Subject" />
         </EntityType>
-        <EntityType Name="Transaction">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountId" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="TransactionType" Type="Int32" />
-          <Property Name="IsIncreaseTransaction" Type="Boolean" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Account" Relationship="DB_Finance_AcademicModel.FK_Transaction_Account" FromRole="Transaction" ToRole="Account" />
-        </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
@@ -1212,11 +1183,11 @@
           <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StudentId" Type="Int32" />
           <Property Name="OldStudentId" Type="Int32" />
-          <NavigationProperty Name="Accounts" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="StudentMajor" ToRole="Account" />
           <NavigationProperty Name="AvailableSubjects" Relationship="DB_Finance_AcademicModel.FK_AvailableSubject_StudentMajor" FromRole="StudentMajor" ToRole="AvailableSubject" />
           <NavigationProperty Name="Registrations" Relationship="DB_Finance_AcademicModel.FK_Registration_StudentMajor" FromRole="StudentMajor" ToRole="Registration" />
           <NavigationProperty Name="Student" Relationship="DB_Finance_AcademicModel.FK_StudentMajor_Student" FromRole="StudentMajor" ToRole="Student" />
           <NavigationProperty Name="StudentInCourses" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Student" FromRole="StudentMajor" ToRole="StudentInCourse" />
+          <NavigationProperty Name="Accounts" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="StudentMajor" ToRole="Account" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
@@ -1246,30 +1217,6 @@
           <Property Name="EffectivenessDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="SubjectMark" ToRole="Subject" />
         </EntityType>
-        <Association Name="FK_Account_StudentMajor">
-          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StudentMajor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="StudentMajorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transaction_Account">
-          <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Transaction" Role="Transaction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transaction">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_AvailableSubject_Block">
           <End Type="DB_Finance_AcademicModel.Block" Role="Block" Multiplicity="1" />
           <End Type="DB_Finance_AcademicModel.AvailableSubject" Role="AvailableSubject" Multiplicity="*" />
@@ -1578,25 +1525,65 @@
           <End Type="DB_Finance_AcademicModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="DB_Finance_AcademicModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="Balance" Type="Double" />
+          <Property Name="StudentMajorId" Type="Int32" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="StudentMajor" Relationship="DB_Finance_AcademicModel.FK_Account_StudentMajor" FromRole="Account" ToRole="StudentMajor" />
+          <NavigationProperty Name="Transactions" Relationship="DB_Finance_AcademicModel.FK_Transaction_Account" FromRole="Account" ToRole="Transaction" />
+        </EntityType>
+        <Association Name="FK_Account_StudentMajor">
+          <End Type="DB_Finance_AcademicModel.StudentMajor" Role="StudentMajor" Multiplicity="0..1" />
+          <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentMajor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StudentMajorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="TransactionType" Type="Int32" />
+          <Property Name="IsIncreaseTransaction" Type="Boolean" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="DB_Finance_AcademicModel.FK_Transaction_Account" FromRole="Transaction" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_Transaction_Account">
+          <End Type="DB_Finance_AcademicModel.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="DB_Finance_AcademicModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DB_Finance_AcademicModelStoreContainer" CdmEntityContainer="DB_Finance_AcademicEntities">
-          <EntitySetMapping Name="Accounts">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Account">
-              <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AvailableSubjects">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.AvailableSubject">
               <MappingFragment StoreEntitySet="AvailableSubject">
@@ -1719,21 +1706,6 @@
               <MappingFragment StoreEntitySet="TeacherSubject">
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Transactions">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Transaction">
-              <MappingFragment StoreEntitySet="Transaction">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IsIncreaseTransaction" ColumnName="IsIncreaseTransaction" />
-                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1882,6 +1854,34 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="StudentMajorId" ColumnName="StudentMajorId" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Transaction">
+              <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsIncreaseTransaction" ColumnName="IsIncreaseTransaction" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

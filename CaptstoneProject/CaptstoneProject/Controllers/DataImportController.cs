@@ -580,6 +580,7 @@ namespace CaptstoneProject.Controllers
                                 course.SemesterId = semester.Id;
                                 course.TeacherId = teacher.Id;
                                 course.CourseName = subject.SubjectName;
+                                course.Status = (int)CourseStatus.Submitted;
 
                                 context.Courses.Add(course);
                                 context.SaveChanges();
