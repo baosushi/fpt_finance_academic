@@ -38,18 +38,36 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 //endDate = semester.EndDate.Value;
                 if (all)
                 {
-                    courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
-                        .Courses.Where(q => q.SemesterId == semester.Id && q.SubjectId == subjectId)
-                        .Select(q => new CourseRecordViewModel
-                        {
-                            CourseId = q.Id,
-                            Name = q.Subject.SubjectName,
-                            Code = q.Subject.SubjectCode,
-                            Class = q.ClassName,
-                            StartDate = q.StartDate.HasValue ? q.StartDate.Value : new DateTime(),
-                            EndDate = q.EndDate.HasValue ? q.EndDate.Value : new DateTime(),
-                            Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
-                        }).ToList();
+                    if (subjectId == 0)
+                    {
+                        courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
+                            .Courses.Where(q => q.SemesterId == semester.Id)
+                            .Select(q => new CourseRecordViewModel
+                            {
+                                CourseId = q.Id,
+                                Name = q.Subject.SubjectName,
+                                Code = q.Subject.SubjectCode,
+                                Class = q.ClassName,
+                                StartDate = q.StartDate.HasValue ? q.StartDate.Value : new DateTime(),
+                                EndDate = q.EndDate.HasValue ? q.EndDate.Value : new DateTime(),
+                                Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                            }).ToList();
+                    }
+                    else
+                    {
+                        courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
+                            .Courses.Where(q => q.SemesterId == semester.Id && q.SubjectId == subjectId)
+                            .Select(q => new CourseRecordViewModel
+                            {
+                                CourseId = q.Id,
+                                Name = q.Subject.SubjectName,
+                                Code = q.Subject.SubjectCode,
+                                Class = q.ClassName,
+                                StartDate = q.StartDate.HasValue ? q.StartDate.Value : new DateTime(),
+                                EndDate = q.EndDate.HasValue ? q.EndDate.Value : new DateTime(),
+                                Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
+                            }).ToList();
+                    }
                 }
                 else
                 {
@@ -189,7 +207,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             return Json(new { success = true, message = "Successully submitted!" });
         }
 
-        [HttpPost]
         public ActionResult DownloadTemplate(int courseId)
         {
             MemoryStream ms = new MemoryStream();
@@ -257,9 +274,9 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.Student.Name;
                         foreach (var mark in StudentMajor.StudentCourseMarks)
                         {
-                            if (!mark.CourseMark.IsFinal.HasValue && mark.CourseMark.IsFinal != true)
+                            if (!mark.CourseMark.IsFinal.HasValue || mark.CourseMark.IsFinal != true)
                             {
-                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString() : "";
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString("0.00") : "";
                             }
                         }
                         StartHeaderChar = 'A';
