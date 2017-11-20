@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -130,7 +130,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-	<Reference Include="System.Transactions" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -309,6 +309,7 @@
     <Content Include="Content\js\datatables\FixedColumns-3.2.3\js\dataTables.fixedColumns.min.js" />
     <Content Include="Content\js\datatables\responsive-dataTable\dataTables.responsive.min.js" />
     <Content Include="Content\js\highchart\highcharts.src.js" />
+    <Content Include="Content\js\sweet-alert2\sweetalert2.all.min.js" />
     <Content Include="Content\plugin\bootstrap-daterangepicker\daterangepicker.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\blue-loading-icon.gif" />

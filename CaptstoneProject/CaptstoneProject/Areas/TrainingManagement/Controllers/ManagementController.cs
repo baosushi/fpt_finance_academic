@@ -246,10 +246,13 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.StudentCode;
                         ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
                         ws.Cells["" + (StartHeaderChar) + (StartHeaderNumber)].Value = StudentMajor.StudentMajor.LoginName;
-                        //foreach(var mark in student.StudentCourseMarks)
-                        //{
-                        //    ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue ? mark.Mark.Value : -1;
-                        //}
+                        foreach (var mark in StudentMajor.StudentCourseMarks)
+                        {
+                            if (!mark.CourseMark.IsFinal.HasValue || mark.CourseMark.IsFinal != true)
+                            {
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString() : "";
+                            }
+                        }
                         StartHeaderChar = 'A';
                     }
                     fileName += ".xlsx";
@@ -356,7 +359,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         {
                             if (!mark.CourseMark.IsFinal.HasValue && mark.CourseMark.IsFinal != true)
                             {
-                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString() : "";
+                                ws.Cells["" + (StartHeaderChar++) + (StartHeaderNumber)].Value = mark.Mark.HasValue && mark.Mark.Value != -1 ? mark.Mark.Value.ToString("0.00") : "";
                             }
                         }
                         StartHeaderChar = 'A';

@@ -77,10 +77,10 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         case (int)TransactionTypeEnum.RefundTuitionFee:
                             form = (int)TransactionForm.Increase;
                             break;
-                        case (int)TransactionTypeEnum.RollbackIncrease:
+                        case (int)TransactionTypeEnum.AdjustIncrease:
                             form = (int)TransactionForm.Increase;
                             break;
-                        case (int)TransactionTypeEnum.RollbackDecrease:
+                        case (int)TransactionTypeEnum.AdjustDecrease:
                             form = (int)TransactionForm.Decrease;
                             break;
 
@@ -227,10 +227,10 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         case (int)TransactionTypeEnum.RefundTuitionFee:
                             transactionForm = (int)TransactionForm.Increase;
                             break;
-                        case (int)TransactionTypeEnum.RollbackIncrease:
+                        case (int)TransactionTypeEnum.AdjustIncrease:
                             transactionForm = (int)TransactionForm.Increase;
                             break;
-                        case (int)TransactionTypeEnum.RollbackDecrease:
+                        case (int)TransactionTypeEnum.AdjustDecrease:
                             transactionForm = (int)TransactionForm.Decrease;
                             break;
                         default:
@@ -317,12 +317,12 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                 using (var context = new DB_Finance_AcademicEntities())
                 {
 
-
+                    Account account = null;
                     var model = context.Transactions.Find(transactionId);
                     if (isApproved)
                     {
                         model.Status = (int)TransactionStatus.Approve;
-                        var account = context.Accounts.Find(model.AccountId);
+                        account = context.Accounts.Find(model.AccountId);
                         if (account != null)
                         {
                             if (model.IsIncreaseTransaction != null && model.IsIncreaseTransaction == true)
@@ -340,13 +340,13 @@ namespace CaptstoneProject.Areas.TransactionManagement.Models
                         model.Status = (int)TransactionStatus.Cancel;
                     }
                     context.SaveChanges();
-                    return Json(new { success = true });
+                    return Json(new { success = true , message = "Successed!", balance = account.Balance});
                 }
             }
             catch (System.Exception e)
             {
                 Console.WriteLine(e);
-                return Json(new { success = false });
+                return Json(new { success = false, message = e.Message });
             }
         }
 

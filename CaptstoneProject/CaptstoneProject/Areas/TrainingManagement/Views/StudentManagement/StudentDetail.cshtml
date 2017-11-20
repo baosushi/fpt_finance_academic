@@ -233,8 +233,8 @@
                                                     <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
                                                     <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
                                                     <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
-                                                    <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
-                                                    <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.AdjustIncrease)">@TransactionTypeEnum.AdjustIncrease.GetEnumDisplayName()</option>
+                                                    <option value="@((int)TransactionTypeEnum.AdjustDecrease)">@TransactionTypeEnum.AdjustDecrease.GetEnumDisplayName()</option>
                                                 </select>
                                             </div>
 
@@ -379,8 +379,8 @@
                                                         <option value="@((int)TransactionTypeEnum.AddFunds)">@TransactionTypeEnum.AddFunds.GetEnumDisplayName()</option>
                                                         <option value="@((int)TransactionTypeEnum.TuitionPayment)">@TransactionTypeEnum.TuitionPayment.GetEnumDisplayName()</option>
                                                         <option value="@((int)TransactionTypeEnum.RefundTuitionFee)">@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</option>
-                                                        <option value="@((int)TransactionTypeEnum.RollbackIncrease)">@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</option>
-                                                        <option value="@((int)TransactionTypeEnum.RollbackDecrease)">@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.AdjustIncrease)">@TransactionTypeEnum.AdjustIncrease.GetEnumDisplayName()</option>
+                                                        <option value="@((int)TransactionTypeEnum.AdjustDecrease)">@TransactionTypeEnum.AdjustDecrease.GetEnumDisplayName()</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -530,7 +530,7 @@
 
 
 
-                
+
 
                 <div id="createTransactionPanel" class="modal fade"></div>
                 <div id="editTransactionPanel" class="modal fade"></div>
@@ -805,11 +805,11 @@
                           case @((int)TransactionTypeEnum.RefundTuitionFee):
                               html = "<label class='label label-warning'>@TransactionTypeEnum.RefundTuitionFee.GetEnumDisplayName()</label>";
                               break;k
-                          case @((int)TransactionTypeEnum.RollbackIncrease):
-                              html = "<label class='label label-danger'>@TransactionTypeEnum.RollbackIncrease.GetEnumDisplayName()</label>";
+                          case @((int)TransactionTypeEnum.AdjustIncrease):
+                              html = "<label class='label label-danger'>@TransactionTypeEnum.AdjustIncrease.GetEnumDisplayName()</label>";
                               break;
-                          case @((int)TransactionTypeEnum.RollbackDecrease):
-                              html = "<label class='label label-danger' >@TransactionTypeEnum.RollbackDecrease.GetEnumDisplayName()</label>";
+                          case @((int)TransactionTypeEnum.AdjustDecrease):
+                              html = "<label class='label label-danger' >@TransactionTypeEnum.AdjustDecrease.GetEnumDisplayName()</label>";
                               break;
 
                       }
@@ -831,7 +831,7 @@
                   }
               },
             ],
-           
+
         });
     }
 
@@ -849,6 +849,7 @@
                 if (result.success) {
                     $("#approveTransactionModal").modal('hide');
                     swal("Success!", "Transaction has been updated", "success");
+                    $("#acc_current_balance").html(toMoney(result.balance, ',', '') + " VND");
                     toastr.options.fadeOut = 3500;
                     toastr.success(result.message);
                     RefreshStudentTransactionTable();
@@ -864,7 +865,7 @@
     }
     $('#approveTransactionModal').on('hidden.bs.modal', function () {
         $("#modal-transactionId").val('');
-    })
+    });
     //////end of approve modal
 
 
