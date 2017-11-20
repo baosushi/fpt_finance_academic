@@ -28,8 +28,6 @@ namespace DataService.Model
         public virtual DbSet<AvailableSubject> AvailableSubjects { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
-        public virtual DbSet<Registration> Registrations { get; set; }
-        public virtual DbSet<RegistrationDetail> RegistrationDetails { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
@@ -50,5 +48,7 @@ namespace DataService.Model
         public virtual DbSet<SubjectMark> SubjectMarks { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<Registration> Registrations { get; set; }
+        public virtual DbSet<RegistrationDetail> RegistrationDetails { get; set; }
     }
 }

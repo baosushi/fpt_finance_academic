@@ -176,8 +176,10 @@
             if (json.success) {
                 swal({
                     title: "Success",
-                    text: "Your transaction has ben verified and is being processed",
+                    text: "Your transaction has been verified and is being processed.",
                     icon: "success",
+                }).then(result => {
+                    
                 });
             } else {
                 verifyCode(json.message);
