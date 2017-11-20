@@ -452,5 +452,65 @@ namespace CaptstoneProject.Areas.Students.Controllers
             }, JsonRequestBehavior.AllowGet);
 
         }
+
+        public ActionResult GetHistoryCourseforStudent(JQueryDataTableParamModel param, int studentMajorId, int? semesterId = -1)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+
+                    var joinResult = from course in context.Courses
+                                     join studentInCourse in context.StudentInCourses on course.Id equals studentInCourse.CourseId
+                                     join semester in context.Semesters on course.SemesterId equals semester.Id
+                                     where semester.Id == semesterId
+                                     && studentInCourse.StudentId == studentMajorId //studentId of studentInCourse is actually StudentMajorId
+                                     && (course.Status != null ? course.Status.Value : 0) == (int)CourseStatus.Closed
+                                     select new { Semester = semester, Course = course, StudentInCourse = studentInCourse };
+
+                    var courseHistoryList = joinResult.Where(q => string.IsNullOrEmpty(param.sSearch)
+                    || q.Course.Subject.SubjectCode.ToUpper().Contains(param.sSearch.Trim().ToUpper())
+                    || q.Course.Subject.SubjectName.ToUpper().Contains(param.sSearch.Trim().ToUpper())
+                    || q.Course.CourseName.ToUpper().Contains(param.sSearch.Trim().ToUpper()));
+
+                    var count = 0;
+                    count = param.iDisplayStart + 1;
+                    var result = courseHistoryList
+                        //.OrderByDescending(q => q.Course.StartDate) //Date still null , uncomment this code when Date available
+                        .OrderByDescending(q => q.Course.Id) //temporary fix cause Date still null
+                        .Skip(param.iDisplayStart).Take(param.iDisplayLength).AsEnumerable()
+                        .Select(q => new IConvertible[]
+                        {
+                            count++,
+                            q.Course.CourseName,
+                            q.Course.Subject.SubjectCode,
+                            q.Course.Subject.SubjectName,
+                            //(q.Course.StartDate != null? q.Course.StartDate.Value.ToString("dd/MM/yyyy"): "-")
+                            //    + " - " +
+                            //    (q.Course.EndDate != null? q.Course.EndDate.Value.ToString("dd/MM/yyyy"): "-"),
+
+                            q.Semester.Title + q.Semester.Year,
+                            Enum.GetName(typeof(StudentInCourseStatus), (q.StudentInCourse.Status.Value))
+                        }).ToList();
+
+                    var totalRecords = courseHistoryList.Count();
+                    var totalDisplay = result.Count();
+                    return Json(new
+                    {
+                        success = true,
+                        sEcho = param.sEcho,
+                        iTotalRecords = totalRecords,
+                        iTotalDisplayRecords = totalDisplay,
+                        aaData = result
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
     }
 }

@@ -42,13 +42,24 @@
         <div class="panel panel-default">
             <div class="panel-title">
                 <i class="fa fa-info-circle" style="color:green"></i> Course Details
-                @if (Model.IsEditable)
+                @if (Model.StatusName == "New")
                 {
                     <div style="float:right">
                         <div>
-                            <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                            <button class="btn-outline-success btn margin-5" type="button" id="start-course">Start Course</button>
                         </div>
                     </div>
+                }
+                else
+                {
+                    if (Model.IsEditable)
+                    {
+                        <div style="float:right">
+                            <div>
+                                <button class="btn-outline-success btn margin-5" type="button" id="submit-comp">Submit Marks</button>
+                            </div>
+                        </div>
+                    }
                 }
             </div>
 
@@ -69,7 +80,7 @@
                         <div class="col-md-10">
                             <label>
                                 <b style="margin-right:5px">Status: </b>
-                                 @switch (Model.StatusName)
+                                @switch (Model.StatusName)
                                 {
                                     case "New":
                                         {
@@ -185,23 +196,23 @@
                             @for (var i = 0; i < Model.ComponentNames.Count(); i++)
                             {
                                 @*foreach (var k in finals)
-                                {
-                                    if (i == k - 3)
                                     {
-                                        <th style="background-color:#105dac!important">
-                                            @Model.ComponentNames[i]
-                                        </th>
-                                        isFinal = true;
-                                        break;
+                                        if (i == k - 3)
+                                        {
+                                            <th style="background-color:#105dac!important">
+                                                @Model.ComponentNames[i]
+                                            </th>
+                                            isFinal = true;
+                                            break;
+                                        }
                                     }
-                                }
-                                if (isFinal != true)
-                                {*@
-                                    <th>
-                                        @Model.ComponentNames[i]
-                                    </th>
-                                    @*isFinal = false;
-                                }*@
+                                    if (isFinal != true)
+                                    {*@
+                                <th>
+                                    @Model.ComponentNames[i]
+                                </th>
+                                @*isFinal = false;
+                                    }*@
 
                             }
                             <th style="background-color:#d1601d !important">
@@ -403,8 +414,7 @@
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Yes, submit it!",
             closeOnConfirm: false
-        },
-    function(){
+        }).then(function (result) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToSubmit")',
@@ -412,6 +422,41 @@
             success: function (result) {
                 if (result.success) {
                     swal("Success!", "Your marks have been submitted!", "success");
+                    //toastr.success(result.message);
+                    window.location.reload();
+
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                toastr.error(err);
+            }
+        });
+
+    });
+    });
+
+    $('#start-course').click(function(){
+        
+        swal({
+            title: "Are you sure?",
+            text: "You won't be stop this course after this!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Yes, start it!",
+            closeOnConfirm: false
+        }).then(function (result) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("StartCourse")',
+            data: { courseId: @Model.CourseId,},
+            success: function (result) {
+                if (result.success) {
+                    debugger
+                    swal("Success!", "Your course will start now!", "success");
                     //toastr.success(result.message);
                     window.location.reload();
 

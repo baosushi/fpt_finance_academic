@@ -3,12 +3,63 @@
     ViewBag.Title = "Đăng ký môn";
 }
 
+<style>
+    .nav-tabs .nav-item {
+        width: 100%;
+    }
+
+    .nav-tabs {
+        background: none;
+    }
+
+        .nav-tabs .nav-link {
+            background: #c7c3c3;
+            border: 1px solid transparent;
+            border-top-right-radius: .25rem;
+            border-top-left-radius: .25rem;
+            margin-left: 2px;
+        }
+</style>
+
 <div class="content">
     <div class="container-default fadeInRight animate">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-users"></i>Đăng ký môn</div>
             <div class="panel-body">
-                @Html.Partial("_RegisterPartial")
+                <ul id="TabList" role="tablist" class="nav nav-tabs">
+                    <li class="nav-item"><a role="tab" class="nav-link active" data-toggle="tab" href="#registration-tab"><h5>Đăng ký môn</h5></a></li>
+                    <li class="nav-item"><a role="tab" class="nav-link" data-toggle="tab" href="#history-course-tab"><h5>Lịch sử học</h5></a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div id="registration-tab" class="tab-pane active" role="tabpanel">
+
+                        @Html.Partial("_RegisterPartial")
+                    </div>
+                    <div id="history-course-tab" class="tab-pane" role="tabpanel">
+                        <select id="semester-select-picker" data-live-search="true">
+                            @foreach (var item in ViewBag.semesterList)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <div>
+                            <table id="history-course-table">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Mã khóa học</th>
+                                        <th>Mã môn</th>
+                                        <th>Môn</th>
+                                        <th>Học kì</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

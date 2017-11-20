@@ -453,7 +453,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
                         studentMark.EdittedMark = mark;
                         studentMark.Note = note;
-                        studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                        //studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                        studentInCourse.Status = (int)StudentInCourseStatus.Submitted;
                     }
 
                     else
@@ -464,6 +465,20 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                 }
                 context.SaveChanges();
+
+                CalculateAverage(courseId, studentId);
+
+                return Json(new { success = true });
+            }
+        }
+        public double? CalculateAverage(int courseId, int studentInCourseId)
+        {
+            double? average = 0;
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                var studentInCourse = course.StudentInCourses.Where(q => q.Id == studentInCourseId).FirstOrDefault();
+
                 foreach (var item in studentInCourse.StudentCourseMarks)
                 {
                     if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
@@ -491,8 +506,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
                 studentInCourse.Average = average;
                 context.SaveChanges();
-                return Json(new { success = true });
             }
+            return average;
         }
 
         public ActionResult EditMarks(string studentCode, int courseId)
@@ -882,11 +897,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 course.Status = (int)CourseStatus.FirstPublish;
-                var students = course.StudentInCourses;
-                foreach (var item in students)
-                {
-                    item.Status = (int)StudentInCourseStatus.FirstPublish;
-                }
+                //var students = course.StudentInCourses;
+                //foreach (var item in students)
+                //{
+                //    item.Status = (int)StudentInCourseStatus.FirstPublish;
+                //}
                 context.SaveChanges();
             }
             return Json(new { success = true, message = "Successully submitted!" });
@@ -914,11 +929,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 course.Status = (int)CourseStatus.FinalPublish;
-                var students = course.StudentInCourses;
-                foreach (var item in students)
-                {
-                    item.Status = (int)StudentInCourseStatus.FinalPublish;
-                }
+                //var students = course.StudentInCourses;
+                //foreach (var item in students)
+                //{
+                //    item.Status = (int)StudentInCourseStatus.FinalPublish;
+                //}
                 context.SaveChanges();
             }
             return Json(new { success = true, message = "Successully submitted!" });
@@ -930,11 +945,11 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 course.Status = (int)CourseStatus.Closed;
-                var students = course.StudentInCourses;
-                foreach (var item in students)
-                {
-                    item.Status = (int)StudentInCourseStatus.FinalPublish;
-                }
+                //var students = course.StudentInCourses;
+                //foreach (var item in students)
+                //{
+                //    item.Status = (int)StudentInCourseStatus.FinalPublish;
+                //}
                 context.SaveChanges();
             }
             return Json(new { success = true, message = "Successully submitted!" });
