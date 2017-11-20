@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "_LearningHistory";
+}
+
+<div>
+    <select id="semester-select-picker" data-live-search="true">
+        <option value="-1">Tất cả</option>
+        @foreach (var item in ViewBag.semesterList)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
+    <div>
+        <table id="history-course-table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Mã khóa học</th>
+                    <th>Mã môn</th>
+                    <th>Môn</th>
+                    <th>Học kì</th>
+                    <th>Điểm</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="modal fade" id="markComponentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Điểm thành phần</h4>
+
+                </div>
+                <div class="modal-body">
+                    <table id="markcomponent-table">
+                        <thead>
+                            <tr>
+                                <th>Điểm thành phần</th>
+                                <th>Điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#semester-select-picker").selectpicker();
+
+        InitStudentHistoryCourseTable();
+
+    });
+
+
+
+    function InitStudentHistoryCourseTable() {
+        $("#history-course-table").DataTable({
+            "serverSide": true,
+            "filter": true,
+            "processing": true,
+            "autoWidth": false,
+            ordering: false,
+            responsive: true,
+            sAjaxSource: "@Url.Action("GetHistoryCourseforStudent")",
+            fnServerParams: function (aoData) {
+                aoData.push({ "name": "semesterId", "value": $("#semester-select-picker").val() });
+                aoData.push({ "name": "studentMajorId", "value": @ViewBag.studentMajorId });
+
+            },
+            language: {
+                searchPlaceholder: "Mã khóa học hoặc môn"
+            },
+            columnDefs: [
+                {
+                    targets:[5, 6],
+                    className: "dt-center"
+                },
+                {
+                    targets: [7],
+                    render: function(data, row, type){
+
+                        return  "<button type='button' onclick='openMarkComponentModal("+data+")' class='btn-fix btn btn-warning'><i class='fa fa-eye'></i></button>";
+
+                    }
+                }
+
+            ]
+
+        });
+    }
+
+
+    function openMarkComponentModal(studentInCourseId){
+        if ($.fn.DataTable.isDataTable('#markcomponent-table')) {
+            $("#markcomponent-table").DataTable().destroy();
+        }
+        $("#markcomponent-table").DataTable({
+            "filter": true,
+            "retrieve": true,
+            "ordering": false,
+            "processing": true,
+            "sAjaxSource": "@Url.Action("GetMarkComponen4StudentbySubject")?studentInCourseId="+studentInCourseId,
+            "columnDefs": [
+             {
+                 "targets": [0, 1],
+                 "className": "dt-center",
+             },
+            ]
+        });
+        $('#markComponentModal').modal('show');
+    }
+
+
+    $("#semester-select-picker").on("change", function () {
+        if ($.fn.DataTable.isDataTable('#history-course-table')) {
+            $("#history-course-table").DataTable().ajax.reload();
+        }
+    });
+</script>

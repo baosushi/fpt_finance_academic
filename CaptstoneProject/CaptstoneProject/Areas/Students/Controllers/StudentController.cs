@@ -11,6 +11,8 @@ using CaptstoneProject.Controllers;
 using static CaptstoneProject.Models.AreaViewModel;
 using CaptstoneProject.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
@@ -22,7 +24,36 @@ namespace CaptstoneProject.Areas.Students.Controllers
         // GET: Student
         public ActionResult Index()
         {
-            return View("_Index");
+            try
+            {
+                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var userId = User.Identity.GetUserId();
+                var user = userManager.FindById(userId);
+                var loginName = user.Email.Split('@')[0];
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var studentMajorId = context.StudentMajors.Where(q => q.LoginName.Equals(loginName)).Select(q => q.Id).FirstOrDefault();
+                    var semesters = from course in context.Courses
+                                    join studentInCourse in context.StudentInCourses on course.Id equals studentInCourse.CourseId
+                                    join semester in context.Semesters on course.SemesterId equals semester.Id
+                                    where studentInCourse.StudentId == studentMajorId // studentId of StudentInCourse is actually StudentMajorId
+                                    select semester;
+                    var semesterList = semesters.Select(q => new SelectListItem
+                    {
+                        Text = q.Title + q.Year,
+                        Value = q.Id.ToString()
+                    }).ToList();
+
+                    ViewBag.semesterList = semesterList;
+                    ViewBag.studentMajorId = studentMajorId;
+                    return View("_Index");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Json(new { success = false, message = e.Message });
+            }
         }
 
         public ActionResult GetRegistrationSubjects()
@@ -253,7 +284,8 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
                                     if (abstractCourse == null)
                                     {
-                                        abstractCourse = new Course() {
+                                        abstractCourse = new Course()
+                                        {
                                             SubjectId = subject.Id,
                                             SemesterId = semester.Id
                                         };
@@ -453,7 +485,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
         }
 
-        public ActionResult GetHistoryCourseforStudent(JQueryDataTableParamModel param, int studentMajorId, int? semesterId = -1)
+        public ActionResult GetHistoryCourseforStudent(JQueryDataTableParamModel param, int studentMajorId, int semesterId)
         {
             try
             {
@@ -463,9 +495,9 @@ namespace CaptstoneProject.Areas.Students.Controllers
                     var joinResult = from course in context.Courses
                                      join studentInCourse in context.StudentInCourses on course.Id equals studentInCourse.CourseId
                                      join semester in context.Semesters on course.SemesterId equals semester.Id
-                                     where semester.Id == semesterId
+                                     where (semesterId != -1 ? semester.Id == semesterId : true) //get by semester or all
                                      && studentInCourse.StudentId == studentMajorId //studentId of studentInCourse is actually StudentMajorId
-                                     && (course.Status != null ? course.Status.Value : 0) == (int)CourseStatus.Closed
+                                     //&& (course.Status != null ? course.Status.Value : 0) == (int)CourseStatus.Closed
                                      select new { Semester = semester, Course = course, StudentInCourse = studentInCourse };
 
                     var courseHistoryList = joinResult.Where(q => string.IsNullOrEmpty(param.sSearch)
@@ -490,7 +522,9 @@ namespace CaptstoneProject.Areas.Students.Controllers
                             //    (q.Course.EndDate != null? q.Course.EndDate.Value.ToString("dd/MM/yyyy"): "-"),
 
                             q.Semester.Title + q.Semester.Year,
-                            Enum.GetName(typeof(StudentInCourseStatus), (q.StudentInCourse.Status.Value))
+                            (q.StudentInCourse.Average != -1? q.StudentInCourse.Average.Value.ToString() : "-"),
+                            Enum.GetName(typeof(StudentInCourseStatus), (q.StudentInCourse.Status.Value)),
+                            q.StudentInCourse.Id
                         }).ToList();
 
                     var totalRecords = courseHistoryList.Count();
@@ -509,6 +543,35 @@ namespace CaptstoneProject.Areas.Students.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new { success = false, message = e.Message });
+            }
+        }
+
+        public ActionResult GetMarkComponen4StudentbySubject(int studentInCourseId)
+        {
+            try
+            {
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var result = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentInCourseId).AsEnumerable()
+                         .Select(q => new IConvertible[] {
+                            q.CourseMark.ComponentName,
+                            (q.Mark != -1? q.Mark.Value.ToString() : "-")
+                         }).ToList();
+
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = result.Count(),
+                        iTotalDisplayRecords = result.Count(),
+                        aaData = result
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+                throw;
             }
         }
 
