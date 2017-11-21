@@ -19,6 +19,7 @@ using static CaptstoneProject.Models.AreaViewModel;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Ajax.Utilities;
 using System.Globalization;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -1362,6 +1363,42 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 return Json(new { success = false, message = e.Message });
             }
 
+        }
+		
+        public bool NotifyTeacherForgotInputMark(string senderPassword)
+        {
+            try
+            {
+                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var teacherList = context.Courses.Where(q => q.Status != (int)CourseStatus.Submitted)
+                          .Select(q => new TeacherMail
+                          {
+                              EduMail = q.Teacher.EduEmail,
+                              FeMail = q.Teacher.FeEmail
+                          }).ToList();
+
+                    var message = "";
+
+                    ///not done yet!
+
+                    foreach (var teacher in teacherList)
+                    {
+                        
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+
+            return true;
         }
 
         #region Registration to Courses creation

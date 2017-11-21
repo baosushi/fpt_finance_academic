@@ -199,5 +199,11 @@ namespace CaptstoneProject.Models
             public double UnitPrice { get; set; }
             public double TotalPrice { get; set; }
         }
+
+        public class TeacherMail
+        {
+            public String EduMail { get; set; }
+            public String FeMail { get; set; }
+        }
     }
 }

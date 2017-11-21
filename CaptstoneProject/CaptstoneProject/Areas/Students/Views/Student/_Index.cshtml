@@ -37,30 +37,15 @@
                         @Html.Partial("_RegisterPartial")
                     </div>
                     <div id="history-course-tab" class="tab-pane" role="tabpanel">
-                        <select id="semester-select-picker" data-live-search="true">
-                            @foreach (var item in ViewBag.semesterList)
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        </select>
-                        <div>
-                            <table id="history-course-table">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Mã khóa học</th>
-                                        <th>Mã môn</th>
-                                        <th>Môn</th>
-                                        <th>Học kì</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                        @Html.Partial("_LearningHistory")
                     </div>
-                </div>
+                </div> @*end of tab content*@
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    
+</script>

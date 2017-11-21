@@ -251,6 +251,7 @@
     <Compile Include="Areas\MarkComponent\MarkComponentAreaRegistration.cs" />
     <Compile Include="Areas\Semester\Controllers\SemesterController.cs" />
     <Compile Include="Areas\Semester\SemesterAreaRegistration.cs" />
+    <Compile Include="Areas\Students\Models\CourseMarkViewModel.cs" />
     <Compile Include="Areas\Students\StudentAreaRegistration.cs" />
     <Compile Include="Areas\Teacher\Controllers\CourseController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
@@ -444,6 +445,7 @@
     <Content Include="Areas\Students\Views\Student\_RegisterPartial.cshtml" />
     <Content Include="Areas\Students\Views\Student\_Index.cshtml" />
     <Content Include="Areas\Students\Views\Student\Payment.cshtml" />
+    <Content Include="Areas\Students\Views\Student\_LearningHistory.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />

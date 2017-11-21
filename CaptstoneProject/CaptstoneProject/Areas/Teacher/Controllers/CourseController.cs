@@ -18,11 +18,11 @@ using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.Teacher.Controllers
 {
-    [Authorize(Roles = "Teacher")]
+    [Authorize(Roles = "Teacher, Head of Department")]
     public class CourseController : MyBaseController
     {
         // GET: Teacher/Course
-        public ActionResult Index(bool all = false, int subjectId = -1, int semesterId = -1)
+        public ActionResult Index(bool all = false, int subjectId = 0, int semesterId = -1)
         {
             var loginName = (string)Session["loginName"];
             List<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
@@ -33,7 +33,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                 var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
                 //var subjects = context.TeacherSubjects.Where(q => q.Id == teacher.Id && q.SubjectId == subjectId).ToList();
-                subjectId = subjectId == -1 ? context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).FirstOrDefault().SubjectId : subjectId;
+                //subjectId = subjectId == -1 ? context.TeacherSubjects.Where(q => q.TeacherId == teacher.Id).FirstOrDefault().SubjectId : subjectId;
                 //startDate = semester.StartDate.Value;
                 //endDate = semester.EndDate.Value;
                 if (all)
@@ -320,7 +320,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public ActionResult UploadExcel(int courseId)
         {
             var failRecordCount = 0;
-
             try
             {
                 if (Request.Files.Count > 0)
@@ -744,5 +743,6 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
             return Json(new { success = false, message = "Course is null" });
         }
+
     }
 }
