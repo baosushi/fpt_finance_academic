@@ -171,7 +171,7 @@
                 }
                 $.ajax({
                     type: "post",
-                    url: "@Url.Action("ImportAvailableSubjectForRegister")",
+                    url: "@Url.Action("TestPercent")",
                     data: data,
                     processData: false,
                     contentType: false,
@@ -192,7 +192,7 @@
                         }
                     }
                 });
-                //checkPercentage();
+                checkPercentage();
 
             }
         });
@@ -223,7 +223,7 @@
             url: "@Url.Action("GetPercentageOfImportingAvailableSubject")",
             type: "post",
             success: function (result) {
-                if (result.sucess) {
+                if (result.success) {
                     drawPercentage(result.percent);
                     if (result.percent < 100) {
                         setTimeout(checkPercentage, 1000);

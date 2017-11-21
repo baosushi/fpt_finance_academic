@@ -18,20 +18,20 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
     public class StudentManagementController : MyBaseController
     {
-        //public int excelRowCompleted = 0;
-        //public int excelTotalRow = 0;
+       static public int excelRowCompleted = 0;
+       static public int excelTotalRow = 0;
         // GET: TrainingManagement/StudentManagement
         public ActionResult Index()
         {
             try
             {
-                using(var context= new DB_Finance_AcademicEntities())
+                using (var context = new DB_Finance_AcademicEntities())
                 {
-                   var blockList = context.Blocks.Where(q => q.Semester.Status != (int)SemesterStatus.Closed).Select(q => new SelectListItem
+                    var blockList = context.Blocks.Where(q => q.Semester.Status != (int)SemesterStatus.Closed).Select(q => new SelectListItem
                     {
                         Value = q.Id.ToString(),
-                        Text =  q.Semester.Title + q.Semester.Year +" - " + q.Name
-                   }).ToList();
+                        Text = q.Semester.Title + q.Semester.Year + " - " + q.Name
+                    }).ToList();
                     ViewBag.BlockList = blockList;
                 }
             }
@@ -628,21 +628,21 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> TestPercent(int blockId)
-        //{
-        //   await Task.Run(() =>
-        //    {
-        //        Session["excelTotalRow"] = 10;
-        //        var excelRowCompleted = 0;
-        //        for (int i = 0; i < 10; i++)
-        //        {
-        //            Session["excelRowCompleted"] = ++excelRowCompleted;
-        //            Thread.Sleep(1000);
-        //        }
-        //    });
-        //    return Json(new { success = true, message = "Done" });
-        //}
+        [HttpPost]
+        public ActionResult TestPercent(int blockId)
+        {
+
+            //Session["excelTotalRow"] = 20;
+            excelTotalRow = 20;
+            var excelRowCompleted = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                //Session["excelRowCompleted"] = ++excelRowCompleted;
+                excelRowCompleted = ++excelRowCompleted;
+                Thread.Sleep(1000);
+            }
+            return Json(new { success = true, message = "Done" });
+        }
 
         //public async Task<ActionResult> TestAsync(int blockId)
         //{
@@ -655,37 +655,43 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         //    return await Task.Run(() => GetPercentageOfImportingAvailableSubject());
         //}
 
-        //public async Task<ActionResult> GetPercentageOfImportingAvailableSubject()
-        //{
-        //    try
-        //    {
-        //        var percent = 0;
-        //        await Task.Run(() =>
-        //        {
-        //            var a = Session["excelTotalRow"];
-        //            var b = Session["excelRowCompleted"];
-        //            if (a != null && b != null)
-        //            {
+        public ActionResult GetPercentageOfImportingAvailableSubject()
+        {
+            try
+            {
+                var percent = 0;
+                //await Task.Run(() =>
+                //{
+                //var a = Session["excelTotalRow"];
+                //var b = Session["excelRowCompleted"];
+                var a = excelTotalRow;
+                var b = excelRowCompleted;
+                if (a != -1 && b != -1)
+                {
 
-        //                var excelTotalRow = (int)a;
-        //                var excelRowCompleted = (int)b;
-        //                if (excelTotalRow > 0)
-        //                {
-        //                    percent = excelRowCompleted / excelTotalRow * 100;
+                    var excelTotalRow = (int)a;
+                    var excelRowCompleted = (int)b;
+                    if (excelTotalRow > 0)
+                    {
+                        percent = excelRowCompleted / excelTotalRow * 100;
 
-        //                }
+                    }
+                    if (excelRowCompleted == excelTotalRow)
+                    {
+                        //Session["excelRowCompleted"] = 0;
+                        excelRowCompleted = 0;
+                    }
 
-        //            }
-        //        });
-        //        return Json(new { success = true, percent = percent });
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        //        return Json(new { success = false, message = e.Message });
-        //        throw;
-        //    }
-        //}
+                }
+                //});
+                return Json(new { success = true, percent = percent });
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
 
     }
 }

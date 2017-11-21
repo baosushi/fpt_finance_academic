@@ -20,6 +20,7 @@ using Microsoft.Office.Interop.Excel;
 using Microsoft.Ajax.Utilities;
 using System.Globalization;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
@@ -1364,42 +1365,61 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
         }
-		
-        public bool NotifyTeacherForgotInputMark(string senderPassword)
+
+        #region Send mail for teacher hasn't input mark 
+        public async Task<ActionResult> NotifyTeacherForgotInputMark(string senderPassword)
         {
             try
             {
                 var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var user = userManager.FindById(User.Identity.GetUserId());
+
+                var senderEmail = System.Web.Configuration.WebConfigurationManager.AppSettings["DefaultEmail"];
+                 senderPassword = System.Web.Configuration.WebConfigurationManager.AppSettings["DefaultPassword"];
+
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     var teacherList = context.Courses.Where(q => q.Status != (int)CourseStatus.Submitted)
+                          .Select(q => q.Teacher).Distinct()
                           .Select(q => new TeacherMail
                           {
-                              EduMail = q.Teacher.EduEmail,
-                              FeMail = q.Teacher.FeEmail
+                              TeacherName = q.Name,
+                              EduMail = q.EduEmail,
+                              FeMail = q.FeEmail
                           }).ToList();
-
-                    var message = "";
-
-                    ///not done yet!
 
                     foreach (var teacher in teacherList)
                     {
-                        
+
+                        var message = $"Dear {teacher.TeacherName},<br><br>There's some courses that have not had marks yet." +
+                            $"Please finish inputting marks for those courses!" +
+                            $"<br><br>Thank you and best regard,<br> Khảo thí FPT University ";
+
+
+                        //replace senderEmail with user.Email for real deploy
+                        if (teacher.EduMail != null)
+                            await Utils.SendEmail(senderEmail, teacher.EduMail, senderPassword, message);
+                        if (teacher.FeMail != null)
+                            await Utils.SendEmail(senderEmail, teacher.FeMail, senderPassword, message);
+
                     }
+                    
                 }
 
-
+            return Json(new {success = true, message = "Send mail successed!" });
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return false;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message});
             }
-
-
-            return true;
         }
+
+
+      
+
+        #endregion
 
         #region Registration to Courses creation
         [HttpPost]
@@ -1414,7 +1434,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 {
                     var registrationDetails = context.RegistrationDetails.GroupBy(q => q.Course);
 
-                    foreach(var registeredCourse in registrationDetails)
+                    foreach (var registeredCourse in registrationDetails)
                     {
                         var subjectId = registeredCourse.Key.SubjectId;
                     }
@@ -1428,6 +1448,98 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
         }
         #endregion
+
+        #region Handle all abstract course
+        public ActionResult RegisterCourseManagement()
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var subjectList = context.Subjects.Select(q => new SelectListItem
+                    {
+                        Text = q.SubjectName + " - " + q.SubjectCode,
+                        Value = q.Id.ToString()
+                    }).ToList();
+
+                    var semesterList = context.Semesters.Select(q => new SelectListItem
+                    {
+                        Text = q.Title + " " + q.Year,
+                        Value = q.Id.ToString(),
+                    }).ToList();
+
+                    ViewBag.SemesterList = semesterList;
+                    ViewBag.SubjectList = subjectList;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return HttpNotFound();
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateAbstractCourse(int semesterId, int subjectId, string courseName)
+        {
+            try
+            {
+
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var course = new Course()
+                    {
+                        CourseName = courseName,
+                        SubjectId = subjectId,
+                        SemesterId = semesterId,
+                        IsAbstract = true,
+                        Status = (int)CourseStatus.New
+                    };
+                    context.Courses.Add(course);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("RegisterCourseManagement");
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+        public ActionResult GetAllAbstractCourse(int semesterId)
+        {
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    int count = 1;
+                    var courseList = context.Courses.Where(q => q.SemesterId == semesterId && q.IsAbstract == true).AsEnumerable()
+                        .Select(q => new IConvertible[]{
+                            count++,
+                            q.CourseName,
+                            q.Subject.SubjectName,
+                            q.Semester.Title + q.Semester.Year
+                        }).ToList();
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = courseList.Count(),
+                        iTotalDisplayRecords = courseList.Count(),
+                        aaData = courseList
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+        #endregion
+
+
+
     }
 
 }

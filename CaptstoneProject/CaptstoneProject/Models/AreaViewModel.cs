@@ -202,6 +202,7 @@ namespace CaptstoneProject.Models
 
         public class TeacherMail
         {
+            public String TeacherName { get; set; }
             public String EduMail { get; set; }
             public String FeMail { get; set; }
         }

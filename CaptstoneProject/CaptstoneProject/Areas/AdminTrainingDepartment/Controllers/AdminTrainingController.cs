@@ -43,11 +43,9 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             try
             {
 
-                semesterId = -1;
                 List<CourseRecordViewModel> courses = new List<CourseRecordViewModel>();
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    int? status = null;
                     //DateTime startDate, endDate;
                     var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
 
@@ -480,7 +478,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 
 
                     List<int> currentSubjectIds = context.Courses.Where(q => q.SemesterId == semester.Id &&
-                    q.Subject.SubjectGroup.Id == subjectGroupId).Select(q => q.SubjectId).Distinct().ToList();
+                    q.Subject.SubjectGroup.Id == subjectGroupId && q.Status >= (int)CourseStatus.FinalPublish).Select(q => q.SubjectId).Distinct().ToList();
 
 
 
@@ -503,8 +501,8 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 
                            q.StudentInCourses.Count(),//total
                            q.StudentInCourses.Where(a => a.Status  == (int)StudentInCourseStatus.Passed).Count(),// pass
-                           q.StudentInCourses.Max(a => a.Average).Value, //max
-                           q.StudentInCourses.Min(a => a.Average).Value //min
+                           q.StudentInCourses.Max(a => a.Average) != null? q.StudentInCourses.Max(a => a.Average).Value: 0, //max
+                           q.StudentInCourses.Min(a => a.Average) != null? q.StudentInCourses.Min(a => a.Average).Value: 0 //min
 
                         }).ToList();
 
@@ -518,6 +516,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         {
                             total += (int)item[0]; //total
                             totalPassed += (int)item[1]; //pass
+
                             if ((double)item[2] > maxMark)
                             {
                                 maxMark = (double)item[2];

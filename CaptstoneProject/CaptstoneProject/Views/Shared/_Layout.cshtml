@@ -262,6 +262,18 @@
                         <span class="nav-title">Transaction Management</span>
                     </a>
                 </li>
+                <li>
+                    <a href="@Url.Action("RegisterCourseManagement", "Management", new { area = "TrainingManagement" })">
+                        <span class="icon color5"><i class="mdi mdi-book-open-page-variant" aria-hidden="true"></i></span>
+                        <span class="nav-title">Register Course Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "AdminTraining", new { area = "AdminTrainingDepartment" })">
+                        <span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>
+                        <span class="nav-title">Admin Training</span>
+                    </a>
+                </li>
             }
             @if (User.IsInRole("Admin Training Management"))
             {
