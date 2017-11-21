@@ -98,15 +98,6 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="Subject_Curriculum">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubjectId" Type="int" />
-          <Property Name="CurriculumId" Type="int" />
-          <Property Name="TermNumber" Type="int" />
-        </EntityType>
         <EntityType Name="SubjectGroup">
           <Key>
             <PropertyRef Name="Id" />
@@ -563,18 +554,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Subject_Curriculum_Subject">
-          <End Role="Subject" Type="Self.Subject" Multiplicity="0..1" />
-          <End Role="Subject_Curriculum" Type="Self.Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subject">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="SubjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Subject_SubjectGroup">
           <End Role="SubjectGroup" Type="Self.SubjectGroup" Multiplicity="0..1" />
           <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
@@ -657,7 +636,6 @@
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="StudentType" EntityType="Self.StudentType" Schema="db_owner" store:Type="Tables" />
-          <EntitySet Name="Subject_Curriculum" EntityType="Self.Subject_Curriculum" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="SubjectGroup" EntityType="Self.SubjectGroup" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="db_owner" store:Type="Tables" />
           <EntitySet Name="TeacherSubject" EntityType="Self.TeacherSubject" Schema="db_owner" store:Type="Tables" />
@@ -761,10 +739,6 @@
           <AssociationSet Name="FK_StudentMajor_Student" Association="Self.FK_StudentMajor_Student">
             <End Role="Student" EntitySet="Student" />
             <End Role="StudentMajor" EntitySet="StudentMajor" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subject_Curriculum_Subject" Association="Self.FK_Subject_Curriculum_Subject">
-            <End Role="Subject" EntitySet="Subject" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
           </AssociationSet>
           <AssociationSet Name="FK_Subject_SubjectGroup" Association="Self.FK_Subject_SubjectGroup">
             <End Role="SubjectGroup" EntitySet="SubjectGroup" />
@@ -927,11 +901,6 @@
           <AssociationSet Name="AspNetUserRoles" Association="DB_Finance_AcademicModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <EntitySet Name="Subject_Curriculum" EntityType="DB_Finance_AcademicModel.Subject_Curriculum" />
-          <AssociationSet Name="FK_Subject_Curriculum_Subject" Association="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject">
-            <End Role="Subject" EntitySet="Subjects" />
-            <End Role="Subject_Curriculum" EntitySet="Subject_Curriculum" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Account">
@@ -1244,7 +1213,6 @@
           <NavigationProperty Name="TeacherSubjects" Relationship="DB_Finance_AcademicModel.FK_TeacherSubject_Subject" FromRole="Subject" ToRole="TeacherSubject" />
           <NavigationProperty Name="Courses" Relationship="DB_Finance_AcademicModel.FK_Course_Subject" FromRole="Subject" ToRole="Course" />
           <NavigationProperty Name="SubjectMarks" Relationship="DB_Finance_AcademicModel.FK_SubjectMark_Subject" FromRole="Subject" ToRole="SubjectMark" />
-          <NavigationProperty Name="Subject_Curriculum" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject" FromRole="Subject" ToRole="Subject_Curriculum" />
         </EntityType>
         <EntityType Name="SubjectMark">
           <Key>
@@ -1578,28 +1546,6 @@
           <End Type="DB_Finance_AcademicModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="DB_Finance_AcademicModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <EntityType Name="Subject_Curriculum">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubjectId" Type="Int32" />
-          <Property Name="CurriculumId" Type="Int32" />
-          <Property Name="TermNumber" Type="Int32" />
-          <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject" FromRole="Subject_Curriculum" ToRole="Subject" />
-        </EntityType>
-        <Association Name="FK_Subject_Curriculum_Subject">
-          <End Type="DB_Finance_AcademicModel.Subject" Role="Subject" Multiplicity="0..1" />
-          <End Type="DB_Finance_AcademicModel.Subject_Curriculum" Role="Subject_Curriculum" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subject">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subject_Curriculum">
-              <PropertyRef Name="SubjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1905,16 +1851,6 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Subject_Curriculum">
-            <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Subject_Curriculum">
-              <MappingFragment StoreEntitySet="Subject_Curriculum">
-                <ScalarProperty Name="TermNumber" ColumnName="TermNumber" />
-                <ScalarProperty Name="CurriculumId" ColumnName="CurriculumId" />
-                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

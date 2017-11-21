@@ -132,9 +132,6 @@
     <Compile Include="Model\SubjectMark.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Subject_Curriculum.cs">
-      <DependentUpon>CapstoneEntity.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Teacher.cs">
       <DependentUpon>CapstoneEntity.tt</DependentUpon>
     </Compile>

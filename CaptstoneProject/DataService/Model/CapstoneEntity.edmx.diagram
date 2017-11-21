@@ -56,8 +56,6 @@
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_StudentInCourse_Student" />
         <AssociationConnector Association="DB_Finance_AcademicModel.FK_SubjectMark_Subject" />
         <AssociationConnector Association="DB_Finance_AcademicModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="DB_Finance_AcademicModel.Subject_Curriculum" Width="1.5" PointX="5.25" PointY="22.125" />
-        <AssociationConnector Association="DB_Finance_AcademicModel.FK_Subject_Curriculum_Subject" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

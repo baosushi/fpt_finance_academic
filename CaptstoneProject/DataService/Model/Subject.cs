@@ -21,7 +21,6 @@ namespace DataService.Model
             this.TeacherSubjects = new HashSet<TeacherSubject>();
             this.Courses = new HashSet<Course>();
             this.SubjectMarks = new HashSet<SubjectMark>();
-            this.Subject_Curriculum = new HashSet<Subject_Curriculum>();
         }
     
         public int Id { get; set; }
@@ -41,7 +40,5 @@ namespace DataService.Model
         public virtual ICollection<Course> Courses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectMark> SubjectMarks { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Subject_Curriculum> Subject_Curriculum { get; set; }
     }
 }
