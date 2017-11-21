@@ -226,6 +226,8 @@
           <Property Name="TeacherId" Type="int" />
           <Property Name="SemesterId" Type="int" />
           <Property Name="Status" Type="int" />
+          <Property Name="IsAbstract" Type="bit" />
+          <Property Name="MaxQuantity" Type="int" />
           <Property Name="CurrentSyllabus" Type="nvarchar" MaxLength="50" />
           <Property Name="Document" Type="nvarchar" MaxLength="100" />
         </EntityType>
@@ -1192,6 +1194,8 @@
           <NavigationProperty Name="Subject" Relationship="DB_Finance_AcademicModel.FK_Course_Subject" FromRole="Course" ToRole="Subject" />
           <NavigationProperty Name="CourseMarks" Relationship="DB_Finance_AcademicModel.FK_CourseMark_Course" FromRole="Course" ToRole="CourseMark" />
           <NavigationProperty Name="StudentInCourses" Relationship="DB_Finance_AcademicModel.FK_StudentInCourse_Course" FromRole="Course" ToRole="StudentInCourse" />
+          <Property Name="IsAbstract" Type="Boolean" />
+          <Property Name="MaxQuantity" Type="Int32" />
         </EntityType>
         <EntityType Name="CourseMark">
           <Key>
@@ -1835,6 +1839,8 @@
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="DB_Finance_AcademicModel.Course">
               <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="MaxQuantity" ColumnName="MaxQuantity" />
+                <ScalarProperty Name="IsAbstract" ColumnName="IsAbstract" />
                 <ScalarProperty Name="Document" ColumnName="Document" />
                 <ScalarProperty Name="CurrentSyllabus" ColumnName="CurrentSyllabus" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
