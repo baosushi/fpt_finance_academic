@@ -28,6 +28,7 @@ namespace DataService.Model
         public int Year { get; set; }
         public int SemesterInYear { get; set; }
         public int Status { get; set; }
+        public string Document { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Block> Blocks { get; set; }

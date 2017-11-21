@@ -17,10 +17,9 @@ namespace DataService.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Course()
         {
-            this.Schedules = new HashSet<Schedule>();
+            this.RegistrationDetails = new HashSet<RegistrationDetail>();
             this.CourseMarks = new HashSet<CourseMark>();
             this.StudentInCourses = new HashSet<StudentInCourse>();
-            this.RegistrationDetails = new HashSet<RegistrationDetail>();
         }
     
         public int Id { get; set; }
@@ -34,9 +33,10 @@ namespace DataService.Model
         public Nullable<int> SemesterId { get; set; }
         public Nullable<int> Status { get; set; }
         public string CurrentSyllabus { get; set; }
+        public string Document { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual ICollection<RegistrationDetail> RegistrationDetails { get; set; }
         public virtual Semester Semester { get; set; }
         public virtual Teacher Teacher { get; set; }
         public virtual Subject Subject { get; set; }
@@ -44,7 +44,5 @@ namespace DataService.Model
         public virtual ICollection<CourseMark> CourseMarks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentInCourse> StudentInCourses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RegistrationDetail> RegistrationDetails { get; set; }
     }
 }

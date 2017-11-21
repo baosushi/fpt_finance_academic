@@ -16,6 +16,7 @@ using Microsoft.AspNet.Identity;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
+    [Authorize(Roles = "Student")]
     public class StudentController : MyBaseController
     {
         private DB_Finance_AcademicEntities db = new DB_Finance_AcademicEntities();
@@ -61,7 +62,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
             var loginName = (string)this.Session["loginName"];
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
+                var semester = context.Semesters.Where(q => q.Status == (int)SemesterStatus.Registration).FirstOrDefault();
                 if (semester != null)
                 {
                     var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
@@ -101,7 +102,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
+                    var semester = context.Semesters.Where(q => q.Status == (int)SemesterStatus.Registration).FirstOrDefault();
                     var studentMajor = context.StudentMajors.Where(q => q.LoginName == loginName).FirstOrDefault();
                     var availableSubjects = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajor.Id && q.Block.SemesterId == semester.Id);
 
@@ -252,7 +253,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
                             }
                             else
                             {
-                                var semester = context.Semesters.Where(q => q.Status == (int)SememsterStatus.Registration).FirstOrDefault();
+                                var semester = context.Semesters.Where(q => q.Status == (int)SemesterStatus.Registration).FirstOrDefault();
                                 studentAccount.Balance -= cart.TotalPrice;
 
                                 context.Transactions.Add(new Transaction
@@ -314,7 +315,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
                 }
                 else if ((DateTime.Now - startTime) > (new TimeSpan(0, 5, 0)))
                 {
-                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Invalid attempt. Verification code has expired." });
+                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Expired, message = "Invalid attempt. Verification code has expired." });
                 }
                 else
                 {
@@ -546,7 +547,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
             }
         }
 
-        public ActionResult GetMarkComponen4StudentbySubject(int studentInCourseId)
+        public ActionResult GetMarkComponent4StudentbySubject(int studentInCourseId)
         {
             try
             {
@@ -556,7 +557,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
                     var result = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentInCourseId).AsEnumerable()
                          .Select(q => new IConvertible[] {
                             q.CourseMark.ComponentName,
-                            (q.Mark != -1? q.Mark.Value.ToString() : "-")
+                            (q.Mark != -1? Math.Round(q.Mark.Value,2).ToString() : "-")
                          }).ToList();
 
                     return Json(new

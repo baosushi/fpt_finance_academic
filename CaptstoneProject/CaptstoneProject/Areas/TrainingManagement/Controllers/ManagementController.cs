@@ -146,7 +146,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
-                if (semester.Status != (int)SememsterStatus.Closed)
+                if (semester.Status != (int)SemesterStatus.Closed)
                 {
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
@@ -168,14 +168,14 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
-                if (semester.Status != (int)SememsterStatus.Closed)
+                if (semester.Status != (int)SemesterStatus.Closed)
                 {
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
                         course.Status = (int)CourseStatus.Closed;
                     }
-                    semester.Status = (int)SememsterStatus.Closed;
+                    semester.Status = (int)SemesterStatus.Closed;
                     context.SaveChanges();
                 }
             }
@@ -402,6 +402,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 });
             }
         }
+
         [HttpPost]
         public ActionResult GetEdit(List<MarkComp> markList, int courseId, int studentId, string note)
         {
@@ -1236,41 +1237,6 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return View();
         }
 
-        public ActionResult ArrangeCourse()
-        {
-            var smallRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["SmallRoom"];
-            var largeRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["LargeRoom"];
-
-            List<dynamic> result = new List<dynamic>();
-            using (var context = new DB_Finance_AcademicEntities())
-            {
-                var block = context.Semesters.OrderBy(q => q.Year).ThenBy(q => q.SemesterInYear).LastOrDefault().Blocks.Where(q => q.Status == (int)BlockStatus.Registering).FirstOrDefault();
-
-                var availableSubjects = block.AvailableSubjects.GroupBy(q => q.SubjectId).Select(q => new
-                {
-                    Count = q.Count(),
-                    SubjectId = q.Key
-                });
-
-                foreach (var registeredSubject in availableSubjects)
-                {
-                    var subject = context.Subjects.Find(registeredSubject.SubjectId);
-
-                    if (subject != null)
-                    {
-                        var registrationCount = registeredSubject.Count;
-
-                    }
-                    else
-                    {
-                        //TODO
-                    }
-                }
-            }
-
-            return null;
-        }
-
         public ActionResult GetSubject4DataTable(JQueryDataTableParamModel param)
         {
             try
@@ -1398,7 +1364,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             }
 
         }
-
+		
         public bool NotifyTeacherForgotInputMark(string senderPassword)
         {
             try
@@ -1435,11 +1401,33 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return true;
         }
 
+        #region Registration to Courses creation
+        [HttpPost]
+        public ActionResult ArrangeCourse()
+        {
+            var smallRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["SmallRoom"];
+            var largeRoom = System.Web.Configuration.WebConfigurationManager.AppSettings["LargeRoom"];
 
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var registrationDetails = context.RegistrationDetails.GroupBy(q => q.Course);
 
+                    foreach(var registeredCourse in registrationDetails)
+                    {
+                        var subjectId = registeredCourse.Key.SubjectId;
+                    }
 
-
-
+                    return Json(new { success = true });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+        #endregion
     }
 
 }

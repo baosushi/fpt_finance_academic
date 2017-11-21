@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CaptstoneProject.Models
 {
-    public enum SememsterStatus
+    public enum SemesterStatus
     {
         [Display(Name = "Registration")]
         Registration = 0,
@@ -165,6 +165,8 @@ namespace CaptstoneProject.Models
         Exception = 2,
         [Display(Name = "Failed to process request")]
         Failed = 3,
+        [Display(Name = "Request Expired")]
+        Expired = 4,
     }
 
     //public enum TransactionFilter
