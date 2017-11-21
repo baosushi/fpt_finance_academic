@@ -1,4 +1,4 @@
-﻿@model CaptstoneProject.Models.AreaViewModel.TeacherRecordViewModel
+﻿@model List<CaptstoneProject.Models.AreaViewModel.TeacherRecordViewModel>
 <div class="content">
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
@@ -15,18 +15,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            @foreach(var subject in Model.TeacherSubjects)
-                            {
+                        @foreach (var teacher in Model)
+                        {
+                            <tr>
+                                <td>@teacher.TeacherName</td>
                                 <td>
                                     <select>
-                                        <option value="@subject.SubjectId">@subject.SubjectName</option>
+                                        @foreach (var subject in teacher.TeacherSubjects)
+                                        {
+                                            <option value="@subject.SubjectId">@subject.SubjectName</option>
+                                        }
                                     </select>
                                     <button class="btn btn-info"><i class="fa fa-check"></i></button>
                                 </td>
-                            }
-                        </tr>
+
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

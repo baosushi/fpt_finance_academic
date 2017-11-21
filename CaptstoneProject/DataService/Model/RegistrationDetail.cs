@@ -17,6 +17,7 @@ namespace DataService.Model
         public int Id { get; set; }
         public Nullable<int> PreferredSlot { get; set; }
         public int RegistrationId { get; set; }
+        public Nullable<bool> IsInProgram { get; set; }
         public int CourseId { get; set; }
     
         public virtual Registration Registration { get; set; }

@@ -34,8 +34,6 @@ namespace DataService.Model
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
-        public virtual DbSet<Subject_Curriculum> Subject_Curriculum { get; set; }
-        public virtual DbSet<SubjectDepartment> SubjectDepartments { get; set; }
         public virtual DbSet<SubjectGroup> SubjectGroups { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }

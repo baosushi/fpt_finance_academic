@@ -31,9 +31,9 @@ namespace DataService.Model
         public string EduEmail { get; set; }
         public string FeEmail { get; set; }
         public Nullable<bool> IsHeadOfDepartment { get; set; }
-        public Nullable<int> SubjectDepartmentId { get; set; }
+        public Nullable<int> SubjectGroupId { get; set; }
     
-        public virtual SubjectDepartment SubjectDepartment { get; set; }
+        public virtual SubjectGroup SubjectGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

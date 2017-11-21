@@ -32,10 +32,10 @@ namespace DataService.Model
         public Nullable<int> TeacherId { get; set; }
         public Nullable<int> SemesterId { get; set; }
         public Nullable<int> Status { get; set; }
-        public string CurrentSyllabus { get; set; }
-        public string Document { get; set; }
         public Nullable<bool> IsAbstract { get; set; }
         public Nullable<int> MaxQuantity { get; set; }
+        public string CurrentSyllabus { get; set; }
+        public string Document { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegistrationDetail> RegistrationDetails { get; set; }
