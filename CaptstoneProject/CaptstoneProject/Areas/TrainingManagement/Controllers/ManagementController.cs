@@ -38,7 +38,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                 //startDate = semester.StartDate.Value;
                 //endDate = semester.EndDate.Value;
 
-                courses = context.Courses.Where(q => q.SemesterId == semester.Id).AsEnumerable()
+                courses = context.Courses.Where(q => q.SemesterId == semester.Id &&q.IsAbstract==false).AsEnumerable()
                     .Select(q => new CourseRecordViewModel
                     {
                         CourseId = q.Id,

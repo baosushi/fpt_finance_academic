@@ -18,10 +18,10 @@ namespace DataService.Model
         public Subject()
         {
             this.AvailableSubjects = new HashSet<AvailableSubject>();
-            this.Subject_Curriculum = new HashSet<Subject_Curriculum>();
             this.TeacherSubjects = new HashSet<TeacherSubject>();
             this.Courses = new HashSet<Course>();
             this.SubjectMarks = new HashSet<SubjectMark>();
+            this.Subject_Curriculum = new HashSet<Subject_Curriculum>();
         }
     
         public int Id { get; set; }
@@ -34,8 +34,6 @@ namespace DataService.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Subject_Curriculum> Subject_Curriculum { get; set; }
         public virtual SubjectGroup SubjectGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
@@ -43,5 +41,7 @@ namespace DataService.Model
         public virtual ICollection<Course> Courses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectMark> SubjectMarks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Subject_Curriculum> Subject_Curriculum { get; set; }
     }
 }

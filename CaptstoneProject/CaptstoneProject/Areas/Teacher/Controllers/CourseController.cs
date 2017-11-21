@@ -41,7 +41,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     if (subjectId == 0)
                     {
                         courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
-                            .Courses.Where(q => q.SemesterId == semester.Id)
+                            .Courses.Where(q => q.SemesterId == semester.Id && q.IsAbstract == false)
                             .Select(q => new CourseRecordViewModel
                             {
                                 CourseId = q.Id,
@@ -56,7 +56,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     else
                     {
                         courses = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault()
-                            .Courses.Where(q => q.SemesterId == semester.Id && q.SubjectId == subjectId)
+                            .Courses.Where(q => q.SemesterId == semester.Id && q.SubjectId == subjectId && q.IsAbstract == false)
                             .Select(q => new CourseRecordViewModel
                             {
                                 CourseId = q.Id,
@@ -107,14 +107,33 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         public ActionResult AssignTeachers()
         {
             var loginName = (string)Session["loginName"];
+            List<TeacherRecordViewModel> teachersList = new List<TeacherRecordViewModel>();
             using (var context = new DB_Finance_AcademicEntities())
             {
-                var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
-                if (teacher != null) {
+                var teacher = context.Teachers.Where(q => q.LoginName == loginName && q.IsHeadOfDepartment == true).FirstOrDefault();
+                if (teacher != null)
+                {
+                    var department = context.SubjectGroups.Where(q => q.Id == teacher.SubjectGroupId).FirstOrDefault();
+                    if (department != null)
+                    {
+                        teachersList = department.Teachers.Select(q => new TeacherRecordViewModel
+                        {
+                            Id = q.Id,
+                            TeacherName = q.Name,
+                        }).ToList();
+                        foreach (var item in teachersList)
+                        {
+                            item.TeacherSubjects = context.TeacherSubjects.Where(q => q.TeacherId == item.Id).Select(w => new SubjectViewModel
+                            {
+                                SubjectId=w.SubjectId,
+                                SubjectName=w.Subject.SubjectName,
+                            }).ToList();
+                        }
+                    }
                 }
-                
+
             }
-            return View();
+            return View(teachersList);
         }
 
         public ActionResult CourseDetails(int courseId)
