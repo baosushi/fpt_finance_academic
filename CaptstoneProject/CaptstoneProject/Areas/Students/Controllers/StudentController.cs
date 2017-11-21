@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace CaptstoneProject.Areas.Students.Controllers
 {
+    [Authorize(Roles = "Student")]
     public class StudentController : MyBaseController
     {
         private DB_Finance_AcademicEntities db = new DB_Finance_AcademicEntities();
@@ -282,7 +283,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
                 }
                 else if ((DateTime.Now - startTime) > (new TimeSpan(0, 5, 0)))
                 {
-                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Failed, message = "Invalid attempt. Verification code has expired." });
+                    return Json(new { success = false, errorType = (int)JsonResultErrorType.Expired, message = "Invalid attempt. Verification code has expired." });
                 }
                 else
                 {

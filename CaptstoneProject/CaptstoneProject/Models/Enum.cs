@@ -165,6 +165,8 @@ namespace CaptstoneProject.Models
         Exception = 2,
         [Display(Name = "Failed to process request")]
         Failed = 3,
+        [Display(Name = "Request Expired")]
+        Expired = 4,
     }
 
     //public enum TransactionFilter

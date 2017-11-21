@@ -179,17 +179,26 @@
                     text: "Your transaction has been verified and is being processed.",
                     icon: "success",
                 }).then(result => {
-                    
+
                 });
             } else {
-                verifyCode(json.message);
+                switch (json.errorType) {
+                    case @((int)JsonResultErrorType.Unauthorized), @((int)JsonResultErrorType.Expired):
+                        return Promise.reject(json.message);
+                    break;
+                    case @((int)JsonResultErrorType.Failed):
+                        verifyCode(json.message);
+                    break;
+                    default:
+                        verifyCode(json.message);
+                }
             }
         }).catch(err => {
             if (err == "canceled") {
                 swal.stopLoading();
                 swal.close();
             } else if (err) {
-                swal("Please try again later!", "Something went wrong. Please try again later.", "warning");
+                swal("Invalid request!", err, "error");
             } else {
                 swal.stopLoading();
                 swal.close();
