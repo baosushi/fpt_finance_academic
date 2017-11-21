@@ -340,8 +340,7 @@
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Yes, submit it!",
             closeOnConfirm: false
-        },
-    function(){
+        }).then(function (result) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToPublish")',
@@ -373,8 +372,7 @@
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Yes, submit it!",
             closeOnConfirm: false
-        },
-    function(){
+        }).then(function (result) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToSubmit")',
@@ -406,8 +404,7 @@
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Yes, submit it!",
             closeOnConfirm: false
-        },
-    function(){
+        }).then(function (result) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChangeToFinalPublish")',
@@ -439,8 +436,7 @@
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Yes, submit it!",
             closeOnConfirm: false
-        },
-    function(){
+        }).then(function (result) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("CloseCourse")',

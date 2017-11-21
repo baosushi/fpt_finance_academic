@@ -204,7 +204,24 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                 }
                 context.SaveChanges();
             }
-            return Json(new { success = true, message = "Successully submitted!" });
+            return Json(new { success = true, message = "Successfully submitted!" });
+        }
+
+        public ActionResult StartCourse(int courseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                course.Status = (int)CourseStatus.InProgress;
+                var students = course.StudentInCourses;
+                foreach (var item in students)
+                {
+                    item.Status = (int)StudentInCourseStatus.Studying;
+                }
+                context.SaveChanges();
+            }
+
+            return Json(new { success = true, message = "Successfully submitted!" });
         }
 
         public ActionResult DownloadTemplate(int courseId)
@@ -499,7 +516,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     Per = q.Percentage,
                 }).ToList();
 
-                var studentInCourse = context.StudentInCourses.Find(studentId);
+                var studentInCourse = course.StudentInCourses.Where(q => q.Id == studentId).FirstOrDefault();
                 var studentMarks = studentInCourse.StudentCourseMarks.ToList();
 
                 double? average = 0;
@@ -525,7 +542,8 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                             var studentMark = studentMarks.Where(q => q.CourseMarkId == componentId).FirstOrDefault();
                             studentMark.EdittedMark = mark;
                             studentMark.Note = note;
-                            studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                            //studentInCourse.Status = course.Status.Value == (int)CourseStatus.FirstPublish ? (int)StudentInCourseStatus.FirstPublish : (int)StudentInCourseStatus.FinalPublish;
+                            studentInCourse.Status = (int)StudentInCourseStatus.Submitted;
                         }
                     }
                     else if (course.Status.HasValue && course.Status.Value == (int)CourseStatus.InProgress)
@@ -536,6 +554,19 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                 }
                 context.SaveChanges();
+                CalculateAverage(courseId, studentId);
+                return Json(new { success = true });
+            }
+        }
+
+        public double? CalculateAverage(int courseId, int studentInCourseId)
+        {
+            double? average = 0;
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                var studentInCourse = course.StudentInCourses.Where(q => q.Id == studentInCourseId).FirstOrDefault();
+
                 foreach (var item in studentInCourse.StudentCourseMarks)
                 {
                     if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
@@ -563,8 +594,22 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
 
                 studentInCourse.Average = average;
                 context.SaveChanges();
-                return Json(new { success = true });
             }
+            return average;
+        }
+
+        public string EvaluateStudentInCourse(int courseId, int studentInCourseId)
+        {
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var course = context.Courses.Find(courseId);
+                var studentInCourse = course.StudentInCourses.Where(q => q.Id == studentInCourseId).FirstOrDefault();
+                if(studentInCourse.Average >= 5)
+                {
+                    //if(course.Subject.SubjectMarks.Where(q=> q. ))
+                }
+            }
+            return StudentInCourseStatus.Passed.ToString();
         }
 
         public ActionResult EditMarks(string studentCode, int courseId)
@@ -688,33 +733,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         //studentCourseMark.StudentInCourse.Average -= studentCourseMark.Mark * studentCourseMark.CourseMark.Percentage / 100;
 
                         //average += record.ComponentMark * studentCourseMark.CourseMark.Percentage / 100;
-                        foreach (var item in studentInCourse.StudentCourseMarks)
-                        {
-                            if (item.CourseMark.IsFinal == null || item.CourseMark.IsFinal != true)
-                            {
-                                if (item.EdittedMark == null)
-                                {
-                                    average += item.Mark != -1 ? item.Mark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
-                                }
-                                else
-                                {
-                                    average += item.EdittedMark != -1 ? item.EdittedMark * item.CourseMark.Percentage / 100 : 0 * item.CourseMark.Percentage;
-                                }
-                            }
-                        }
-                        if (studentInCourse.HasRetake == true)
-                        {
-                            var retake = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
-                            average += retake;
-                        }
-                        else
-                        {
-                            var final = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && !q.CourseMark.ComponentName.Contains("2nd")).Sum(q => q.Mark != -1 ? q.Mark * q.CourseMark.Percentage / 100 : 0);
-                            average += final;
-                        }
-
-                        studentInCourse.Average = average;
-                        //studentInCourse.Status = 1;
+                        CalculateAverage(course.Id, studentInCourse.Id);
 
                         context.SaveChanges();
                     }

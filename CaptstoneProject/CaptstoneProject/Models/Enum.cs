@@ -34,10 +34,10 @@ namespace CaptstoneProject.Models
         Studying = 1,
         [Display(Name = "Submitted")]
         Submitted = 2,
-        [Display(Name = "Publishable")]
-        FirstPublish = 3,
-        [Display(Name = "Final Publish")]
-        FinalPublish = 4,
+        //[Display(Name = "Publishable")]
+        //FirstPublish = 3,
+        //[Display(Name = "Final Publish")]
+        //FinalPublish = 4,
         [Display(Name = "Passed")]
         Passed = 5,
         [Display(Name = "Failed")]
