@@ -274,7 +274,7 @@ namespace CaptstoneProject.Areas.Admin.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
-                if (semester.Status != (int)SememsterStatus.Closed)
+                if (semester.Status != (int)SemesterStatus.Closed)
                 {
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
@@ -297,14 +297,14 @@ namespace CaptstoneProject.Areas.Admin.Controllers
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var semester = context.Semesters.Where(q => q.Id == semesterId).SingleOrDefault();
-                if (semester.Status != (int)SememsterStatus.Closed)
+                if (semester.Status != (int)SemesterStatus.Closed)
                 {
                     var courseList = context.Courses.Where(q => q.SemesterId == semesterId).ToList();
                     foreach (var course in courseList)
                     {
                         course.Status = (int)CourseStatus.Closed;
                     }
-                    semester.Status = (int)SememsterStatus.Closed;
+                    semester.Status = (int)SemesterStatus.Closed;
                     context.SaveChanges();
                 }
             }
@@ -321,7 +321,7 @@ namespace CaptstoneProject.Areas.Admin.Controllers
                 //{
                 //    course.Status = (int)CourseStatus.Open;
                 //}
-                semester.Status = (int)SememsterStatus.Open;
+                semester.Status = (int)SemesterStatus.Open;
                 context.SaveChanges();
             }
 

@@ -18,6 +18,7 @@ namespace DataService.Model
         public Subject()
         {
             this.AvailableSubjects = new HashSet<AvailableSubject>();
+            this.Subject_Curriculum = new HashSet<Subject_Curriculum>();
             this.TeacherSubjects = new HashSet<TeacherSubject>();
             this.Courses = new HashSet<Course>();
             this.SubjectMarks = new HashSet<SubjectMark>();
@@ -29,9 +30,12 @@ namespace DataService.Model
         public Nullable<int> SubjectGroupId { get; set; }
         public string SubjectCode { get; set; }
         public string CurrentSyllabus { get; set; }
+        public string Document { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Subject_Curriculum> Subject_Curriculum { get; set; }
         public virtual SubjectGroup SubjectGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }

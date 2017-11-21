@@ -27,11 +27,12 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             {
                 using(var context= new DB_Finance_AcademicEntities())
                 {
-                    context.Blocks.Select(q => new SelectListItem
+                   var blockList = context.Blocks.Where(q => q.Semester.Status != (int)SemesterStatus.Closed).Select(q => new SelectListItem
                     {
                         Value = q.Id.ToString(),
-                        Text = q.Id.ToString()+ "-" + q.Semester.Title + q.Semester.Year
-                    }).ToList();
+                        Text =  q.Semester.Title + q.Semester.Year +" - " + q.Name
+                   }).ToList();
+                    ViewBag.BlockList = blockList;
                 }
             }
             catch (Exception e)

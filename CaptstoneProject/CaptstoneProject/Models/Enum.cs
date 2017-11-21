@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CaptstoneProject.Models
 {
-    public enum SememsterStatus
+    public enum SemesterStatus
     {
         [Display(Name = "Registration")]
         Registration = 0,

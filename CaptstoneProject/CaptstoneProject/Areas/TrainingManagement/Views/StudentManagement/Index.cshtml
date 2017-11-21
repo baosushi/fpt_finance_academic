@@ -44,12 +44,13 @@
                 </div>
             </div>
             <div class="panel-body">
-                @*<button id="my-btn" class="">GG</button>*@
-
 
                 <div class="">
                     <select id="block-select-picker">
-                        <option value="-1">TEst</option>
+                        @foreach (var item in ViewBag.BlockList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
                     </select>
                     <input type="file" class="hidden" id="upload-file" />
                     <button type="button" class="btn btn-success" id="btn-choose-file">Choose File</button>
@@ -119,28 +120,17 @@
 
 <script>
 
-        $(document).ready(function () {
+     $(document).ready(function () {
             //setupDaterangepicker();
             InitUserDatatable();
             $('[name=searchBy]').change(function () {
                 RefreshTableFilter('#UserDatatable', true);
             });
+
+            $("#block-select-picker").selectpicker();
     });
 
-    $("#my-btn").on("click", function () {
-        swal({
-            title: "Ajax request example",
-            text: "Submit to run ajax request",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-        }, function () {
-            setTimeout(function () {
-                swal("Ajax request finished!");
-            }, 2000);
-        });
-    });
+   
 
     $("#btn-choose-file").on("click", function () {
         $("#upload-file").trigger('click');
@@ -151,7 +141,7 @@
 
         if (fileName != undefined) {
             var attrDisable = $("#btn-import-avail-subject").attr('disabled');
-            if (typeof attrDisable !== typeof undefined && attr !== false) {
+            if (typeof attrDisable !== undefined) {
                 $("#btn-import-avail-subject").removeAttr('disabled');
             }
         } else {

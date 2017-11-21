@@ -12,21 +12,18 @@ namespace DataService.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Block
+    public partial class SubjectDepartment
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Block()
+        public SubjectDepartment()
         {
-            this.AvailableSubjects = new HashSet<AvailableSubject>();
+            this.Teachers = new HashSet<Teacher>();
         }
     
         public int Id { get; set; }
-        public int Status { get; set; }
-        public int SemesterId { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AvailableSubject> AvailableSubjects { get; set; }
-        public virtual Semester Semester { get; set; }
+        public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }

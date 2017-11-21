@@ -22,6 +22,7 @@ namespace DataService.Model
         public int SubjectId { get; set; }
         public int BlockId { get; set; }
         public Nullable<bool> IsViolatingRegulation { get; set; }
+        public string Document { get; set; }
     
         public virtual Block Block { get; set; }
         public virtual StudentMajor StudentMajor { get; set; }
