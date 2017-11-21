@@ -446,6 +446,7 @@
     <Content Include="Areas\Students\Views\Student\_Index.cshtml" />
     <Content Include="Areas\Students\Views\Student\Payment.cshtml" />
     <Content Include="Areas\Students\Views\Student\_LearningHistory.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\AssignTeachers.cshtml" />
     <None Include="Resources\img-logo-fe.jpg" />
     <Content Include="Scripts\accounting.min.js" />
     <Content Include="Scripts\bootstrap.js" />

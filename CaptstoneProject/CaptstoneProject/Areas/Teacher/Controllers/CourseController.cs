@@ -104,6 +104,19 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             return View(courses);
         }
 
+        public ActionResult AssignTeachers()
+        {
+            var loginName = (string)Session["loginName"];
+            using (var context = new DB_Finance_AcademicEntities())
+            {
+                var teacher = context.Teachers.Where(q => q.LoginName == loginName).FirstOrDefault();
+                if (teacher != null) {
+                }
+                
+            }
+            return View();
+        }
+
         public ActionResult CourseDetails(int courseId)
         {
             ViewBag.CourseId = courseId;
@@ -603,7 +616,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
             {
                 var course = context.Courses.Find(courseId);
                 var studentInCourse = course.StudentInCourses.Where(q => q.Id == studentInCourseId).FirstOrDefault();
-                if(studentInCourse.Average >= 5)
+                if (studentInCourse.Average >= 5)
                 {
                     //if(course.Subject.SubjectMarks.Where(q=> q. ))
                 }

@@ -205,5 +205,19 @@ namespace CaptstoneProject.Models
             public String EduMail { get; set; }
             public String FeMail { get; set; }
         }
+        public class SubjectViewModel
+        {
+            public int SubjectId { get; set; }
+            public string SubjectName { get; set; }
+        }
+
+        public class TeacherRecordViewModel
+        {
+            public int Id { get; set; }
+            public string TeacherName { get; set; }
+            public List<SubjectViewModel> TeacherSubjects { get; set; }
+        }
+
+        
     }
 }

@@ -1,20 +1,32 @@
-﻿
+﻿@model CaptstoneProject.Models.AreaViewModel.TeacherRecordViewModel
 <div class="content">
     <!-- Start Container -->
     <div class="container-default animated fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
             <div class="panel-title">
-                <div class="panel-heading">
-                    <h4><i style="color:#4db748" class="fa fa-user-plus"></i> Assign Teachers</h4>
-                </div>
+                <i style="color:#4db748" class="fa fa-user-plus"></i> Assign Teachers
             </div>
             <div class="panel-body">
                 <table id="" class="table display dataTable cell-border">
                     <thead>
-                        <tr></tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>Assign</td>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr></tr>
+                        <tr>
+                            <td></td>
+                            @foreach(var subject in Model.TeacherSubjects)
+                            {
+                                <td>
+                                    <select>
+                                        <option value="@subject.SubjectId">@subject.SubjectName</option>
+                                    </select>
+                                    <button class="btn btn-info"><i class="fa fa-check"></i></button>
+                                </td>
+                            }
+                        </tr>
                     </tbody>
                 </table>
             </div>
