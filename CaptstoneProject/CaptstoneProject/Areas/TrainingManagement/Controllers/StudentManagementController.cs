@@ -18,8 +18,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
     public class StudentManagementController : MyBaseController
     {
-       static public int excelRowCompleted = 0;
-       static public int excelTotalRow = 0;
+        static public double excelRowCompleted = 0;
+        static public double excelTotalRow = 0;
         // GET: TrainingManagement/StudentManagement
         public ActionResult Index()
         {
@@ -453,7 +453,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         var totalCol = ws.Dimension.Columns;
                         var totalRow = ws.Dimension.Rows;
 
-                        //excelTotalRow = totalRow;
+                        excelTotalRow = totalRow;
+                        excelRowCompleted = 0;
 
                         var studentCodeCell = (from cell in ws.Cells
                                                where cell.Value.ToString().Trim().ToUpper()
@@ -604,8 +605,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                             context.BulkInsert(availableSubject, count, 100);
                                         }
                                     }
-                                }
+                                }//end of if
 
+                                ++excelRowCompleted;
                             } //end of for()
                             context.SaveChanges();
                         }// end of using context
@@ -634,57 +636,36 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
             //Session["excelTotalRow"] = 20;
             excelTotalRow = 20;
-            var excelRowCompleted = 0;
+            excelRowCompleted = 0;
             for (int i = 0; i < 20; i++)
             {
                 //Session["excelRowCompleted"] = ++excelRowCompleted;
-                excelRowCompleted = ++excelRowCompleted;
+                ++excelRowCompleted;
                 Thread.Sleep(1000);
             }
             return Json(new { success = true, message = "Done" });
         }
 
-        //public async Task<ActionResult> TestAsync(int blockId)
-        //{
-        //    return await Task.Run(() => TestPercent(blockId));
-        //}
-
-
-        //public async Task<ActionResult> GetPercentAsync()
-        //{
-        //    return await Task.Run(() => GetPercentageOfImportingAvailableSubject());
-        //}
+        
 
         public ActionResult GetPercentageOfImportingAvailableSubject()
         {
             try
             {
-                var percent = 0;
-                //await Task.Run(() =>
-                //{
-                //var a = Session["excelTotalRow"];
-                //var b = Session["excelRowCompleted"];
-                var a = excelTotalRow;
-                var b = excelRowCompleted;
-                if (a != -1 && b != -1)
+                double mypercent = 0;
+
+
+                if (excelRowCompleted > 0)
                 {
-
-                    var excelTotalRow = (int)a;
-                    var excelRowCompleted = (int)b;
-                    if (excelTotalRow > 0)
-                    {
-                        percent = excelRowCompleted / excelTotalRow * 100;
-
-                    }
-                    if (excelRowCompleted == excelTotalRow)
-                    {
-                        //Session["excelRowCompleted"] = 0;
-                        excelRowCompleted = 0;
-                    }
+                    mypercent = Math.Round(excelRowCompleted / excelTotalRow * 100, 1);
 
                 }
-                //});
-                return Json(new { success = true, percent = percent });
+                if (excelRowCompleted == excelTotalRow)
+                {
+                    excelRowCompleted = 0;
+                }
+
+                return Json(new { success = true, percent = mypercent });
             }
             catch (Exception e)
             {

@@ -1298,36 +1298,53 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         public ActionResult SubjectDetails(int subjectId = -1)
         {
-            if (subjectId == -1)
+            if(subjectId == -1)
             {
-                return Json(new { success = false, message = "Error! Invalid Subject" });
+                return HttpNotFound();
             }
+            ViewBag.SubjectId = subjectId;
+            return View();
+        }
+
+        public ActionResult GetSubjectDetailMarkComponents(int subjectId = -1)
+        {
             try
             {
+                if (subjectId == -1)
+                {
+                    return Json(new { success = false, message = "Error! Invalid Subject" });
+                }
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     var count = 0;
-                    var model = context.SubjectMarks.Where(q => q.SubjectId == subjectId)
-                        .OrderByDescending(q => q.EffectivenessDate).AsEnumerable()
-                        .Select(q => new SubjectMarkViewModel
+                    var result = context.SubjectMarks.Where(q => q.SubjectId == subjectId).AsEnumerable()
+                        .OrderByDescending(q => (q.EffectivenessDate.HasValue)).OrderByDescending(q => q.EffectivenessDate)
+                        .Select(q => new IConvertible[]
                         {
-                            Index = count++,
-                            Id = q.Id,
-                            ComponentName = q.ComponentName,
-                            Percentage = q.Percentage,
-                            EffectivenessDate = q.EffectivenessDate == null ? "-" :
+                            count++,
+                            q.Id,
+                            q.ComponentName,
+                            q.Percentage, //3
+                            q.EffectivenessDate == null ? "-" :
                             DateTime.Parse(q.EffectivenessDate.Value.ToString())
-                            .ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)
+                            .ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture), // effectivenessDay
+                            q.CurrentSyllabus //version //5
                         })
                         .ToList();
                     ViewBag.SubjectId = subjectId;
-                    return View(model);
+                    return Json(new
+                    {
+                        success = true,
+                        iTotalRecords = result.Count,
+                        iTotalDisplayRecords = result.Count,
+                        aaData = result
+                    }, JsonRequestBehavior.AllowGet);
                 }
-            }
-            catch (Exception)
+            } 
+            catch (Exception e)
             {
-
-                throw;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
             }
         }
 
@@ -1538,6 +1555,40 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
         #endregion
 
+        public ActionResult ApplySubjectComponentVersion(string version, int subjectId = -1)
+        {
+            if(subjectId == -1)
+            {
+                return Json(new { success = false, message = "Subject not found!" });
+            }
+            try
+            {
+                using(var context = new DB_Finance_AcademicEntities())
+                {
+                    var newSubjectComponents = context.SubjectMarks
+                        .Where(q => q.SubjectId == subjectId && q.CurrentSyllabus.Equals(version.Trim()))
+                        .ToList();
+                    //var lastestDate =  context.SubjectMarks.Where(q => q.SubjectId == subjectId)
+                    //     .OrderByDescending(q => q.EffectivenessDate.HasValue)
+                    //     .OrderByDescending(q => q.EffectivenessDate).Select(q => q.EffectivenessDate).FirstOrDefault();
+                    // var oldVersion = context.SubjectMarks
+                    //     .Where(q => q.SubjectId == subjectId && q.EffectivenessDate == lastestDate).ToList();
+
+                    foreach (var item in newSubjectComponents)
+                    {
+                        item.EffectivenessDate = DateTime.Now;
+                    }
+                    context.SaveChanges();
+                    return Json(new { success = true, message = "Subject has been updated!" });
+
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
 
 
     }

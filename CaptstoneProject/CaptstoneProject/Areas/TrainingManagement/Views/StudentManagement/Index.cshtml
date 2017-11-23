@@ -130,7 +130,7 @@
             $("#block-select-picker").selectpicker();
     });
 
-   
+
 
     $("#btn-choose-file").on("click", function () {
         $("#upload-file").trigger('click');
@@ -199,22 +199,25 @@
 
     });
     function drawPercentage(percent) {
-        var ctx = $("#percentageLoader")[0].getContext('2d');
-        var start = Math.PI * 1.5;
-        var cw = ctx.canvas.width;
-        var ch = ctx.canvas.height;
-        var diff;
-        diff = ((percent / 100) * Math.PI * 2);
-            ctx.clearRect(0, 0, cw, ch);
-            ctx.lineWidth = 10;
-            ctx.fillStyle = '#4285f4';
-            ctx.strokeStyle = "#4285f4";
-            ctx.textAlign = "center";
-            ctx.font = "24px monospace";
-            ctx.fillText(percent + '%', cw * .52, ch * .5 + 5);
-            ctx.beginPath();
-            ctx.arc(cw/2, ch/2, 40, start, start + diff, false);
-            ctx.stroke();
+        var canvas = $("#percentageLoader")[0];
+        if (canvas != undefined) {
+            var ctx =canvas.getContext('2d');
+            var start = Math.PI * 1.5;
+            var cw = ctx.canvas.width;
+            var ch = ctx.canvas.height;
+            var diff;
+            diff = ((percent / 100) * Math.PI * 2);
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.lineWidth = 10;
+                ctx.fillStyle = '#4285f4';
+                ctx.strokeStyle = "#4285f4";
+                ctx.textAlign = "center";
+                ctx.font = "28px monospace";
+                ctx.fillText(percent + '%', cw * .52, ch * .5 + 5);
+                ctx.beginPath();
+                ctx.arc(cw/2, ch/2, 60, start, start + diff, false);
+                ctx.stroke();
+        }
     }
 
 
