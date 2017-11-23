@@ -554,7 +554,7 @@ namespace CaptstoneProject.Areas.Students.Controllers
 
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var result = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentInCourseId).AsEnumerable()
+                    var result = context.StudentCourseMarks.Where(q => q.StudentInCourseId == studentInCourseId).OrderBy(q => q.Id).AsEnumerable()
                          .Select(q => new IConvertible[] {
                             q.CourseMark.ComponentName,
                             (q.Mark != -1? Math.Round(q.Mark.Value,2).ToString() : "-")

@@ -2,12 +2,124 @@
 @{
     ViewBag.Title = "RegisterCourseManagement";
 }
-
+<style>
+    .my-header-modal {
+        background-color: #ecb028;
+        border-radius: .3rem .3rem 0 0;
+    }
+</style>
 <div class="content">
-    <div class="container-default animate fadeInRight" >
+    <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
-            <div></div>
+            <div class="panel-title"><i class="mdi mdi-book-open-page-variant" style="color:#29ce20;"></i> Register Course</div>
+            <div class="panel-body">
+                <div>
+                    <div class="modal fade" id="abstract-course-modal">
+                        <div class="modal-dialog">
+                            <form id="form-create-abstract-course" method="post" action="@Url.Action("CreateAbstractCourse")">
+                                <div class="modal-content">
+                                    <div class="modal-header my-header-modal"><h4 style="color:white"> Create Abstract Course</h4><button class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button></div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Course Name:</label>
+                                            <input type="text" value="" class="form-control" placeholder="Course name" name="courseName" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Semester: </label>
+                                            <select id="semester-list" name="semesterId" class="form-control">
+                                                @foreach (var item in ViewBag.SemesterList)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Subject: </label>
+                                            <select id="subjectSelector" class="form-control" name="subjectId" data-live-search="true">
+                                                @foreach (var item in ViewBag.SubjectList)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button style="background-color: #c1c5ca;color: #444444; cursor:pointer;" type="button"
+                                                class="btn btn-default" data-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                        <button style="cursor:pointer;" id="btn-create-course"
+                                                type="submit" class="btn btn-info">
+                                            Create
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div> @*end of modal*@
+
+                    <div>
+                        <div class="row col-md-12">
+
+                            <select id="semester-list-2" name="semesterId" class="" data-live-search="true">
+                                @foreach (var item in ViewBag.SemesterList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            &nbsp;
+                            <button type="button" data-toggle="modal"
+                                    data-target="#abstract-course-modal" class="btn btn-success">
+                                <i class="fa fa-plus"></i> Create Abstract Course
+                            </button>
+
+                        </div>
+
+                        <table id="table-abstract-course">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Tên khóa</th>
+                                    <th>Tên môn</th>
+                                    <th>Kì</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+            </div> @*end of panel-body*@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#semester-list").selectpicker();
+        $("#semester-list-2").selectpicker();
+        $("#subjectSelector").selectpicker();
 
+        InitAbstractCourseTable();
+        //$("#btn-create-course").on("click", function () {
+        //    $("#form-create-abstract-course").submit();
+        //})
+
+    });
+
+    $("#semester-list-2").on('change', function () {
+        if ($.fn.DataTable.isDataTable("#table-abstract-course")) {
+            $("#table-abstract-course").DataTable().ajax.reload();
+        }
+    });
+
+    function InitAbstractCourseTable() {
+        $("#table-abstract-course").DataTable({
+            "processing": true,
+            "retrieve": true,
+            "autoWidth": false,
+            "sAjaxSource": "@Url.Action("GetAllAbstractCourse")?semesterId=" + $("#semester-list-2").val(),
+
+        });
+    }
+</script>

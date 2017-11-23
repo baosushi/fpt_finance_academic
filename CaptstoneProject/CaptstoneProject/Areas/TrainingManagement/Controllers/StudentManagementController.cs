@@ -18,20 +18,20 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 {
     public class StudentManagementController : MyBaseController
     {
-        //public int excelRowCompleted = 0;
-        //public int excelTotalRow = 0;
+        static public double excelRowCompleted = 0;
+        static public double excelTotalRow = 0;
         // GET: TrainingManagement/StudentManagement
         public ActionResult Index()
         {
             try
             {
-                using(var context= new DB_Finance_AcademicEntities())
+                using (var context = new DB_Finance_AcademicEntities())
                 {
-                   var blockList = context.Blocks.Where(q => q.Semester.Status != (int)SemesterStatus.Closed).Select(q => new SelectListItem
+                    var blockList = context.Blocks.Where(q => q.Semester.Status != (int)SemesterStatus.Closed).Select(q => new SelectListItem
                     {
                         Value = q.Id.ToString(),
-                        Text =  q.Semester.Title + q.Semester.Year +" - " + q.Name
-                   }).ToList();
+                        Text = q.Semester.Title + q.Semester.Year + " - " + q.Name
+                    }).ToList();
                     ViewBag.BlockList = blockList;
                 }
             }
@@ -453,7 +453,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         var totalCol = ws.Dimension.Columns;
                         var totalRow = ws.Dimension.Rows;
 
-                        //excelTotalRow = totalRow;
+                        excelTotalRow = totalRow;
+                        excelRowCompleted = 0;
 
                         var studentCodeCell = (from cell in ws.Cells
                                                where cell.Value.ToString().Trim().ToUpper()
@@ -604,8 +605,9 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                             context.BulkInsert(availableSubject, count, 100);
                                         }
                                     }
-                                }
+                                }//end of if
 
+                                ++excelRowCompleted;
                             } //end of for()
                             context.SaveChanges();
                         }// end of using context
@@ -628,64 +630,49 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
 
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> TestPercent(int blockId)
-        //{
-        //   await Task.Run(() =>
-        //    {
-        //        Session["excelTotalRow"] = 10;
-        //        var excelRowCompleted = 0;
-        //        for (int i = 0; i < 10; i++)
-        //        {
-        //            Session["excelRowCompleted"] = ++excelRowCompleted;
-        //            Thread.Sleep(1000);
-        //        }
-        //    });
-        //    return Json(new { success = true, message = "Done" });
-        //}
+        [HttpPost]
+        public ActionResult TestPercent(int blockId)
+        {
 
-        //public async Task<ActionResult> TestAsync(int blockId)
-        //{
-        //    return await Task.Run(() => TestPercent(blockId));
-        //}
+            //Session["excelTotalRow"] = 20;
+            excelTotalRow = 20;
+            excelRowCompleted = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                //Session["excelRowCompleted"] = ++excelRowCompleted;
+                ++excelRowCompleted;
+                Thread.Sleep(1000);
+            }
+            return Json(new { success = true, message = "Done" });
+        }
+
+        
+
+        public ActionResult GetPercentageOfImportingAvailableSubject()
+        {
+            try
+            {
+                double mypercent = 0;
 
 
-        //public async Task<ActionResult> GetPercentAsync()
-        //{
-        //    return await Task.Run(() => GetPercentageOfImportingAvailableSubject());
-        //}
+                if (excelRowCompleted > 0)
+                {
+                    mypercent = Math.Round(excelRowCompleted / excelTotalRow * 100, 1);
 
-        //public async Task<ActionResult> GetPercentageOfImportingAvailableSubject()
-        //{
-        //    try
-        //    {
-        //        var percent = 0;
-        //        await Task.Run(() =>
-        //        {
-        //            var a = Session["excelTotalRow"];
-        //            var b = Session["excelRowCompleted"];
-        //            if (a != null && b != null)
-        //            {
+                }
+                if (excelRowCompleted == excelTotalRow)
+                {
+                    excelRowCompleted = 0;
+                }
 
-        //                var excelTotalRow = (int)a;
-        //                var excelRowCompleted = (int)b;
-        //                if (excelTotalRow > 0)
-        //                {
-        //                    percent = excelRowCompleted / excelTotalRow * 100;
-
-        //                }
-
-        //            }
-        //        });
-        //        return Json(new { success = true, percent = percent });
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        //        return Json(new { success = false, message = e.Message });
-        //        throw;
-        //    }
-        //}
+                return Json(new { success = true, percent = mypercent });
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { success = false, message = e.Message });
+            }
+        }
 
     }
 }

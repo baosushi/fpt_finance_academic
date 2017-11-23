@@ -1,4 +1,4 @@
-﻿@model List<CaptstoneProject.Models.AreaViewModel.SubjectMarkViewModel>
+﻿@*@model List<CaptstoneProject.Models.AreaViewModel.SubjectMarkViewModel>*@
 @{
     ViewBag.Title = "SubjectDetails";
 }
@@ -77,21 +77,21 @@
                                     <th>Index</th>
                                     <th>Component Name</th>
                                     <th>Percentage</th>
-                                    <th>Created Date</th>
+                                    <th>Version</th>
                                     @*<th>Action</th>*@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (int i = 0; i < this.Model.Count(); i++)
-                                {
-                                    <tr>
-                                        <td>@Model[i].Index</td>
-                                        <td>@Model[i].ComponentName</td>
-                                        <td>@Model[i].Percentage%</td>
-                                        <td>@Model[i].EffectivenessDate</td>
-                                        @*<td><button class="btn btn-default"></button></td>*@
-                                    </tr>
-                                }
+                                @*@for (int i = 0; i < this.Model.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td>@Model[i].Index</td>
+                                            <td>@Model[i].ComponentName</td>
+                                            <td>@Model[i].Percentage%</td>
+                                            <td>@Model[i].EffectivenessDate</td>
+
+                                        </tr>
+                                    }*@
                             </tbody>
                         </table>
                     </div>
@@ -123,6 +123,7 @@
                                         <button class="btn btn-success" id="btn-create-component" style="margin-top: 10px;">Create Component</button>
                                     </div>
                                     <div class="col-md-6">
+                                        <button type="button" onclick="clearMarkComponent()"><i class="fa fa-undo"></i>Clear</button>
                                         <div class="container table-responsive" style="overflow-x:hidden;">
                                             <ul class="list-group" id="component-container">
                                                 @*<li class="list-group-item"><div>Quiz 1</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
@@ -155,35 +156,89 @@
 
     $(document).ready(function () {
         $('#subjectComponent_table').DataTable({
-            //rowGroup: {
-            //    dataSrc: 2
-            //},
-            "lengthChange": false,
+            "retrieve": true,
+            //"processing": true,
+            "sAjaxSource": "@Url.Action("GetSubjectDetailMarkComponents")?subjectId="+@ViewBag.SubjectId,
+            //"lengthChange": false,
             "pageLength": 20,
+            "ordering": false,
             "drawCallback": function (settings) {
                 var api = this.api();
                 var rows = api.rows({ page: 'current' }).nodes();
                 var last = null;
 
                 api.column(3, { page: 'current' }).data().each(function (group, i) {
+                    api.row(i).data();
+                    var version = api.row(i).data()[5];
+                    group = version;
                     if (last !== group) {
                         var formattedDate = moment(group, "DD/MM/YYYY hh:mm:ss").format("DD/MM/YYYY");
 
                         if (i == 0 && rows.page() == 0)
                             $(rows).eq(i).before(
-                                '<tr class="group"><th class="my-header-active text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><btn class="btn btn-warning active-status">Active</div></td></tr>'
+                                '<tr class="group"><th class="my-header-active text_mid">Version: ' + version + '<br/> ' + formattedDate+' </th><td class="text_mid"><btn class="btn btn-warning active-status">Active</div></td></tr>'
                             );
                         else
                             $(rows).eq(i).before(
-                                '<tr class="group"><th class="my-header text_mid">Created Date: ' + formattedDate + ' </th><td class="text_mid"><button class="btn btn-default">Apply</button></td></tr>'
+                                '<tr class="group"><th class="my-header text_mid">Version: ' + version + '<br/> ' + formattedDate +
+                                '</th><td class="text_mid">' +
+                                '<button class="btn btn-default" onclick="applySubjectComponentVersion(' + version + ')" > Apply</button ></td ></tr > '
                             );
                         last = group;
                     }
                 });
             },
-            "columnDefs": [{ "visible": false, "targets": [0, 3] }, { "className": "dt-center", "targets": "_all" },],
-            "order": [[0, "asc"]]
+            "columnDefs": [
+                {
+                    "targets": [1],
+                    "render": function (data, type, row) {
+                        return row[2];
+                    }
+                },
+                {
+                    "targets": [2],
+                    "render": function (data, type, row) {
+                        var percent = row[3];
+                        return percent+" %";
+                    }
+                },
+                {
+                    "targets": [3],
+                    "render": function (data, type, row) {
+                        var version = row[5];
+                        return version;
+                    }
+                },
+                { "visible": false, targets: [0, 3] },
+                { "className": "dt-center", "targets": "_all" },
+            ],
+            //"order": [[0, "asc"]]
         });
+
+
+        function applySubjectComponentVersion(version) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("ApplySubjectComponentVersion")",
+                data: { version: version, subjectId: "@ViewBag.SubjectId" },
+                success: function (result) {
+                    if (result.success) {
+                        swal("Apply Completed", result.message, "success");
+                        $('#subjectComponent_table').DataTable().ajax.reload();
+                    } else {
+                        swal("Error", result.message, "error");
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+
+
 
         $("#btn-create-component").on('click', function () {
             var isFinal = $("input[name='isFinal']:checked").val();
@@ -300,9 +355,10 @@
                 }
             }
 
-        });
+        }); //end of create mark component
 
     });
+
     function deleteSubjectComponent(index, group) {
 
         if (group != -1) {
@@ -347,17 +403,20 @@
             success: function (result) {
                 if (result.success) {
                     swal("Successed", result.message, "success");
-                    //$('#subjectComponent_table').DataTable().ajax.reload();
+                    $('#subjectComponent_table').DataTable().ajax.reload();
                 } else {
                     swal("Error", result.message, "error");
                 }
-                subjectComponentArray.splice(0, subjectComponentArray.length);
-                $("#component-container").html("");
+                clearMarkComponent();
             }
 
              });
         });
-
-
     });
+
+
+    function clearMarkComponent() {
+        subjectComponentArray.splice(0, subjectComponentArray.length);
+        $("#component-container").html("");
+    }
 </script>
