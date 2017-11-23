@@ -7,10 +7,10 @@
                 <i style="color:#4db748" class="fa fa-user-plus"></i> Assign Teachers
             </div>
             <div class="panel-body">
-                <table id="" class="table display dataTable cell-border">
+                <table id="assign-table" class="table display dataTable cell-border">
                     <thead>
                         <tr>
-                            <td>Name</td>
+                            <td style="width:300px">Name</td>
                             <td>Assign</td>
                         </tr>
                     </thead>
@@ -18,15 +18,26 @@
                         @foreach (var teacher in Model)
                         {
                             <tr>
-                                <td>@teacher.TeacherName</td>
+                                <td><span id="teacher-name-@teacher.Id">@teacher.TeacherName</span></td>
                                 <td>
-                                    <select>
-                                        @foreach (var subject in teacher.TeacherSubjects)
-                                        {
-                                            <option value="@subject.SubjectId">@subject.SubjectName</option>
-                                        }
-                                    </select>
-                                    <button class="btn btn-info"><i class="fa fa-check"></i></button>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <select id="subject-teacher-@teacher.Id" class="selectpicker" data-live-search="true" multiple data-max-options="5">
+                                                @foreach (var subject in teacher.TeacherSubjects)
+                                                {
+                                                    <option selected value="@subject.SubjectId">@subject.SubjectName</option>
+                                                }
+                                                @foreach (var subject in teacher.OthersSubjects)
+                                                {
+                                                    <option value="@subject.SubjectId">@subject.SubjectName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="teacher-assign-@teacher.Id" class="btn btn-info assign-teacher"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+
                                 </td>
 
                             </tr>
@@ -37,3 +48,52 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#assign-table').DataTable({
+            "searching": true,
+            "sorting": false,
+            "drawCallback": function (settings) {
+                $(".selectpicker").selectpicker();
+            },
+            "columnDefs": [
+         {
+             targets: [0],
+             searchable: true,
+         },
+        {
+            targets: [1],
+            searchable: false,
+        }
+            ],
+        });
+
+        $(".assign-teacher").on('click', function () {
+            debugger
+            var teacherId = this.id.split('-')[2];
+            var subjectList = $("#subject-teacher-" + teacherId + "").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AssignTeacherSubjects")',
+                data: { teacherId: teacherId, subjectSelected: subjectList},
+                success: function (result) {
+                    if (result.success) {
+                        var name = $("#teacher-name-" + teacherId).html();
+                        swal("Success!", name+"'s subjects is updated! ", "success");
+                        $("#subject-teacher-" + teacherId + "").val(result.newTeacherSubjects);
+                        $("#subject-teacher-" + teacherId + "").selectpicker("refresh");
+
+                    } else {
+                        toastr.error(result.message);
+                    }
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    toastr.error(err);
+                }
+            });
+
+        });
+    });
+    
+</script>

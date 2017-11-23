@@ -108,6 +108,7 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
         {
             var loginName = (string)Session["loginName"];
             List<TeacherRecordViewModel> teachersList = new List<TeacherRecordViewModel>();
+            List<SubjectViewModel> subjects = new List<SubjectViewModel>();
             using (var context = new DB_Finance_AcademicEntities())
             {
                 var teacher = context.Teachers.Where(q => q.LoginName == loginName && q.IsHeadOfDepartment == true).FirstOrDefault();
@@ -116,6 +117,11 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                     var department = context.SubjectGroups.Where(q => q.Id == teacher.SubjectGroupId).FirstOrDefault();
                     if (department != null)
                     {
+                        subjects = context.Subjects.Where(q => q.SubjectGroupId == department.Id).Select(w => new SubjectViewModel
+                        {
+                            SubjectId = w.Id,
+                            SubjectName = w.SubjectName,
+                        }).ToList();
                         teachersList = department.Teachers.Select(q => new TeacherRecordViewModel
                         {
                             Id = q.Id,
@@ -123,17 +129,69 @@ namespace CaptstoneProject.Areas.Teacher.Controllers
                         }).ToList();
                         foreach (var item in teachersList)
                         {
-                            item.TeacherSubjects = context.TeacherSubjects.Where(q => q.TeacherId == item.Id).Select(w => new SubjectViewModel
+                            var teacherSubjectList = context.TeacherSubjects.Where(q => q.TeacherId == item.Id).Select(w => new SubjectViewModel
                             {
-                                SubjectId=w.SubjectId,
-                                SubjectName=w.Subject.SubjectName,
+                                SubjectId = w.SubjectId,
+                                SubjectName = w.Subject.SubjectName,
                             }).ToList();
+                            item.TeacherSubjects = teacherSubjectList;
+                            item.OthersSubjects = subjects.Where(w => !teacherSubjectList.Select(q => q.SubjectId).Contains(w.SubjectId)).ToList();
                         }
                     }
                 }
 
             }
+            //ViewData["SubjectList"] = subjects;
+
             return View(teachersList);
+        }
+
+        public ActionResult AssignTeacherSubjects(int teacherId, List<int?> subjectSelected)
+        {
+            try
+            {
+                List<int> lastestTeacherSubject = new List<int>();
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var currentTeacherSubject = context.TeacherSubjects.Where(q => q.TeacherId == teacherId).ToList();
+                    var currentSubjects = currentTeacherSubject.Select(q => q.SubjectId).ToList();
+                    foreach (var item in currentTeacherSubject)
+                    {
+                        if (!subjectSelected.Contains(item.SubjectId))
+                        {
+                            var removingSubject = context.TeacherSubjects.Find(item.Id);
+                            currentSubjects.Remove(removingSubject.SubjectId);
+                            context.TeacherSubjects.Remove(removingSubject);
+                        }
+                    }
+                    context.SaveChanges();
+                    if (subjectSelected[0] != null)
+                    {
+                        foreach (var item in subjectSelected)
+                        {
+                            if (!currentSubjects.Contains(item.Value))
+                            {
+                                TeacherSubject newTeacherSubject = new TeacherSubject();
+                                newTeacherSubject.SubjectId = item.Value;
+                                newTeacherSubject.TeacherId = teacherId;
+                                context.TeacherSubjects.Add(newTeacherSubject);
+                            }
+                        }
+                        context.SaveChanges();
+                    }
+                    
+                    lastestTeacherSubject = context.TeacherSubjects.Where(q => q.TeacherId == teacherId).Select(q => q.SubjectId).ToList();
+                }
+
+                return Json(new { success = true, newTeacherSubjects = lastestTeacherSubject }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         public ActionResult CourseDetails(int courseId)

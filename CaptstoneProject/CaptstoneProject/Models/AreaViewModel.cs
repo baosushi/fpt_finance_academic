@@ -216,6 +216,7 @@ namespace CaptstoneProject.Models
             public int Id { get; set; }
             public string TeacherName { get; set; }
             public List<SubjectViewModel> TeacherSubjects { get; set; }
+            public List<SubjectViewModel> OthersSubjects { get; set; }
         }
 
         
