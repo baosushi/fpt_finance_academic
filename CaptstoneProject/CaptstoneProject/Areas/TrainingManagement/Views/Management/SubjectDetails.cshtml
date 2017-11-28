@@ -136,6 +136,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer my-panel-footer">
+                                <input type="text" value="" class="pull-left" placeholder="version" id="subject-component-version" />
                                 <button style="float:right;" id="apply-subject-component" class="btn btn-default">Apply Component</button>
                             </div>
                         </div>
@@ -168,11 +169,14 @@
                 var last = null;
 
                 api.column(3, { page: 'current' }).data().each(function (group, i) {
-                    api.row(i).data();
-                    var version = api.row(i).data()[5];
+                    //api.row(i).data();
+                    var percent = api.rows({ page: 'current' }).data()[i][3];
+
+                    var version = api.rows({ page: 'current' }).data()[i][5];
                     group = version;
+                    var date = api.rows({ page: 'current' }).data()[i][4];
                     if (last !== group) {
-                        var formattedDate = moment(group, "DD/MM/YYYY hh:mm:ss").format("DD/MM/YYYY");
+                        var formattedDate = moment(date, "DD/MM/YYYY hh:mm:ss").format("DD/MM/YYYY");
 
                         if (i == 0 && rows.page() == 0)
                             $(rows).eq(i).before(
@@ -216,21 +220,7 @@
         });
 
 
-        function applySubjectComponentVersion(version) {
-            $.ajax({
-                type: "post",
-                url: "@Url.Action("ApplySubjectComponentVersion")",
-                data: { version: version, subjectId: "@ViewBag.SubjectId" },
-                success: function (result) {
-                    if (result.success) {
-                        swal("Apply Completed", result.message, "success");
-                        $('#subjectComponent_table').DataTable().ajax.reload();
-                    } else {
-                        swal("Error", result.message, "error");
-                    }
-                }
-            });
-        }
+
 
 
 
@@ -357,7 +347,24 @@
 
         }); //end of create mark component
 
-    });
+    }); //end of document ready
+
+
+    function applySubjectComponentVersion(version) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("ApplySubjectComponentVersion")",
+                data: { version: version, subjectId: "@ViewBag.SubjectId" },
+                success: function (result) {
+                    if (result.success) {
+                        swal("Apply Completed", result.message, "success");
+                        $('#subjectComponent_table').DataTable().ajax.reload();
+                    } else {
+                        swal("Error", result.message, "error");
+                    }
+                }
+            });
+        }
 
     function deleteSubjectComponent(index, group) {
 
@@ -379,40 +386,70 @@
     }
 
     $("#apply-subject-component").on('click', function () {
+        var version = $('#subject-component-version').val();
+        if (version == undefined || version.trim().length == 0) {
+            toastr.error("Please input version !");
+            return;
+        }
+
         swal({
-            title: "Are you sure",
-            text: "Submit to apply this Subject Component",
-            type: "info",
+            title: 'Are you sure?',
+            text: "This subject will apply new version of subject component",
+            type: 'info',
             showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-        }, function () {
-            //var subjectMarkList = JSON.stringify({ subjectMarkList: subjectComponentArray });
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result) {
+                swal({
+                    title: 'This will take a bit time',
+                    text: 'Applying new version',
+                    onOpen: () => {
+                        swal.showLoading();
+                        //exclude null from array before send
+                    for (var i = 0; i < subjectComponentArray.length; i++) {
+                        if (subjectComponentArray[i] == undefined) {
+                            subjectComponentArray.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    if (subjectComponentArray.length == 0) {
+                        toastr.error("Subject Component is Empty !");
+                        swal.closeModal();
+                        return;
+                    }
 
-            //exclude null from array before send
-            for (var i = 0; i < subjectComponentArray.length; i++) {
-                if (subjectComponentArray[i] == undefined) {
-                    subjectComponentArray.splice(i, 1);
-                    i--;
-                }
-            }
-            $.ajax({
-            type: "post",
-            url: "@Url.Action("AddSubjectComponent")",
-            data: { subjectMarkList: subjectComponentArray, subjectId: @ViewBag.SubjectId },
-            success: function (result) {
-                if (result.success) {
-                    swal("Successed", result.message, "success");
-                    $('#subjectComponent_table').DataTable().ajax.reload();
-                } else {
-                    swal("Error", result.message, "error");
-                }
-                clearMarkComponent();
-            }
 
-             });
-        });
+
+                    $.ajax({
+                    type: "post",
+                    url: "@Url.Action("AddSubjectComponent")",
+                    data: {
+                        subjectMarkList: subjectComponentArray,
+                        subjectId: @ViewBag.SubjectId,
+                        subjectVersion: $('#subject-component-version').val()
+                    },
+                    success: function (result)
+                    {
+                        if (result.success) {
+                            swal("Successed", result.message, "success");
+                            $('#subjectComponent_table').DataTable().ajax.reload();
+                        } else {
+                            swal("Error", result.message, "error");
+                        }
+                        clearMarkComponent();
+                    } });// end of ajax
+                 },
+                    allowOutsideClick:false
+                });
+            }
+        })
+
+
+
     });
+
 
 
     function clearMarkComponent() {

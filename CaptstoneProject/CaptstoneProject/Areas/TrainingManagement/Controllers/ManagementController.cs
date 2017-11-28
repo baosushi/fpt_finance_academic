@@ -1349,12 +1349,16 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSubjectComponent(List<SubjectMarkModel> subjectMarkList, int subjectId)
+        public ActionResult AddSubjectComponent(List<SubjectMarkModel> subjectMarkList, int subjectId, string subjectVersion)
         {
             try
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
+                    if(context.SubjectMarks.Where(q => q.CurrentSyllabus.Equals(subjectVersion.Trim())).ToList().Count > 0)
+                    {
+                        return Json(new { success = false, message = "Version already exist!" });
+                    }
                     foreach (var item in subjectMarkList)
                     {
                         if (item != null && item.SubjectComponentName != null)
@@ -1364,8 +1368,8 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                                 ComponentName = item.SubjectComponentName,
                                 Percentage = item.Percentage,
                                 EffectivenessDate = DateTime.Now,
-                                SubjectId = subjectId
-
+                                SubjectId = subjectId,
+                                CurrentSyllabus = subjectVersion.Trim()
                                 ///còn thiếu CurrentSyllabus
                             });
                         }
