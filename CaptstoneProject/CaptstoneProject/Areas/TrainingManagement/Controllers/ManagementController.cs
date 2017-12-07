@@ -1277,6 +1277,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                         count++,
                         q.SubjectCode,
                         q.SubjectName,
+                        q.SubjectGroup != null? q.SubjectGroup.Name: "-",
                         q.Id
                      }).ToList();
                     return Json(new

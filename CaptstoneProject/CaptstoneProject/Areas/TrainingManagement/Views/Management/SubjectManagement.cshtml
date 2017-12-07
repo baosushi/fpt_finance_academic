@@ -59,6 +59,7 @@
                                 <td>No.</td>
                                 <td>Subject Code</td>
                                 <td>Subject Name</td>
+                                <td>Subject Group</td>
                                 <td>View Subject </td>
                             </tr>
                         </thead>
@@ -200,7 +201,7 @@
             "columnDefs": [
                 { "className": "dt-center", "targets": "_all" },
                 {
-                    "targets": 3,
+                    "targets": 4,
                     "render": function (data, type, row, meta) {
                         return '<a href="@Url.Action("SubjectDetails")?subjectId='+data+'"><button type="button" class="btn btn-default my-btn"><i class="fa fa-eye"></i></button></a>';
                     }

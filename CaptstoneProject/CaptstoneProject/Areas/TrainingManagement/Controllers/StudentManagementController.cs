@@ -406,7 +406,10 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
                     var count = 0;
                     count = param.iDisplayStart + 1;
 
-                    var result = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajorId).AsEnumerable()
+                    var currentDate = DateTime.Now;
+                    var currentSemester = context.Semesters.Where(q => q.StartDate <= currentDate && q.EndDate >= currentDate).FirstOrDefault();
+                    var nextSemester = context.Semesters.OrderBy(q => q.Id).Where(q => q.Id > currentSemester.Id).FirstOrDefault();
+                    var result = context.AvailableSubjects.Where(q => q.StudentMajorId == studentMajorId && q.Block.SemesterId == nextSemester.Id).AsEnumerable()
                         .Select(q => new IConvertible[]{
                             count++,
                             q.Subject.SubjectCode,
@@ -646,7 +649,7 @@ namespace CaptstoneProject.Areas.TrainingManagement.Controllers
             return Json(new { success = true, message = "Done" });
         }
 
-        
+
 
         public ActionResult GetPercentageOfImportingAvailableSubject()
         {

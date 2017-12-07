@@ -6,7 +6,7 @@
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-cogs" style="color: #1763cb;"></i> Administration</div>
-
+            
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-4">
@@ -16,6 +16,22 @@
                             </div>
                         </a>
                     </div>
+                </div>
+                <div>
+                    <select id="semester-selector">
+                        @foreach (var item in ViewBag.SemesterList)
+                        {
+                            if (item.Value == ViewBag.CurrentSemester)
+                            {
+                                <option value="@item.Value" selected> @item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value"> @item.Text</option>
+                            }
+                        }
+                    </select>
+
                 </div>
                 <div class="">
                     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -28,12 +44,7 @@
                             <option value="@item.Value"> @item.Text</option>
                         }
                     </select>
-                    <select id="semester-selector">
-                        @foreach (var item in ViewBag.SemesterList)
-                        {
-                            <option value="@item.Value"> @item.Text</option>
-                        }
-                    </select>
+                    
                 </div>
                 <div class="table-responsive">
                     <table id="table-4-subjectGroupSelector">
@@ -58,33 +69,9 @@
 <script>
     $(window).load(function () {
 
-        $.ajax({
-            type: "get",
-            url: "@Url.Action("GetTestResultCurrentSemester")",
-            success: function (result) {
-                if (result.success) {
-                    subjectStatusCurrentSemester(result);
-                } else {
-                    toastr.error(result.message, "Error! Can't load chart");
-                }
-            }
-        });
 
-
-
-
-         $.ajax({
-            type: "get",
-            url: "@Url.Action("GetTestResultBySubjectGroup")",
-            success: function (result) {
-                if (result.success) {
-                    subjectGroupCurrentSemester(result);
-                } else {
-                    toastr.error(result.message, "Error! Can't load chart");
-                }
-            }
-        });
-
+        GetTestBySemester();
+        GetTestBySubjectGroup();
 
         //chart for pass and fail of every subject in this semester
 
@@ -109,7 +96,7 @@
            //         "bSortable": false
            //     }
            // ],
-                   
+
         });
         var i = 0;
         $("#subjectGroups-selector").on("change", function () {
@@ -122,8 +109,46 @@
         $("#subjectGroups-selector").selectpicker();
         $("#semester-selector").selectpicker();
 
+        $("#semester-selector").on('change', function () {
+            GetTestBySubjectGroup();
+            GetTestBySemester();
+        });
 
     });
+
+      function GetTestBySemester(){
+            $.ajax({
+                type: "get",
+                url: "@Url.Action("GetTestResultCurrentSemester")",
+                data: { semesterId: $("#semester-selector").val() },
+                success: function (result) {
+                    if (result.success) {
+                        subjectStatusCurrentSemester(result);
+                    } else {
+                        toastr.error(result.message, "Error! Can't load chart");
+                    }
+                }
+            });
+        }
+
+
+
+        function GetTestBySubjectGroup(){
+
+             $.ajax({
+                type: "get",
+                url: "@Url.Action("GetTestResultBySubjectGroup")",
+                data: { semesterId: $("#semester-selector").val() },
+                success: function (result) {
+                    if (result.success) {
+                        subjectGroupCurrentSemester(result);
+                    } else {
+                        toastr.error(result.message, "Error! Can't load chart");
+                    }
+                }
+            });
+        }
+
 
     function subjectStatusCurrentSemester(data) {
 

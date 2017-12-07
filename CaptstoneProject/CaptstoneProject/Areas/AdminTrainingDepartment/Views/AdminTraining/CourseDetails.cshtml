@@ -203,7 +203,7 @@
                                         else
                                         {
                                             <td>
-                                                @mark.Mark
+                                                @mark.Mark.Value.ToString("0.00")
                                             </td>
                                         }
                                     }
@@ -231,14 +231,19 @@
                                     @Model.StudentInCourse[i - 1].Status
                                 </td>
                                 <td>
-                                    @if (Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Failed
-                                         && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Passed
-                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Cancel
-                                        && Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Issued)
+                                    @if (Model.StudentInCourse[i - 1].Status != (int)StudentInCourseStatus.Issued)
                                     {
 
                                         <button class="btn btn-warning btn-unlock-student" onclick="unlockStudent(this)">Unlock</button>
                                         <form class="hidden" method="post" action="@Url.Action("UnlockStudent")">
+                                            <input type="text" name="courseId" class="hidden" value="@Model.CourseId" />
+                                            <input type="text" name="studentCode" class="hidden" value="@Model.StudentInCourse[i-1].StudentCode" />
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-warning btn-unlock-student" onclick="lockStudent(this)">Lock</button>
+                                        <form class="hidden" method="post" action="@Url.Action("LockStudent")">
                                             <input type="text" name="courseId" class="hidden" value="@Model.CourseId" />
                                             <input type="text" name="studentCode" class="hidden" value="@Model.StudentInCourse[i-1].StudentCode" />
                                         </form>
@@ -543,20 +548,47 @@
     });
 
     function unlockStudent(e) {
+       
+
         swal({
-            title: "Are you sure?",
-            text: "This will unlock student, allow mark to be modified",
-            type: "info",
+            title: 'Are you sure?',
+            text: "This will unlock student, allow mark to be modified!",
+            type: 'warning',
             showCancelButton: true,
-            confirmButtonClass: "btn-primary",
-            confirmButtonText: "Yes",
-            closeOnConfirm: false
-        },
-            function () {
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result) {
+               
                 var form = $(e).siblings('form');
                 form.submit();
                 //$("form[name='form-issue-student']").submit();
-            })
+            
+            }
+        })
+
+    }
+
+    function lockStudent(e) {
+
+        swal({
+            title: 'Are you sure?',
+            text: "This will lock student back to their previous status",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result) {
+
+                var form = $(e).siblings('form');
+                form.submit();
+
+            }
+        })
+
     }
 
 

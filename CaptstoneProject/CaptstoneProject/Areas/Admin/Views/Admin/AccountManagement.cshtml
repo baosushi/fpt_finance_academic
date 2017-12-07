@@ -11,9 +11,9 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6 pull-left">
-                        <div class="btn btn-default" data-toggle="modal" data-target="#create-role-modal">
+                        @*<div class="btn btn-default" data-toggle="modal" data-target="#create-role-modal">
                             Add Role
-                        </div>
+                        </div>*@
                         <div class="modal fade" id="create-role-modal">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -48,35 +48,40 @@
 
                     <div class="col-md-6 pull-right">
                         <div class="pull-right">
-                            <form action="@Url.Action("DownloadAccountTemplate")" method="post">
-                                <button type="submit" class="btn-success btn" id="download-template-btn"
-                                        title="Template use for import multiple account in the same time">
-                                    <i class="fa fa-upload"></i>
-                                    Template Import Account
+                            <div class="row">
+                                <form action="@Url.Action("DownloadAccountTemplate")" method="post">
+                                    <button type="submit" class="btn-success btn" id="download-template-btn"
+                                            title="Template use for import multiple account in the same time">
+                                        <i class="fa fa-upload"></i>
+                                        Template Import Account
+                                    </button>
+                                </form>
+
+                                <button class="btn-primary btn"
+                                        title="Import Account using template contain google emails" id="import-acc-btn">
+                                    Choose file
                                 </button>
-                            </form>
+                                <input id="upload-file" class="hidden" type="file" name="upload-file" />
+                                <span id="filename"></span>
+                                <br />
+                                <div class="progress" style="display:none">
+                                    <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
 
-                            <button class="btn-primary btn"
-                                    title="Import Account using template contain google emails" id="import-acc-btn">
-                                Import Account
-                            </button>
-                            <input id="upload-file" class="hidden" type="file" name="upload-file" /><br />
-                            <span id="filename"></span>
-                            <div class="progress" style="display:none">
-                                <div id="upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-
+                                    </div>
                                 </div>
                             </div>
-                            <button type="button" id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waiting for file</button>
-                       @*<table id="table_Account">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Role</th>
-                            </tr>
-                        </thead>
-                       </table>*@
+                                <button type="button" id="submit-button" class="btn btn-primary pull-right disabled" disabled="disabled">Waiting for file</button>
+
+                            <table id="table_Account">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -103,10 +108,19 @@
 
         });
 
-        @*$("#table_Account").DataTable({
-            "sAjaxSource": "@Url.Action("")"
-
-        });*@
+       $("#table_Account").DataTable({
+           "filter": true,
+           "processing": true,
+           "serverSide": true,
+           "retrieve": true,
+           "sAjaxSource": '@Url.Action("GetAccount")',
+           "columnDefs": [
+                {
+                    "aTargets": [0, 1, 2],
+                    "bSortable": false
+                }
+            ],
+        });
 
         $('#import-acc-btn').click(function () {
             $('#upload-file').trigger("click");

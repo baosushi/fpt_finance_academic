@@ -30,7 +30,7 @@
 
     <script type="text/javascript" src="~/Scripts/accounting.min.js"></script>
     @*responsive-dataTable*@
-    <script type="text/javascript" src="~/Content/js/datatables/responsive-dataTable/dataTables.responsive.min.js" ></script>
+    <script type="text/javascript" src="~/Content/js/datatables/responsive-dataTable/dataTables.responsive.min.js"></script>
 
     <script type="text/javascript" src="~/Content/js/datatables/FixedColumns-3.2.3/js/dataTables.fixedColumns.min.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Content/js/datatables/FixedColumns-3.2.3/css/fixedColumns.dataTables.min.css" />
@@ -191,7 +191,7 @@
                         <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Dashboard 3</a></li>
                     </ul>
                 </li>*@
-			@if (User.IsInRole("Student"))
+            @if (User.IsInRole("Student"))
             {
                 <li>
                     <a href="@Url.Action("Index", "Student", new { area = "Students" })">
@@ -268,47 +268,41 @@
                         <span class="nav-title">Register Course Management</span>
                     </a>
                 </li>
-                <li>
-                    <a href="@Url.Action("Index", "AdminTraining", new { area = "AdminTrainingDepartment" })">
-                        <span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>
-                        <span class="nav-title">Admin Training</span>
-                    </a>
-                </li>
             }
             @if (User.IsInRole("Admin Training Management"))
             {
 
-                        <li>
-                            <a href="@Url.Action("Index", "AdminTraining", new { area = "AdminTrainingDepartment" })">
-                                @*<span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>*@
-                                <span class="nav-title">Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("SemesterManagement", "AdminTraining", new { area = "AdminTrainingDepartment" })">
-                                @*<span class="nav-title">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </span>*@
-                                <span class="nav-title">Semester Management</span>
-                            </a>
-                        </li>
+                <li>
+                    <a href="@Url.Action("Index", "AdminTraining", new { area = "AdminTrainingDepartment" })">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("SemesterManagement", "AdminTraining", new { area = "AdminTrainingDepartment" })">
+                        <span class="icon color5">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-title">Semester Management</span>
+                    </a>
+                </li>
 
             }
             @if (User.IsInRole("Admin"))
             {
 
-                        <li>
-                            <a href="@Url.Action("Index", "Admin", new { area = "Admin" })">
-                                @*<span class="icon color5"><i class="fa fa-user-wpforms" aria-hidden="true"></i></span>*@
-                                <span class="nav-title">Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("AccountManagement", "Admin", new { area = "Admin" })">
-                                @*<span class="icon color5"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>*@
-                                <span class="nav-title">Account Management</span>
-                            </a>
-                        </li>
+                <li>
+                    <a href="@Url.Action("Index", "Admin", new { area = "Admin" })">
+                        <span class="icon color5"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span class="nav-title">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("AccountManagement", "Admin", new { area = "Admin" })">
+                        <span class="icon color5"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
+                        <span class="nav-title">Account Management</span>
+                    </a>
+                </li>
 
             }
             @*<li class="sidetitle">FEATURES</li>*@

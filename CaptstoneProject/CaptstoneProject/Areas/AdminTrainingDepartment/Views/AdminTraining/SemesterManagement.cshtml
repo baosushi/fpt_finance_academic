@@ -117,7 +117,9 @@
                         </span>
                     </form>
                 }*@
-            <button id="my-par-btn" class="btn btn-warning">Partial</button>
+
+            @*Test button*@
+            @*<button id="my-par-btn" class="btn btn-warning">Partial</button>*@
             <div class="panel-body table-responsive">
                 <table id="testTable" class="table display dataTable">
                     <thead>
@@ -129,7 +131,7 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
-                            <th>Status Action</th>
+                            @*<th>Status Action</th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -183,7 +185,7 @@
                                     }
                                 </td>
                                 <td><a href="@Url.Action("CourseDetails", "AdminTraining", new { courseId = Model[i - 1].CourseId})">View course</a></td>
-                                <td></td>
+                                @*<td></td>*@
                             </tr>
                         }
                     </tbody>
@@ -205,14 +207,14 @@
         $('#semesterId-course-form').val($('#semesterSelector').val());
         $('#form-export-allstudentmark input[name="semesterId"]').val($('#semesterSelector').val());
 
-        $("#my-par-btn").on("click", function () {
+        @*$("#my-par-btn").on("click", function () {
             $.ajax({
                 url: "@Url.Action("GetMyData")",
                 success: function (result) {
                     $("#myPartial").html(result);
                 }
             })
-        });
+        });*@
 
         $("#btn-create-course").on("click", function () {
             $("#form-create-course").submit();

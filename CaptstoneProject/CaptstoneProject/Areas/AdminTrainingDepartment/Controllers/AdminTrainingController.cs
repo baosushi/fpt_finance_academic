@@ -14,6 +14,7 @@ using static CaptstoneProject.Models.AreaViewModel;
 
 namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 {
+    [Authorize(Roles = "Admin Training Management")]
     public class AdminTrainingController : MyBaseController
     {
         // GET: AdminTrainingDepartment/AdminTraining
@@ -32,6 +33,14 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                         Text = q.Title + " " + q.Year,
                         Value = q.Id.ToString()
                     }).ToList();
+
+                var currentDate = DateTime.Now;
+                var currentSemester = context.Semesters.Where(q => q.StartDate <= currentDate && q.EndDate >= currentDate)
+                    .FirstOrDefault();
+                if (currentSemester == null)
+                    currentSemester = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault();
+
+                ViewBag.CurrentSemester = currentSemester.Id.ToString();
                 ViewBag.SubjectGroups = subjectGroupList;
                 ViewBag.SemesterList = semesterList;
             }
@@ -47,7 +56,11 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     //DateTime startDate, endDate;
-                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault() : context.Semesters.Find(semesterId);
+                    var currentDate = DateTime.Now;
+                    var semester = semesterId == null ? context.Semesters.Where(q => q.StartDate <= currentDate && q.EndDate >= currentDate).FirstOrDefault() : context.Semesters.Find(semesterId);
+                    if (semester == null)
+                        semester = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault();
+
 
                     //startDate = semester.StartDate.Value;
                     //endDate = semester.EndDate.Value;
@@ -59,8 +72,8 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                             Name = q.Subject.SubjectName,
                             Code = q.Subject.SubjectCode,
                             Class = q.ClassName,
-                            StartDate = (q.StartDate == null ? new DateTime(): q.StartDate.Value),
-                            EndDate = (q.EndDate == null? new DateTime(): q.EndDate.Value),
+                            StartDate = (q.StartDate == null ? new DateTime() : q.StartDate.Value),
+                            EndDate = (q.EndDate == null ? new DateTime() : q.EndDate.Value),
                             Status = Enum.GetName(typeof(CourseStatus), q.Status == null ? 0 : q.Status.Value)
                         }).ToList();
 
@@ -93,7 +106,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
 
                 return View(courses);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new { success = false, message = e.Message });
@@ -309,9 +322,11 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
-                        ThenByDescending(q => q.SemesterInYear).
-                        FirstOrDefault() : context.Semesters.Find(semesterId);
+                    var currentDate = DateTime.Now;
+                    var semester = semesterId == -1 ? context.Semesters.Where(q => q.StartDate <= currentDate && q.EndDate >= currentDate)
+                        .FirstOrDefault() : context.Semesters.Find(semesterId);
+                    if (semester == null)
+                        semester = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault();
 
                     var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).
                         Select(q => (int?)q.Subject.SubjectGroup.Id).ToList();
@@ -384,7 +399,60 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
                 using (var context = new DB_Finance_AcademicEntities())
                 {
                     var studentInCourse = context.StudentInCourses.Where(q => q.CourseId == courseId && q.StudentMajor.StudentCode == studentCode).FirstOrDefault();
+
                     studentInCourse.Status = (int)StudentInCourseStatus.Issued;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Json(new { success = false, message = e });
+            }
+            return RedirectToAction("CourseDetails", new { courseId = courseId });
+        }
+
+        [HttpPost]
+        public ActionResult LockStudent(string studentCode, int courseId = -1)
+        {
+            if (courseId == -1 || studentCode == null || studentCode.Length == 0)
+            {
+                return Json(new { success = false, message = "Error! No student found" });
+
+            }
+            try
+            {
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var studentInCourse = context.StudentInCourses.Where(q => q.CourseId == courseId && q.StudentMajor.StudentCode == studentCode).FirstOrDefault();
+                    var courseStatus = studentInCourse.Course.Status;
+                    switch (courseStatus)
+                    {
+                        case (int)CourseStatus.InProgress:
+                            studentInCourse.Status = (int)StudentInCourseStatus.Studying;
+                            break;
+                        case (int)CourseStatus.Submitted:
+                            studentInCourse.Status = (int)StudentInCourseStatus.Submitted;
+                            break;
+                        case (int)CourseStatus.FirstPublish:
+                        case (int)CourseStatus.FinalPublish:
+                        case (int)CourseStatus.Closed:
+                            var avg = studentInCourse.Average;
+                            var zeroMarkList = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == false && q.Mark == 0).ToList();
+                            var finalMark = studentInCourse.StudentCourseMarks.Where(q => q.CourseMark.IsFinal == true && q.Mark != -1).Average(q => q.Mark);
+
+                            if (zeroMarkList.Count == 0 && avg >= 5 && finalMark >= 4)
+                            {
+                                studentInCourse.Status = (int)StudentInCourseStatus.Passed;
+                            }
+                            else
+                            {
+                                studentInCourse.Status = (int)StudentInCourseStatus.Failed;
+                            }
+                            break;
+                    }
+
+
                     context.SaveChanges();
                 }
             }
@@ -402,9 +470,12 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             {
                 using (var context = new DB_Finance_AcademicEntities())
                 {
-                    var semester = semesterId == -1 ? context.Semesters.OrderByDescending(q => q.Year).
-                        ThenByDescending(q => q.SemesterInYear).
-                        FirstOrDefault() : context.Semesters.Find(semesterId);
+                    var currentDate = DateTime.Now;
+                    var semester = semesterId == -1 ? context.Semesters.Where(q => q.StartDate <= currentDate && q.EndDate >= currentDate)
+                        .FirstOrDefault() : context.Semesters.Find(semesterId);
+                    if (semester == null)
+                        semester = context.Semesters.OrderByDescending(q => q.Year).ThenByDescending(q => q.SemesterInYear).FirstOrDefault();
+
 
 
                     var currentIdList = context.Courses.Where(q => q.SemesterId == semester.Id).Select(q => q.SubjectId).ToList();

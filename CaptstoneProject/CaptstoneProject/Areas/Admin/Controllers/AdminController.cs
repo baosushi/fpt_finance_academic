@@ -254,18 +254,44 @@ namespace CaptstoneProject.Areas.Admin.Controllers
                 }
                 catch (Exception e)
                 {
-
-                    return Json(new { success = false });
+                    return Json(new { success = false, message = e.Message });
                 }
             }
         }
 
-        public ActionResult GetAccount()
+        public ActionResult GetAccount(JQueryDataTableParamModel param)
         {
-            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            //var list = userManager.Users.Select(q => new AccountViewModel4Admin { Email = q.Email, Role = q.Roles. }).ToList();
+            try
+            {
+                var count = param.iDisplayStart + 1;
+                using (var context = new DB_Finance_AcademicEntities())
+                {
+                    var result = context.AspNetUsers.Where(q => string.IsNullOrEmpty(param.sSearch.Trim()) || q.Email.ToUpper().Contains(param.sSearch.ToLower()));
+                   var list = result.OrderByDescending(q => q.Id).Skip(param.iDisplayStart)
+                        .Take(param.iDisplayLength)
+                        .AsEnumerable()
+                        .Select(q => new IConvertible[] {
+                            count++,
+                            q.Email != null? q.Email: q.UserName,
+                            getAllRoles(q.AspNetRoles.Select(a => a.Name).ToList())
+                    }).ToList();
 
-            return Json(new { success = true });
+                    return Json(new
+                    {
+                        success = true,
+                        sEcho = param.sEcho,
+                        iTotalRecords = list.Count,
+                        iTotalDisplayRecords = list.Count,
+                        aaData = list,
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+
+            
         }
 
         [HttpPost]
@@ -376,14 +402,34 @@ namespace CaptstoneProject.Areas.Admin.Controllers
 
 
 
-            return RedirectToAction("Index", new { semesterId = semesterId});
+            return RedirectToAction("Index", new { semesterId = semesterId });
         }
+
 
         public class AccountViewModel4Admin
         {
             public string Email { get; set; }
             public string[] Role { get; set; }
 
+        }
+
+        public static string getAllRoles(List<string> list)
+        {
+            var result = "";
+            if (list.Count == 1)
+            {
+                result = list[0];
+            }
+            else
+            {
+                for (int i = 0; i < list.Count - 1; i++)
+                {
+
+                    result += list[i] + ", ";
+                }
+                result += list[list.Count - 1];
+            }
+            return result;
         }
 
     }

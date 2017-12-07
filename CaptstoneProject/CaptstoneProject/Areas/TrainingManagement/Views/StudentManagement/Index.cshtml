@@ -358,13 +358,15 @@
 
         $("#btn-createAccount").on('click', function () {
             swal({
-                title: "Create account for all student",
-                text: "Press ok to create",
-                type: "info",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true
-            }, function () {
+            title: 'Create account for all student',
+            text: "This task my take long time to run",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result) {
                 $.ajax({
                     type: "post",
                     url: "@Url.Action("CreateAllStudentAccount")",
@@ -377,9 +379,12 @@
                         }
                     }
                 });
-
-            });
+            }
         })
+        })
+
+
+
 
 
         // export csv
