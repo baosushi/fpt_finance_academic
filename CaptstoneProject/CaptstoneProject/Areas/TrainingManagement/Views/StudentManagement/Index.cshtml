@@ -36,7 +36,7 @@
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
             <div class="panel-title row">
-                <div class="col-md-5"><i class="fa fa-user-circle-o" style="color:#fc7401"></i> Student Financial Management</div>
+                <div><i class="fa fa-user-circle-o" style="color:#fc7401"></i> Student Financial Management</div>
                 <div class="offset-md-5 col-md-2">
                     <button id="btn-createAccount" title="Create Account for All Student" class="btn btn-default pull-right">
                         Create Account
@@ -52,10 +52,12 @@
                             <option value="@item.Value">@item.Text</option>
                         }
                     </select>
-                    <input type="file" class="hidden" id="upload-file" />
-                    <button type="button" class="btn btn-success" id="btn-choose-file">Choose File</button>
-                    <span id="file-name">Nothing selected</span>
-                    <button type="button" class="btn btn-success" disabled id="btn-import-avail-subject"><i class="fa fa-upload"></i> Import Available Subject</button>
+                    <div style="float:right">
+                        <input type="file" class="hidden" id="upload-file" />
+                        <button type="button" class="btn btn-success" id="btn-choose-file">Choose File</button>
+                        <span id="file-name">Nothing selected</span>
+                        <button type="button" class="btn btn-success" disabled id="btn-import-avail-subject"><i class="fa fa-upload"></i> Import Available Subject</button>
+                    </div>
                 </div>
 
 

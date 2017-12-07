@@ -16,19 +16,22 @@
     <div class="container-default animate fadeInRight" style="padding-bottom:10px; min-height:700px">
         <div class="panel panel-default">
             <div class="panel-title"><i class="fa fa-info-circle" style="color:green"></i> Courses </div>
-            <div class="row">
-                <form action="@Url.Action("SemesterManagement")" id="semesterForm">
-                    <label>Term: </label>
-                    <select id="semesterSelector" style="width:100px" name="semesterId">
-                        @foreach (var item in ViewBag.semList)
-                        {
-                            <option value="@item.Value">
-                                @item.Text
-                            </option>
-                        }
-                    </select>
-                </form>
+            <div class="panel-body">
+            <div class="row" style="margin:0!important">
                 <div>
+                    <form action="@Url.Action("SemesterManagement")" id="semesterForm">
+                        <label>Term: </label>
+                        <select id="semesterSelector" style="width:100px" name="semesterId">
+                            @foreach (var item in ViewBag.semList)
+                            {
+                                <option value="@item.Value">
+                                    @item.Text
+                                </option>
+                            }
+                        </select>
+                    </form>
+                </div>
+                <div class="offset-md-6">
                     <button id="btn-export-allstudentmark" class="btn btn-success" title="Export all mark of student by semester">
                         <i class="fa fa-download"></i>Export All Students Mark
                     </button>
@@ -98,7 +101,7 @@
                     </div>
                 </div>
             </div>
-
+            </div>
             @*@if (ViewBag.semesterStatus == (int)SememsterStatus.Open)
                 {
                     <form method="post" action="@Url.Action("LockAllCourseForTrainingMangement")">

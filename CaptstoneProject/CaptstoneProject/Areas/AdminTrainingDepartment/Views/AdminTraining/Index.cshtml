@@ -5,19 +5,17 @@
 <div class="content">
     <div class="container-default animate fadeInRight">
         <div class="panel panel-default">
-            <div class="panel-title"><i class="fa fa-cogs" style="color: #1763cb;"></i> Administration</div>
+            <div class="panel-title">
+                <i class="fa fa-cogs" style="color: #1763cb;"></i> Administration
+                @*<a href="@Url.Action("SemesterManagement")">
+                    <div style="float:right;font-size:14px" class="btn btn-warning btn-lg">
+                        <i class="fa fa-calendar"></i> Semester Management
+                    </div>
+                </a>*@
+            </div>
             
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="@Url.Action("SemesterManagement")">
-                            <div class="btn btn-warning btn-lg">
-                                <i class="fa fa-calendar"></i>Semester
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div>
+                <div style="padding-bottom:10px">
                     <select id="semester-selector">
                         @foreach (var item in ViewBag.SemesterList)
                         {
@@ -37,14 +35,19 @@
                     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
-                <div class="row">
+                </div>
+            </div>
+        <div class="panel panel-default">
+            <div class="panel-title"><i class="fa fa-th-list" style="color: #1763cb;"></i> Department Statistic</div>
+            <div class="panel-body">
+                <div style="padding-bottom:10px">
                     <select id="subjectGroups-selector" data-live-search="true">
                         @foreach (var item in ViewBag.SubjectGroups)
                         {
                             <option value="@item.Value"> @item.Text</option>
                         }
                     </select>
-                    
+
                 </div>
                 <div class="table-responsive">
                     <table id="table-4-subjectGroupSelector">
@@ -64,8 +67,7 @@
         </div>
     </div>
 
-    <div></div>
-</div>
+    </div>
 <script>
     $(window).load(function () {
 

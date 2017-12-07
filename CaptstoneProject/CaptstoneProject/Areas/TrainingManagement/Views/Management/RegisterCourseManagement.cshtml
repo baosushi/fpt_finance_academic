@@ -62,19 +62,18 @@
 
                     <div>
                         <div class="row col-md-12">
-
-                            <select id="semester-list-2" name="semesterId" class="" data-live-search="true">
-                                @foreach (var item in ViewBag.SemesterList)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                            &nbsp;
-                            <button type="button" data-toggle="modal"
-                                    data-target="#abstract-course-modal" class="btn btn-success">
-                                <i class="fa fa-plus"></i> Create Abstract Course
-                            </button>
-
+                            <div style="padding-right:10px">
+                                <select id="semester-list-2" name="semesterId" class="" data-live-search="true">
+                                    @foreach (var item in ViewBag.SemesterList)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                                <button type="button" data-toggle="modal"
+                                        data-target="#abstract-course-modal" class="btn btn-success">
+                                    <i class="fa fa-plus"></i> Create Abstract Course
+                                </button>
                         </div>
 
                         <table id="table-abstract-course">
