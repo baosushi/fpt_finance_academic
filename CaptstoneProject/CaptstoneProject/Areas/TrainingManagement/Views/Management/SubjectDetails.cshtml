@@ -24,7 +24,7 @@
     }
 
     .btn_remove_subjectComp {
-        float: right;
+       margin-left:15px;
         background: rgba(239, 65, 12, 0.77);
         color: white;
     }
@@ -38,6 +38,16 @@
         padding: 20px;
         overflow: hidden;
     }
+
+    .clear-subject-btn {
+        margin-bottom: 10px;
+        float: right;
+    }
+
+    .subject-component-container {
+        border: solid 1px #a6a0a0;
+    }
+
 </style>
 <link href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" rel="stylesheet" type="text/css" />
 <div class="content">
@@ -123,8 +133,8 @@
                                         <button class="btn btn-success" id="btn-create-component" style="margin-top: 10px;">Create Component</button>
                                     </div>
                                     <div class="col-md-6">
-                                        <button type="button" onclick="clearMarkComponent()"><i class="fa fa-undo"></i>Clear</button>
-                                        <div class="container table-responsive" style="overflow-x:hidden;">
+                                        <button type="button" class="btn btn-danger clear-subject-btn" onclick="clearMarkComponent()"><i class="fa fa-undo"></i> Clear</button>
+                                        <div class="container subject-component-container table-responsive" style="overflow-x:hidden;min-height: 155px;">
                                             <ul class="list-group" id="component-container">
                                                 @*<li class="list-group-item"><div>Quiz 1</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
                                                     <li class="list-group-item"><div>Quiz 2</div> <span class="badge">10%</span><button class="btn btn_remove_subjectComp"><i class="fa fa-trash"></i></button></li>
@@ -136,7 +146,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer my-panel-footer">
-                                <input type="text" value="" class="pull-left" placeholder="version" id="subject-component-version" />
+                                <input type="text" value="" class="pull-left" placeholder="Version" id="subject-component-version" />
                                 <button style="float:right;" id="apply-subject-component" class="btn btn-default">Apply Component</button>
                             </div>
                         </div>

@@ -47,7 +47,7 @@ namespace CaptstoneProject.Areas.AdminTrainingDepartment.Controllers
             return View();
         }
 
-        public ActionResult SemesterManagement(int? semesterId)
+        public ActionResult SemesterManagement(int semesterId=-1)
         {
             try
             {
